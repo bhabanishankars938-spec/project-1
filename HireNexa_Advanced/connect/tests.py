@@ -122,7 +122,7 @@ class HireNexaConnectTestSuite(TestCase):
             meeting=self.meeting,
             user=self.candidate,
             role=MeetingParticipant.Role.CANDIDATE,
-            status=MeetingParticipant.Status.INVITED
+            status=MeetingParticipant.Status.ACCEPTED
         )
 
         # Public Event / Webinar

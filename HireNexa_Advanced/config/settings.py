@@ -26,7 +26,8 @@ except ImportError:
                 return default
         return val
 
-DEBUG = str(get_env("DJANGO_DEBUG", "True")).lower() == "true"
+_default_debug = "False" if os.environ.get("VERCEL") == "1" else "True"
+DEBUG = str(get_env("DJANGO_DEBUG", _default_debug)).lower() == "true"
 ENVIRONMENT = str(get_env("ENVIRONMENT", "development" if DEBUG else "production")).strip().lower()
 IS_PRODUCTION = (not DEBUG) or (ENVIRONMENT in ("production", "prod"))
 
@@ -274,8 +275,6 @@ elif EMAIL_BACKEND_MODE == "smtp":
         if DEBUG:
             # Fall back to console backend in DEBUG mode so OTPs are printed and visible locally
             EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-            print("[HIRENEXA INFO] SMTP credentials missing in .env. DEBUG=True -> Falling back to console.EmailBackend. "
-                  "Verification emails will print to the terminal.")
         else:
             if not IS_TESTING:
                 raise ImproperlyConfigured(
@@ -369,6 +368,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"

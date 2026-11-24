@@ -1,0 +1,5 @@
+# Optional large ML dependencies for non-serverless deployments.
+# Vercel can use the built-in lexical similarity fallback without these.
+sentence-transformers>=3.0
+scikit-learn>=1.5
+numpy>=1.26

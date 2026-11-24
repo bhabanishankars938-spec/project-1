@@ -1,7 +1,28 @@
 # HireNexa V3 Enterprise SaaS – Production Deployment Guide
 
+## Vercel Deployment
+
+Set the Vercel project Root Directory to `HireNexa_Advanced`. Configure these
+environment variables in the Vercel project before deploying:
+
+- `DJANGO_SECRET_KEY`: a unique, strong production secret.
+- `DJANGO_DEBUG`: `False`.
+- `ENVIRONMENT`: `production`.
+- `DJANGO_ALLOWED_HOSTS`: the exact Vercel deployment hostname and any custom
+  hostnames, separated by commas (do not use `*`).
+- `DATABASE_URL`: a managed PostgreSQL connection string; Vercel's function
+  filesystem is temporary, so SQLite is not suitable for persistent data.
+- Email delivery settings: provide `EMAIL_HOST_USER` and
+  `EMAIL_HOST_PASSWORD` when using the default SMTP backend.
+
+The optional transformer packages are kept in `requirements-ml.txt` because
+they pull in large ML dependencies unsuitable for Vercel's serverless function
+size limits. The application uses its built-in lexical similarity fallback
+when those packages are not installed. For a non-serverless deployment that
+needs transformer-based matching, install both requirements files.
+
 ## 1. System Overview & Architecture
-HireNexa is an enterprise-grade multi-tenant AI recruitment SaaS application built with Python 3.12+, Django 5.x, PostgreSQL 16, and PyTorch / Sentence-Transformers NLP.
+HireNexa is an enterprise-grade multi-tenant AI recruitment SaaS application built with Python 3.12+, Django 6.1, PostgreSQL 16, and optional Sentence-Transformers NLP.
 
 ```
        [ Internet Users & Corporate Recruiters ]

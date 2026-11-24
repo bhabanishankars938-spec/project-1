@@ -63,3 +63,6 @@ desktop.ini
 
 # Scratch and temporary work
 scratch/
+
+.vercel
+.env*
