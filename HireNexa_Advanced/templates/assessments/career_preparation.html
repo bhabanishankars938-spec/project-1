@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Career & Placement Preparation · Internships & Training | HireNexa{% endblock %}
+
+{% block content %}
+<div class="career-prep-container">
+
+  <!-- Hero Header -->
+  <header class="career-hero-card">
+    <div class="career-hero-info">
+      <span class="badge-cat">💼 Campus & Off-Campus Placement Hub</span>
+      <h1 class="career-hero-title">Career, Internship & Placement Preparation</h1>
+      <p class="career-hero-desc">
+        Comprehensive preparation roadmap for campus drives, technical and HR interviews,
+        verified internship drives with source attribution, and company-specific selection patterns.
+      </p>
+    </div>
+
+    {% if readiness %}
+    <div class="career-readiness-widget">
+      <div class="gauge-ring">
+        <span class="gauge-num">{{ readiness.overall_readiness_score }}%</span>
+        <span class="gauge-text">Readiness</span>
+      </div>
+      <div class="gauge-sub">Target Role: <strong>{{ readiness.target_role }}</strong></div>
+    </div>
+    {% endif %}
+  </header>
+
+  <!-- Section 1: Verified Internship & Training Opportunities -->
+  <section class="career-section">
+    <div class="career-section-header">
+      <div>
+        <h2 class="career-section-title">🌟 Verified Internship & Training Opportunities</h2>
+        <p class="career-section-subtitle">Real, authenticated opportunities with verifiable sources and last-updated timestamps.</p>
+      </div>
+    </div>
+
+    <div class="opportunities-grid">
+      {% for opp in opportunities %}
+      <div class="opportunity-card">
+        <div class="opp-card-top">
+          <span class="opp-type-badge">{{ opp.get_opportunity_type_display }}</span>
+          <span class="opp-verified-badge">✓ Source Verified</span>
+        </div>
+
+        <h3 class="opp-title">{{ opp.title }}</h3>
+        <div class="opp-company">🏢 {{ opp.organization_name }} · 📍 {{ opp.location }}</div>
+
+        {% if opp.stipend_or_perk %}
+        <div class="opp-perk">💰 <strong>{{ opp.stipend_or_perk }}</strong></div>
+        {% endif %}
+
+        <p class="opp-desc">{{ opp.description }}</p>
+
+        <!-- Requirements -->
+        <div class="opp-reqs-list">
+          <strong>Key Requirements:</strong>
+          <ul>
+            {% for req in opp.requirements %}
+              <li>{{ req }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- Verified Source Foot -->
+        <div class="opp-foot">
+          <div class="opp-source-meta">
+            <span>Source: <strong>{{ opp.source_name }}</strong></span>
+            <small>Last Verified: {{ opp.verification_date|date:"M d, Y" }}</small>
+          </div>
+          <a href="{{ opp.source_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+            <span>Apply via Official Channel ↗</span>
+          </a>
+        </div>
+      </div>
+      {% empty %}
+      <div class="empty-state-card" style="grid-column: 1 / -1;">
+        <p>No active opportunities at this moment. Check back soon for updated verified listings.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Section 2: Company-Specific Placement Preparation -->
+  <section class="career-section">
+    <div class="career-section-header">
+      <div>
+        <h2 class="career-section-title">🏢 Company-Specific Selection Patterns</h2>
+        <p class="career-section-subtitle">Standardized selection rounds, assessment patterns, and core preparation strategies.</p>
+      </div>
+    </div>
+
+    <div class="company-patterns-grid">
+      <div class="company-card">
+        <div class="co-head">
+          <div class="co-logo">TCS</div>
+          <div>
+            <h4>TCS National Qualifier Test (NQT)</h4>
+            <small>Ninja & Digital Profiles</small>
+          </div>
+        </div>
+        <div class="co-body">
+          <p><strong>Selection Rounds:</strong></p>
+          <ol>
+            <li>Cognitive Skills (Numerical Ability, Reasoning, Verbal)</li>
+            <li>Advanced Coding (Data structures, array manipulation in C/Python)</li>
+            <li>Technical & Managerial Interview</li>
+            <li>HR Interview</li>
+          </ol>
+        </div>
+        <div class="co-foot">
+          <a href="{% url 'mcq_entrance_hub' %}" class="btn btn-outline btn-sm btn-block">Practice Aptitude & C MCQs →</a>
+        </div>
+      </div>
+
+      <div class="company-card">
+        <div class="co-head">
+          <div class="co-logo">INF</div>
+          <div>
+            <h4>Infosys HackWithInfy & Specialist</h4>
+            <small>Systems Engineer & Specialist</small>
+          </div>
+        </div>
+        <div class="co-body">
+          <p><strong>Selection Rounds:</strong></p>
+          <ol>
+            <li>Mathematical Ability & Critical Reasoning</li>
+            <li>Pseudocode Analysis & Output Prediction</li>
+            <li>Hands-on Coding Assessment</li>
+            <li>Technical Architecture Interview</li>
+          </ol>
+        </div>
+        <div class="co-foot">
+          <a href="{% url 'coding_list' %}" class="btn btn-outline btn-sm btn-block">Practice Coding Problems →</a>
+        </div>
+      </div>
+
+      <div class="company-card">
+        <div class="co-head">
+          <div class="co-logo">FAANG</div>
+          <div>
+            <h4>Product Tech Giants (Google, Amazon, Microsoft)</h4>
+            <small>SDE I / Graduate Engineer</small>
+          </div>
+        </div>
+        <div class="co-body">
+          <p><strong>Selection Rounds:</strong></p>
+          <ol>
+            <li>Online Assessment: 2 HackerRank-style algorithmic challenges (70-90 min)</li>
+            <li>3 Technical Problem Solving & DSA rounds (Trees, Graphs, DP)</li>
+            <li>Low-Level Object-Oriented Design (LLD)</li>
+            <li>Behavioral Leadership Principles (STAR method)</li>
+          </ol>
+        </div>
+        <div class="co-foot">
+          <a href="{% url 'coding_list' %}" class="btn btn-primary btn-sm btn-block">Master HackerRank Challenges →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: HR & Technical Interview Master Guide -->
+  <section class="career-section">
+    <div class="career-section-header">
+      <div>
+        <h2 class="career-section-title">🤝 Technical & HR Interview Master Framework</h2>
+        <p class="career-section-subtitle">Behavioral storytelling frameworks and technical design methodologies.</p>
+      </div>
+    </div>
+
+    <div class="framework-grid">
+      <div class="framework-card">
+        <h3>⭐ The STAR Method for Behavioral & HR Questions</h3>
+        <p class="framework-desc">Use this structured framework to answer questions like <em>"Tell me about a time you resolved a difficult conflict in a team"</em>:</p>
+        
+        <div class="star-steps">
+          <div class="star-step">
+            <span class="star-letter">S</span>
+            <div><strong>Situation:</strong> Set the context and describe the specific scenario or challenge.</div>
+          </div>
+          <div class="star-step">
+            <span class="star-letter">T</span>
+            <div><strong>Task:</strong> Explain what your exact responsibility was in addressing the situation.</div>
+          </div>
+          <div class="star-step">
+            <span class="star-letter">A</span>
+            <div><strong>Action:</strong> Detail the specific steps and technical decisions YOU took.</div>
+          </div>
+          <div class="star-step">
+            <span class="star-letter">R</span>
+            <div><strong>Result:</strong> Share the quantifiable outcome, metrics, and what you learned.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="framework-card">
+        <h3>💡 Top High-Frequency Technical Interview Questions</h3>
+        <ul class="faq-list">
+          <li><strong>Explain ACID Properties in DBMS:</strong> Atomicity, Consistency, Isolation, Durability with real-world banking transaction example.</li>
+          <li><strong>Process vs Thread:</strong> Process is an independent execution unit with isolated memory; Thread is a lightweight sub-process sharing the same process address space.</li>
+          <li><strong>Virtual DOM Reconciliation:</strong> React computes a lightweight tree diff in JavaScript memory, avoiding expensive real browser DOM reflows and repaints.</li>
+          <li><strong>TCP vs UDP:</strong> TCP is connection-oriented, reliable, with acknowledgements; UDP is connectionless, fast, best for live streaming and gaming.</li>
+        </ul>
+        <a href="{% url 'special_interview_hub' %}" class="btn btn-outline btn-sm">Explore Special Interview Modules →</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+{% endblock %}

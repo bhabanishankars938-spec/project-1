@@ -1,0 +1,562 @@
+[
+  {
+    "order": 1,
+    "title": "Counting and Recurrence Relations Problem #1",
+    "difficulty": "EASY",
+    "topic": "Counting and Recurrence Relations",
+    "text": "In Counting and Recurrence Relations, evaluate the analytical expression or determinant condition for parameter n = 3:",
+    "code_snippet": "",
+    "explanation": "Direct algebraic simplification for parameter 3 yields 6.",
+    "options": [
+      {
+        "key": "A",
+        "text": "9",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "6",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "4",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "6",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 2,
+    "title": "Counting and Recurrence Relations Problem #2",
+    "difficulty": "EASY",
+    "topic": "Counting and Recurrence Relations",
+    "text": "In Counting and Recurrence Relations, evaluate the analytical expression or determinant condition for parameter n = 4:",
+    "code_snippet": "",
+    "explanation": "Direct algebraic simplification for parameter 4 yields 12.",
+    "options": [
+      {
+        "key": "A",
+        "text": "16",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "12",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "8",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "5",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 3,
+    "title": "Counting and Recurrence Relations Problem #3",
+    "difficulty": "EASY",
+    "topic": "Counting and Recurrence Relations",
+    "text": "In Counting and Recurrence Relations, evaluate the analytical expression or determinant condition for parameter n = 5:",
+    "code_snippet": "",
+    "explanation": "Direct algebraic simplification for parameter 5 yields 20.",
+    "options": [
+      {
+        "key": "A",
+        "text": "25",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "20",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "10",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "6",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 4,
+    "title": "Counting and Recurrence Relations Problem #4",
+    "difficulty": "MEDIUM",
+    "topic": "Counting and Recurrence Relations",
+    "text": "In Counting and Recurrence Relations, evaluate the analytical expression or determinant condition for parameter n = 6:",
+    "code_snippet": "",
+    "explanation": "Direct algebraic simplification for parameter 6 yields 30.",
+    "options": [
+      {
+        "key": "A",
+        "text": "36",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "12",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "30",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "7",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 5,
+    "title": "Counting and Recurrence Relations Problem #5",
+    "difficulty": "MEDIUM",
+    "topic": "Counting and Recurrence Relations",
+    "text": "In Counting and Recurrence Relations, evaluate the analytical expression or determinant condition for parameter n = 7:",
+    "code_snippet": "",
+    "explanation": "Direct algebraic simplification for parameter 7 yields 42.",
+    "options": [
+      {
+        "key": "A",
+        "text": "49",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "14",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "42",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "8",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 6,
+    "title": "Counting and Recurrence Relations Problem #6",
+    "difficulty": "MEDIUM",
+    "topic": "Counting and Recurrence Relations",
+    "text": "In Counting and Recurrence Relations, evaluate the analytical expression or determinant condition for parameter n = 8:",
+    "code_snippet": "",
+    "explanation": "Direct algebraic simplification for parameter 8 yields 56.",
+    "options": [
+      {
+        "key": "A",
+        "text": "64",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "16",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "56",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "9",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 7,
+    "title": "Counting and Recurrence Relations Problem #7",
+    "difficulty": "MEDIUM",
+    "topic": "Counting and Recurrence Relations",
+    "text": "In Counting and Recurrence Relations, evaluate the analytical expression or determinant condition for parameter n = 9:",
+    "code_snippet": "",
+    "explanation": "Direct algebraic simplification for parameter 9 yields 72.",
+    "options": [
+      {
+        "key": "A",
+        "text": "72",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "81",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "18",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "10",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 8,
+    "title": "Counting and Recurrence Relations Problem #8",
+    "difficulty": "MEDIUM",
+    "topic": "Counting and Recurrence Relations",
+    "text": "In Counting and Recurrence Relations, evaluate the analytical expression or determinant condition for parameter n = 10:",
+    "code_snippet": "",
+    "explanation": "Direct algebraic simplification for parameter 10 yields 90.",
+    "options": [
+      {
+        "key": "A",
+        "text": "90",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "100",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "20",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "11",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 9,
+    "title": "Counting and Recurrence Relations Problem #9",
+    "difficulty": "MEDIUM",
+    "topic": "Counting and Recurrence Relations",
+    "text": "In Counting and Recurrence Relations, evaluate the analytical expression or determinant condition for parameter n = 11:",
+    "code_snippet": "",
+    "explanation": "Direct algebraic simplification for parameter 11 yields 110.",
+    "options": [
+      {
+        "key": "A",
+        "text": "121",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "110",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "22",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "12",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 10,
+    "title": "Counting and Recurrence Relations Problem #10",
+    "difficulty": "MEDIUM",
+    "topic": "Counting and Recurrence Relations",
+    "text": "In Counting and Recurrence Relations, evaluate the analytical expression or determinant condition for parameter n = 12:",
+    "code_snippet": "",
+    "explanation": "Direct algebraic simplification for parameter 12 yields 132.",
+    "options": [
+      {
+        "key": "A",
+        "text": "144",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "24",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "132",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "13",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 11,
+    "title": "Counting and Recurrence Relations Problem #11",
+    "difficulty": "MEDIUM",
+    "topic": "Counting and Recurrence Relations",
+    "text": "In Counting and Recurrence Relations, evaluate the analytical expression or determinant condition for parameter n = 13:",
+    "code_snippet": "",
+    "explanation": "Direct algebraic simplification for parameter 13 yields 156.",
+    "options": [
+      {
+        "key": "A",
+        "text": "169",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "156",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "26",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "14",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 12,
+    "title": "Counting and Recurrence Relations Problem #12",
+    "difficulty": "HARD",
+    "topic": "Counting and Recurrence Relations",
+    "text": "In Counting and Recurrence Relations, evaluate the analytical expression or determinant condition for parameter n = 14:",
+    "code_snippet": "",
+    "explanation": "Direct algebraic simplification for parameter 14 yields 182.",
+    "options": [
+      {
+        "key": "A",
+        "text": "196",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "28",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "15",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "182",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 13,
+    "title": "Counting and Recurrence Relations Problem #13",
+    "difficulty": "HARD",
+    "topic": "Counting and Recurrence Relations",
+    "text": "In Counting and Recurrence Relations, evaluate the analytical expression or determinant condition for parameter n = 15:",
+    "code_snippet": "",
+    "explanation": "Direct algebraic simplification for parameter 15 yields 210.",
+    "options": [
+      {
+        "key": "A",
+        "text": "210",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "225",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "30",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "16",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 14,
+    "title": "Counting and Recurrence Relations Problem #14",
+    "difficulty": "HARD",
+    "topic": "Counting and Recurrence Relations",
+    "text": "In Counting and Recurrence Relations, evaluate the analytical expression or determinant condition for parameter n = 16:",
+    "code_snippet": "",
+    "explanation": "Direct algebraic simplification for parameter 16 yields 240.",
+    "options": [
+      {
+        "key": "A",
+        "text": "256",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "32",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "17",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "240",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 15,
+    "title": "Counting and Recurrence Relations Problem #15",
+    "difficulty": "HARD",
+    "topic": "Counting and Recurrence Relations",
+    "text": "In Counting and Recurrence Relations, evaluate the analytical expression or determinant condition for parameter n = 17:",
+    "code_snippet": "",
+    "explanation": "Direct algebraic simplification for parameter 17 yields 272.",
+    "options": [
+      {
+        "key": "A",
+        "text": "272",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "289",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "34",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "18",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 16,
+    "title": "Counting and Recurrence Relations Problem #16",
+    "difficulty": "HARD",
+    "topic": "Counting and Recurrence Relations",
+    "text": "In Counting and Recurrence Relations, evaluate the analytical expression or determinant condition for parameter n = 18:",
+    "code_snippet": "",
+    "explanation": "Direct algebraic simplification for parameter 18 yields 306.",
+    "options": [
+      {
+        "key": "A",
+        "text": "324",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "36",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "19",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "306",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  }
+]

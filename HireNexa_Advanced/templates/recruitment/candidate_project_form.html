@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} · HireNexa{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto; padding-bottom: 40px;">
+  <div style="margin-bottom: 24px;">
+    <a href="{% url 'candidate_portfolio_list' %}" style="font-size: 14px; font-weight: 500; color: var(--slate-500); display: inline-flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+      ← Back to Portfolio
+    </a>
+    <h1 style="font-size: 28px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.02em; margin: 0;">
+      {{ title }}
+    </h1>
+    <p style="color: var(--slate-600); font-size: 14px; margin-top: 4px;">
+      Stored and secured in <strong>Supabase PostgreSQL</strong> with private file encryption in <strong>Supabase Storage</strong>.
+    </p>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-sm);">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 20px; color: #be123c; font-size: 14px;">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+
+      <!-- Project Name -->
+      <div style="margin-bottom: 20px;">
+        <label for="{{ form.project_name.id_for_label }}" style="display: block; font-size: 14px; font-weight: 700; color: var(--slate-700); margin-bottom: 6px;">
+          Project Name <span style="color: #e11d48;">*</span>
+        </label>
+        {{ form.project_name }}
+        {% if form.project_name.errors %}
+          <div style="color: #e11d48; font-size: 12px; margin-top: 4px;">{{ form.project_name.errors }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Category & Technologies -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+        <div>
+          <label for="{{ form.category.id_for_label }}" style="display: block; font-size: 14px; font-weight: 700; color: var(--slate-700); margin-bottom: 6px;">
+            Domain / Category <span style="color: #e11d48;">*</span>
+          </label>
+          {{ form.category }}
+        </div>
+        <div>
+          <label for="{{ form.technologies.id_for_label }}" style="display: block; font-size: 14px; font-weight: 700; color: var(--slate-700); margin-bottom: 6px;">
+            Technologies & Tools <span style="color: #e11d48;">*</span>
+          </label>
+          {{ form.technologies }}
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div style="margin-bottom: 20px;">
+        <label for="{{ form.description.id_for_label }}" style="display: block; font-size: 14px; font-weight: 700; color: var(--slate-700); margin-bottom: 6px;">
+          Project Description & Architecture <span style="color: #e11d48;">*</span>
+        </label>
+        {{ form.description }}
+        {% if form.description.errors %}
+          <div style="color: #e11d48; font-size: 12px; margin-top: 4px;">{{ form.description.errors }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Links Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
+        <div>
+          <label for="{{ form.github_url.id_for_label }}" style="display: block; font-size: 13px; font-weight: 700; color: var(--slate-700); margin-bottom: 6px;">
+            🐙 GitHub Repository
+          </label>
+          {{ form.github_url }}
+        </div>
+        <div>
+          <label for="{{ form.live_demo_url.id_for_label }}" style="display: block; font-size: 13px; font-weight: 700; color: var(--slate-700); margin-bottom: 6px;">
+            🌐 Live Demo URL
+          </label>
+          {{ form.live_demo_url }}
+        </div>
+        <div>
+          <label for="{{ form.video_url.id_for_label }}" style="display: block; font-size: 13px; font-weight: 700; color: var(--slate-700); margin-bottom: 6px;">
+            🎥 Video Walkthrough URL
+          </label>
+          {{ form.video_url }}
+        </div>
+      </div>
+
+      <!-- Supabase Storage File Upload Dropzone -->
+      <div style="margin-bottom: 24px; padding: 20px; background: var(--slate-50); border: 2px dashed var(--slate-300); border-radius: var(--radius-lg);">
+        <label for="{{ form.project_files.id_for_label }}" style="display: block; font-size: 14px; font-weight: 700; color: var(--slate-800); margin-bottom: 4px;">
+          📁 Upload Project Attachments (Supabase Storage)
+        </label>
+        <p style="font-size: 13px; color: var(--slate-500); margin-bottom: 12px;">
+          Upload multiple project files: <strong>PDF, ZIP, DOC, DOCX, PPT, PPTX, PNG, JPG, JPEG</strong> (up to 50 MB each).
+        </p>
+        {{ form.project_files }}
+      </div>
+
+      <!-- If Editing: Existing files list -->
+      {% if project and project.files.exists %}
+        <div style="margin-bottom: 28px;">
+          <h4 style="font-size: 14px; font-weight: 700; color: var(--slate-700); text-transform: uppercase; margin-bottom: 12px;">
+            Currently Attached Files ({{ project.files.count }})
+          </h4>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            {% for f in project.files.all %}
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md);">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span>{% if f.is_pdf %}📄{% elif f.is_image %}🖼️{% elif f.is_zip %}📦{% else %}📎{% endif %}</span>
+                  <span style="font-size: 13px; font-weight: 600; color: var(--slate-800);">{{ f.file_name }}</span>
+                  <span style="font-size: 12px; color: var(--slate-500);">({{ f.formatted_size }})</span>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <a href="{% url 'candidate_project_file_download' f.pk %}" class="btn btn-white btn-sm" style="font-size: 11px; padding: 4px 8px;">⬇️ Download</a>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Buttons -->
+      <div style="display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid var(--slate-200); padding-top: 20px;">
+        <a href="{% url 'candidate_portfolio_list' %}" class="btn btn-white">
+          Cancel
+        </a>
+        <button type="submit" class="btn btn-primary" style="min-width: 140px;">
+          {{ action|default:"Save Project" }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

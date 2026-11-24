@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Career Guidance & Industry Roadmaps · HireNexa{% endblock %}
+
+{% block content %}
+<div class="pro-container" style="max-width: 1100px; margin: 40px auto; padding: 0 20px;">
+  
+  <div style="text-align: center; margin-bottom: 50px;">
+    <span class="meta-badge" style="background: rgba(124, 58, 237, 0.1); color: var(--violet-600); border: 1px solid rgba(124, 58, 237, 0.25); font-weight: 700; padding: 6px 14px; border-radius: 9999px; font-size: 12px; letter-spacing: 0.05em;">
+      CAREER INTELLIGENCE & ROADMAPS
+    </span>
+    <h1 style="font-size: 40px; font-weight: 800; color: var(--slate-900); margin: 16px 0 12px; letter-spacing: -0.02em;">
+      Curated Career Roadmaps for <span style="background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Modern Tech Roles</span>
+    </h1>
+    <p style="font-size: 17px; color: var(--slate-600); max-width: 720px; margin: 0 auto; line-height: 1.6;">
+      Step-by-step career blueprints designed by hiring managers and tech leads to take you from foundational knowledge to production readiness.
+    </p>
+  </div>
+
+  <!-- Roadmaps Grid -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 26px; margin-bottom: 50px;">
+    
+    <!-- Roadmap 1: Full-Stack Python & Django -->
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 30px; box-shadow: var(--shadow-sm); border-top: 4px solid var(--blue-600);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <span style="font-size: 28px;">🐍</span>
+        <span class="meta-badge" style="background: #e0f2fe; color: #0369a1; font-weight: 700;">MCA & BTECH</span>
+      </div>
+      <h3 style="font-size: 20px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px;">Full-Stack Python & Django</h3>
+      <p style="font-size: 13px; color: var(--slate-600); line-height: 1.6; margin-bottom: 18px;">
+        Master server-side architectures, REST APIs with DRF, PostgreSQL indexing, and modern React frontend integration.
+      </p>
+      <div style="font-size: 12px; color: var(--slate-700); line-height: 1.8; margin-bottom: 20px;">
+        <div><strong>Phase 1:</strong> Python Core (OOP, Decorators, Generators, Async)</div>
+        <div><strong>Phase 2:</strong> Django ORM, MTV, Middleware, RBAC Security</div>
+        <div><strong>Phase 3:</strong> RESTful APIs, JWT Auth, Celery Background Workers</div>
+        <div><strong>Phase 4:</strong> Docker Containers, PostgreSQL Tuning & Cloud Deploy</div>
+      </div>
+      <a href="{% url 'job_list' %}?q=Python" class="btn btn-outline" style="width: 100%; justify-content: center; font-size: 13px;">View Matching Vacancies →</a>
+    </div>
+
+    <!-- Roadmap 2: AI & LLM Engineering -->
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 30px; box-shadow: var(--shadow-sm); border-top: 4px solid var(--violet-600);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <span style="font-size: 28px;">⚡</span>
+        <span class="meta-badge" style="background: #fae8ff; color: #86198f; font-weight: 700;">HIGH DEMAND</span>
+      </div>
+      <h3 style="font-size: 20px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px;">AI & LLM Application Engineer</h3>
+      <p style="font-size: 13px; color: var(--slate-600); line-height: 1.6; margin-bottom: 18px;">
+        Bridge machine learning models into high-concurrency production web apps with vector databases and RAG pipelines.
+      </p>
+      <div style="font-size: 12px; color: var(--slate-700); line-height: 1.8; margin-bottom: 20px;">
+        <div><strong>Phase 1:</strong> Python Data Stack (NumPy, Pandas, Scikit-Learn)</div>
+        <div><strong>Phase 2:</strong> Transformer Architecture & Sentence Embeddings</div>
+        <div><strong>Phase 3:</strong> Vector Databases (pgvector, Pinecone, FAISS) & RAG</div>
+        <div><strong>Phase 4:</strong> LangChain, Agentic Tool Calling & Evaluation Metrics</div>
+      </div>
+      <a href="{% url 'job_list' %}?q=AI" class="btn btn-outline" style="width: 100%; justify-content: center; font-size: 13px;">View Matching Vacancies →</a>
+    </div>
+
+    <!-- Roadmap 3: Cloud DevOps & Site Reliability -->
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 30px; box-shadow: var(--shadow-sm); border-top: 4px solid #10b981;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <span style="font-size: 28px;">☁️</span>
+        <span class="meta-badge" style="background: #ecfdf5; color: #047857; font-weight: 700;">INFRASTRUCTURE</span>
+      </div>
+      <h3 style="font-size: 20px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px;">Cloud DevOps & SRE</h3>
+      <p style="font-size: 13px; color: var(--slate-600); line-height: 1.6; margin-bottom: 18px;">
+        Design resilient, auto-scaling cloud architectures with Kubernetes, Infrastructure as Code, and CI/CD pipelines.
+      </p>
+      <div style="font-size: 12px; color: var(--slate-700); line-height: 1.8; margin-bottom: 20px;">
+        <div><strong>Phase 1:</strong> Linux Administration & Networking Fundamentals</div>
+        <div><strong>Phase 2:</strong> Docker Multi-Stage Builds & Container Security</div>
+        <div><strong>Phase 3:</strong> Kubernetes Orchestration & Helm Charts</div>
+        <div><strong>Phase 4:</strong> GitHub Actions, Terraform & Prometheus Monitoring</div>
+      </div>
+      <a href="{% url 'job_list' %}?q=DevOps" class="btn btn-outline" style="width: 100%; justify-content: center; font-size: 13px;">View Matching Vacancies →</a>
+    </div>
+
+    <!-- Roadmap 4: MBA Talent Acquisition & HR Strategy -->
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 30px; box-shadow: var(--shadow-sm); border-top: 4px solid #f59e0b;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <span style="font-size: 28px;">📊</span>
+        <span class="meta-badge" style="background: #fef3c7; color: #b45309; font-weight: 700;">MBA DEPARTMENT</span>
+      </div>
+      <h3 style="font-size: 20px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px;">Talent Acquisition & HR Ops</h3>
+      <p style="font-size: 13px; color: var(--slate-600); line-height: 1.6; margin-bottom: 18px;">
+        Master modern data-driven recruitment, applicant tracking systems, compensation benchmarking, and talent pipelines.
+      </p>
+      <div style="font-size: 12px; color: var(--slate-700); line-height: 1.8; margin-bottom: 20px;">
+        <div><strong>Phase 1:</strong> Talent Sourcing, Boolean Search & Job Design</div>
+        <div><strong>Phase 2:</strong> ATS Screening, Structured Interview Scorecards</div>
+        <div><strong>Phase 3:</strong> Compensation & Benefits (CTC Breakdowns, ESOPs)</div>
+        <div><strong>Phase 4:</strong> Recruitment Metrics (Time to Fill, Cost per Hire)</div>
+      </div>
+      <a href="{% url 'job_list' %}?course=MBA" class="btn btn-outline" style="width: 100%; justify-content: center; font-size: 13px;">View Matching Vacancies →</a>
+    </div>
+
+    <!-- Roadmap 5: MCA Entrance Exam (NIMCET & OJEE) -->
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 30px; box-shadow: var(--shadow-sm); border-top: 4px solid #0284c7;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <span style="font-size: 28px;">📝</span>
+        <span class="meta-badge" style="background: #e0f2fe; color: #0369a1; font-weight: 700;">ENTRANCE TRACK</span>
+      </div>
+      <h3 style="font-size: 20px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px;">MCA Entrance (NIMCET, OJEE, CUET)</h3>
+      <p style="font-size: 13px; color: var(--slate-600); line-height: 1.6; margin-bottom: 18px;">
+        Comprehensive mathematical, computer awareness, and reasoning syllabus mapped to top NIT and university admissions.
+      </p>
+      <div style="font-size: 12px; color: var(--slate-700); line-height: 1.8; margin-bottom: 20px;">
+        <div><strong>Mathematics (50%):</strong> Coordinate Geometry, Vectors, Calculus</div>
+        <div><strong>Computer Awareness (20%):</strong> Binary, Hex, Logic Gates, OS, C</div>
+        <div><strong>Logical Reasoning (20%):</strong> Puzzles, Sequences, Relations</div>
+        <div><strong>General English (10%):</strong> Vocabulary, Comprehension</div>
+      </div>
+      <a href="{% url 'mcq_entrance_hub' %}" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 13px;">Open MCQ Preparation Hub →</a>
+    </div>
+
+    <!-- Roadmap 6: Frontend Architecture (React & Next.js) -->
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 30px; box-shadow: var(--shadow-sm); border-top: 4px solid #6366f1;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <span style="font-size: 28px;">⚛️</span>
+        <span class="meta-badge" style="background: #e0e7ff; color: #4338ca; font-weight: 700;">UI & DESIGN</span>
+      </div>
+      <h3 style="font-size: 20px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px;">Frontend Architecture (React/Next)</h3>
+      <p style="font-size: 13px; color: var(--slate-600); line-height: 1.6; margin-bottom: 18px;">
+        Develop enterprise-grade web applications with modern state management, server components, and responsive design systems.
+      </p>
+      <div style="font-size: 12px; color: var(--slate-700); line-height: 1.8; margin-bottom: 20px;">
+        <div><strong>Phase 1:</strong> Advanced ES6+ JavaScript, TypeScript & DOM</div>
+        <div><strong>Phase 2:</strong> React Hooks, Custom Hooks, Reconciliation</div>
+        <div><strong>Phase 3:</strong> Next.js App Router, SSR, Server Components</div>
+        <div><strong>Phase 4:</strong> Design Tokens, Performance Audits (Core Web Vitals)</div>
+      </div>
+      <a href="{% url 'job_list' %}?q=React" class="btn btn-outline" style="width: 100%; justify-content: center; font-size: 13px;">View Matching Vacancies →</a>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Comprehensive Question Bank · 21 Subjects | HireNexa{% endblock %}
+
+{% block content %}
+<div class="qbank-container">
+
+  <!-- Header -->
+  <section class="qbank-hero">
+    <span class="badge-cat">📚 Academic & Industry Question Bank</span>
+    <h1 class="qbank-title">Comprehensive Technical Question Bank</h1>
+    <p class="qbank-desc">
+      Explore verified technical questions spanning DBMS, Python, C, C++, Java, React, Angular,
+      Data Structures, OS, Networking, AI/ML, and Placement Entrance exams.
+    </p>
+
+    <!-- Search Form -->
+    <form method="get" class="qbank-search-bar">
+      <input type="text" name="q" value="{{ search_query }}" placeholder="Search by topic, concept, tag, or keyword..." class="search-input">
+      <button type="submit" class="btn btn-primary">Search Questions</button>
+    </form>
+  </section>
+
+  <!-- Filter Controls -->
+  <div class="qbank-filters-row">
+    <div class="filter-item">
+      <label>Subject:</label>
+      <select onchange="location = this.value;" class="filter-select">
+        <option value="?q={{ search_query }}&difficulty={{ selected_difficulty }}&type={{ selected_type }}">All Subjects</option>
+        {% for s in subjects %}
+          <option value="?subject={{ s.slug }}&q={{ search_query }}&difficulty={{ selected_difficulty }}&type={{ selected_type }}" {% if selected_subject == s.slug %}selected{% endif %}>{{ s.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="filter-item">
+      <label>Difficulty:</label>
+      <select onchange="location = this.value;" class="filter-select">
+        <option value="?subject={{ selected_subject }}&q={{ search_query }}&type={{ selected_type }}">All Difficulties</option>
+        {% for val, name in difficulty_levels %}
+          <option value="?subject={{ selected_subject }}&difficulty={{ val }}&q={{ search_query }}&type={{ selected_type }}" {% if selected_difficulty == val %}selected{% endif %}>{{ name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="filter-item">
+      <label>Type:</label>
+      <select onchange="location = this.value;" class="filter-select">
+        <option value="?subject={{ selected_subject }}&difficulty={{ selected_difficulty }}&q={{ search_query }}">All Formats</option>
+        {% for val, name in question_types %}
+          <option value="?subject={{ selected_subject }}&difficulty={{ selected_difficulty }}&type={{ val }}&q={{ search_query }}" {% if selected_type == val %}selected{% endif %}>{{ name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <!-- Questions List -->
+  <div class="qbank-list">
+    {% for q in questions %}
+    <div class="q-list-card">
+      <div class="q-card-head">
+        <div class="q-tags-left">
+          <span class="badge-subject">{{ q.subject.name }}</span>
+          <span class="badge-diff badge-{{ q.difficulty|lower }}">{{ q.get_difficulty_display }}</span>
+          <span class="badge-type">{{ q.get_question_type_display }}</span>
+          {% if q.is_pyq %}
+            <span class="badge-pyq">⭐ PYQ · {{ q.pyq_exam }} {{ q.pyq_year }}</span>
+          {% endif %}
+        </div>
+        <span class="q-marks-pill">+{{ q.marks }} Marks</span>
+      </div>
+
+      <h3 class="q-title"><a href="{% url 'question_detail' q.id %}">{{ q.title }}</a></h3>
+      <p class="q-text">{{ q.question_text|truncatewords:30 }}</p>
+
+      {% if q.options.exists %}
+      <div class="q-options-preview">
+        {% for opt in q.options.all %}
+          <div class="opt-preview-item">
+            <span class="opt-key">{{ opt.option_key }}</span>
+            <span class="opt-text">{{ opt.option_text|truncatechars:65 }}</span>
+          </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="q-card-foot">
+        <span class="q-source-verified">✓ Verified Answer Key & Detailed Explanation</span>
+        <a href="{% url 'question_detail' q.id %}" class="btn btn-primary btn-sm">Solve & View Logic →</a>
+      </div>
+    </div>
+    {% empty %}
+    <div class="empty-state-card">
+      <span class="empty-icon">🔍</span>
+      <h3>No questions found matching your filter criteria</h3>
+      <p>Try resetting the subject or search query.</p>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  {% if questions.has_other_pages %}
+  <div class="pagination-bar">
+    {% if questions.has_previous %}
+      <a href="?subject={{ selected_subject }}&difficulty={{ selected_difficulty }}&type={{ selected_type }}&q={{ search_query }}&page={{ questions.previous_page_number }}" class="btn btn-ghost btn-sm">← Previous</a>
+    {% endif %}
+    <span class="page-current">Page {{ questions.number }} of {{ questions.paginator.num_pages }}</span>
+    {% if questions.has_next %}
+      <a href="?subject={{ selected_subject }}&difficulty={{ selected_difficulty }}&type={{ selected_type }}&q={{ search_query }}&page={{ questions.next_page_number }}" class="btn btn-ghost btn-sm">Next →</a>
+    {% endif %}
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

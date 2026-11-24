@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ package.title }} · Special Interview Package | HireNexa{% endblock %}
+
+{% block content %}
+<div class="special-detail-container">
+
+  <!-- Breadcrumbs -->
+  <nav class="breadcrumb-nav">
+    <a href="{% url 'special_interview_hub' %}">Special Interview Packages</a>
+    <span class="sep">/</span>
+    <span class="current">{{ package.title }}</span>
+  </nav>
+
+  <!-- Package Header -->
+  <header class="pkg-detail-header">
+    <span class="badge-cat">🎯 Deep Dive Interview Module</span>
+    <h1 class="pkg-detail-title">{{ package.title }}</h1>
+    <p class="pkg-detail-desc">{{ package.description }}</p>
+  </header>
+
+  <!-- Questions Stream -->
+  <div class="pkg-questions-list">
+    {% for q in questions %}
+    <div class="pkg-q-card">
+      <div class="pkg-q-head">
+        <span class="badge-subject">{{ q.subject.name }}</span>
+        <span class="badge-diff badge-{{ q.difficulty|lower }}">{{ q.get_difficulty_display }}</span>
+        <span class="pkg-pts">+{{ q.marks }} Marks</span>
+      </div>
+
+      <h3 class="pkg-q-title">
+        <a href="{% url 'question_detail' q.id %}">{{ q.title }}</a>
+      </h3>
+
+      <div class="pkg-q-text">{{ q.question_text|linebreaksbr }}</div>
+
+      {% if q.code_snippet %}
+      <div class="q-code-snippet">
+        <pre><code>{{ q.code_snippet }}</code></pre>
+      </div>
+      {% endif %}
+
+      {% if q.options.exists %}
+      <div class="pkg-options-box">
+        {% for opt in q.options.all %}
+        <div class="pkg-opt-item">
+          <span class="opt-key-circle">{{ opt.option_key }}</span>
+          <span>{{ opt.option_text }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if q.explanation_detail %}
+      <div class="pkg-solution-preview">
+        <h4>💡 Core Architectural Logic:</h4>
+        <p>{{ q.explanation_detail.why_correct }}</p>
+        {% if q.explanation_detail.practical_example %}
+          <p><strong>Practical Application:</strong> {{ q.explanation_detail.practical_example }}</p>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <div class="pkg-q-foot">
+        <a href="{% url 'question_detail' q.id %}" class="btn btn-primary btn-sm">Solve Interactively & Ask AI →</a>
+      </div>
+    </div>
+    {% empty %}
+    <div class="empty-state-card">
+      <p>Module questions currently being updated with verified test keys.</p>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

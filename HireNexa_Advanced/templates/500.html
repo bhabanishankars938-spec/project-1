@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}500 Internal Server Error · HireNexa{% endblock %}
+
+{% block content %}
+<div style="max-width: 680px; margin: 60px auto; padding: 0 16px; text-align: center;">
+  <div style="background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 16px; padding: 48px; color: #f8fafc; backdrop-filter: blur(12px);">
+    <div style="font-size: 56px; margin-bottom: 12px;">⚠️</div>
+    <div style="background: rgba(239, 68, 68, 0.15); color: #f87171; display: inline-block; padding: 3px 12px; border-radius: 9999px; font-size: 12px; font-weight: 800; text-transform: uppercase; margin-bottom: 16px;">
+      Error 500 · System Exception
+    </div>
+    <h1 style="font-size: 26px; font-weight: 800; color: #ffffff; margin-bottom: 12px;">
+      Something Unexpected Occurred
+    </h1>
+    <p style="color: #94a3b8; font-size: 15px; line-height: 1.6; margin-bottom: 28px;">
+      The HireNexa security and application layer encountered a temporary issue. Our audit system has registered this event.
+    </p>
+    <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+      <a href="{% url 'home' %}" class="btn btn-primary" style="padding: 10px 22px;">Return to Home</a>
+      <a href="{% url 'dashboard' %}" class="btn btn-outline" style="padding: 10px 22px;">Go to My Workspace</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

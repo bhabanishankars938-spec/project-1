@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% block title %}{{ org.name }} · Company Tenant Inspection · HireNexa Owner{% endblock %}
+
+{% block content %}
+<div style="max-width: 1100px; margin: 0 auto; padding-bottom: 60px;">
+  <!-- Header & Back Navigation -->
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+        <a href="{% url 'owner_dashboard' %}" style="color: var(--slate-500); font-size: 13px; text-decoration: none;">← Owner Control Center</a>
+        <span style="color: var(--slate-400); font-size: 13px;">/</span>
+        <span style="color: var(--primary); font-size: 13px; font-weight: 600;">Tenant Inspection</span>
+      </div>
+      <h1 style="font-size: 28px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.03em;">
+        {{ org.name }}
+      </h1>
+      <p style="color: var(--slate-600); font-size: 14px; margin-top: 4px;">
+        {{ org.industry|default:"Enterprise Organization" }} · {{ org.company_size|default:"50-200" }} · Created {{ org.created_at|date:"M d, Y" }}
+      </p>
+    </div>
+
+    <!-- Governance Action Buttons -->
+    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+      {% if org.verification_status == 'PENDING' %}
+        <form method="post" action="{% url 'owner_approve_org' org.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary" style="background: #059669; border-color: #059669;">
+            ✓ Approve Organization
+          </button>
+        </form>
+        <button type="button" class="btn btn-outline" style="color: var(--rose-600); border-color: var(--rose-200);" onclick="document.getElementById('reject-modal').style.display = 'flex';">
+          ✕ Reject Registration
+        </button>
+      {% elif org.verification_status == 'APPROVED' %}
+        <span class="meta-badge" style="background: #ecfdf5; color: #059669; font-weight: 700; font-size: 13px;">
+          ✓ Verified Employer
+        </span>
+      {% else %}
+        <span class="meta-badge" style="background: #fff1f2; color: #e11d48; font-weight: 700; font-size: 13px;">
+          ✕ Rejected Registration
+        </span>
+      {% endif %}
+
+      <form method="post" action="{% url 'owner_toggle_org' org.pk %}">
+        {% csrf_token %}
+        {% if org.is_active %}
+          <button type="submit" class="btn btn-outline" style="color: #d97706; border-color: #fde68a;">
+            ⏸ Suspend Workspace
+          </button>
+        {% else %}
+          <button type="submit" class="btn btn-primary">
+            ▶ Reactivate Workspace
+          </button>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+
+  <!-- Rejection Notice Banner if rejected -->
+  {% if org.verification_status == 'REJECTED' and org.rejection_reason %}
+    <div style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: var(--radius-md); padding: 16px 20px; margin-bottom: 24px; color: #be123c;">
+      <strong>Registration Rejection Reason Recorded:</strong>
+      <p style="margin: 4px 0 0 0; font-size: 13px;">{{ org.rejection_reason }}</p>
+    </div>
+  {% endif %}
+
+  <!-- Organization Overview Grid -->
+  <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 32px;">
+    <div class="detail-main" style="padding: 24px;">
+      <h2 style="font-size: 16px; font-weight: 700; color: var(--slate-900); margin-bottom: 16px;">
+        Tenant Identity & Corporate Profile
+      </h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 13px; margin-bottom: 20px;">
+        <div>
+          <span style="color: var(--slate-500); display: block;">Official Domain / Website</span>
+          {% if org.website %}
+            <a href="{{ org.website }}" target="_blank" style="color: var(--primary); font-weight: 600;">{{ org.website }} ↗</a>
+          {% else %}
+            <span style="color: var(--slate-400);">Not specified</span>
+          {% endif %}
+        </div>
+        <div>
+          <span style="color: var(--slate-500); display: block;">Headquarters Location</span>
+          <strong style="color: var(--slate-800);">{{ org.location|default:"Not specified" }}</strong>
+        </div>
+        <div>
+          <span style="color: var(--slate-500); display: block;">Tenant Workspace Slug</span>
+          <code>{{ org.slug }}</code>
+        </div>
+        <div>
+          <span style="color: var(--slate-500); display: block;">Platform Status</span>
+          {% if org.is_active %}
+            <span style="color: #059669; font-weight: 700;">● Active</span>
+          {% else %}
+            <span style="color: #e11d48; font-weight: 700;">⏸ Suspended</span>
+          {% endif %}
+        </div>
+      </div>
+      <div>
+        <span style="color: var(--slate-500); font-size: 12px; display: block; margin-bottom: 4px;">Company Overview</span>
+        <p style="color: var(--slate-700); font-size: 13px; line-height: 1.6; margin: 0;">
+          {{ org.description|default:"No company profile statement submitted." }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Subscription & Entitlements Card -->
+    <div class="detail-main" style="padding: 24px;">
+      <h2 style="font-size: 16px; font-weight: 700; color: var(--slate-900); margin-bottom: 16px;">
+        Subscription & Entitlements
+      </h2>
+      {% if subscription %}
+        <div style="background: #f8fafc; border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 16px; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <strong style="font-size: 15px; color: var(--slate-900);">{{ subscription.plan }} Tier</strong>
+            <span class="meta-badge" style="background: #ecfdf5; color: #059669; font-weight: 700;">{{ subscription.status }}</span>
+          </div>
+          <span style="font-size: 12px; color: var(--slate-500); display: block;">
+            Renews: {{ subscription.current_period_end|date:"M d, Y"|default:"Active cycle" }}
+          </span>
+        </div>
+      {% else %}
+        <div style="background: #f8fafc; border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 16px; margin-bottom: 16px; text-align: center;">
+          <span style="color: var(--slate-500); font-size: 13px;">Standard Evaluation Tier</span>
+        </div>
+      {% endif %}
+
+      <div style="font-size: 13px; display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--slate-500);">Open Vacancies:</span>
+          <strong>{{ jobs.count }} Jobs</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--slate-500);">HR Recruiter Seats:</span>
+          <strong>{{ members.count }} Members</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HR Recruiter Team Seats -->
+  <div class="section-header" style="margin-top: 24px;">
+    <h2 class="section-title">HR Recruiter Team Seats ({{ members.count }})</h2>
+  </div>
+  <div class="detail-main" style="padding: 0; overflow: hidden; margin-bottom: 32px;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: left;">
+      <thead>
+        <tr style="background: var(--slate-50); border-bottom: 1px solid var(--slate-200); color: var(--slate-600);">
+          <th style="padding: 12px 16px;">User</th>
+          <th style="padding: 12px 16px;">Official Email</th>
+          <th style="padding: 12px 16px;">Tenant Role</th>
+          <th style="padding: 12px 16px;">Status</th>
+          <th style="padding: 12px 16px;">Joined Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in members %}
+          <tr style="border-bottom: 1px solid var(--slate-100);">
+            <td style="padding: 12px 16px; font-weight: 600; color: var(--slate-900);">
+              {{ m.user.get_full_name|default:m.user.username }}
+            </td>
+            <td style="padding: 12px 16px; color: var(--slate-600);">
+              {{ m.user.email }}
+            </td>
+            <td style="padding: 12px 16px;">
+              <span class="meta-badge" style="background: var(--slate-100); color: var(--slate-700);">{{ m.get_role_display }}</span>
+            </td>
+            <td style="padding: 12px 16px;">
+              {% if m.user.is_active %}
+                <span style="color: #059669; font-weight: 600;">Active</span>
+              {% else %}
+                <span style="color: #e11d48; font-weight: 600;">Suspended</span>
+              {% endif %}
+            </td>
+            <td style="padding: 12px 16px; color: var(--slate-500);">
+              {{ m.joined_at|date:"M d, Y" }}
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5" style="padding: 20px; text-align: center; color: var(--slate-400);">No HR team members provisioned yet.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Posted Vacancies -->
+  <div class="section-header" style="margin-top: 24px;">
+    <h2 class="section-title">Posted Vacancies ({{ jobs.count }})</h2>
+  </div>
+  <div class="detail-main" style="padding: 0; overflow: hidden; margin-bottom: 32px;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: left;">
+      <thead>
+        <tr style="background: var(--slate-50); border-bottom: 1px solid var(--slate-200); color: var(--slate-600);">
+          <th style="padding: 12px 16px;">Role Title</th>
+          <th style="padding: 12px 16px;">Course / Dept</th>
+          <th style="padding: 12px 16px; text-align: center;">Headcount Target</th>
+          <th style="padding: 12px 16px; text-align: center;">Hired</th>
+          <th style="padding: 12px 16px;">Status</th>
+          <th style="padding: 12px 16px;">Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for j in jobs %}
+          <tr style="border-bottom: 1px solid var(--slate-100);">
+            <td style="padding: 12px 16px;">
+              <strong style="color: var(--slate-900);">
+                <a href="{% url 'job_detail' j.pk %}">{{ j.title }}</a>
+              </strong>
+            </td>
+            <td style="padding: 12px 16px; color: var(--slate-600);">
+              {{ j.get_target_course_display }} · {{ j.department|default:"Engineering" }}
+            </td>
+            <td style="padding: 12px 16px; text-align: center; font-weight: 700; color: var(--primary);">
+              {{ j.vacancies }}
+            </td>
+            <td style="padding: 12px 16px; text-align: center; font-weight: 700; color: #059669;">
+              {{ j.hired_count }}
+            </td>
+            <td style="padding: 12px 16px;">
+              <span class="meta-badge" style="background: #f1f5f9; color: #475569;">{{ j.get_status_display }}</span>
+            </td>
+            <td style="padding: 12px 16px; color: var(--slate-500);">
+              {{ j.created_at|date:"M d, Y" }}
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="6" style="padding: 20px; text-align: center; color: var(--slate-400);">No vacancies created by this organization yet.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Rejection Modal -->
+<div id="reject-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+  <div style="background: #ffffff; border-radius: var(--radius-lg); padding: 24px; max-width: 500px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);">
+    <h3 style="font-size: 18px; font-weight: 800; color: var(--slate-900); margin: 0 0 8px 0;">Reject Company Registration</h3>
+    <p style="color: var(--slate-600); font-size: 13px; margin-bottom: 16px;">
+      Provide an official reason for rejection (e.g. corporate verification documents missing, unverified domain, or duplicate account).
+    </p>
+    <form method="post" action="{% url 'owner_reject_org' org.pk %}">
+      {% csrf_token %}
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label class="form-label">Rejection Reason</label>
+        <textarea name="rejection_reason" rows="4" class="form-input" placeholder="Explain the exact compliance or documentation issue..." required></textarea>
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button type="button" class="btn btn-ghost" onclick="document.getElementById('reject-modal').style.display = 'none';">Cancel</button>
+        <button type="submit" class="btn btn-primary" style="background: #e11d48; border-color: #e11d48;">Confirm Rejection</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

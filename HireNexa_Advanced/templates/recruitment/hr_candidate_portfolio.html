@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block title %}Candidate Project Portfolio · {{ candidate.get_full_name|default:candidate.username }} · HireNexa{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 24px;">
+  <a href="javascript:history.back()" style="font-size: 14px; font-weight: 500; color: var(--slate-500); display: inline-flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+    ← Back to Previous View
+  </a>
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+    <div>
+      <span class="hero-pill" style="margin-bottom: 6px;">HR CANDIDATE TECHNICAL AUDIT & PORTFOLIO</span>
+      <h1 style="font-size: 30px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.03em; margin: 0;">
+        {{ profile.full_name|default:candidate.username }}
+      </h1>
+      <p style="color: var(--slate-600); font-size: 15px; margin-top: 4px;">
+        {{ profile.headline|default:"Candidate Technical Profile" }} · 📍 {{ profile.location|default:"India" }}
+      </p>
+    </div>
+
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      {% if profile.github_url %}
+        <a href="{{ profile.github_url }}" target="_blank" class="btn btn-white btn-sm">🐙 GitHub Profile ↗</a>
+      {% endif %}
+      {% if profile.linkedin_url %}
+        <a href="{{ profile.linkedin_url }}" target="_blank" class="btn btn-white btn-sm" style="color: #0077b5;">💼 LinkedIn ↗</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Candidate Summary Banner -->
+<div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 20px 24px; box-shadow: var(--shadow-sm); margin-bottom: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+  <div style="display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; color: var(--slate-700);">
+    <div>🎓 <strong>Education:</strong> {{ profile.education|default:"Degree" }} ({{ profile.university|default:"University" }})</div>
+    {% if profile.cgpa %}
+      <div>📊 <strong>CGPA:</strong> {{ profile.cgpa }}</div>
+    {% endif %}
+    <div>⚡ <strong>Total Projects:</strong> {{ portfolios.count }}</div>
+    {% if profile.preferred_work_mode %}
+      <div>💼 <strong>Workplace Pref:</strong> <span class="meta-badge" style="background: #f0fdf4; color: #15803d; font-weight: 700;">{{ profile.preferred_work_mode }}</span></div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Projects Showcase -->
+<h3 style="font-size: 20px; font-weight: 800; color: var(--slate-900); margin-bottom: 16px;">
+  Verified Technical Projects ({{ portfolios.count }})
+</h3>
+
+{% if portfolios %}
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    {% for proj in portfolios %}
+      <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 12px;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <h3 style="font-size: 20px; font-weight: 800; color: var(--slate-900); margin: 0;">
+                {{ proj.project_name }}
+              </h3>
+              <span class="meta-badge" style="background: #e0e7ff; color: #4338ca; font-weight: 700;">
+                {{ proj.get_category_display }}
+              </span>
+            </div>
+
+            <!-- Tech Badges -->
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;">
+              {% for tech in proj.get_technologies_list %}
+                <span class="meta-badge" style="background: var(--slate-100); color: var(--slate-700); font-weight: 600;">
+                  ⚡ {{ tech }}
+                </span>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Links -->
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            {% if proj.github_url %}
+              <a href="{{ proj.github_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-white btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">
+                <span>🐙</span> Codebase ↗
+              </a>
+            {% endif %}
+            {% if proj.live_demo_url %}
+              <a href="{{ proj.live_demo_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-white btn-sm" style="display: inline-flex; align-items: center; gap: 6px; color: var(--primary);">
+                <span>🌐</span> Live Demo ↗
+              </a>
+            {% endif %}
+            {% if proj.video_url %}
+              <a href="{{ proj.video_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-white btn-sm" style="display: inline-flex; align-items: center; gap: 6px; color: #b45309;">
+                <span>🎥</span> Walkthrough ↗
+              </a>
+            {% endif %}
+          </div>
+        </div>
+
+        <p style="color: var(--slate-700); font-size: 14px; line-height: 1.6; margin: 12px 0;">
+          {{ proj.description|linebreaksbr }}
+        </p>
+
+        <!-- Attached Files & Screenshots -->
+        {% if proj.files.exists %}
+          <div style="margin-top: 16px; border-top: 1px solid var(--slate-100); padding-top: 14px;">
+            <div style="font-size: 12px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px;">
+              Attached Files & Verification Documents ({{ proj.files.count }})
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px;">
+              {% for f in proj.files.all %}
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md);">
+                  <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                    <span style="font-size: 18px;">
+                      {% if f.is_pdf %}📄{% elif f.is_image %}🖼️{% elif f.is_zip %}📦{% else %}📎{% endif %}
+                    </span>
+                    <div style="min-width: 0;">
+                      <div style="font-size: 13px; font-weight: 600; color: var(--slate-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ f.file_name }}">
+                        {{ f.file_name }}
+                      </div>
+                      <div style="font-size: 11px; color: var(--slate-500);">
+                        {{ f.formatted_size }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; gap: 6px; margin-left: 6px;">
+                    {% if f.is_pdf or f.is_image %}
+                      <a href="{% url 'candidate_project_file_preview' f.pk %}" target="_blank" class="btn btn-white btn-sm" style="font-size: 11px; padding: 4px 8px;" title="Preview Document">
+                        Preview
+                      </a>
+                    {% endif %}
+                    <a href="{% url 'candidate_project_file_download' f.pk %}" class="btn btn-primary btn-sm" style="font-size: 11px; padding: 4px 8px;" title="Download securely via signed URL">
+                      Download ⬇️
+                    </a>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 36px; text-align: center; color: var(--slate-500);">
+    No projects uploaded by this candidate yet.
+  </div>
+{% endif %}
+{% endblock %}

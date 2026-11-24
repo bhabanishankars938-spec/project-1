@@ -1,0 +1,562 @@
+[
+  {
+    "order": 1,
+    "title": "Sentence Correction Problem #1",
+    "difficulty": "EASY",
+    "topic": "Sentence Correction",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Sentence Correction (Case #1):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 2,
+    "title": "Sentence Correction Problem #2",
+    "difficulty": "EASY",
+    "topic": "Sentence Correction",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Sentence Correction (Case #2):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 3,
+    "title": "Sentence Correction Problem #3",
+    "difficulty": "EASY",
+    "topic": "Sentence Correction",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Sentence Correction (Case #3):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 4,
+    "title": "Sentence Correction Problem #4",
+    "difficulty": "MEDIUM",
+    "topic": "Sentence Correction",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Sentence Correction (Case #4):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 5,
+    "title": "Sentence Correction Problem #5",
+    "difficulty": "MEDIUM",
+    "topic": "Sentence Correction",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Sentence Correction (Case #5):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 6,
+    "title": "Sentence Correction Problem #6",
+    "difficulty": "MEDIUM",
+    "topic": "Sentence Correction",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Sentence Correction (Case #6):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 7,
+    "title": "Sentence Correction Problem #7",
+    "difficulty": "MEDIUM",
+    "topic": "Sentence Correction",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Sentence Correction (Case #7):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 8,
+    "title": "Sentence Correction Problem #8",
+    "difficulty": "MEDIUM",
+    "topic": "Sentence Correction",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Sentence Correction (Case #8):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 9,
+    "title": "Sentence Correction Problem #9",
+    "difficulty": "MEDIUM",
+    "topic": "Sentence Correction",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Sentence Correction (Case #9):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 10,
+    "title": "Sentence Correction Problem #10",
+    "difficulty": "MEDIUM",
+    "topic": "Sentence Correction",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Sentence Correction (Case #10):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 11,
+    "title": "Sentence Correction Problem #11",
+    "difficulty": "MEDIUM",
+    "topic": "Sentence Correction",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Sentence Correction (Case #11):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 12,
+    "title": "Sentence Correction Problem #12",
+    "difficulty": "HARD",
+    "topic": "Sentence Correction",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Sentence Correction (Case #12):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 13,
+    "title": "Sentence Correction Problem #13",
+    "difficulty": "HARD",
+    "topic": "Sentence Correction",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Sentence Correction (Case #13):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 14,
+    "title": "Sentence Correction Problem #14",
+    "difficulty": "HARD",
+    "topic": "Sentence Correction",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Sentence Correction (Case #14):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 15,
+    "title": "Sentence Correction Problem #15",
+    "difficulty": "HARD",
+    "topic": "Sentence Correction",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Sentence Correction (Case #15):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 16,
+    "title": "Sentence Correction Problem #16",
+    "difficulty": "HARD",
+    "topic": "Sentence Correction",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Sentence Correction (Case #16):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  }
+]

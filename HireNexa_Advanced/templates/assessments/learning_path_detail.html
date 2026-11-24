@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}{{ path.title }} · Learning Path · HireNexa{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 960px; margin: 0 auto; padding: 24px 16px;">
+  <div style="margin-bottom: 20px;">
+    <a href="{% url 'learning_paths' %}" style="font-size: 13px; color: #4f46e5; text-decoration: none; font-weight: 600;">← Back to Learning Paths</a>
+    <h1 style="font-size: 28px; font-weight: 800; color: var(--slate-900); margin: 6px 0 2px 0;">{{ path.title }}</h1>
+    <p style="color: var(--slate-600); font-size: 14px;">{{ path.description }}</p>
+  </div>
+
+  <!-- Progress Card -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 20px; margin-bottom: 28px; box-shadow: var(--shadow-sm); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+    <div>
+      <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase;">Overall Progression</span>
+      <strong style="font-size: 18px; color: var(--slate-900); display: block;">{{ path.completed_milestones }} of {{ path.total_milestones }} Milestones Cleared</strong>
+    </div>
+    <div style="min-width: 200px;">
+      <div style="width: 100%; height: 10px; background: var(--slate-100); border-radius: 9999px; overflow: hidden; margin-bottom: 4px;">
+        <div style="width: {{ path.progress_percentage }}%; height: 100%; background: #4f46e5; border-radius: 9999px;"></div>
+      </div>
+      <span style="font-size: 12px; font-weight: 700; color: #4f46e5; text-align: right; display: block;">{{ path.progress_percentage }}% Completed</span>
+    </div>
+  </div>
+
+  <!-- Stepper Milestones -->
+  <div style="display: flex; flex-direction: column; gap: 18px;">
+    {% for m in path.milestones %}
+    <div style="background: #ffffff; border: 1px solid {% if m.is_completed %}#a7f3d0{% elif m.is_unlocked %}#c7d2fe{% else %}var(--slate-200){% endif %}; border-radius: var(--radius-xl); padding: 22px; box-shadow: var(--shadow-sm); display: flex; gap: 18px; align-items: flex-start; opacity: {% if m.is_unlocked %}1{% else %}0.65{% endif %};">
+      <!-- Step Icon Badge -->
+      <div style="width: 40px; height: 40px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; flex-shrink: 0;
+        {% if m.is_completed %}background: #ecfdf5; color: #047857; border: 2px solid #a7f3d0;
+        {% elif m.is_unlocked %}background: #eef2ff; color: #4f46e5; border: 2px solid #c7d2fe;
+        {% else %}background: var(--slate-100); color: var(--slate-400); border: 2px solid var(--slate-200);{% endif %}">
+        {% if m.is_completed %}✓{% else %}{{ m.step }}{% endif %}
+      </div>
+
+      <!-- Milestone Details -->
+      <div style="flex-grow: 1;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 4px;">
+          <div>
+            <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase;">Step {{ m.step }} · {{ m.milestone_type }}</span>
+            <h3 style="font-size: 17px; font-weight: 700; color: var(--slate-900); margin: 2px 0 0 0;">{{ m.title }}</h3>
+          </div>
+          <span style="font-size: 12px; font-weight: 700; padding: 4px 8px; border-radius: 4px;
+            {% if m.status == 'COMPLETED' %}background: #ecfdf5; color: #047857;
+            {% elif m.status == 'IN_PROGRESS' %}background: #eef2ff; color: #4f46e5;
+            {% else %}background: var(--slate-100); color: var(--slate-500);{% endif %}">
+            {{ m.status }}
+          </span>
+        </div>
+
+        <p style="font-size: 13px; color: var(--slate-600); margin: 6px 0 10px 0; line-height: 1.5;">{{ m.theory_summary }}</p>
+
+        <!-- Completion Criteria -->
+        <div style="background: var(--slate-50); padding: 8px 12px; border-radius: var(--radius-md); font-size: 12px; color: var(--slate-700); margin-bottom: 12px;">
+          🎯 <strong>Completion Criteria:</strong> {{ m.practical_criteria }}
+        </div>
+
+        {% if m.prerequisites %}
+        <span style="font-size: 11px; color: var(--slate-500); display: block; margin-bottom: 10px;">
+          🔒 <strong>Prerequisites:</strong> {{ m.prerequisites|join:", " }}
+        </span>
+        {% endif %}
+
+        {% if m.is_unlocked and not m.is_completed %}
+        <a href="{% url 'question_bank' %}" class="btn btn-primary btn-sm">Start Practice Assessment →</a>
+        {% elif m.is_completed %}
+        <span style="font-size: 12px; font-weight: 700; color: #047857;">✓ Milestone Verified in Database</span>
+        {% else %}
+        <span style="font-size: 12px; color: var(--slate-400);">Complete earlier steps to unlock this milestone.</span>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

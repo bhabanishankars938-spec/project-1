@@ -1,0 +1,170 @@
+{% extends "accounts/settings/settings_base.html" %}
+
+{% block title %}Notifications Preferences · HireNexa Settings{% endblock %}
+
+{% block settings_content %}
+<div class="settings-card">
+  <div class="card-header-bar">
+    <div class="card-title-group">
+      <h2 class="card-title">Notification Preferences & Alert Channels</h2>
+      <p class="card-subtitle">Control email digests, in-app bell announcements, push broadcasts, and quiet hours.</p>
+    </div>
+  </div>
+
+  <form method="post" class="settings-form">
+    {% csrf_token %}
+
+    <!-- Email Notifications Category -->
+    <h3 class="form-section-heading">📧 Email Notifications</h3>
+    <div class="toggle-group-list">
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>Job Applications & Candidate Submissions</strong>
+          <span>Receive alerts when candidates apply to your roles or when your application status changes.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="email_applications" {% if prefs.email_applications %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>Interview Invitations & Scheduling</strong>
+          <span>Notifications for scheduled rounds, calendar links, and interview rescheduling requests.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="email_interviews" {% if prefs.email_interviews %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>Direct Recruiter & Candidate Messages</strong>
+          <span>Alerts when hiring teams or freelance clients send direct messages or proposal updates.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="email_messages" {% if prefs.email_messages %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>Smart Job Alerts & AI Matches</strong>
+          <span>Weekly or instant AI match alerts matching your verified skills and target compensation.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="email_job_alerts" {% if prefs.email_job_alerts %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>Platform News & Hiring Bulletins</strong>
+          <span>Company announcements, hackathons, and enterprise webinars.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="email_news" {% if prefs.email_news %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>Product Updates & Marketing Digest</strong>
+          <span>Periodic summaries of newly released platform tools and feature spotlights.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="email_marketing" {% if prefs.email_marketing %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <!-- In-App & Bell Notifications -->
+    <h3 class="form-section-heading">🔔 In-App Bell Center</h3>
+    <div class="toggle-group-list">
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>In-App Application Alerts</strong>
+          <span>Show badges and dropdown alerts in the top navigation header for application status updates.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="inapp_applications" {% if prefs.inapp_applications %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>In-App Interview Reminders</strong>
+          <span>Real-time reminders 30 minutes before interviews and panel rounds.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="inapp_interviews" {% if prefs.inapp_interviews %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>Browser Web Push Notifications</strong>
+          <span>Desktop notification toasts when HireNexa tab is in the background.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="push_enabled" {% if prefs.push_enabled %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <!-- Frequency & Quiet Hours -->
+    <h3 class="form-section-heading">⏳ Delivery Cadence & Quiet Hours</h3>
+    <div class="form-row-2col">
+      <div class="form-group">
+        <label for="digestSelect" class="form-label">Email Digest Frequency</label>
+        <select name="digest_frequency" id="digestSelect" class="form-input">
+          <option value="INSTANT" {% if prefs.digest_frequency == 'INSTANT' %}selected{% endif %}>Instant (Receive alerts immediately)</option>
+          <option value="DAILY" {% if prefs.digest_frequency == 'DAILY' %}selected{% endif %}>Daily Summary (Consolidated digest at 9:00 AM)</option>
+          <option value="WEEKLY" {% if prefs.digest_frequency == 'WEEKLY' %}selected{% endif %}>Weekly Digest (Every Monday morning)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Quiet Hours Silence Mode</label>
+        <div style="display: flex; align-items: center; gap: 12px; margin-top: 6px;">
+          <label class="toggle-switch">
+            <input type="checkbox" name="quiet_hours_enabled" {% if prefs.quiet_hours_enabled %}checked{% endif %}>
+            <span class="toggle-slider"></span>
+          </label>
+          <span style="font-size: 13px; color: var(--slate-600);">Pause all non-critical notifications during sleep hours</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row-2col">
+      <div class="form-group">
+        <label for="quietStartInput" class="form-label">Quiet Hours Start</label>
+        <input type="time" name="quiet_hours_start" id="quietStartInput" value="{{ prefs.quiet_hours_start|time:'H:i'|default:'22:00' }}" class="form-input">
+      </div>
+      <div class="form-group">
+        <label for="quietEndInput" class="form-label">Quiet Hours End</label>
+        <input type="time" name="quiet_hours_end" id="quietEndInput" value="{{ prefs.quiet_hours_end|time:'H:i'|default:'08:00' }}" class="form-input">
+      </div>
+    </div>
+
+    <div class="form-submit-row">
+      <button type="submit" class="btn btn-primary btn-md">
+        Save Notification Preferences
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

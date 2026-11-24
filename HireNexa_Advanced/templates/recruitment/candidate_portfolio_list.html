@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% block title %}Project Portfolio & Supabase Storage · HireNexa{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+  <div>
+    <a href="{% url 'candidate_dashboard' %}" style="font-size: 14px; font-weight: 500; color: var(--slate-500); display: inline-flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+      ← Back to Candidate Dashboard
+    </a>
+    <h1 style="font-size: 30px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.03em; margin: 0;">
+      Project Portfolio & Storage
+    </h1>
+    <p style="color: var(--slate-600); font-size: 15px; margin-top: 4px;">
+      Showcase your technical engineering projects, architecture blueprints, code repositories, and documentation to verified recruiters.
+    </p>
+  </div>
+
+  <div style="display: flex; gap: 12px; align-items: center;">
+    <a href="{% url 'candidate_project_create' %}" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
+      <span>➕</span> Add New Project
+    </a>
+  </div>
+</div>
+
+<!-- Storage & Portfolio Stats Ribbon -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 32px;">
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-sm);">
+    <div style="font-size: 12px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.05em;">Total Projects</div>
+    <div style="font-size: 28px; font-weight: 800; color: var(--slate-900); margin-top: 4px;">{{ total_projects }}</div>
+    <div style="font-size: 13px; color: var(--slate-500); margin-top: 2px;">Active in recruiter showcase</div>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-sm);">
+    <div style="font-size: 12px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.05em;">Attached Files</div>
+    <div style="font-size: 28px; font-weight: 800; color: var(--primary); margin-top: 4px;">{{ total_files }}</div>
+    <div style="font-size: 13px; color: var(--slate-500); margin-top: 2px;">PDFs, ZIPs, Docs & Screenshots</div>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-sm);">
+    <div style="font-size: 12px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.05em;">Supabase Storage Used</div>
+    <div style="font-size: 28px; font-weight: 800; color: #059669; margin-top: 4px;">{{ storage_str }}</div>
+    <div style="font-size: 13px; color: var(--slate-500); margin-top: 2px;">Encrypted cloud bucket storage</div>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-sm);">
+    <div style="font-size: 12px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.05em;">Security Tier</div>
+    <div style="font-size: 20px; font-weight: 800; color: #4338ca; margin-top: 8px;">PostgreSQL RLS</div>
+    <div style="font-size: 13px; color: var(--slate-500); margin-top: 2px;">Private Signed URL Protection</div>
+  </div>
+</div>
+
+<!-- Projects List -->
+{% if portfolios %}
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    {% for proj in portfolios %}
+      <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm); transition: transform 0.2s ease, box-shadow 0.2s ease;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 14px;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px;">
+              <h2 style="font-size: 22px; font-weight: 800; color: var(--slate-900); margin: 0;">
+                {{ proj.project_name }}
+              </h2>
+              <span class="meta-badge" style="background: #e0e7ff; color: #4338ca; font-weight: 700;">
+                {{ proj.get_category_display }}
+              </span>
+              <span style="font-size: 13px; color: var(--slate-500);">
+                Added {{ proj.created_at|date:"M d, Y" }}
+              </span>
+            </div>
+
+            <!-- Technology Chips -->
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;">
+              {% for tech in proj.get_technologies_list %}
+                <span class="meta-badge" style="background: var(--slate-100); color: var(--slate-700); font-weight: 600;">
+                  ⚡ {{ tech }}
+                </span>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <a href="{% url 'candidate_project_edit' proj.pk %}" class="btn btn-white btn-sm">
+              ✏️ Edit
+            </a>
+            <form method="post" action="{% url 'candidate_project_delete' proj.pk %}" onsubmit="return confirm('Are you sure you want to permanently delete this project and all its uploaded files?');" style="margin: 0;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-sm" style="color: #e11d48; border-color: #fecdd3; background: #fff1f2;">
+                🗑️ Delete
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <p style="color: var(--slate-700); font-size: 15px; line-height: 1.6; margin: 14px 0;">
+          {{ proj.description|linebreaksbr }}
+        </p>
+
+        <!-- Project Links -->
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0; padding-bottom: 16px; border-bottom: 1px solid var(--slate-100);">
+          {% if proj.github_url %}
+            <a href="{{ proj.github_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-white btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">
+              <span>🐙</span> GitHub Repository ↗
+            </a>
+          {% endif %}
+          {% if proj.live_demo_url %}
+            <a href="{{ proj.live_demo_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-white btn-sm" style="display: inline-flex; align-items: center; gap: 6px; color: var(--primary); border-color: var(--primary-light);">
+              <span>🌐</span> Live Application Demo ↗
+            </a>
+          {% endif %}
+          {% if proj.video_url %}
+            <a href="{{ proj.video_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-white btn-sm" style="display: inline-flex; align-items: center; gap: 6px; color: #b45309;">
+              <span>🎥</span> Video Walkthrough ↗
+            </a>
+          {% endif %}
+        </div>
+
+        <!-- Attached Files Section -->
+        <div>
+          <h4 style="font-size: 14px; font-weight: 700; color: var(--slate-700); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 12px;">
+            📁 Supabase Storage Attachments ({{ proj.files.count }})
+          </h4>
+
+          {% if proj.files.exists %}
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px;">
+              {% for f in proj.files.all %}
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md);">
+                  <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                    <span style="font-size: 20px;">
+                      {% if f.is_pdf %}📄
+                      {% elif f.is_image %}🖼️
+                      {% elif f.is_zip %}📦
+                      {% elif f.is_doc %}📝
+                      {% elif f.is_presentation %}📊
+                      {% else %}📎{% endif %}
+                    </span>
+                    <div style="min-width: 0;">
+                      <div style="font-size: 13px; font-weight: 600; color: var(--slate-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ f.file_name }}">
+                        {{ f.file_name }}
+                      </div>
+                      <div style="font-size: 11px; color: var(--slate-500);">
+                        {{ f.formatted_size }} · {{ f.uploaded_at|date:"M d" }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; align-items: center; gap: 6px; margin-left: 8px;">
+                    {% if f.is_pdf or f.is_image %}
+                      <a href="{% url 'candidate_project_file_preview' f.pk %}" target="_blank" class="btn btn-white btn-sm" style="padding: 4px 8px; font-size: 11px;" title="Preview">
+                        👁️
+                      </a>
+                    {% endif %}
+                    <a href="{% url 'candidate_project_file_download' f.pk %}" class="btn btn-white btn-sm" style="padding: 4px 8px; font-size: 11px;" title="Secure Download">
+                      ⬇️
+                    </a>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div style="font-size: 13px; color: var(--slate-500); font-style: italic;">
+              No files attached to this project. <a href="{% url 'candidate_project_edit' proj.pk %}" style="color: var(--primary);">Upload screenshots or documentation →</a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div style="background: #ffffff; border: 2px dashed var(--slate-200); border-radius: var(--radius-lg); padding: 48px; text-align: center;">
+    <div style="font-size: 48px; margin-bottom: 12px;">📁</div>
+    <h3 style="font-size: 20px; font-weight: 800; color: var(--slate-800); margin-bottom: 6px;">
+      No Projects in Your Portfolio Yet
+    </h3>
+    <p style="color: var(--slate-500); font-size: 14px; max-width: 500px; margin: 0 auto 20px auto;">
+      Candidates with rich project portfolios receive up to <strong>3.8x more interview requests</strong> from top employers. Add your first full-stack, mobile, or AI project now!
+    </p>
+    <a href="{% url 'candidate_project_create' %}" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
+      <span>➕</span> Create First Project
+    </a>
+  </div>
+{% endif %}
+{% endblock %}

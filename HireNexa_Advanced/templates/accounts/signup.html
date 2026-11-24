@@ -1,0 +1,441 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Create Your Account · HireNexa Intelligence{% endblock %}
+
+{% block content %}
+<div class="split-auth-container" id="signupContainer">
+  <!-- Left Column: Showcase & Platform Value Proposition -->
+  <aside class="auth-showcase-pane" aria-label="HireNexa Platform Highlights">
+    <div class="auth-showcase-top">
+      <div class="auth-brand-badge">
+        <div class="auth-brand-icon">HN</div>
+        <span class="auth-brand-name">HireNexa</span>
+        <span class="auth-brand-pill">Join For Free</span>
+      </div>
+
+      <h1 class="auth-showcase-headline">
+        Where Talent Meets <br>
+        <span style="background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Intelligent Opportunity.</span>
+      </h1>
+
+      <p class="auth-showcase-subtext">
+        Connect with leading tech companies, accelerate your professional career, or streamline enterprise hiring quotas with explainable AI.
+      </p>
+
+      <div class="auth-benefits-list">
+        <div class="auth-benefit-item">
+          <div class="auth-benefit-icon">🎯</div>
+          <div>
+            <div class="auth-benefit-title">Explainable AI Matching</div>
+            <div class="auth-benefit-desc">Transparent skill fit scores, quota counters, and vacancy metrics without black-box filtering.</div>
+          </div>
+        </div>
+
+        <div class="auth-benefit-item">
+          <div class="auth-benefit-icon">⚡</div>
+          <div>
+            <div class="auth-benefit-title">Multi-Role Specialized Hubs</div>
+            <div class="auth-benefit-desc">Dedicated workflows for Candidates, HR Recruiters, Company Admins, and Freelancers.</div>
+          </div>
+        </div>
+
+        <div class="auth-benefit-item">
+          <div class="auth-benefit-icon">🏆</div>
+          <div>
+            <div class="auth-benefit-title">MCQ & Entrance Examination Prep</div>
+            <div class="auth-benefit-desc">16-question CBT mock tests for NIMCET, OJEE, CAT, with instant scorecards and analytics.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-showcase-footer">
+      <div class="auth-trust-tag">
+        <span class="auth-trust-dot"></span>
+        <span>25,000+ Verified Users</span>
+      </div>
+      <div class="auth-trust-tag">
+        <span>🛡️ Argon2 Password Hashing</span>
+      </div>
+      <div class="auth-trust-tag">
+        <span>🔒 Zero Data Selling</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Right Column: Registration Form -->
+  <main class="auth-form-pane" aria-labelledby="signupTitle">
+    <div class="auth-form-header">
+      <h2 class="auth-title" id="signupTitle">Create Your Account</h2>
+      <p class="auth-subtitle">Select your account role and start your workspace in 30 seconds</p>
+    </div>
+
+    {% if form.non_field_errors %}
+      <div class="alert-message alert-error" style="margin-bottom: 18px; padding: 12px 16px; border-radius: 10px; font-size: 13px;" role="alert">
+        {% for error in form.non_field_errors %}
+          <div>⚠️ {{ error }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'signup' %}" id="hirenexaSignupForm" novalidate>
+      {% csrf_token %}
+      {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+      {% endif %}
+
+      <!-- 1. Interactive Multi-Role Selector Cards -->
+      <div style="margin-bottom: 18px;">
+        <label class="form-label" style="font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px; display: block;">
+          Select Platform Role <span style="color: #ef4444;">*</span>
+        </label>
+        
+        {% with current_role=form.role.value|default:'CANDIDATE' %}
+        <div class="auth-role-grid" role="radiogroup" aria-label="Select Account Role">
+          <!-- Candidate / Student -->
+          <label class="auth-role-card {% if current_role == 'CANDIDATE' or not current_role %}active{% endif %}" id="roleCard_CANDIDATE">
+            <input type="radio" name="role" value="CANDIDATE" class="auth-role-card-radio" {% if current_role == 'CANDIDATE' or not current_role %}checked{% endif %} onchange="handleRoleCardChange(this)">
+            <div class="auth-role-card-content">
+              <div class="auth-role-card-title"><span>🎓</span> Student / Candidate</div>
+              <div class="auth-role-card-desc">Find tech jobs, internships & CBT entrance prep</div>
+            </div>
+          </label>
+
+          <!-- HR / Recruiter -->
+          <label class="auth-role-card {% if current_role == 'RECRUITER' %}active{% endif %}" id="roleCard_RECRUITER">
+            <input type="radio" name="role" value="RECRUITER" class="auth-role-card-radio" {% if current_role == 'RECRUITER' %}checked{% endif %} onchange="handleRoleCardChange(this)">
+            <div class="auth-role-card-content">
+              <div class="auth-role-card-title"><span>💼</span> HR / Recruiter</div>
+              <div class="auth-role-card-desc">Post jobs, screen CVs & manage talent pipelines</div>
+            </div>
+          </label>
+
+          <!-- Company Admin -->
+          <label class="auth-role-card {% if current_role == 'COMPANY_ADMIN' %}active{% endif %}" id="roleCard_COMPANY_ADMIN">
+            <input type="radio" name="role" value="COMPANY_ADMIN" class="auth-role-card-radio" {% if current_role == 'COMPANY_ADMIN' %}checked{% endif %} onchange="handleRoleCardChange(this)">
+            <div class="auth-role-card-content">
+              <div class="auth-role-card-title"><span>🏢</span> Company Admin</div>
+              <div class="auth-role-card-desc">Manage company org, seats & recruiter team</div>
+            </div>
+          </label>
+
+          <!-- Freelancer -->
+          <label class="auth-role-card {% if current_role == 'FREELANCER' %}active{% endif %}" id="roleCard_FREELANCER">
+            <input type="radio" name="role" value="FREELANCER" class="auth-role-card-radio" {% if current_role == 'FREELANCER' %}checked{% endif %} onchange="handleRoleCardChange(this)">
+            <div class="auth-role-card-content">
+              <div class="auth-role-card-title"><span>⚡</span> Freelancer</div>
+              <div class="auth-role-card-desc">Bid on projects, contract briefs & showcase work</div>
+            </div>
+          </label>
+        </div>
+        {% endwith %}
+
+        {% if form.role.errors %}
+          <div class="auth-field-error">
+            <span>⚠️</span> {{ form.role.errors.0 }}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- 2. Full Name Input -->
+      <div class="form-group" style="margin-bottom: 14px;">
+        <label class="form-label" for="id_full_name" style="font-size: 13px; font-weight: 700; color: #334155;">
+          Full Name <span style="color: #ef4444;">*</span>
+        </label>
+        <div class="auth-input-group">
+          <span class="auth-input-icon">👤</span>
+          <input 
+            type="text" 
+            name="full_name" 
+            id="id_full_name" 
+            class="auth-input {% if form.full_name.errors %}is-invalid{% endif %}" 
+            placeholder="e.g. Priya Sharma" 
+            value="{{ form.full_name.value|default:'' }}" 
+            required 
+            autocomplete="name"
+          >
+        </div>
+        {% if form.full_name.errors %}
+          <div class="auth-field-error">
+            <span>⚠️</span> {{ form.full_name.errors.0 }}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- 3. Username Input -->
+      <div class="form-group" style="margin-bottom: 14px;">
+        <label class="form-label" for="id_username" style="font-size: 13px; font-weight: 700; color: #334155;">
+          Username <span style="color: #ef4444;">*</span>
+        </label>
+        <div class="auth-input-group">
+          <span class="auth-input-icon">@</span>
+          <input 
+            type="text" 
+            name="username" 
+            id="id_username" 
+            class="auth-input {% if form.username.errors %}is-invalid{% endif %}" 
+            placeholder="Choose a unique username" 
+            value="{{ form.username.value|default:'' }}" 
+            required 
+            autocomplete="username"
+            spellcheck="false"
+          >
+        </div>
+        {% if form.username.errors %}
+          <div class="auth-field-error">
+            <span>⚠️</span> {{ form.username.errors.0 }}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- 4. Email Address Input -->
+      <div class="form-group" style="margin-bottom: 14px;">
+        <label class="form-label" for="id_email" style="font-size: 13px; font-weight: 700; color: #334155;">
+          Email Address <span style="color: #ef4444;">*</span>
+        </label>
+        <div class="auth-input-group">
+          <span class="auth-input-icon">✉️</span>
+          <input 
+            type="email" 
+            name="email" 
+            id="id_email" 
+            class="auth-input {% if form.email.errors %}is-invalid{% endif %}" 
+            placeholder="e.g. priya.sharma@example.com" 
+            value="{{ form.email.value|default:'' }}" 
+            required 
+            autocomplete="email"
+          >
+        </div>
+        {% if form.email.errors %}
+          <div class="auth-field-error">
+            <span>⚠️</span> {{ form.email.errors.0 }}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- 5. Mobile Phone Number Input -->
+      <div class="form-group" style="margin-bottom: 14px;">
+        <label class="form-label" for="id_phone_number" style="font-size: 13px; font-weight: 700; color: #334155;">
+          Mobile Number <span style="color: #ef4444;">*</span>
+        </label>
+        <div style="display: grid; grid-template-columns: 140px 1fr; gap: 8px;">
+          <select name="country_code" id="id_country_code" class="auth-input" style="padding-left: 12px; cursor: pointer;">
+            <option value="+91" {% if form.country_code.value == '+91' or not form.country_code.value %}selected{% endif %}>🇮🇳 +91 (IN)</option>
+            <option value="+1" {% if form.country_code.value == '+1' %}selected{% endif %}>🇺🇸 +1 (US/CA)</option>
+            <option value="+44" {% if form.country_code.value == '+44' %}selected{% endif %}>🇬🇧 +44 (UK)</option>
+            <option value="+971" {% if form.country_code.value == '+971' %}selected{% endif %}>🇦🇪 +971 (UAE)</option>
+            <option value="+65" {% if form.country_code.value == '+65' %}selected{% endif %}>🇸🇬 +65 (SG)</option>
+            <option value="+61" {% if form.country_code.value == '+61' %}selected{% endif %}>🇦🇺 +61 (AU)</option>
+            <option value="+49" {% if form.country_code.value == '+49' %}selected{% endif %}>🇩🇪 +49 (DE)</option>
+          </select>
+          <div class="auth-input-group">
+            <span class="auth-input-icon">📱</span>
+            <input 
+              type="tel" 
+              name="phone_number" 
+              id="id_phone_number" 
+              class="auth-input {% if form.phone_number.errors %}is-invalid{% endif %}" 
+              placeholder="98765 43210" 
+              value="{{ form.phone_number.value|default:'' }}" 
+              required 
+              autocomplete="tel-national"
+            >
+          </div>
+        </div>
+        {% if form.phone_number.errors %}
+          <div class="auth-field-error">
+            <span>⚠️</span> {{ form.phone_number.errors.0 }}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- 6. Password Input with Show/Hide & Live Strength Meter -->
+      <div class="form-group" style="margin-bottom: 14px;">
+        <label class="form-label" for="id_password1" style="font-size: 13px; font-weight: 700; color: #334155;">
+          Password <span style="color: #ef4444;">*</span>
+        </label>
+        <div class="auth-input-group">
+          <span class="auth-input-icon">🔒</span>
+          <input 
+            type="password" 
+            name="password1" 
+            id="id_password1" 
+            class="auth-input {% if form.password1.errors %}is-invalid{% endif %}" 
+            placeholder="Min. 8 characters with letters & numbers" 
+            required 
+            autocomplete="new-password"
+            oninput="checkPasswordStrength(this.value)"
+          >
+          <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('id_password1', this)" aria-label="Toggle password visibility">
+            👁️
+          </button>
+        </div>
+
+        <!-- Real-Time Password Strength Meter -->
+        <div class="password-meter-wrap" id="passwordMeterContainer" style="display: none;">
+          <div class="password-meter-track">
+            <div class="password-meter-fill" id="passwordMeterFill"></div>
+          </div>
+          <div class="password-meter-label">
+            <span id="passwordStrengthText">Security: Weak</span>
+            <span id="passwordCriteriaText">At least 8 characters</span>
+          </div>
+        </div>
+
+        {% if form.password1.errors %}
+          <div class="auth-field-error">
+            <span>⚠️</span> {{ form.password1.errors.0 }}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- 7. Confirm Password Input -->
+      <div class="form-group" style="margin-bottom: 16px;">
+        <label class="form-label" for="id_password2" style="font-size: 13px; font-weight: 700; color: #334155;">
+          Confirm Password <span style="color: #ef4444;">*</span>
+        </label>
+        <div class="auth-input-group">
+          <span class="auth-input-icon">🔒</span>
+          <input 
+            type="password" 
+            name="password2" 
+            id="id_password2" 
+            class="auth-input {% if form.password2.errors %}is-invalid{% endif %}" 
+            placeholder="Confirm your password" 
+            required 
+            autocomplete="new-password"
+          >
+          <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('id_password2', this)" aria-label="Toggle password confirmation visibility">
+            👁️
+          </button>
+        </div>
+        {% if form.password2.errors %}
+          <div class="auth-field-error">
+            <span>⚠️</span> {{ form.password2.errors.0 }}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- 8. Terms and Privacy Checkbox -->
+      <label class="auth-checkbox-row">
+        <input type="checkbox" name="agree_terms" id="id_agree_terms" class="auth-checkbox" value="1" checked required>
+        <span class="auth-checkbox-label">
+          I agree to the <a href="{% url 'terms' %}" target="_blank">Terms of Service</a> and <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a>, including secure encrypted credential handling.
+        </span>
+      </label>
+      {% if form.agree_terms.errors %}
+        <div class="auth-field-error" style="margin-top: -10px; margin-bottom: 12px;">
+          <span>⚠️</span> {{ form.agree_terms.errors.0 }}
+        </div>
+      {% endif %}
+
+      <!-- 9. Create Account Submit Button -->
+      <button type="submit" class="auth-submit-btn" id="signupSubmitBtn">
+        <span id="signupSubmitText">Create Your Account →</span>
+      </button>
+    </form>
+
+    <div class="auth-pane-footer">
+      Already have an account?
+      <a href="{% url 'login' %}">Sign In to Workspace →</a>
+    </div>
+  </main>
+</div>
+
+<!-- ==========================================================================
+     HIRENEXA CLIENT-SIDE VALIDATION & INTERACTIVITY ENGINE
+     ========================================================================== -->
+<script>
+function handleRoleCardChange(radio) {
+  document.querySelectorAll('.auth-role-card').forEach(card => card.classList.remove('active'));
+  const parentCard = radio.closest('.auth-role-card');
+  if (parentCard) parentCard.classList.add('active');
+}
+
+// Allow clicking on role card to activate
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.auth-role-card').forEach(card => {
+    card.addEventListener('click', function(e) {
+      const radio = this.querySelector('input[type="radio"]');
+      if (radio && e.target !== radio) {
+        radio.checked = true;
+        handleRoleCardChange(radio);
+      }
+    });
+  });
+
+  // Form submit loading state to prevent double submissions
+  const form = document.getElementById('hirenexaSignupForm');
+  const btn = document.getElementById('signupSubmitBtn');
+  const btnText = document.getElementById('signupSubmitText');
+  if (form && btn) {
+    form.addEventListener('submit', function() {
+      btn.disabled = true;
+      btn.classList.add('btn-loading');
+      if (btnText) btnText.innerHTML = '⚡ Creating Your Account...';
+    });
+  }
+});
+
+// Toggle password visibility
+function togglePasswordVisibility(fieldId, btn) {
+  const input = document.getElementById(fieldId);
+  if (!input) return;
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.innerHTML = '🙈';
+    btn.setAttribute('aria-label', 'Hide password');
+  } else {
+    input.type = 'password';
+    btn.innerHTML = '👁️';
+    btn.setAttribute('aria-label', 'Show password');
+  }
+}
+
+// Dynamic Password Strength Meter
+function checkPasswordStrength(password) {
+  const container = document.getElementById('passwordMeterContainer');
+  const fill = document.getElementById('passwordMeterFill');
+  const text = document.getElementById('passwordStrengthText');
+  const criteria = document.getElementById('passwordCriteriaText');
+  
+  if (!password || password.length === 0) {
+    if (container) container.style.display = 'none';
+    return;
+  }
+  if (container) container.style.display = 'block';
+
+  let score = 0;
+  if (password.length >= 8) score++;
+  if (password.length >= 12) score++;
+  if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score++;
+  if (/\d/.test(password)) score++;
+  if (/[^A-Za-z0-9]/.test(password)) score++;
+
+  if (fill && text) {
+    fill.className = 'password-meter-fill';
+    if (score <= 1) {
+      fill.classList.add('meter-weak');
+      text.innerText = 'Security: Weak';
+      text.style.color = '#ef4444';
+      if (criteria) criteria.innerText = 'Add letters, numbers & symbols';
+    } else if (score === 2) {
+      fill.classList.add('meter-fair');
+      text.innerText = 'Security: Fair';
+      text.style.color = '#f59e0b';
+      if (criteria) criteria.innerText = 'Try adding uppercase & symbols';
+    } else if (score === 3 || score === 4) {
+      fill.classList.add('meter-good');
+      text.innerText = 'Security: Good';
+      text.style.color = '#3b82f6';
+      if (criteria) criteria.innerText = 'Solid password';
+    } else {
+      fill.classList.add('meter-strong');
+      text.innerText = 'Security: Strong';
+      text.style.color = '#10b981';
+      if (criteria) criteria.innerText = 'Excellent password strength';
+    }
+  }
+}
+</script>
+{% endblock %}

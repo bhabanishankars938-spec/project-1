@@ -1,0 +1,356 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Ultra Pro Entrance Examination & Learning Hub · MCA & MBA | HireNexa{% endblock %}
+
+{% block content %}
+<div class="prep-hub-container" style="max-width: 1300px; margin: 0 auto; padding: 24px 20px;">
+
+  <!-- Hero Header -->
+  <section class="prep-hero-card"
+    style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fff; border-radius: 16px; padding: 36px 32px; margin-bottom: 28px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px;">
+      <div style="max-width: 800px;">
+        <div style="display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap;">
+          <span
+            style="background: #2563eb; color: #fff; font-size: 0.8rem; font-weight: 700; padding: 4px 12px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.5px;">
+            🎓 Ultra Pro Entrance Ecosystem
+          </span>
+          <span
+            style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); font-size: 0.8rem; font-weight: 600; padding: 4px 12px; border-radius: 999px;">
+            ✓ 100% Verified Authentic Question Bank
+          </span>
+        </div>
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin: 0 0 12px 0; color: #f8fafc; letter-spacing: -0.5px;">
+          Entrance Examination & Intelligent Learning Platform
+        </h1>
+        <p style="font-size: 1.05rem; color: #cbd5e1; line-height: 1.6; margin: 0 0 20px 0;">
+          Specialized preparation tracks for <strong>MCA Entrances</strong> (NIMCET, OJEE, CUET-PG) and
+          <strong>MBA Entrances</strong> (CAT, MAT, CMAT, XAT). Standardized 16-question CBT topic examinations,
+          comprehensive educational notes, and precision percentage analytics.
+        </p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <a href="{% url 'performance_analytics' %}" class="btn btn-primary"
+            style="background: #2563eb; color: #fff; font-weight: 600; padding: 10px 20px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            📊 Performance Analytics Dashboard
+          </a>
+          <a href="{% url 'exam_list' %}" class="btn btn-outline"
+            style="background: transparent; color: #f8fafc; border: 1px solid #475569; font-weight: 600; padding: 10px 20px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            ⏱️ Full Mock Tests Directory
+          </a>
+        </div>
+      </div>
+
+      <!-- Live Metrics Strip -->
+      <div
+        style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; background: rgba(30, 41, 59, 0.7); padding: 18px; border-radius: 12px; border: 1px solid #334155; min-width: 280px;">
+        <div style="text-align: center; border-right: 1px solid #334155; padding-right: 12px;">
+          <div style="font-size: 1.6rem; font-weight: 800; color: #60a5fa;">{{ total_mcqs }}+</div>
+          <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">Verified
+            Questions</div>
+        </div>
+        <div style="text-align: center; padding-left: 6px;">
+          <div style="font-size: 1.6rem; font-weight: 800; color: #34d399;">{{ total_tests }}</div>
+          <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">Standardized
+            Tests</div>
+        </div>
+        <div
+          style="text-align: center; border-right: 1px solid #334155; padding-right: 12px; border-top: 1px solid #334155; padding-top: 10px;">
+          <div style="font-size: 1.6rem; font-weight: 800; color: #f59e0b;">{{ total_subjects }}</div>
+          <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">Syllabus
+            Subjects</div>
+        </div>
+        <div style="text-align: center; padding-left: 6px; border-top: 1px solid #334155; padding-top: 10px;">
+          <div style="font-size: 1.6rem; font-weight: 800; color: #a78bfa;">16 Qs · 21M</div>
+          <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">CBT Blueprint
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Track Selector Tabs (MCA vs MBA) -->
+  <section style="margin-bottom: 28px;">
+    <div style="display: flex; gap: 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; flex-wrap: wrap;">
+      {% for trk in tracks %}
+      <a href="?track={{ trk.slug }}"
+        style="display: flex; align-items: center; gap: 10px; padding: 12px 24px; border-radius: 10px; font-weight: 700; font-size: 1rem; text-decoration: none; transition: all 0.2s; {% if active_track and active_track.id == trk.id %}background: #1e40af; color: #fff; box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);{% else %}background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0;{% endif %}">
+        <span style="font-size: 1.2rem;">{% if trk.code == 'MCA' %}💻{% elif trk.code == 'MBA' %}💼{% else %}🎯{% endif %}</span>
+        <div>
+          <div>{{ trk.name }}</div>
+          <div style="font-size: 0.75rem; font-weight: 500; opacity: 0.85;">
+            {% for ex in trk.target_exams %}{{ ex }}{% if not forloop.last %}, {% endif %}{% endfor %}
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Subject-Wise Question Banks Grid (Section 4) -->
+  <section style="margin-bottom: 40px;">
+    <div
+      style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+      <div>
+        <h2 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin: 0 0 6px 0;">
+          📚 {{ active_track.name|default:"Entrance Subjects" }} ({{ enhanced_subjects|length }} Core Subjects)
+        </h2>
+        <p style="font-size: 0.95rem; color: #64748b; margin: 0;">
+          Click on any subject card to expand syllabus topics, access structured learning notes, and start 16-question
+          CBT examinations.
+        </p>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <span
+          style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 0.82rem; font-weight: 600; color: #475569;">
+          🎯 Blueprint: 16 Questions · 21 Minutes · Max 5 Attempts · (+1.00 / -0.25)
+        </span>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(370px, 1fr)); gap: 20px;">
+      {% for subj in enhanced_subjects %}
+      <div class="subject-card-v2"
+        style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: transform 0.15s, box-shadow 0.15s;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div
+              style="width: 44px; height: 44px; border-radius: 10px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+              {% if subj.icon == 'calculator' or 'Math' in subj.name %}📐
+              {% elif 'Logic' in subj.name or 'Reasoning' in subj.name %}🧠
+              {% elif 'Python' in subj.name %}🐍
+              {% elif 'C Programming' in subj.name %}⚙️
+              {% elif 'Java' in subj.name %}☕
+              {% elif 'DBMS' in subj.name %}🗄️
+              {% elif 'Data Structures' in subj.name or 'Algorithm' in subj.name %}🌲
+              {% elif 'Operating' in subj.name %}🖥️
+              {% elif 'Network' in subj.name %}🌐
+              {% elif 'English' in subj.name or 'Verbal' in subj.name %}📖
+              {% elif 'Quantitative' in subj.name %}📊
+              {% elif 'Awareness' in subj.name or 'Business' in subj.name %}💼
+              {% else %}📦{% endif %}
+            </div>
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">{{ subj.name }}</h3>
+              <span
+                style="font-size: 0.78rem; font-weight: 600; color: #16a34a; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; border: 1px solid #bbf7d0;">
+                ✓ {{ subj.verified_questions }} Verified Questions
+              </span>
+            </div>
+          </div>
+          <span
+            style="font-size: 0.8rem; font-weight: 700; color: #475569; background: #f1f5f9; padding: 4px 8px; border-radius: 6px;">
+            {{ subj.total_topics }} Topics
+          </span>
+        </div>
+
+        <p style="font-size: 0.88rem; color: #64748b; line-height: 1.5; margin: 0 0 16px 0; min-height: 42px;">
+          {{ subj.description|truncatewords:16 }}
+        </p>
+
+        <!-- Metrics Grid (Section 4 Requirements) -->
+        <div
+          style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: #f8fafc; border: 1px solid #edf2f7; border-radius: 8px; padding: 10px; margin-bottom: 14px; text-align: center;">
+          <div>
+            <div style="font-size: 0.72rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Notes</div>
+            <div style="font-size: 0.95rem; font-weight: 700; color: #0f172a;">{{ subj.available_notes }}</div>
+          </div>
+          <div style="border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0;">
+            <div style="font-size: 0.72rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Completed
+            </div>
+            <div style="font-size: 0.95rem; font-weight: 700; color: #2563eb;">{{ subj.completed_topics_count }}/{{ subj.total_topics }}</div>
+          </div>
+          <div>
+            <div style="font-size: 0.72rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Mastery</div>
+            <div style="font-size: 0.95rem; font-weight: 700; color: #16a34a;">{{ subj.subject_mastery_percentage }}%
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress Bars -->
+        <div style="margin-bottom: 16px;">
+          <div
+            style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600; color: #475569; margin-bottom: 4px;">
+            <span>Syllabus Completion</span>
+            <span>{{ subj.completion_percentage }}%</span>
+          </div>
+          <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 999px; overflow: hidden;">
+            <div
+              style="width: {{ subj.completion_percentage }}%; height: 100%; background: #2563eb; border-radius: 999px;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Toggle Accordion for Topics -->
+        <details style="border-top: 1px solid #e2e8f0; padding-top: 12px;">
+          <summary style="font-size: 0.88rem; font-weight: 700; color: #2563eb; cursor: pointer; user-select: none;">
+            View All {{ subj.total_topics }} Topics & Tests ▾
+          </summary>
+          <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+            {% for top in subj.topics_list %}
+            <div
+              style="background: #fafafa; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <div style="font-size: 0.9rem; font-weight: 600; color: #111827;">{{ top.name }}</div>
+                <div
+                  style="font-size: 0.75rem; color: #6b7280; display: flex; gap: 8px; align-items: center; margin-top: 2px;">
+                  <span>16 Qs · 21 Mins</span>
+                  <span>•</span>
+                  <span>Attempts: <strong>{{ top.used_attempts }}/5</strong> ({{ top.attempts_left }} left)</span>
+                  {% if top.best_score is not None %}
+                  <span>•</span>
+                  <span style="color: #059669; font-weight: 700;">Best: {{ top.best_score }}/16 ({{ top.best_score_pct }}%)</span>
+                  {% endif %}
+                </div>
+              </div>
+              <div style="display: flex; gap: 6px;">
+                <a href="{% url 'topic_learning_notes' top.id %}"
+                  style="background: #f3f4f6; color: #374151; font-size: 0.78rem; font-weight: 600; padding: 5px 10px; border-radius: 6px; text-decoration: none; border: 1px solid #d1d5db;">
+                  📖 Notes
+                </a>
+                {% if top.exam_slug %}
+                {% if top.attempts_left > 0 %}
+                <a href="{% url 'exam_start' top.exam_slug %}"
+                  style="background: #2563eb; color: #fff; font-size: 0.78rem; font-weight: 600; padding: 5px 12px; border-radius: 6px; text-decoration: none;">
+                  🚀 Take Test
+                </a>
+                {% else %}
+                <a href="{% url 'exam_start' top.exam_slug %}"
+                  style="background: #9ca3af; color: #fff; font-size: 0.78rem; font-weight: 600; padding: 5px 10px; border-radius: 6px; text-decoration: none;">
+                  Review (0 left)
+                </a>
+                {% endif %}
+                {% endif %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </details>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Featured Target Exam Practice Questions (When filtered or targeted) -->
+  {% if featured_questions %}
+  <section class="featured-questions-section"
+    style="background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 28px; margin-bottom: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+    <div
+      style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+      <div>
+        <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0 0 4px 0;">
+          🎯 Verified Practice Questions {% if active_exam_filter != 'all' %}({{ active_exam_filter|upper }}){% endif %}
+        </h2>
+        <p style="font-size: 0.9rem; color: #64748b; margin: 0;">
+          Syllabus-verified questions with comprehensive multi-tier explanations and step-by-step solutions.
+        </p>
+      </div>
+      <span
+        style="font-size: 0.82rem; font-weight: 700; color: #16a34a; background: #f0fdf4; padding: 4px 12px; border-radius: 999px; border: 1px solid #bbf7d0;">
+        ✓ {{ featured_questions|length }} Verified Questions
+      </span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 18px;">
+      {% for q in featured_questions %}
+      <div
+        style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span
+              style="font-size: 0.72rem; font-weight: 700; color: #2563eb; background: #eff6ff; padding: 2px 8px; border-radius: 4px;">
+              {{ q.subject.name }}
+            </span>
+            <span style="font-size: 0.72rem; font-weight: 600; color: #64748b;">
+              {{ q.get_difficulty_display }}
+            </span>
+          </div>
+          <h4 style="font-size: 1rem; font-weight: 700; color: #0f172a; margin: 0 0 8px 0; line-height: 1.4;">
+            {{ q.title }}
+          </h4>
+          <p style="font-size: 0.82rem; color: #475569; margin: 0 0 14px 0; line-height: 1.5;">
+            {{ q.question_text|truncatewords:16 }}
+          </p>
+        </div>
+        <a href="{% url 'question_detail' q.id %}"
+          style="display: block; text-align: center; width: 100%; padding: 8px; background: #2563eb; color: #fff; border-radius: 6px; font-weight: 600; font-size: 0.85rem; text-decoration: none;">
+          Solve Interactive MCQ →
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Live Timed Entrance Mock Tests Section -->
+  {% if exams_page %}
+  <section
+    style="background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 28px; margin-bottom: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+    <div
+      style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+      <div>
+        <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0 0 4px 0;">
+          ⏱️ Standardized Examinations (16 Questions · 21 Minutes · Max 5 Attempts)
+        </h2>
+        <p style="font-size: 0.9rem; color: #64748b; margin: 0;">
+          CBT simulation with synchronized countdown timer, palette navigation, and instant percentage report.
+        </p>
+      </div>
+      <a href="{% url 'exam_list' %}"
+        style="color: #2563eb; font-weight: 600; font-size: 0.9rem; text-decoration: none;">
+        View All Examinations →
+      </a>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 18px;">
+      {% for ex in exams_page %}
+      <div
+        style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span
+              style="font-size: 0.75rem; font-weight: 700; color: #2563eb; background: #eff6ff; padding: 2px 8px; border-radius: 4px;">
+              {% if ex.topic %}{{ ex.topic.name }}{% elif ex.subject %}{{ ex.subject.name }}{% else %}{{ ex.get_kind_display }}{% endif %}
+            </span>
+            <span style="font-size: 0.75rem; font-weight: 600; color: #64748b;">
+              ⏱️ {{ ex.duration_minutes }} Mins
+            </span>
+          </div>
+          <h4 style="font-size: 1.05rem; font-weight: 700; color: #0f172a; margin: 0 0 6px 0;">{{ ex.title }}</h4>
+          <p style="font-size: 0.82rem; color: #64748b; margin: 0 0 12px 0; line-height: 1.4;">
+            {{ ex.description|truncatewords:16 }}
+          </p>
+          <div
+            style="display: flex; gap: 12px; font-size: 0.78rem; font-weight: 600; color: #475569; margin-bottom: 14px;">
+            <span>📝 16 Questions</span>
+            <span>🎯 16.00 Marks</span>
+            <span>📉 -0.25 Neg</span>
+            <span>🔄 {{ ex.user_attempts_left }} Attempts Left</span>
+          </div>
+        </div>
+
+        <div>
+          {% if ex.is_final_combined and ex.is_locked %}
+          <button disabled
+            style="width: 100%; padding: 8px; background: #e2e8f0; color: #94a3b8; border: none; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: not-allowed;">
+            🔒 Locked (Complete Prerequisites)
+          </button>
+          {% elif ex.user_attempts_left <= 0 %} <a href="{% url 'exam_start' ex.slug %}"
+            style="display: block; text-align: center; width: 100%; padding: 8px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; border-radius: 6px; font-weight: 600; font-size: 0.85rem; text-decoration: none;">
+            View Attempt Results (5/5 Used)
+            </a>
+            {% else %}
+            <a href="{% url 'exam_start' ex.slug %}"
+              style="display: block; text-align: center; width: 100%; padding: 8px; background: #2563eb; color: #fff; border-radius: 6px; font-weight: 600; font-size: 0.85rem; text-decoration: none;">
+              Start Examination ({{ ex.user_attempts_left }} left)
+            </a>
+            {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+</div>
+{% endblock %}

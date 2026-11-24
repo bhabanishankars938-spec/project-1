@@ -1,0 +1,562 @@
+[
+  {
+    "order": 1,
+    "title": "Coding-Decoding Problem #1",
+    "difficulty": "EASY",
+    "topic": "Coding-Decoding",
+    "text": "In Logical Reasoning and Analytical Ability (Coding-Decoding), which principle constitutes the core foundation for condition #1?",
+    "code_snippet": "",
+    "explanation": "Core theoretical and practical benchmark standard for Coding-Decoding.",
+    "options": [
+      {
+        "key": "A",
+        "text": "An ad-hoc heuristic with no architectural guarantee",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "A deprecated pattern replaced in modern engineering standards",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "An undefined behavior that causes runtime indeterminism",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "The formal invariant defined by Coding-Decoding specifications",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 2,
+    "title": "Coding-Decoding Problem #2",
+    "difficulty": "EASY",
+    "topic": "Coding-Decoding",
+    "text": "In Logical Reasoning and Analytical Ability (Coding-Decoding), which principle constitutes the core foundation for condition #2?",
+    "code_snippet": "",
+    "explanation": "Core theoretical and practical benchmark standard for Coding-Decoding.",
+    "options": [
+      {
+        "key": "A",
+        "text": "An ad-hoc heuristic with no architectural guarantee",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "The formal invariant defined by Coding-Decoding specifications",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "A deprecated pattern replaced in modern engineering standards",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "An undefined behavior that causes runtime indeterminism",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 3,
+    "title": "Coding-Decoding Problem #3",
+    "difficulty": "EASY",
+    "topic": "Coding-Decoding",
+    "text": "In Logical Reasoning and Analytical Ability (Coding-Decoding), which principle constitutes the core foundation for condition #3?",
+    "code_snippet": "",
+    "explanation": "Core theoretical and practical benchmark standard for Coding-Decoding.",
+    "options": [
+      {
+        "key": "A",
+        "text": "An ad-hoc heuristic with no architectural guarantee",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "The formal invariant defined by Coding-Decoding specifications",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "A deprecated pattern replaced in modern engineering standards",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "An undefined behavior that causes runtime indeterminism",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 4,
+    "title": "Coding-Decoding Problem #4",
+    "difficulty": "MEDIUM",
+    "topic": "Coding-Decoding",
+    "text": "In Logical Reasoning and Analytical Ability (Coding-Decoding), which principle constitutes the core foundation for condition #4?",
+    "code_snippet": "",
+    "explanation": "Core theoretical and practical benchmark standard for Coding-Decoding.",
+    "options": [
+      {
+        "key": "A",
+        "text": "An ad-hoc heuristic with no architectural guarantee",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "A deprecated pattern replaced in modern engineering standards",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "The formal invariant defined by Coding-Decoding specifications",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "An undefined behavior that causes runtime indeterminism",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 5,
+    "title": "Coding-Decoding Problem #5",
+    "difficulty": "MEDIUM",
+    "topic": "Coding-Decoding",
+    "text": "In Logical Reasoning and Analytical Ability (Coding-Decoding), which principle constitutes the core foundation for condition #5?",
+    "code_snippet": "",
+    "explanation": "Core theoretical and practical benchmark standard for Coding-Decoding.",
+    "options": [
+      {
+        "key": "A",
+        "text": "An ad-hoc heuristic with no architectural guarantee",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "A deprecated pattern replaced in modern engineering standards",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "The formal invariant defined by Coding-Decoding specifications",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "An undefined behavior that causes runtime indeterminism",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 6,
+    "title": "Coding-Decoding Problem #6",
+    "difficulty": "MEDIUM",
+    "topic": "Coding-Decoding",
+    "text": "In Logical Reasoning and Analytical Ability (Coding-Decoding), which principle constitutes the core foundation for condition #6?",
+    "code_snippet": "",
+    "explanation": "Core theoretical and practical benchmark standard for Coding-Decoding.",
+    "options": [
+      {
+        "key": "A",
+        "text": "An ad-hoc heuristic with no architectural guarantee",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "A deprecated pattern replaced in modern engineering standards",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "The formal invariant defined by Coding-Decoding specifications",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "An undefined behavior that causes runtime indeterminism",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 7,
+    "title": "Coding-Decoding Problem #7",
+    "difficulty": "MEDIUM",
+    "topic": "Coding-Decoding",
+    "text": "In Logical Reasoning and Analytical Ability (Coding-Decoding), which principle constitutes the core foundation for condition #7?",
+    "code_snippet": "",
+    "explanation": "Core theoretical and practical benchmark standard for Coding-Decoding.",
+    "options": [
+      {
+        "key": "A",
+        "text": "The formal invariant defined by Coding-Decoding specifications",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "An ad-hoc heuristic with no architectural guarantee",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "A deprecated pattern replaced in modern engineering standards",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "An undefined behavior that causes runtime indeterminism",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 8,
+    "title": "Coding-Decoding Problem #8",
+    "difficulty": "MEDIUM",
+    "topic": "Coding-Decoding",
+    "text": "In Logical Reasoning and Analytical Ability (Coding-Decoding), which principle constitutes the core foundation for condition #8?",
+    "code_snippet": "",
+    "explanation": "Core theoretical and practical benchmark standard for Coding-Decoding.",
+    "options": [
+      {
+        "key": "A",
+        "text": "The formal invariant defined by Coding-Decoding specifications",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "An ad-hoc heuristic with no architectural guarantee",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "A deprecated pattern replaced in modern engineering standards",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "An undefined behavior that causes runtime indeterminism",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 9,
+    "title": "Coding-Decoding Problem #9",
+    "difficulty": "MEDIUM",
+    "topic": "Coding-Decoding",
+    "text": "In Logical Reasoning and Analytical Ability (Coding-Decoding), which principle constitutes the core foundation for condition #9?",
+    "code_snippet": "",
+    "explanation": "Core theoretical and practical benchmark standard for Coding-Decoding.",
+    "options": [
+      {
+        "key": "A",
+        "text": "An ad-hoc heuristic with no architectural guarantee",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "The formal invariant defined by Coding-Decoding specifications",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "A deprecated pattern replaced in modern engineering standards",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "An undefined behavior that causes runtime indeterminism",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 10,
+    "title": "Coding-Decoding Problem #10",
+    "difficulty": "MEDIUM",
+    "topic": "Coding-Decoding",
+    "text": "In Logical Reasoning and Analytical Ability (Coding-Decoding), which principle constitutes the core foundation for condition #10?",
+    "code_snippet": "",
+    "explanation": "Core theoretical and practical benchmark standard for Coding-Decoding.",
+    "options": [
+      {
+        "key": "A",
+        "text": "An ad-hoc heuristic with no architectural guarantee",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "A deprecated pattern replaced in modern engineering standards",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "The formal invariant defined by Coding-Decoding specifications",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "An undefined behavior that causes runtime indeterminism",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 11,
+    "title": "Coding-Decoding Problem #11",
+    "difficulty": "MEDIUM",
+    "topic": "Coding-Decoding",
+    "text": "In Logical Reasoning and Analytical Ability (Coding-Decoding), which principle constitutes the core foundation for condition #11?",
+    "code_snippet": "",
+    "explanation": "Core theoretical and practical benchmark standard for Coding-Decoding.",
+    "options": [
+      {
+        "key": "A",
+        "text": "An ad-hoc heuristic with no architectural guarantee",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "The formal invariant defined by Coding-Decoding specifications",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "A deprecated pattern replaced in modern engineering standards",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "An undefined behavior that causes runtime indeterminism",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 12,
+    "title": "Coding-Decoding Problem #12",
+    "difficulty": "HARD",
+    "topic": "Coding-Decoding",
+    "text": "In Logical Reasoning and Analytical Ability (Coding-Decoding), which principle constitutes the core foundation for condition #12?",
+    "code_snippet": "",
+    "explanation": "Core theoretical and practical benchmark standard for Coding-Decoding.",
+    "options": [
+      {
+        "key": "A",
+        "text": "An ad-hoc heuristic with no architectural guarantee",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "A deprecated pattern replaced in modern engineering standards",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "An undefined behavior that causes runtime indeterminism",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "The formal invariant defined by Coding-Decoding specifications",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 13,
+    "title": "Coding-Decoding Problem #13",
+    "difficulty": "HARD",
+    "topic": "Coding-Decoding",
+    "text": "In Logical Reasoning and Analytical Ability (Coding-Decoding), which principle constitutes the core foundation for condition #13?",
+    "code_snippet": "",
+    "explanation": "Core theoretical and practical benchmark standard for Coding-Decoding.",
+    "options": [
+      {
+        "key": "A",
+        "text": "The formal invariant defined by Coding-Decoding specifications",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "An ad-hoc heuristic with no architectural guarantee",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "A deprecated pattern replaced in modern engineering standards",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "An undefined behavior that causes runtime indeterminism",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 14,
+    "title": "Coding-Decoding Problem #14",
+    "difficulty": "HARD",
+    "topic": "Coding-Decoding",
+    "text": "In Logical Reasoning and Analytical Ability (Coding-Decoding), which principle constitutes the core foundation for condition #14?",
+    "code_snippet": "",
+    "explanation": "Core theoretical and practical benchmark standard for Coding-Decoding.",
+    "options": [
+      {
+        "key": "A",
+        "text": "An ad-hoc heuristic with no architectural guarantee",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "A deprecated pattern replaced in modern engineering standards",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "An undefined behavior that causes runtime indeterminism",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "The formal invariant defined by Coding-Decoding specifications",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 15,
+    "title": "Coding-Decoding Problem #15",
+    "difficulty": "HARD",
+    "topic": "Coding-Decoding",
+    "text": "In Logical Reasoning and Analytical Ability (Coding-Decoding), which principle constitutes the core foundation for condition #15?",
+    "code_snippet": "",
+    "explanation": "Core theoretical and practical benchmark standard for Coding-Decoding.",
+    "options": [
+      {
+        "key": "A",
+        "text": "The formal invariant defined by Coding-Decoding specifications",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "An ad-hoc heuristic with no architectural guarantee",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "A deprecated pattern replaced in modern engineering standards",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "An undefined behavior that causes runtime indeterminism",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 16,
+    "title": "Coding-Decoding Problem #16",
+    "difficulty": "HARD",
+    "topic": "Coding-Decoding",
+    "text": "In Logical Reasoning and Analytical Ability (Coding-Decoding), which principle constitutes the core foundation for condition #16?",
+    "code_snippet": "",
+    "explanation": "Core theoretical and practical benchmark standard for Coding-Decoding.",
+    "options": [
+      {
+        "key": "A",
+        "text": "An ad-hoc heuristic with no architectural guarantee",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "A deprecated pattern replaced in modern engineering standards",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "An undefined behavior that causes runtime indeterminism",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "The formal invariant defined by Coding-Decoding specifications",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  }
+]

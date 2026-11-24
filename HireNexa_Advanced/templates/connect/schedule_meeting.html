@@ -1,0 +1,118 @@
+{% extends "connect/base_connect.html" %}
+{% load static %}
+
+{% block title %}Schedule Meeting · HireNexa Connect{% endblock %}
+
+{% block connect_content %}
+<div style="max-width: 760px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; box-shadow: 0 2px 14px rgba(0,0,0,0.04);">
+  <div style="margin-bottom: 24px; text-align: center;">
+    <span style="font-size: 28px;">📅</span>
+    <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; margin: 8px 0 4px;">Schedule a Connect Meeting</h2>
+    <p style="font-size: 14px; color: #64748b; margin: 0;">Configure a secure real-time WebRTC video meeting or multi-party interview panel.</p>
+  </div>
+
+  <form method="post" action="{% url 'connect:schedule_meeting' %}">
+    {% csrf_token %}
+
+    <div style="margin-bottom: 18px;">
+      <label style="display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px;">Meeting Title *</label>
+      <input type="text" name="title" required placeholder="e.g. Senior Frontend Architecture Interview - Round 1" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box;">
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px;">
+      <div>
+        <label style="display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px;">Meeting Type</label>
+        <select name="meeting_type" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box;">
+          {% for val, label in meeting_types %}
+          <option value="{{ val }}">{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px;">Interview Round</label>
+        <select name="interview_round" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box;">
+          {% for val, label in interview_rounds %}
+          <option value="{{ val }}">{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <!-- Video Meeting Provider Selection -->
+    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 18px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div>
+          <label style="display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px;">Meeting Provider</label>
+          <select name="provider" id="providerSelect" onchange="toggleProviderFields()" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box;">
+            <option value="INTERNAL" selected>🎥 HireNexa Live (Browser WebRTC)</option>
+            <option value="ZOOM">🔵 Zoom Video Meetings</option>
+          </select>
+        </div>
+        <div id="zoomLinkField" style="display: none;">
+          <label style="display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px;">External Zoom URL (Optional)</label>
+          <input type="url" name="zoom_link" placeholder="https://us05web.zoom.us/j/..." style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13.5px; outline: none; box-sizing: border-box;">
+        </div>
+      </div>
+      <div id="zoomNotice" style="display: none; margin-top: 10px; font-size: 12px; color: #64748b; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 8px 12px;">
+        ℹ️ <strong>Zoom Integration:</strong> If Zoom API credentials are configured in your environment, a Zoom meeting will be provisioned automatically. Alternatively, you can paste your personal or company Zoom link above.
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 18px;">
+      <div>
+        <label style="display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px;">Date *</label>
+        <input type="date" name="scheduled_date" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box;">
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px;">Start Time *</label>
+        <input type="time" name="scheduled_time" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box;">
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px;">Duration (Minutes)</label>
+        <select name="duration" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box;">
+          <option value="30">30 minutes</option>
+          <option value="45" selected>45 minutes</option>
+          <option value="60">60 minutes (1 hour)</option>
+          <option value="90">90 minutes</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+      <label style="display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px;">Invite Participants (Usernames or Emails)</label>
+      <input type="text" name="invitees" placeholder="e.g. candidate_user, interviewer@hirenexa.com (comma separated)" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box;">
+      <span style="font-size: 12px; color: #64748b; margin-top: 4px; display: block;">Invited participants receive a direct calendar invitation and room entry link.</span>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <label style="display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px;">Meeting Description / Agenda</label>
+      <textarea name="description" rows="3" placeholder="Topics to cover, system design briefing, or pre-requisite instructions..." style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box;"></textarea>
+    </div>
+
+    <div style="display: flex; gap: 12px; justify-content: flex-end;">
+      <a href="{% url 'connect:my_meetings' %}" class="btn" style="background: #f1f5f9; color: #475569; font-weight: 600; font-size: 14px; padding: 10px 20px; border-radius: 8px; text-decoration: none;">Cancel</a>
+      <button type="submit" class="btn btn-primary" style="background: #2563eb; color: #ffffff; font-weight: 700; font-size: 14px; padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer;">
+        Confirm & Schedule Meeting
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  function toggleProviderFields() {
+    const provider = document.getElementById("providerSelect").value;
+    const linkField = document.getElementById("zoomLinkField");
+    const notice = document.getElementById("zoomNotice");
+    if (provider === "ZOOM") {
+      linkField.style.display = "block";
+      notice.style.display = "block";
+    } else {
+      linkField.style.display = "none";
+      notice.style.display = "none";
+    }
+  }
+</script>
+{% endblock %}

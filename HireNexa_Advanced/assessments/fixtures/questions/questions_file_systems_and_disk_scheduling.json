@@ -1,0 +1,562 @@
+[
+  {
+    "order": 1,
+    "title": "File Systems and Disk Scheduling Problem #1",
+    "difficulty": "EASY",
+    "topic": "File Systems and Disk Scheduling",
+    "text": "In modern Operating Systems (File Systems and Disk Scheduling), how does the kernel guarantee safety or optimize performance for scenario #1?",
+    "code_snippet": "",
+    "explanation": "Atomic operations, semaphores, and monitor invariants ensure race conditions and deadlocks are prevented.",
+    "options": [
+      {
+        "key": "A",
+        "text": "By disabling user space process execution entirely",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "By allowing uncontrolled simultaneous access to shared critical memory",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "By switching the CPU clock to single-cycle execution mode",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "By enforcing hardware-assisted synchronization primitives and mutual exclusion",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 2,
+    "title": "File Systems and Disk Scheduling Problem #2",
+    "difficulty": "EASY",
+    "topic": "File Systems and Disk Scheduling",
+    "text": "In modern Operating Systems (File Systems and Disk Scheduling), how does the kernel guarantee safety or optimize performance for scenario #2?",
+    "code_snippet": "",
+    "explanation": "Atomic operations, semaphores, and monitor invariants ensure race conditions and deadlocks are prevented.",
+    "options": [
+      {
+        "key": "A",
+        "text": "By disabling user space process execution entirely",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "By enforcing hardware-assisted synchronization primitives and mutual exclusion",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "By allowing uncontrolled simultaneous access to shared critical memory",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "By switching the CPU clock to single-cycle execution mode",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 3,
+    "title": "File Systems and Disk Scheduling Problem #3",
+    "difficulty": "EASY",
+    "topic": "File Systems and Disk Scheduling",
+    "text": "In modern Operating Systems (File Systems and Disk Scheduling), how does the kernel guarantee safety or optimize performance for scenario #3?",
+    "code_snippet": "",
+    "explanation": "Atomic operations, semaphores, and monitor invariants ensure race conditions and deadlocks are prevented.",
+    "options": [
+      {
+        "key": "A",
+        "text": "By disabling user space process execution entirely",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "By enforcing hardware-assisted synchronization primitives and mutual exclusion",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "By allowing uncontrolled simultaneous access to shared critical memory",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "By switching the CPU clock to single-cycle execution mode",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 4,
+    "title": "File Systems and Disk Scheduling Problem #4",
+    "difficulty": "MEDIUM",
+    "topic": "File Systems and Disk Scheduling",
+    "text": "In modern Operating Systems (File Systems and Disk Scheduling), how does the kernel guarantee safety or optimize performance for scenario #4?",
+    "code_snippet": "",
+    "explanation": "Atomic operations, semaphores, and monitor invariants ensure race conditions and deadlocks are prevented.",
+    "options": [
+      {
+        "key": "A",
+        "text": "By disabling user space process execution entirely",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "By allowing uncontrolled simultaneous access to shared critical memory",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "By enforcing hardware-assisted synchronization primitives and mutual exclusion",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "By switching the CPU clock to single-cycle execution mode",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 5,
+    "title": "File Systems and Disk Scheduling Problem #5",
+    "difficulty": "MEDIUM",
+    "topic": "File Systems and Disk Scheduling",
+    "text": "In modern Operating Systems (File Systems and Disk Scheduling), how does the kernel guarantee safety or optimize performance for scenario #5?",
+    "code_snippet": "",
+    "explanation": "Atomic operations, semaphores, and monitor invariants ensure race conditions and deadlocks are prevented.",
+    "options": [
+      {
+        "key": "A",
+        "text": "By disabling user space process execution entirely",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "By allowing uncontrolled simultaneous access to shared critical memory",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "By enforcing hardware-assisted synchronization primitives and mutual exclusion",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "By switching the CPU clock to single-cycle execution mode",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 6,
+    "title": "File Systems and Disk Scheduling Problem #6",
+    "difficulty": "MEDIUM",
+    "topic": "File Systems and Disk Scheduling",
+    "text": "In modern Operating Systems (File Systems and Disk Scheduling), how does the kernel guarantee safety or optimize performance for scenario #6?",
+    "code_snippet": "",
+    "explanation": "Atomic operations, semaphores, and monitor invariants ensure race conditions and deadlocks are prevented.",
+    "options": [
+      {
+        "key": "A",
+        "text": "By disabling user space process execution entirely",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "By allowing uncontrolled simultaneous access to shared critical memory",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "By enforcing hardware-assisted synchronization primitives and mutual exclusion",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "By switching the CPU clock to single-cycle execution mode",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 7,
+    "title": "File Systems and Disk Scheduling Problem #7",
+    "difficulty": "MEDIUM",
+    "topic": "File Systems and Disk Scheduling",
+    "text": "In modern Operating Systems (File Systems and Disk Scheduling), how does the kernel guarantee safety or optimize performance for scenario #7?",
+    "code_snippet": "",
+    "explanation": "Atomic operations, semaphores, and monitor invariants ensure race conditions and deadlocks are prevented.",
+    "options": [
+      {
+        "key": "A",
+        "text": "By enforcing hardware-assisted synchronization primitives and mutual exclusion",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "By disabling user space process execution entirely",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "By allowing uncontrolled simultaneous access to shared critical memory",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "By switching the CPU clock to single-cycle execution mode",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 8,
+    "title": "File Systems and Disk Scheduling Problem #8",
+    "difficulty": "MEDIUM",
+    "topic": "File Systems and Disk Scheduling",
+    "text": "In modern Operating Systems (File Systems and Disk Scheduling), how does the kernel guarantee safety or optimize performance for scenario #8?",
+    "code_snippet": "",
+    "explanation": "Atomic operations, semaphores, and monitor invariants ensure race conditions and deadlocks are prevented.",
+    "options": [
+      {
+        "key": "A",
+        "text": "By enforcing hardware-assisted synchronization primitives and mutual exclusion",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "By disabling user space process execution entirely",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "By allowing uncontrolled simultaneous access to shared critical memory",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "By switching the CPU clock to single-cycle execution mode",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 9,
+    "title": "File Systems and Disk Scheduling Problem #9",
+    "difficulty": "MEDIUM",
+    "topic": "File Systems and Disk Scheduling",
+    "text": "In modern Operating Systems (File Systems and Disk Scheduling), how does the kernel guarantee safety or optimize performance for scenario #9?",
+    "code_snippet": "",
+    "explanation": "Atomic operations, semaphores, and monitor invariants ensure race conditions and deadlocks are prevented.",
+    "options": [
+      {
+        "key": "A",
+        "text": "By disabling user space process execution entirely",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "By enforcing hardware-assisted synchronization primitives and mutual exclusion",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "By allowing uncontrolled simultaneous access to shared critical memory",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "By switching the CPU clock to single-cycle execution mode",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 10,
+    "title": "File Systems and Disk Scheduling Problem #10",
+    "difficulty": "MEDIUM",
+    "topic": "File Systems and Disk Scheduling",
+    "text": "In modern Operating Systems (File Systems and Disk Scheduling), how does the kernel guarantee safety or optimize performance for scenario #10?",
+    "code_snippet": "",
+    "explanation": "Atomic operations, semaphores, and monitor invariants ensure race conditions and deadlocks are prevented.",
+    "options": [
+      {
+        "key": "A",
+        "text": "By disabling user space process execution entirely",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "By allowing uncontrolled simultaneous access to shared critical memory",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "By enforcing hardware-assisted synchronization primitives and mutual exclusion",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "By switching the CPU clock to single-cycle execution mode",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 11,
+    "title": "File Systems and Disk Scheduling Problem #11",
+    "difficulty": "MEDIUM",
+    "topic": "File Systems and Disk Scheduling",
+    "text": "In modern Operating Systems (File Systems and Disk Scheduling), how does the kernel guarantee safety or optimize performance for scenario #11?",
+    "code_snippet": "",
+    "explanation": "Atomic operations, semaphores, and monitor invariants ensure race conditions and deadlocks are prevented.",
+    "options": [
+      {
+        "key": "A",
+        "text": "By disabling user space process execution entirely",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "By enforcing hardware-assisted synchronization primitives and mutual exclusion",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "By allowing uncontrolled simultaneous access to shared critical memory",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "By switching the CPU clock to single-cycle execution mode",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 12,
+    "title": "File Systems and Disk Scheduling Problem #12",
+    "difficulty": "HARD",
+    "topic": "File Systems and Disk Scheduling",
+    "text": "In modern Operating Systems (File Systems and Disk Scheduling), how does the kernel guarantee safety or optimize performance for scenario #12?",
+    "code_snippet": "",
+    "explanation": "Atomic operations, semaphores, and monitor invariants ensure race conditions and deadlocks are prevented.",
+    "options": [
+      {
+        "key": "A",
+        "text": "By disabling user space process execution entirely",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "By allowing uncontrolled simultaneous access to shared critical memory",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "By switching the CPU clock to single-cycle execution mode",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "By enforcing hardware-assisted synchronization primitives and mutual exclusion",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 13,
+    "title": "File Systems and Disk Scheduling Problem #13",
+    "difficulty": "HARD",
+    "topic": "File Systems and Disk Scheduling",
+    "text": "In modern Operating Systems (File Systems and Disk Scheduling), how does the kernel guarantee safety or optimize performance for scenario #13?",
+    "code_snippet": "",
+    "explanation": "Atomic operations, semaphores, and monitor invariants ensure race conditions and deadlocks are prevented.",
+    "options": [
+      {
+        "key": "A",
+        "text": "By enforcing hardware-assisted synchronization primitives and mutual exclusion",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "By disabling user space process execution entirely",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "By allowing uncontrolled simultaneous access to shared critical memory",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "By switching the CPU clock to single-cycle execution mode",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 14,
+    "title": "File Systems and Disk Scheduling Problem #14",
+    "difficulty": "HARD",
+    "topic": "File Systems and Disk Scheduling",
+    "text": "In modern Operating Systems (File Systems and Disk Scheduling), how does the kernel guarantee safety or optimize performance for scenario #14?",
+    "code_snippet": "",
+    "explanation": "Atomic operations, semaphores, and monitor invariants ensure race conditions and deadlocks are prevented.",
+    "options": [
+      {
+        "key": "A",
+        "text": "By disabling user space process execution entirely",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "By allowing uncontrolled simultaneous access to shared critical memory",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "By switching the CPU clock to single-cycle execution mode",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "By enforcing hardware-assisted synchronization primitives and mutual exclusion",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 15,
+    "title": "File Systems and Disk Scheduling Problem #15",
+    "difficulty": "HARD",
+    "topic": "File Systems and Disk Scheduling",
+    "text": "In modern Operating Systems (File Systems and Disk Scheduling), how does the kernel guarantee safety or optimize performance for scenario #15?",
+    "code_snippet": "",
+    "explanation": "Atomic operations, semaphores, and monitor invariants ensure race conditions and deadlocks are prevented.",
+    "options": [
+      {
+        "key": "A",
+        "text": "By enforcing hardware-assisted synchronization primitives and mutual exclusion",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "By disabling user space process execution entirely",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "By allowing uncontrolled simultaneous access to shared critical memory",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "By switching the CPU clock to single-cycle execution mode",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 16,
+    "title": "File Systems and Disk Scheduling Problem #16",
+    "difficulty": "HARD",
+    "topic": "File Systems and Disk Scheduling",
+    "text": "In modern Operating Systems (File Systems and Disk Scheduling), how does the kernel guarantee safety or optimize performance for scenario #16?",
+    "code_snippet": "",
+    "explanation": "Atomic operations, semaphores, and monitor invariants ensure race conditions and deadlocks are prevented.",
+    "options": [
+      {
+        "key": "A",
+        "text": "By disabling user space process execution entirely",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "By allowing uncontrolled simultaneous access to shared critical memory",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "By switching the CPU clock to single-cycle execution mode",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "By enforcing hardware-assisted synchronization primitives and mutual exclusion",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  }
+]

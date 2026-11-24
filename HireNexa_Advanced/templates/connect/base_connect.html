@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<style>
+  /* HireNexa Connect Design System - Enterprise Dark Navy & Blue */
+  :root {
+    --connect-bg: #0b1120;
+    --connect-surface: #0f172a;
+    --connect-card: #1e293b;
+    --connect-border: #334155;
+    --connect-primary: #2563eb;
+    --connect-primary-hover: #1d4ed8;
+    --connect-accent: #38bdf8;
+    --connect-text: #f8fafc;
+    --connect-text-muted: #94a3b8;
+    --connect-success: #10b981;
+    --connect-danger: #ef4444;
+    --connect-warning: #f59e0b;
+  }
+
+  .connect-shell {
+    max-width: 1400px;
+    margin: 20px auto 48px;
+    padding: 0 16px;
+  }
+
+  /* Subnav Header Banner */
+  .connect-header-banner {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    border: 1px solid var(--connect-border);
+    border-radius: 16px;
+    padding: 24px 28px;
+    color: #ffffff;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  .connect-brand-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(37, 99, 235, 0.2);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    border-radius: 9999px;
+    padding: 4px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #38bdf8;
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .connect-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .connect-tagline {
+    font-size: 14px;
+    color: var(--connect-text-muted);
+    margin: 0;
+  }
+
+  /* Connect Navigation Tabs */
+  .connect-tabs-nav {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .connect-tab-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #475569;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .connect-tab-link:hover {
+    color: var(--connect-primary);
+    background: #f1f5f9;
+  }
+
+  .connect-tab-link.active {
+    color: #ffffff;
+    background: var(--connect-primary);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+  }
+
+  /* Quick Actions in Banner */
+  .connect-quick-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-connect-instant {
+    background: #10b981;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 13.5px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .btn-connect-instant:hover {
+    background: #059669;
+    transform: translateY(-1px);
+    color: #ffffff;
+  }
+
+  .btn-connect-schedule {
+    background: var(--connect-primary);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 13.5px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .btn-connect-schedule:hover {
+    background: var(--connect-primary-hover);
+    transform: translateY(-1px);
+    color: #ffffff;
+  }
+</style>
+{% block connect_extra_head %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="connect-shell">
+  <!-- Connect Top Header Banner -->
+  <div class="connect-header-banner">
+    <div>
+      <div class="connect-brand-badge">
+        <span>● LIVE REAL-TIME</span>
+        <span>HIRENEXA CONNECT</span>
+      </div>
+      <h1 class="connect-title">
+        <span>🎥 HireNexa Connect</span>
+      </h1>
+      <p class="connect-tagline">Connect. Communicate. Interview. Grow.</p>
+    </div>
+
+    <div class="connect-quick-actions">
+      <a href="{% url 'connect:join_meeting' %}" class="btn btn-outline" style="background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.25); font-weight: 600; font-size: 13.5px; padding: 10px 16px; border-radius: 10px; text-decoration: none;" title="Join a meeting using code or link">
+        <span>🔑 Join Meeting</span>
+      </a>
+      <a href="{% url 'connect:instant_meeting' %}" class="btn-connect-instant" title="Start an instant WebRTC room right now">
+        <span>⚡ Instant Meeting</span>
+      </a>
+      <a href="{% url 'connect:schedule_meeting' %}" class="btn-connect-schedule" title="Schedule an interview or panel meeting">
+        <span>📅 Schedule Meeting</span>
+      </a>
+      <a href="{% url 'connect:smart_calendar' %}" class="btn btn-outline" style="background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.25); font-weight: 600; font-size: 13.5px; padding: 10px 16px; border-radius: 10px; text-decoration: none;">
+        <span>🗓️ Calendar</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Connect Sub-navigation Links -->
+  <nav class="connect-tabs-nav" aria-label="HireNexa Connect Navigation">
+    <a href="{% url 'connect:dashboard' %}" class="connect-tab-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+      <span>📊 Connect Dashboard</span>
+    </a>
+    <a href="{% url 'connect:join_meeting' %}" class="connect-tab-link {% if request.resolver_match.url_name == 'join_meeting' %}active{% endif %}">
+      <span>🔑 Join Meeting</span>
+    </a>
+    <a href="{% url 'connect:my_meetings' %}" class="connect-tab-link {% if request.resolver_match.url_name == 'my_meetings' %}active{% endif %}">
+      <span>👥 My Meetings</span>
+    </a>
+    <a href="{% url 'connect:upcoming_interviews' %}" class="connect-tab-link {% if request.resolver_match.url_name == 'upcoming_interviews' %}active{% endif %}">
+      <span>🎯 Upcoming Interviews</span>
+    </a>
+    <a href="{% url 'connect:public_events' %}" class="connect-tab-link {% if 'events' in request.path %}active{% endif %}">
+      <span>🌐 Public Webinars</span>
+    </a>
+    <a href="{% url 'connect:meeting_history' %}" class="connect-tab-link {% if request.resolver_match.url_name == 'meeting_history' %}active{% endif %}">
+      <span>📜 Meeting History</span>
+    </a>
+    <a href="{% url 'connect:meeting_settings' %}" class="connect-tab-link {% if request.resolver_match.url_name == 'meeting_settings' %}active{% endif %}">
+      <span>⚙️ Settings</span>
+    </a>
+  </nav>
+
+  <!-- Connect Child Body Block -->
+  {% block connect_content %}{% endblock %}
+</div>
+{% endblock %}

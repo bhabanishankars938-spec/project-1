@@ -1,0 +1,562 @@
+[
+  {
+    "order": 1,
+    "title": "Time and Work Problem #1",
+    "difficulty": "EASY",
+    "topic": "Time and Work",
+    "text": "A train traveling at 10 km/h crosses a platform in 30 seconds (Time and Work). What is the length of the train if the platform is 50 meters?",
+    "code_snippet": "",
+    "explanation": "Distance = Speed in m/s x Time. Total distance = 83m. Subtracting platform gives 50m.",
+    "options": [
+      {
+        "key": "A",
+        "text": "100 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "20 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "100 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "50 meters",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 2,
+    "title": "Time and Work Problem #2",
+    "difficulty": "EASY",
+    "topic": "Time and Work",
+    "text": "A train traveling at 20 km/h crosses a platform in 40 seconds (Time and Work). What is the length of the train if the platform is 100 meters?",
+    "code_snippet": "",
+    "explanation": "Distance = Speed in m/s x Time. Total distance = 222m. Subtracting platform gives 122m.",
+    "options": [
+      {
+        "key": "A",
+        "text": "172 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "122 meters",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "92 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "244 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 3,
+    "title": "Time and Work Problem #3",
+    "difficulty": "EASY",
+    "topic": "Time and Work",
+    "text": "A train traveling at 30 km/h crosses a platform in 50 seconds (Time and Work). What is the length of the train if the platform is 150 meters?",
+    "code_snippet": "",
+    "explanation": "Distance = Speed in m/s x Time. Total distance = 416m. Subtracting platform gives 266m.",
+    "options": [
+      {
+        "key": "A",
+        "text": "316 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "266 meters",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "236 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "532 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 4,
+    "title": "Time and Work Problem #4",
+    "difficulty": "MEDIUM",
+    "topic": "Time and Work",
+    "text": "A train traveling at 40 km/h crosses a platform in 60 seconds (Time and Work). What is the length of the train if the platform is 200 meters?",
+    "code_snippet": "",
+    "explanation": "Distance = Speed in m/s x Time. Total distance = 666m. Subtracting platform gives 466m.",
+    "options": [
+      {
+        "key": "A",
+        "text": "516 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "436 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "466 meters",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "932 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 5,
+    "title": "Time and Work Problem #5",
+    "difficulty": "MEDIUM",
+    "topic": "Time and Work",
+    "text": "A train traveling at 50 km/h crosses a platform in 70 seconds (Time and Work). What is the length of the train if the platform is 250 meters?",
+    "code_snippet": "",
+    "explanation": "Distance = Speed in m/s x Time. Total distance = 972m. Subtracting platform gives 722m.",
+    "options": [
+      {
+        "key": "A",
+        "text": "772 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "692 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "722 meters",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "1444 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 6,
+    "title": "Time and Work Problem #6",
+    "difficulty": "MEDIUM",
+    "topic": "Time and Work",
+    "text": "A train traveling at 60 km/h crosses a platform in 80 seconds (Time and Work). What is the length of the train if the platform is 300 meters?",
+    "code_snippet": "",
+    "explanation": "Distance = Speed in m/s x Time. Total distance = 1333m. Subtracting platform gives 1033m.",
+    "options": [
+      {
+        "key": "A",
+        "text": "1083 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "1003 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "1033 meters",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "2066 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 7,
+    "title": "Time and Work Problem #7",
+    "difficulty": "MEDIUM",
+    "topic": "Time and Work",
+    "text": "A train traveling at 70 km/h crosses a platform in 90 seconds (Time and Work). What is the length of the train if the platform is 350 meters?",
+    "code_snippet": "",
+    "explanation": "Distance = Speed in m/s x Time. Total distance = 1749m. Subtracting platform gives 1399m.",
+    "options": [
+      {
+        "key": "A",
+        "text": "1399 meters",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "1449 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "1369 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "2798 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 8,
+    "title": "Time and Work Problem #8",
+    "difficulty": "MEDIUM",
+    "topic": "Time and Work",
+    "text": "A train traveling at 80 km/h crosses a platform in 100 seconds (Time and Work). What is the length of the train if the platform is 400 meters?",
+    "code_snippet": "",
+    "explanation": "Distance = Speed in m/s x Time. Total distance = 2222m. Subtracting platform gives 1822m.",
+    "options": [
+      {
+        "key": "A",
+        "text": "1822 meters",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "1872 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "1792 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "3644 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 9,
+    "title": "Time and Work Problem #9",
+    "difficulty": "MEDIUM",
+    "topic": "Time and Work",
+    "text": "A train traveling at 90 km/h crosses a platform in 110 seconds (Time and Work). What is the length of the train if the platform is 450 meters?",
+    "code_snippet": "",
+    "explanation": "Distance = Speed in m/s x Time. Total distance = 2750m. Subtracting platform gives 2300m.",
+    "options": [
+      {
+        "key": "A",
+        "text": "2350 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "2300 meters",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "2270 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "4600 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 10,
+    "title": "Time and Work Problem #10",
+    "difficulty": "MEDIUM",
+    "topic": "Time and Work",
+    "text": "A train traveling at 100 km/h crosses a platform in 120 seconds (Time and Work). What is the length of the train if the platform is 500 meters?",
+    "code_snippet": "",
+    "explanation": "Distance = Speed in m/s x Time. Total distance = 3333m. Subtracting platform gives 2833m.",
+    "options": [
+      {
+        "key": "A",
+        "text": "2883 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "2803 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "2833 meters",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "5666 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 11,
+    "title": "Time and Work Problem #11",
+    "difficulty": "MEDIUM",
+    "topic": "Time and Work",
+    "text": "A train traveling at 110 km/h crosses a platform in 130 seconds (Time and Work). What is the length of the train if the platform is 550 meters?",
+    "code_snippet": "",
+    "explanation": "Distance = Speed in m/s x Time. Total distance = 3972m. Subtracting platform gives 3422m.",
+    "options": [
+      {
+        "key": "A",
+        "text": "3472 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "3422 meters",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "3392 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "6844 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 12,
+    "title": "Time and Work Problem #12",
+    "difficulty": "HARD",
+    "topic": "Time and Work",
+    "text": "A train traveling at 120 km/h crosses a platform in 140 seconds (Time and Work). What is the length of the train if the platform is 600 meters?",
+    "code_snippet": "",
+    "explanation": "Distance = Speed in m/s x Time. Total distance = 4666m. Subtracting platform gives 4066m.",
+    "options": [
+      {
+        "key": "A",
+        "text": "4116 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "4036 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "8132 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "4066 meters",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 13,
+    "title": "Time and Work Problem #13",
+    "difficulty": "HARD",
+    "topic": "Time and Work",
+    "text": "A train traveling at 130 km/h crosses a platform in 150 seconds (Time and Work). What is the length of the train if the platform is 650 meters?",
+    "code_snippet": "",
+    "explanation": "Distance = Speed in m/s x Time. Total distance = 5416m. Subtracting platform gives 4766m.",
+    "options": [
+      {
+        "key": "A",
+        "text": "4766 meters",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "4816 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "4736 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "9532 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 14,
+    "title": "Time and Work Problem #14",
+    "difficulty": "HARD",
+    "topic": "Time and Work",
+    "text": "A train traveling at 140 km/h crosses a platform in 160 seconds (Time and Work). What is the length of the train if the platform is 700 meters?",
+    "code_snippet": "",
+    "explanation": "Distance = Speed in m/s x Time. Total distance = 6222m. Subtracting platform gives 5522m.",
+    "options": [
+      {
+        "key": "A",
+        "text": "5572 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "5492 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "11044 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "5522 meters",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 15,
+    "title": "Time and Work Problem #15",
+    "difficulty": "HARD",
+    "topic": "Time and Work",
+    "text": "A train traveling at 150 km/h crosses a platform in 170 seconds (Time and Work). What is the length of the train if the platform is 750 meters?",
+    "code_snippet": "",
+    "explanation": "Distance = Speed in m/s x Time. Total distance = 7083m. Subtracting platform gives 6333m.",
+    "options": [
+      {
+        "key": "A",
+        "text": "6333 meters",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "6383 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "6303 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "12666 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 16,
+    "title": "Time and Work Problem #16",
+    "difficulty": "HARD",
+    "topic": "Time and Work",
+    "text": "A train traveling at 160 km/h crosses a platform in 180 seconds (Time and Work). What is the length of the train if the platform is 800 meters?",
+    "code_snippet": "",
+    "explanation": "Distance = Speed in m/s x Time. Total distance = 7999m. Subtracting platform gives 7199m.",
+    "options": [
+      {
+        "key": "A",
+        "text": "7249 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "7169 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "14398 meters",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "7199 meters",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  }
+]

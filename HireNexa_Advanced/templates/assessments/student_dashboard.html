@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Student Assessment Dashboard & Placement Readiness | HireNexa{% endblock %}
+
+{% block content %}
+<div class="student-dash-container">
+
+  <!-- Header -->
+  <header class="dash-hero-card">
+    <div class="dash-hero-info">
+      <span class="badge-cat">📊 Student Learning & Performance Analytics</span>
+      <h1 class="dash-hero-title">Welcome back, {{ request.user.get_full_name|default:request.user.username }}</h1>
+      <p class="dash-hero-desc">
+        Track your entrance examination speed, coding mastery, subject accuracy,
+        and algorithmic placement readiness.
+      </p>
+    </div>
+
+    <!-- Readiness Gauge Box -->
+    <div class="dash-readiness-gauge">
+      <div class="gauge-circle">
+        <span class="gauge-val">{{ readiness.overall_readiness_score }}%</span>
+        <span class="gauge-lbl">Readiness Score</span>
+      </div>
+      <div class="gauge-meta">
+        <strong>Target: {{ readiness.target_role }}</strong>
+        <small>Evaluated across MCQs, Coding Challenges, and Live Exam performance.</small>
+      </div>
+    </div>
+  </header>
+
+  <!-- Key Performance Metrics Strip -->
+  <div class="dash-metrics-grid">
+    <div class="dash-metric-card">
+      <span class="icon">⏱️</span>
+      <span class="val">{{ total_attempts }}</span>
+      <span class="lbl">Tests Attempted</span>
+    </div>
+    <div class="dash-metric-card">
+      <span class="icon">📝</span>
+      <span class="val">{{ total_q_solved }}</span>
+      <span class="lbl">Questions Solved</span>
+    </div>
+    <div class="dash-metric-card">
+      <span class="icon">💻</span>
+      <span class="val">{{ coding_solved }}</span>
+      <span class="lbl">Coding Problems Solved</span>
+    </div>
+    <div class="dash-metric-card">
+      <span class="icon">🎯</span>
+      <span class="val">{{ avg_score }}%</span>
+      <span class="lbl">Average Exam Score</span>
+    </div>
+  </div>
+
+  <!-- SPLIT DASHBOARD LAYOUT -->
+  <div class="dash-split-grid">
+
+    <!-- LEFT: Subject Performance & Weak Topics -->
+    <div class="dash-left-col">
+
+      <!-- Subject-Wise Mastery Bars -->
+      <section class="dash-card">
+        <h3 class="dash-card-title">📚 Subject-Wise Accuracy & Performance</h3>
+        
+        <div class="subject-bars-list">
+          {% for sm in skill_masteries %}
+          <div class="subj-bar-item">
+            <div class="s-bar-head">
+              <span class="s-name">{{ sm.subject.name }}</span>
+              <span class="s-pct"><strong>{{ sm.accuracy_percentage }}%</strong> ({{ sm.correct_count }}/{{ sm.attempted_count }} solved)</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width: {{ sm.accuracy_percentage }}%;"></div>
+            </div>
+          </div>
+          {% empty %}
+          <p class="text-muted">No tests recorded yet. Take an entrance exam mock test to generate subject accuracy metrics.</p>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- Strong & Weak Topics -->
+      <div class="dash-two-cols">
+        <div class="dash-card card-weak">
+          <h4 class="col-title">⚠️ Weak Topics (Needs Focus)</h4>
+          <ul class="topic-tag-list">
+            {% for sm in skill_masteries %}
+              {% for t in sm.weak_topics %}
+                <li class="tag-weak">{{ t }} ({{ sm.subject.name }})</li>
+              {% endfor %}
+            {% empty %}
+              <li class="text-muted text-sm">No weak topics identified yet.</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="dash-card card-strong">
+          <h4 class="col-title">💪 Strong Topics</h4>
+          <ul class="topic-tag-list">
+            {% for sm in skill_masteries %}
+              {% for t in sm.strong_topics %}
+                <li class="tag-strong">✓ {{ t }} ({{ sm.subject.name }})</li>
+              {% endfor %}
+            {% empty %}
+              <li class="text-muted text-sm">Solve more questions to discover your strengths.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <!-- Personalized AI Learning Recommendations -->
+      {% if readiness.recommendations %}
+      <section class="dash-card">
+        <h3 class="dash-card-title">⚡ Recommended Action Plan & Next Steps</h3>
+        <ul class="recs-list">
+          {% for r in readiness.recommendations %}
+            <li class="rec-item">
+              <span class="rec-bullet">→</span>
+              <span>{{ r }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+
+    </div>
+
+    <!-- RIGHT: Recent Tests & Quick Launchers -->
+    <div class="dash-right-col">
+
+      <!-- Recent Test Results -->
+      <section class="dash-card">
+        <h3 class="dash-card-title">⏱️ Recent Examination Results</h3>
+
+        <div class="recent-exams-list">
+          {% for att in recent_attempts %}
+          <div class="recent-exam-row">
+            <div class="re-top">
+              <span class="re-title">{{ att.examination.title }}</span>
+              <span class="re-score {% if att.passed %}score-pass{% else %}score-fail{% endif %}">
+                {{ att.score }} / {{ att.total_possible_marks }} ({{ att.percentage }}%)
+              </span>
+            </div>
+            <div class="re-foot">
+              <small class="text-muted">{{ att.submitted_at|date:"M d, Y · h:i A" }}</small>
+              <a href="{% url 'exam_result' att.id %}" class="btn-link-sm">View Report →</a>
+            </div>
+          </div>
+          {% empty %}
+          <p class="text-muted text-sm">No recent exam attempts found.</p>
+          {% endfor %}
+        </div>
+
+        <div class="card-footer-action">
+          <a href="{% url 'exam_list' %}" class="btn btn-outline btn-sm btn-block">Explore All Live Tests →</a>
+        </div>
+      </section>
+
+      <!-- Practice Quick Links Widget -->
+      <section class="dash-card widget-quick-links">
+        <h3 class="dash-card-title">🚀 Quick Practice Portals</h3>
+        <a href="{% url 'mcq_entrance_hub' %}" class="dash-quick-link">
+          <span class="icon">📝</span>
+          <div>
+            <strong>MCQ & Entrance Exam Preparation</strong>
+            <small>MCA, OJEE, NIMCET & CUET-PG question banks</small>
+          </div>
+        </a>
+        <a href="{% url 'coding_list' %}" class="dash-quick-link">
+          <span class="icon">💻</span>
+          <div>
+            <strong>HackerRank-Style Coding IDE</strong>
+            <small>Two Sum, Dynamic Programming, String Parsing</small>
+          </div>
+        </a>
+        <a href="{% url 'special_interview_hub' %}" class="dash-quick-link">
+          <span class="icon">🎯</span>
+          <div>
+            <strong>Special Interview Modules</strong>
+            <small>React vs Angular, FDE, System Deployment</small>
+          </div>
+        </a>
+        <a href="{% url 'career_prep' %}" class="dash-quick-link">
+          <span class="icon">💼</span>
+          <div>
+            <strong>Placement & Career Preparation</strong>
+            <small>Internship drives, training, company patterns</small>
+          </div>
+        </a>
+      </section>
+
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Hiring Companies · Verified Employers · HireNexa{% endblock %}
+
+{% block content %}
+<div class="section-header" style="align-items: center; margin-bottom: 24px;">
+  <div>
+    <span class="hero-pill" style="margin-bottom: 8px;">VERIFIED EMPLOYER NETWORK</span>
+    <h1 style="font-size: 32px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.03em;">
+      Hiring Companies & Enterprises
+    </h1>
+    <p style="color: var(--slate-600); font-size: 15px; margin-top: 4px;">
+      Explore top technology companies, startups, and enterprises actively screening talent on HireNexa.
+    </p>
+  </div>
+  <div>
+    <a href="{% url 'hr_signup' %}" class="btn btn-primary btn-lg">Register Your Company →</a>
+  </div>
+</div>
+
+<!-- Search & Industry Filters -->
+<form method="get" action="{% url 'companies_list' %}" style="display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap;">
+  <div style="flex: 2; min-width: 260px; position: relative;">
+    <input type="text" name="q" value="{{ q }}" placeholder="Search company by name, location, or keywords..." class="form-input" style="padding-left: 36px;">
+    <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--slate-400);">🔍</span>
+  </div>
+  <div style="flex: 1; min-width: 200px;">
+    <input type="text" name="industry" value="{{ industry }}" placeholder="Filter by industry (e.g. AI, Fintech)..." class="form-input">
+  </div>
+  <button type="submit" class="btn btn-primary">Filter Companies</button>
+  {% if q or industry %}
+    <a href="{% url 'companies_list' %}" class="btn btn-outline" style="border-color: var(--slate-300); color: var(--slate-700);">Reset</a>
+  {% endif %}
+</form>
+
+<!-- Companies Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+  {% for comp in companies %}
+    <div class="job-card" style="display: flex; flex-direction: column; justify-content: space-between; padding: 24px;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="company-logo" style="width: 48px; height: 48px; font-size: 20px;">
+              {{ comp.name|slice:":1" }}
+            </div>
+            <div>
+              <h3 style="font-size: 18px; font-weight: 800; color: var(--slate-900); margin: 0;">
+                {{ comp.name }}
+              </h3>
+              {% if comp.industry %}
+                <span style="font-size: 12px; color: var(--slate-500); display: block;">{{ comp.industry }}</span>
+              {% endif %}
+            </div>
+          </div>
+          {% if comp.verification_status == 'APPROVED' %}
+            <span class="meta-badge" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; font-weight: 700; font-size: 11px;">
+              ✓ Verified
+            </span>
+          {% endif %}
+        </div>
+
+        <p style="font-size: 13px; color: var(--slate-600); line-height: 1.5; margin-bottom: 16px;">
+          {{ comp.description|default:"Leading technology company seeking talented engineering, management, and cloud talent through HireNexa."|truncatechars:140 }}
+        </p>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; font-size: 12px; color: var(--slate-500);">
+          {% if comp.location %}<span>📍 {{ comp.location }}</span>{% endif %}
+          {% if comp.company_size %}<span>👥 {{ comp.company_size }}</span>{% endif %}
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid var(--slate-100);">
+        <span class="meta-badge" style="background: #e0f2fe; color: #0369a1; font-weight: 700;">
+          🎯 {{ comp.active_jobs_count }} Active Job{{ comp.active_jobs_count|pluralize }}
+        </span>
+        <a href="{% url 'job_list' %}?q={{ comp.name }}" class="btn btn-outline btn-sm" style="border-color: var(--primary); color: var(--primary);">
+          View Openings →
+        </a>
+      </div>
+    </div>
+  {% empty %}
+    <div style="grid-column: 1 / -1; text-align: center; padding: 48px; background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl);">
+      <h3>No companies matched your query</h3>
+      <p style="color: var(--slate-500); margin-top: 6px;">Try adjusting your search terms or industry filter.</p>
+      <a href="{% url 'companies_list' %}" class="btn btn-primary" style="margin-top: 14px;">View All Companies</a>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

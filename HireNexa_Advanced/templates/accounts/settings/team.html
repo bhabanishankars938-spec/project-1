@@ -1,0 +1,63 @@
+{% extends "accounts/settings/settings_base.html" %}
+
+{% block title %}Team Members & HR Seats · HireNexa Settings{% endblock %}
+
+{% block settings_content %}
+<div class="settings-card">
+  <div class="card-header-bar">
+    <div class="card-title-group">
+      <h2 class="card-title">Hiring Team Members & HR Seat Allocation</h2>
+      <p class="card-subtitle">Manage recruiter seats, hiring managers, interview panel reviewers, and permissions.</p>
+    </div>
+    {% if org %}
+      <a href="{% url 'company_add_hr' %}" class="btn btn-primary btn-sm">+ Invite Team Member</a>
+    {% endif %}
+  </div>
+
+  {% if org %}
+    <div class="table-responsive">
+      <table class="settings-table">
+        <thead>
+          <tr>
+            <th>Member</th>
+            <th>Role</th>
+            <th>Department</th>
+            <th>Post Jobs</th>
+            <th>Interviews</th>
+            <th>Joined</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for m in members %}
+            <tr>
+              <td>
+                <div style="font-weight: 700; color: var(--slate-900);">{{ m.user.get_full_name|default:m.user.username }}</div>
+                <div style="font-size: 11px; color: var(--slate-500);">{{ m.user.email }}</div>
+              </td>
+              <td>
+                <span class="role-pill-clean {% if m.role == 'ADMIN' %}company_admin{% else %}recruiter{% endif %}">
+                  {{ m.get_role_display }}
+                </span>
+              </td>
+              <td>{{ m.department|default:"Talent Acquisition" }}</td>
+              <td>{% if m.can_post_jobs %}✓ Allowed{% else %}✕ Restricted{% endif %}</td>
+              <td>{% if m.can_schedule_interviews %}✓ Allowed{% else %}✕ Restricted{% endif %}</td>
+              <td>{{ m.joined_at|date:"M d, Y" }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="6" style="text-align: center; color: var(--slate-500); padding: 30px;">
+                No additional team members added yet. Click "+ Invite Team Member" to add HR colleagues.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div style="padding: 40px; text-align: center;">
+      <p style="font-size: 14px; color: var(--slate-600);">You must be part of a company organization to manage team seats.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

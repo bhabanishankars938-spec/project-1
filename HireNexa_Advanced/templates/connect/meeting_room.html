@@ -1,0 +1,1692 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}HireNexa Connect · {{ meeting.title }} ({{ meeting.meeting_id }}){% endblock %}
+
+{% block meta %}
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* Full-bleed Professional Stage */
+  body {
+    background: #090d16 !important;
+    overflow-x: hidden;
+  }
+
+  .connect-room-container {
+    max-width: 1600px;
+    margin: 12px auto 24px auto;
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 100px);
+    min-height: 640px;
+  }
+
+  /* Top Control Strip */
+  .room-top-bar {
+    background: #0f172a;
+    color: #ffffff;
+    border-radius: 14px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+    border: 1px solid #1e293b;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  }
+
+  .badge-live-pulse {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #ef4444;
+    color: #ffffff;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    animation: liveGlow 2s infinite;
+  }
+
+  @keyframes liveGlow {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  .room-timer {
+    background: #1e293b;
+    border: 1px solid #334155;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 13.5px;
+    color: #38bdf8;
+    font-weight: 700;
+  }
+
+  .room-code-tag {
+    background: #1e293b;
+    color: #94a3b8;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 12px;
+  }
+
+  /* Main Stage Workspace */
+  .room-stage-layout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Video Canvas Canvas */
+  .room-video-canvas {
+    background: #050811;
+    border-radius: 16px;
+    border: 1px solid #1e293b;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+  }
+
+  /* Grid Layout: Responsive Video Tiles */
+  .video-grid-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 12px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Single Tile */
+  .video-tile {
+    background: #0f172a;
+    border-radius: 12px;
+    border: 2px solid #1e293b;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 9;
+    max-height: 100%;
+    transition: border-color 0.2s;
+  }
+
+  .video-tile.speaking {
+    border-color: #10b981 !important;
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
+  }
+
+  .video-tile video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+    /* Mirror local video */
+  }
+
+  .video-tile.remote-stream video {
+    transform: scaleX(1);
+    /* Remote video not mirrored */
+  }
+
+  /* Avatar Fallback when Camera is Off */
+  .tile-avatar-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+    color: #ffffff;
+    z-index: 2;
+  }
+
+  .tile-avatar-glyph {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Tile Tags */
+  .tile-tag-name {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(15, 23, 42, 0.85);
+    color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tile-tag-audio {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(15, 23, 42, 0.85);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    z-index: 10;
+  }
+
+  /* Screen Share Notification Bar */
+  .screen-share-banner {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0284c7;
+    color: #ffffff;
+    padding: 6px 18px;
+    border-radius: 9999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    z-index: 50;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  .screen-share-banner button {
+    background: #ffffff;
+    color: #0284c7;
+    border: none;
+    padding: 2px 10px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  /* Live Captions Bar */
+  .captions-bar {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.9);
+    color: #f8fafc;
+    border: 1px solid #334155;
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    max-width: 80%;
+    text-align: center;
+    display: none;
+    z-index: 40;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Side Drawers (Chat, Participants, Settings) */
+  .room-drawer {
+    width: 340px;
+    background: #0f172a;
+    border-radius: 16px;
+    border: 1px solid #1e293b;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    color: #f8fafc;
+  }
+
+  .drawer-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid #1e293b;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .drawer-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .drawer-close {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px;
+  }
+
+  .chat-msg-row {
+    margin-bottom: 12px;
+    font-size: 13px;
+  }
+
+  .chat-msg-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2px;
+    font-size: 11px;
+    color: #94a3b8;
+  }
+
+  .chat-msg-content {
+    background: #1e293b;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: #f1f5f9;
+    word-break: break-word;
+  }
+
+  .chat-input-row {
+    padding: 12px;
+    border-top: 1px solid #1e293b;
+    display: flex;
+    gap: 8px;
+  }
+
+  .chat-input-row input {
+    flex: 1;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+  }
+
+  .chat-input-row button {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* Bottom Zoom-Style Meeting Toolbar */
+  .room-bottom-toolbar {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 10px 24px;
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    flex-wrap: wrap;
+  }
+
+  .toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tool-btn {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #ffffff;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 68px;
+    height: 52px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 4px 8px;
+    position: relative;
+  }
+
+  .tool-btn:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  .tool-btn.off {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+    color: #fca5a5;
+  }
+
+  .tool-btn.active-blue {
+    background: rgba(37, 99, 235, 0.3);
+    border-color: #3b82f6;
+    color: #93c5fd;
+  }
+
+  .tool-btn .btn-icon {
+    font-size: 18px;
+    margin-bottom: 2px;
+  }
+
+  .tool-btn-leave {
+    background: #ef4444 !important;
+    border-color: #dc2626 !important;
+    color: #ffffff !important;
+    font-weight: 700;
+  }
+
+  .tool-btn-leave:hover {
+    background: #dc2626 !important;
+  }
+
+  .badge-counter {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 1px 5px;
+    border-radius: 9999px;
+  }
+
+  /* Host Control Floating Bar */
+  .host-badge-pill {
+    background: #f59e0b;
+    color: #0f172a;
+    font-weight: 800;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if in_waiting_room %}
+<!-- Professional Waiting Room Screen -->
+<div class="connect-room-container"
+  style="justify-content: center; align-items: center; min-height: 80vh; display: flex;">
+  <div
+    style="background: #0f172a; border: 1px solid #1e293b; border-radius: 20px; padding: 48px 40px; max-width: 580px; width: 100%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+    <div style="position: relative; width: 80px; height: 80px; margin: 0 auto 24px auto;">
+      <div
+        style="position: absolute; inset: 0; border-radius: 50%; border: 3px solid #38bdf8; opacity: 0.25; animation: liveGlow 2s infinite;">
+      </div>
+      <div
+        style="position: absolute; inset: 12px; border-radius: 50%; background: #1e293b; display: flex; align-items: center; justify-content: center; font-size: 28px;">
+        ⏳
+      </div>
+    </div>
+
+    <div
+      style="display: inline-block; background: rgba(56, 189, 248, 0.15); border: 1px solid #38bdf8; color: #38bdf8; font-size: 11px; font-weight: 800; padding: 4px 14px; border-radius: 9999px; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 14px;">
+      Waiting Room Active
+    </div>
+
+    <h2 style="font-size: 22px; font-weight: 800; color: #ffffff; margin: 0 0 10px;">Please wait, the host will let you
+      in soon</h2>
+    <p style="font-size: 14px; color: #94a3b8; margin: 0 0 24px;">The meeting host has been notified that you are in the
+      waiting room.</p>
+
+    <div
+      style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 18px; text-align: left; margin-bottom: 24px;">
+      <div style="font-size: 11px; font-weight: 700; color: #64748b; letter-spacing: 0.05em; margin-bottom: 4px;">
+        SESSION DETAILS</div>
+      <div style="font-size: 16px; font-weight: 700; color: #f8fafc; margin-bottom: 10px;">{{ meeting.title }}</div>
+      <div
+        style="display: flex; justify-content: space-between; font-size: 13px; color: #cbd5e1; flex-wrap: wrap; gap: 8px;">
+        <span>Room Code: <strong style="color: #38bdf8; font-family: monospace;">{{ meeting.meeting_id
+            }}</strong></span>
+        <span>Host: <strong>{{ meeting.host.get_full_name|default:meeting.host.username }}</strong></span>
+      </div>
+    </div>
+
+    <div id="waitingStatusMsg"
+      style="font-size: 13.5px; color: #38bdf8; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+      <span
+        style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 8px #38bdf8;"></span>
+      <span>Waiting for host approval...</span>
+    </div>
+
+    <div style="display: flex; gap: 12px; justify-content: center;">
+      <a href="{% url 'connect:dashboard' %}" class="btn"
+        style="background: #334155; color: #ffffff; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;">
+        Leave Waiting Room
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Polling waiting room status every 2.5s
+  const WAITING_MEETING_ID = "{{ meeting.meeting_id }}";
+  let waitingPoll = setInterval(async function () {
+    try {
+      const res = await fetch(`/connect/api/${WAITING_MEETING_ID}/waiting-status/`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.is_admitted) {
+        clearInterval(waitingPoll);
+        document.getElementById("waitingStatusMsg").innerHTML = "🎉 <strong style='color:#10b981;'>Host admitted you! Joining room...</strong>";
+        setTimeout(() => { window.location.reload(); }, 600);
+      } else if (data.is_removed) {
+        clearInterval(waitingPoll);
+        alert("The host has declined your request to join this meeting.");
+        window.location.href = "/connect/dashboard/";
+      }
+    } catch (e) {
+      console.warn("Waiting status error:", e);
+    }
+  }, 2500);
+</script>
+
+{% else %}
+<div class="connect-room-container">
+
+  <!-- Top Status Strip -->
+  <div class="room-top-bar">
+    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+      {% if meeting.status == 'LIVE' %}
+      <span class="badge-live-pulse">● LIVE</span>
+      {% elif meeting.status == 'SCHEDULED' %}
+      <span
+        style="display: inline-flex; align-items: center; gap: 6px; background: #2563eb; color: #ffffff; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 800;">📅
+        SCHEDULED</span>
+      {% else %}
+      <span
+        style="display: inline-flex; align-items: center; gap: 6px; background: #475569; color: #ffffff; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 800;">{{
+        meeting.get_status_display }}</span>
+      {% endif %}
+      <div>
+        <span style="font-weight: 700; font-size: 15px;">{{ meeting.title }}</span>
+        <span class="room-code-tag" style="margin-left: 8px;">{{ meeting.meeting_id }}</span>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+      <!-- Quick Share Invite Action -->
+      <button type="button" onclick="openShareModal()"
+        style="background: #2563eb; color: #ffffff; border: none; padding: 6px 14px; border-radius: 8px; font-size: 12.5px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s;"
+        onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
+        <span>🔗 Share Invite</span>
+      </button>
+
+      <!-- Peer Connection State Badge -->
+      <span id="connStateBadge"
+        style="font-size: 12px; color: #10b981; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span>
+        <span id="connStateText">WebRTC Connected</span>
+      </span>
+
+      <!-- Live Call Timer -->
+      <span class="room-timer" id="roomCallTimer">00:00:00</span>
+
+      {% if is_host %}
+      <span class="host-badge-pill">Host Mode</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Main Stage Workspace -->
+  <div class="room-stage-layout">
+
+    <!-- Video Canvas Stage -->
+    <div class="room-video-canvas" id="roomVideoCanvas">
+
+      <!-- Screen Share Notification Banner -->
+      <div class="screen-share-banner" id="screenShareBanner">
+        <span>🖥️ You are sharing your screen</span>
+        <button type="button" onclick="stopScreenShare()">Stop Sharing</button>
+      </div>
+
+      <!-- Live Captions Bar -->
+      <div class="captions-bar" id="captionsBar">
+        <span id="captionsText">Listening for speech...</span>
+      </div>
+
+      <!-- Responsive Video Gallery Grid -->
+      <div class="video-grid-gallery" id="videoGalleryGrid">
+
+        <!-- Local Video Tile (You) -->
+        <div class="video-tile" id="localTile">
+          <video id="localVideo" autoplay playsinline muted></video>
+          <div class="tile-avatar-fallback" id="localAvatarFallback">
+            <div class="tile-avatar-glyph">
+              {{ request.user.username|slice:":1"|upper }}
+            </div>
+            <span>{{ request.user.get_full_name|default:request.user.username }}</span>
+          </div>
+          <div class="tile-tag-name">
+            <span>{{ request.user.get_full_name|default:request.user.username }} (You)</span>
+            {% if is_host %}<span class="host-badge-pill">Host</span>{% endif %}
+          </div>
+          <div class="tile-tag-audio" id="localAudioBadge">🎙️</div>
+        </div>
+
+        <!-- Remote Peer Tile -->
+        <div class="video-tile remote-stream" id="remoteTile">
+          <video id="remoteVideo" autoplay playsinline></video>
+          <div class="tile-avatar-fallback" id="remoteAvatarFallback">
+            <div class="tile-avatar-glyph" id="remoteAvatarGlyph">HN</div>
+            <span id="remoteStatusText">Waiting for peer connection...</span>
+          </div>
+          <div class="tile-tag-name" id="remoteTagName">
+            <span id="remoteNameLabel">Peer Attendee</span>
+          </div>
+          <div class="tile-tag-audio" id="remoteAudioBadge">🎙️</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Side Drawer: Chat -->
+    <div class="room-drawer" id="chatDrawer">
+      <div class="drawer-header">
+        <h3 class="drawer-title">💬 Meeting Chat</h3>
+        <button type="button" class="drawer-close" onclick="toggleDrawer('chatDrawer')">✕</button>
+      </div>
+      <div class="drawer-body" id="chatMessagesBox">
+        <div style="font-size: 11.5px; color: #64748b; text-align: center; margin-bottom: 12px;">
+          Messages are encrypted & visible only to participants in this room.
+        </div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Send a message..."
+          onkeydown="if(event.key==='Enter') sendChatMessage()">
+        <button type="button" onclick="sendChatMessage()">Send</button>
+      </div>
+    </div>
+
+    <!-- Side Drawer: Participants -->
+    <div class="room-drawer" id="participantsDrawer">
+      <div class="drawer-header">
+        <h3 class="drawer-title">👥 Participants (<span id="participantCount">1</span>)</h3>
+        <button type="button" class="drawer-close" onclick="toggleDrawer('participantsDrawer')">✕</button>
+      </div>
+
+      {% if is_host %}
+      <!-- Host Waiting Room Moderation Section -->
+      <div id="hostWaitingRoomPanel"
+        style="padding: 12px 14px; background: rgba(245, 158, 11, 0.12); border-bottom: 1px solid #f59e0b;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div
+            style="font-size: 11.5px; font-weight: 800; color: #f59e0b; text-transform: uppercase; letter-spacing: 0.05em;">
+            ⏳ Waiting Room (<span id="waitingCount">{{ waiting_participants|length }}</span>)
+          </div>
+          {% if waiting_participants %}
+          <button type="button" id="btnAdmitAll" onclick="admitAllParticipants()"
+            style="background: #10b981; color: #fff; border: none; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer;">
+            Admit All
+          </button>
+          {% endif %}
+        </div>
+        <div id="waitingParticipantsList">
+          {% for wp in waiting_participants %}
+          <div id="waitingRow_{{ wp.id }}"
+            style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-top: 1px solid rgba(245, 158, 11, 0.2); font-size: 12px;">
+            <span style="color: #f8fafc; font-weight: 600;">{{ wp.display_name }}</span>
+            <div style="display: flex; gap: 4px;">
+              <button type="button" onclick="admitParticipant({{ wp.id }})"
+                style="background: #10b981; color: #fff; border: none; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer;">Admit</button>
+              <button type="button" onclick="denyParticipant({{ wp.id }})"
+                style="background: #ef4444; color: #fff; border: none; padding: 2px 6px; border-radius: 4px; font-size: 11px; cursor: pointer;">Deny</button>
+            </div>
+          </div>
+          {% empty %}
+          <div id="noWaitingNotice" style="font-size: 11.5px; color: #94a3b8; font-style: italic;">No attendees
+            currently waiting.</div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="drawer-body" id="participantsListBox">
+        <div
+          style="padding: 8px 0; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <strong>{{ request.user.get_full_name|default:request.user.username }}</strong> (You)
+            <div style="font-size: 11px; color: #38bdf8;">{{ participant.get_role_display }}</div>
+          </div>
+          <span style="font-size: 12px; color: #10b981;">Online</span>
+        </div>
+      </div>
+      {% if is_host %}
+      <div style="padding: 10px 14px; border-top: 1px solid #1e293b; display: flex; gap: 8px;">
+        <button type="button" onclick="hostAction('mute_all')"
+          style="flex: 1; background: #334155; color: #fff; border: none; padding: 6px; border-radius: 6px; font-size: 12px; cursor: pointer;">Mute
+          All</button>
+        <button type="button" onclick="hostAction('lock_room')"
+          style="flex: 1; background: #334155; color: #fff; border: none; padding: 6px; border-radius: 6px; font-size: 12px; cursor: pointer;"
+          id="btnLockRoom">Lock Room</button>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Side Drawer: Settings -->
+    <div class="room-drawer" id="settingsDrawer">
+      <div class="drawer-header">
+        <h3 class="drawer-title">⚙️ Meeting Settings</h3>
+        <button type="button" class="drawer-close" onclick="toggleDrawer('settingsDrawer')">✕</button>
+      </div>
+      <div class="drawer-body">
+        <div style="margin-bottom: 16px;">
+          <label style="font-size: 12px; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 6px;">Camera
+            Source</label>
+          <select id="cameraSelect" onchange="changeCameraDevice()"
+            style="width: 100%; padding: 8px; border-radius: 8px; background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 12px; outline: none;"></select>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label
+            style="font-size: 12px; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 6px;">Microphone
+            Source</label>
+          <select id="micSelect" onchange="changeMicDevice()"
+            style="width: 100%; padding: 8px; border-radius: 8px; background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 12px; outline: none;"></select>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label style="font-size: 12px; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 6px;">Mirror
+            Local Video</label>
+          <button type="button" onclick="toggleMirrorVideo()"
+            style="width: 100%; padding: 8px; border-radius: 8px; background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 12px; cursor: pointer;">Toggle
+            Mirror Mode</button>
+        </div>
+
+        <div style="border-top: 1px solid #1e293b; padding-top: 14px;">
+          <button type="button" onclick="openAbuseReportModal()"
+            style="width: 100%; padding: 8px; border-radius: 8px; background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #fca5a5; font-size: 12px; font-weight: 600; cursor: pointer;">
+            🚩 Report Misconduct or Abuse
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {% if interview and is_interviewer %}
+    <!-- Side Drawer: Interviewer Scorecard & Evaluation -->
+    <div class="room-drawer" id="scorecardDrawer" style="display: none;">
+      <div class="drawer-header" style="background: #1e293b; border-bottom: 1px solid #334155; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center;">
+        <h3 class="drawer-title" style="margin: 0; font-size: 14px; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 8px;">
+          <span>📝</span> Live Interview Scorecard
+        </h3>
+        <button type="button" class="drawer-close" onclick="toggleDrawer('scorecardDrawer')" style="background: none; border: none; color: #94a3b8; font-size: 18px; cursor: pointer;">✕</button>
+      </div>
+      <div class="drawer-body" style="padding: 16px; overflow-y: auto;">
+        <div style="background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 12px; margin-bottom: 16px;">
+          <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px;">Candidate</div>
+          <div style="font-size: 14px; font-weight: 700; color: #ffffff;">{{ candidate.get_full_name|default:candidate.username }}</div>
+          <div style="font-size: 12px; color: #38bdf8; margin-top: 2px;">{{ job.title }}</div>
+          {% if application.resume %}
+          <div style="margin-top: 8px;">
+            <a href="{{ application.resume.file.url }}" target="_blank" rel="noopener noreferrer" style="font-size: 12px; color: #60a5fa; text-decoration: underline; display: inline-flex; align-items: center; gap: 4px;">
+              📄 View Candidate Resume ↗
+            </a>
+          </div>
+          {% endif %}
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 6px;">Evaluation Round</label>
+          <div style="font-size: 13px; font-weight: 600; color: #f8fafc; background: #1e293b; padding: 8px 12px; border-radius: 8px; border: 1px solid #334155;">{{ interview.round_name }}</div>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 6px;">Interview Status / Recommendation</label>
+          <select id="interviewStatusSelect" style="width: 100%; padding: 8px 10px; border-radius: 8px; background: #1e293b; border: 1px solid #334155; color: #ffffff; font-size: 13px;">
+            <option value="SCHEDULED" {% if interview.status == 'SCHEDULED' %}selected{% endif %}>In Progress / Scheduled</option>
+            <option value="COMPLETED" {% if interview.status == 'COMPLETED' %}selected{% endif %}>Completed (Pass to Next Round)</option>
+            <option value="CANCELLED" {% if interview.status == 'CANCELLED' %}selected{% endif %}>Cancelled</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label style="font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 6px;">Interviewer Feedback & Notes</label>
+          <textarea id="scorecardNotes" style="width: 100%; height: 130px; padding: 10px; border-radius: 8px; background: #1e293b; border: 1px solid #334155; color: #ffffff; font-size: 13px; line-height: 1.5; resize: vertical;" placeholder="Record observations on technical problem solving, system design, architectural thinking, and communication...">{{ interview.interviewer_feedback }}</textarea>
+        </div>
+
+        <button type="button" onclick="submitScorecard()" style="width: 100%; padding: 10px; border-radius: 8px; background: #2563eb; color: #ffffff; font-weight: 700; font-size: 13px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <span>💾 Save Evaluation Scorecard</span>
+        </button>
+        <div id="scorecardSavedNotice" style="display: none; text-align: center; color: #10b981; font-size: 12.5px; margin-top: 10px; font-weight: 600;">
+          ✓ Scorecard updated in database!
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+
+  <!-- Bottom Zoom-Style Meeting Toolbar -->
+  <div class="room-bottom-toolbar" id="roomBottomToolbar">
+    <!-- Group 1: Media Toggles -->
+    <div class="toolbar-group">
+      <!-- 1. Microphone -->
+      <button type="button" class="tool-btn" id="btnMic" onclick="toggleMic()" title="Mute/Unmute Audio (Alt+A)">
+        <span class="btn-icon">🎙️</span>
+        <span id="btnMicLabel">Mute</span>
+      </button>
+
+      <!-- 2. Camera -->
+      <button type="button" class="tool-btn" id="btnCam" onclick="toggleCam()" title="Start/Stop Video (Alt+V)">
+        <span class="btn-icon">📹</span>
+        <span id="btnCamLabel">Stop Video</span>
+      </button>
+    </div>
+
+    <!-- Group 2: Interactive Collaboration Tools -->
+    <div class="toolbar-group">
+      <!-- 3. Screen Share -->
+      <button type="button" class="tool-btn" id="btnScreenShare" onclick="toggleScreenShare()"
+        title="Share Entire Screen or Window">
+        <span class="btn-icon">🖥️</span>
+        <span>Share</span>
+      </button>
+
+      <!-- 4. Invite / Share -->
+      <button type="button" class="tool-btn" id="btnShareInvite" onclick="openShareModal()"
+        title="Share Invitation Link">
+        <span class="btn-icon">🔗</span>
+        <span>Invite</span>
+      </button>
+
+      <!-- 5. Participants -->
+      <button type="button" class="tool-btn" id="btnParticipants" onclick="toggleDrawer('participantsDrawer')"
+        title="View Participants">
+        <span class="btn-icon">👥</span>
+        <span>People</span>
+        <span class="badge-counter" id="toolbarPartCount">1</span>
+      </button>
+
+      <!-- 6. In-Meeting Chat -->
+      <button type="button" class="tool-btn" id="btnChat" onclick="toggleDrawer('chatDrawer')"
+        title="Open In-Meeting Chat">
+        <span class="btn-icon">💬</span>
+        <span>Chat</span>
+        <span class="badge-counter" id="toolbarChatUnread" style="display: none;">0</span>
+      </button>
+
+      <!-- 7. Live Captions / Subtitles -->
+      <button type="button" class="tool-btn" id="btnCaptions" onclick="toggleCaptions()"
+        title="Toggle Real-Time Speech Captions">
+        <span class="btn-icon">📝</span>
+        <span>Captions</span>
+      </button>
+
+      {% if interview and is_interviewer %}
+      <!-- Interviewer Scorecard -->
+      <button type="button" class="tool-btn" id="btnScorecard" onclick="toggleDrawer('scorecardDrawer')"
+        title="Live Interview Scorecard & Feedback" style="background: rgba(37, 99, 235, 0.25); border: 1px solid #3b82f6;">
+        <span class="btn-icon">📋</span>
+        <span style="color: #60a5fa;">Scorecard</span>
+      </button>
+      {% endif %}
+
+      <!-- 8. Settings -->
+      <button type="button" class="tool-btn" id="btnSettings" onclick="toggleDrawer('settingsDrawer')"
+        title="Audio & Video Settings">
+        <span class="btn-icon">⚙️</span>
+        <span>Settings</span>
+      </button>
+
+      <!-- 9. Fullscreen / PiP -->
+      <button type="button" class="tool-btn" id="btnFullscreen" onclick="toggleFullScreen()" title="Full Screen View">
+        <span class="btn-icon">⛶</span>
+        <span>Expand</span>
+      </button>
+    </div>
+
+    <!-- Group 3: Leave / End Meeting -->
+    <div class="toolbar-group">
+      <button type="button" class="tool-btn tool-btn-leave" onclick="leaveMeeting()" title="Exit Call">
+        <span class="btn-icon">📞</span>
+        <span>Leave</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Share & Invite Modal -->
+  <div id="shareInviteModal"
+    style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; padding: 16px;">
+    <div
+      style="background: #0f172a; border: 1px solid #334155; border-radius: 18px; max-width: 520px; width: 100%; padding: 24px; color: #ffffff; box-shadow: 0 10px 40px rgba(0,0,0,0.6); position: relative;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-size: 18px; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 8px;">
+          <span>🔗</span> Share Meeting Invitation
+        </h3>
+        <button type="button" onclick="closeShareModal()"
+          style="background: transparent; border: none; color: #94a3b8; font-size: 18px; cursor: pointer;">✕</button>
+      </div>
+
+      <div style="margin-bottom: 18px;">
+        <label style="font-size: 12px; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 6px;">DIRECT
+          JOIN LINK</label>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="shareLinkInput" value="{{ share_url }}" readonly
+            style="flex: 1; background: #1e293b; border: 1px solid #334155; color: #38bdf8; padding: 10px 12px; border-radius: 8px; font-family: monospace; font-size: 13px; outline: none;">
+          <button type="button" id="btnCopyLink" onclick="copyShareLink()"
+            style="background: #2563eb; color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap;">
+            Copy Link
+          </button>
+        </div>
+        <div id="copyFeedback" style="font-size: 12px; color: #10b981; margin-top: 4px; display: none;">✓ Link copied to
+          clipboard!</div>
+      </div>
+
+      <!-- Multi-Platform Share Buttons -->
+      <div style="margin-bottom: 20px;">
+        <label style="font-size: 12px; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 8px;">SHARE VIA
+          PLATFORMS</label>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <a href="{{ whatsapp_url }}" target="_blank" rel="noopener"
+            style="background: #25d366; color: #ffffff; text-decoration: none; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span>💬 WhatsApp</span>
+          </a>
+          <a href="{{ email_mailto }}"
+            style="background: #ea4335; color: #ffffff; text-decoration: none; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span>✉️ Email</span>
+          </a>
+          <a href="{{ telegram_url }}" target="_blank" rel="noopener"
+            style="background: #229ed9; color: #ffffff; text-decoration: none; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span>✈️ Telegram</span>
+          </a>
+          <a href="{{ linkedin_url }}" target="_blank" rel="noopener"
+            style="background: #0077b5; color: #ffffff; text-decoration: none; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span>💼 LinkedIn</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- In-App Dispatcher -->
+      <div style="border-top: 1px solid #1e293b; padding-top: 16px; margin-bottom: 16px;">
+        <label style="font-size: 12px; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 8px;">SEND
+          IN-APP / EMAIL INVITATION</label>
+        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+          <input type="text" id="inviteRecipientInput" placeholder="Email address or username..."
+            style="flex: 1; background: #1e293b; border: 1px solid #334155; color: #fff; padding: 8px 12px; border-radius: 8px; font-size: 13px; outline: none;">
+          <button type="button" onclick="sendInAppInvitation()"
+            style="background: #10b981; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer;">
+            Send
+          </button>
+        </div>
+        <div id="inviteDispatchMsg" style="font-size: 12px; display: none;"></div>
+      </div>
+
+      <!-- Meeting Credentials Box -->
+      <div
+        style="background: #1e293b; border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; font-size: 12.5px; color: #cbd5e1;">
+        <span>Meeting ID: <strong style="color: #38bdf8; font-family: monospace;">{{ meeting.meeting_id
+            }}</strong></span>
+        {% if passcode %}
+        <span>Passcode: <strong style="color: #f59e0b; font-family: monospace;">{{ passcode }}</strong></span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Real-time WebRTC Script -->
+<script>
+  const MEETING_ID = "{{ meeting.meeting_id }}";
+  const IS_HOST = {% if is_host %}true{% else %}false{% endif %};
+  const CURRENT_USER = "{{ request.user.username }}";
+  const CURRENT_USER_NAME = "{{ request.user.get_full_name|default:request.user.username }}";
+
+  let localStream = null;
+  let screenStream = null;
+  let peerConnection = null;
+  let isAudioMuted = false;
+  let isVideoMuted = false;
+  let isScreenSharing = false;
+  let isCaptionsOn = false;
+  let speechRecognizer = null;
+  let lastSignalId = 0;
+  let signalInterval = null;
+  let isMirrored = true;
+  let wsSocket = null;
+  let meetingEnded = false;  // Guard: prevents repeated 410 handling
+
+  // Dynamic STUN / TURN Configuration
+  const rtcConfig = {
+    iceServers: {{ ice_servers_json|default:'[{"urls": "stun:stun.l.google.com:19302"}, {"urls": "stun:stun1.l.google.com:19302"}]'|safe }}
+  };
+
+  document.addEventListener("DOMContentLoaded", async function () {
+    startTimer();
+    await initMediaDevices();
+    initWebRTC();
+    initWebSocket();
+    startSignaling();
+    populateDeviceSelectors();
+  });
+
+  // Hybrid Real-Time Transport: WebSocket Primary + HTTP Cache Fallback
+  function initWebSocket() {
+    try {
+      const wsScheme = window.location.protocol === "https:" ? "wss" : "ws";
+      const wsUrl = `${wsScheme}://${window.location.host}/ws/connect/${MEETING_ID}/`;
+      wsSocket = new WebSocket(wsUrl);
+
+      wsSocket.onopen = function () {
+        console.log("HireNexa Connect: WebSocket signaling channel established.");
+        const badge = document.getElementById("connStateText");
+        if (badge) badge.textContent = "WebRTC Ready (WS)";
+      };
+
+      wsSocket.onmessage = async function (evt) {
+        try {
+          const sig = JSON.parse(evt.data);
+          await handleIncomingSignal(sig);
+        } catch (err) {
+          console.warn("WS parse error:", err);
+        }
+      };
+
+      wsSocket.onerror = function (err) {
+        console.warn("WebSocket notice: Using HTTP cache-buffered signaling fallback.", err);
+      };
+
+      wsSocket.onclose = function () {
+        console.log("WebSocket connection closed. HTTP cache polling active.");
+      };
+    } catch (e) {
+      console.warn("WebSocket initialization skipped, falling back to HTTP polling:", e);
+    }
+  }
+
+  // 1. Call Timer
+  function startTimer() {
+    let secs = 0;
+    setInterval(() => {
+      secs++;
+      const h = String(Math.floor(secs / 3600)).padStart(2, '0');
+      const m = String(Math.floor((secs % 3600) / 60)).padStart(2, '0');
+      const s = String(secs % 60).padStart(2, '0');
+      const el = document.getElementById("roomCallTimer");
+      if (el) el.textContent = `${h}:${m}:${s}`;
+    }, 1000);
+  }
+
+  // 2. Initialize Media
+  async function initMediaDevices() {
+    try {
+      localStream = await navigator.mediaDevices.getUserMedia({
+        video: { width: { ideal: 1280 }, height: { ideal: 720 } },
+        audio: true
+      });
+      const localVideo = document.getElementById("localVideo");
+      if (localVideo) localVideo.srcObject = localStream;
+      document.getElementById("localAvatarFallback").style.display = "none";
+    } catch (err) {
+      console.warn("Hardware media access warning:", err);
+      document.getElementById("localAvatarFallback").style.display = "flex";
+      document.getElementById("btnCam").classList.add("off");
+      document.getElementById("btnCamLabel").textContent = "Camera Off";
+      isVideoMuted = true;
+    }
+  }
+
+  // 3. Setup WebRTC PeerConnection
+  function initWebRTC() {
+    peerConnection = new RTCPeerConnection(rtcConfig);
+
+    // Add local tracks
+    if (localStream) {
+      localStream.getTracks().forEach(t => peerConnection.addTrack(t, localStream));
+    }
+
+    // Remote track handler
+    peerConnection.ontrack = function (evt) {
+      const remoteVideo = document.getElementById("remoteVideo");
+      if (remoteVideo && evt.streams[0]) {
+        remoteVideo.srcObject = evt.streams[0];
+        document.getElementById("remoteAvatarFallback").style.display = "none";
+        document.getElementById("connStateText").textContent = "WebRTC Connected";
+        document.getElementById("connStateBadge").style.color = "#10b981";
+      }
+    };
+
+    // ICE Candidate generation
+    peerConnection.onicecandidate = function (evt) {
+      if (evt.candidate) {
+        sendSignal("candidate", evt.candidate);
+      }
+    };
+
+    peerConnection.oniceconnectionstatechange = function () {
+      const state = peerConnection.iceConnectionState;
+      const label = document.getElementById("connStateText");
+      if (state === "disconnected" || state === "failed") {
+        label.textContent = "Reconnecting...";
+        document.getElementById("connStateBadge").style.color = "#f59e0b";
+      } else if (state === "connected" || state === "completed") {
+        label.textContent = "WebRTC Connected";
+        document.getElementById("connStateBadge").style.color = "#10b981";
+      }
+    };
+
+    // Host initiates offer
+    if (IS_HOST) {
+      createAndSendOffer();
+    }
+  }
+
+  async function createAndSendOffer() {
+    try {
+      const offer = await peerConnection.createOffer();
+      await peerConnection.setLocalDescription(offer);
+      sendSignal("offer", offer);
+    } catch (e) {
+      console.warn("Error creating WebRTC offer:", e);
+    }
+  }
+
+  // 4. Signaling Channel
+  function startSignaling() {
+    pollSignals();
+    signalInterval = setInterval(pollSignals, 1400);
+  }
+
+  async function sendSignal(type, payload, target = "all") {
+    // 1. Send via WebSocket if connection is active
+    if (wsSocket && wsSocket.readyState === WebSocket.OPEN) {
+      try {
+        wsSocket.send(JSON.stringify({ type: type, payload: payload, target: target }));
+        return;
+      } catch (err) {
+        console.warn("WebSocket send error, falling back to HTTP:", err);
+      }
+    }
+
+    // 2. Fallback to HTTP REST signaling API
+    try {
+      const csrf = getCsrfToken();
+      await fetch(`/connect/api/${MEETING_ID}/signal/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrf
+        },
+        body: JSON.stringify({ type: type, payload: payload, target: target })
+      });
+    } catch (e) {
+      console.warn("Signal send error:", e);
+    }
+  }
+
+  async function pollSignals() {
+    // Guard: stop polling immediately if meeting already ended
+    if (meetingEnded) return;
+    try {
+      const res = await fetch(`/connect/api/${MEETING_ID}/signal/?since=${lastSignalId}`);
+      if (res.status === 410) {
+        // Meeting ended — stop everything immediately
+        cleanupMeeting();
+        showMeetingEndedBanner("This meeting has ended. Redirecting to history...");
+        setTimeout(() => { window.location.href = "/connect/history/"; }, 2000);
+        return;
+      }
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.signals) {
+        for (const sig of data.signals) {
+          lastSignalId = Math.max(lastSignalId, sig.id);
+          await handleIncomingSignal(sig);
+        }
+      }
+      if (data.presence) {
+        updatePresenceList(data.presence);
+      }
+    } catch (e) {
+      console.warn("Poll notice:", e);
+    }
+  }
+
+  function showMeetingEndedBanner(message) {
+    // Remove any existing banner
+    const existing = document.getElementById("meetingEndedBanner");
+    if (existing) existing.remove();
+    const banner = document.createElement("div");
+    banner.id = "meetingEndedBanner";
+    banner.style.cssText = `
+      position: fixed; top: 0; left: 0; right: 0; z-index: 99999;
+      background: linear-gradient(135deg, #dc2626, #991b1b);
+      color: #fff; text-align: center; padding: 16px 24px;
+      font-size: 15px; font-weight: 600; letter-spacing: 0.3px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    `;
+    banner.textContent = "🔴 " + message;
+    document.body.prepend(banner);
+  }
+
+  async function handleIncomingSignal(sig) {
+    const { type, payload, sender_name, sender } = sig;
+    if (!peerConnection) return;
+
+    if (type === "offer" && !IS_HOST) {
+      await peerConnection.setRemoteDescription(new RTCSessionDescription(payload));
+      const answer = await peerConnection.createAnswer();
+      await peerConnection.setLocalDescription(answer);
+      sendSignal("answer", answer);
+    } else if (type === "answer" && IS_HOST) {
+      if (peerConnection.signalingState !== "stable") {
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(payload));
+      }
+    } else if (type === "candidate") {
+      try {
+        await peerConnection.addIceCandidate(new RTCIceCandidate(payload));
+      } catch (err) {
+        console.warn("Candidate handling:", err);
+      }
+    } else if (type === "chat") {
+      appendChatMessage(sender_name, payload.text, false);
+    } else if (type === "host_action") {
+      handleHostAction(payload);
+    }
+  }
+
+  function handleHostAction(payload) {
+    const { action, target, message } = payload;
+    if (action === "end_meeting") {
+      cleanupMeeting();
+      showMeetingEndedBanner("Host has ended the meeting for all participants. Redirecting...");
+      setTimeout(() => { window.location.href = "/connect/history/"; }, 2000);
+    } else if (action === "kick_user" && target === CURRENT_USER) {
+      cleanupMeeting();
+      showMeetingEndedBanner("You have been removed from this meeting by the host.");
+      setTimeout(() => { window.location.href = "/connect/"; }, 2000);
+    } else if (action === "mute_all" || (action === "mute_user" && target === CURRENT_USER)) {
+      if (!isAudioMuted) toggleMic();
+    }
+  }
+
+  // 5. Media Toggles
+  function toggleMic() {
+    if (!localStream) return;
+    const audioTrack = localStream.getAudioTracks()[0];
+    if (audioTrack) {
+      isAudioMuted = !isAudioMuted;
+      audioTrack.enabled = !isAudioMuted;
+      const btn = document.getElementById("btnMic");
+      const badge = document.getElementById("localAudioBadge");
+      if (isAudioMuted) {
+        btn.classList.add("off");
+        document.getElementById("btnMicLabel").textContent = "Unmute";
+        badge.textContent = "🔇";
+      } else {
+        btn.classList.remove("off");
+        document.getElementById("btnMicLabel").textContent = "Mute";
+        badge.textContent = "🎙️";
+      }
+    }
+  }
+
+  function toggleCam() {
+    if (!localStream) return;
+    const videoTrack = localStream.getVideoTracks()[0];
+    if (videoTrack) {
+      isVideoMuted = !isVideoMuted;
+      videoTrack.enabled = !isVideoMuted;
+      const btn = document.getElementById("btnCam");
+      const fallback = document.getElementById("localAvatarFallback");
+      if (isVideoMuted) {
+        btn.classList.add("off");
+        document.getElementById("btnCamLabel").textContent = "Start Video";
+        fallback.style.display = "flex";
+      } else {
+        btn.classList.remove("off");
+        document.getElementById("btnCamLabel").textContent = "Stop Video";
+        fallback.style.display = "none";
+      }
+    }
+  }
+
+  // 6. Screen Sharing
+  async function toggleScreenShare() {
+    if (!isScreenSharing) {
+      try {
+        screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+        const screenTrack = screenStream.getVideoTracks()[0];
+
+        // Replace outgoing track in peer connection
+        if (peerConnection) {
+          const sender = peerConnection.getSenders().find(s => s.track && s.track.kind === "video");
+          if (sender) sender.replaceTrack(screenTrack);
+        }
+
+        // Show local screen preview
+        document.getElementById("localVideo").srcObject = screenStream;
+        document.getElementById("screenShareBanner").style.display = "flex";
+        document.getElementById("btnScreenShare").classList.add("active-blue");
+        isScreenSharing = true;
+
+        screenTrack.onended = () => stopScreenShare();
+      } catch (err) {
+        console.warn("Screen share cancelled or denied:", err);
+      }
+    } else {
+      stopScreenShare();
+    }
+  }
+
+  function stopScreenShare() {
+    if (screenStream) {
+      screenStream.getTracks().forEach(t => t.stop());
+      screenStream = null;
+    }
+    if (localStream && peerConnection) {
+      const videoTrack = localStream.getVideoTracks()[0];
+      const sender = peerConnection.getSenders().find(s => s.track && s.track.kind === "video");
+      if (sender && videoTrack) sender.replaceTrack(videoTrack);
+      document.getElementById("localVideo").srcObject = localStream;
+    }
+    document.getElementById("screenShareBanner").style.display = "none";
+    document.getElementById("btnScreenShare").classList.remove("active-blue");
+    isScreenSharing = false;
+  }
+
+  // 7. Live Captions (Web Speech API)
+  function toggleCaptions() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const bar = document.getElementById("captionsBar");
+    const btn = document.getElementById("btnCaptions");
+
+    if (!SpeechRecognition) {
+      alert("Live captions require Google Chrome or Edge with Web Speech API support.");
+      return;
+    }
+
+    if (!isCaptionsOn) {
+      speechRecognizer = new SpeechRecognition();
+      speechRecognizer.continuous = true;
+      speechRecognizer.interimResults = true;
+      speechRecognizer.lang = "en-US";
+
+      speechRecognizer.onresult = function (event) {
+        let transcript = "";
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          transcript += event.results[i][0].transcript;
+        }
+        document.getElementById("captionsText").textContent = transcript;
+      };
+
+      speechRecognizer.onerror = (e) => console.warn("Speech error:", e);
+      speechRecognizer.start();
+
+      bar.style.display = "block";
+      btn.classList.add("active-blue");
+      isCaptionsOn = true;
+    } else {
+      if (speechRecognizer) speechRecognizer.stop();
+      bar.style.display = "none";
+      btn.classList.remove("active-blue");
+      isCaptionsOn = false;
+    }
+  }
+
+  // 8. In-Meeting Chat
+  function sendChatMessage() {
+    const input = document.getElementById("chatInput");
+    const text = input.value.trim();
+    if (!text) return;
+
+    sendSignal("chat", { text: text });
+    appendChatMessage("You", text, true);
+    input.value = "";
+  }
+
+  function appendChatMessage(sender, text, isMe) {
+    const box = document.getElementById("chatMessagesBox");
+    const row = document.createElement("div");
+    row.className = "chat-msg-row";
+    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    row.innerHTML = `
+      <div class="chat-msg-header">
+        <strong style="color: ${isMe ? '#38bdf8' : '#e2e8f0'}">${sender}</strong>
+        <span>${time}</span>
+      </div>
+      <div class="chat-msg-content">${text}</div>
+    `;
+    box.appendChild(row);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  // 9. Side Drawer Toggle
+  function toggleDrawer(id) {
+    const drawer = document.getElementById(id);
+    const isVisible = drawer.style.display === "flex";
+    document.querySelectorAll(".room-drawer").forEach(d => d.style.display = "none");
+    if (!isVisible) drawer.style.display = "flex";
+  }
+
+  // 10. Presence List
+  function updatePresenceList(presenceList) {
+    const box = document.getElementById("participantsListBox");
+    const countEl = document.getElementById("participantCount");
+    const toolbarCount = document.getElementById("toolbarPartCount");
+
+    if (countEl) countEl.textContent = presenceList.length;
+    if (toolbarCount) toolbarCount.textContent = presenceList.length;
+
+    let html = "";
+    presenceList.forEach(p => {
+      const isMe = (p.username === CURRENT_USER);
+      html += `
+        <div style="padding: 8px 0; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <strong>${p.name}</strong> ${isMe ? '(You)' : ''}
+            <div style="font-size: 11px; color: #38bdf8;">${p.role}</div>
+          </div>
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <span style="font-size: 12px;">${p.audio_muted ? '🔇' : '🎙️'}</span>
+            ${IS_HOST && !isMe ? `<button onclick="hostAction('kick_user', '${p.username}')" style="background: #ef4444; border: none; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 10px; cursor: pointer;">Remove</button>` : ''}
+          </div>
+        </div>
+      `;
+    });
+    box.innerHTML = html;
+  }
+
+  // 11. Host Moderation Actions
+  async function hostAction(action, targetUsername = "") {
+    const csrf = getCsrfToken();
+    try {
+      await fetch(`/connect/api/${MEETING_ID}/moderation/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRFToken": csrf },
+        body: JSON.stringify({ action: action, target_username: targetUsername })
+      });
+    } catch (e) {
+      console.warn("Host action notice:", e);
+    }
+  }
+
+  // 12. Device Selection & Fullscreen
+  async function populateDeviceSelectors() {
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const camSelect = document.getElementById("cameraSelect");
+      const micSelect = document.getElementById("micSelect");
+      devices.forEach(d => {
+        const opt = document.createElement("option");
+        opt.value = d.deviceId;
+        opt.text = d.label || `${d.kind} (${d.deviceId.slice(0, 5)})`;
+        if (d.kind === "videoinput") camSelect.appendChild(opt);
+        if (d.kind === "audioinput") micSelect.appendChild(opt);
+      });
+    } catch (e) {
+      console.warn("Enumerate devices notice:", e);
+    }
+  }
+
+  function toggleMirrorVideo() {
+    isMirrored = !isMirrored;
+    const v = document.getElementById("localVideo");
+    if (v) v.style.transform = isMirrored ? "scaleX(-1)" : "scaleX(1)";
+  }
+
+  function toggleFullScreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => { });
+    } else {
+      document.exitFullscreen().catch(() => { });
+    }
+  }
+
+  function cleanupMeeting() {
+    meetingEnded = true;
+    if (signalInterval) {
+      clearInterval(signalInterval);
+      signalInterval = null;
+    }
+    if (wsSocket) {
+      try { wsSocket.close(); } catch (e) {}
+      wsSocket = null;
+    }
+    if (localStream) {
+      try { localStream.getTracks().forEach(t => t.stop()); } catch (e) {}
+      localStream = null;
+    }
+    if (screenStream) {
+      try { screenStream.getTracks().forEach(t => t.stop()); } catch (e) {}
+      screenStream = null;
+    }
+    if (peerConnection) {
+      try { peerConnection.close(); } catch (e) {}
+      peerConnection = null;
+    }
+  }
+
+  window.addEventListener("beforeunload", cleanupMeeting);
+  window.addEventListener("pagehide", cleanupMeeting);
+
+  function leaveMeeting() {
+    if (confirm("Are you sure you want to leave this meeting?")) {
+      const endForAll = IS_HOST && confirm("Do you want to end this meeting for everyone?");
+      cleanupMeeting();
+      if (endForAll) {
+        hostAction('end_meeting').finally(() => { window.location.href = "/connect/history/"; });
+      } else {
+        window.location.href = "/connect/";
+      }
+    }
+  }
+
+  function getCsrfToken() {
+    const cookie = document.cookie.split(";").find(c => c.trim().startsWith("csrftoken="));
+    return cookie ? cookie.split("=")[1] : "";
+  }
+
+  // 13. Share & Invite Modal Controls
+  function openShareModal() {
+    const modal = document.getElementById("shareInviteModal");
+    if (modal) modal.style.display = "flex";
+  }
+
+  function closeShareModal() {
+    const modal = document.getElementById("shareInviteModal");
+    if (modal) modal.style.display = "none";
+  }
+
+  function copyShareLink() {
+    const input = document.getElementById("shareLinkInput");
+    if (input) {
+      input.select();
+      input.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(input.value).then(() => {
+        const fb = document.getElementById("copyFeedback");
+        if (fb) {
+          fb.style.display = "block";
+          setTimeout(() => { fb.style.display = "none"; }, 2500);
+        }
+      }).catch(() => {
+        document.execCommand("copy");
+      });
+    }
+  }
+
+  async function sendInAppInvitation() {
+    const input = document.getElementById("inviteRecipientInput");
+    const msgEl = document.getElementById("inviteDispatchMsg");
+    const val = input.value.trim();
+    if (!val) return;
+
+    msgEl.style.display = "block";
+    msgEl.style.color = "#94a3b8";
+    msgEl.textContent = "Sending invitation...";
+
+    try {
+      const csrf = getCsrfToken();
+      const res = await fetch(`/connect/api/${MEETING_ID}/invite/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRFToken": csrf },
+        body: JSON.stringify({ recipient: val })
+      });
+      const data = await res.json();
+      if (data.success) {
+        msgEl.style.color = "#10b981";
+        msgEl.textContent = `✓ ${data.message} ${data.email_dispatched ? '(Email sent)' : ''}`;
+        input.value = "";
+      } else {
+        msgEl.style.color = "#ef4444";
+        msgEl.textContent = `✕ ${data.error || 'Failed to send invitation.'}`;
+      }
+    } catch (e) {
+      msgEl.style.color = "#ef4444";
+      msgEl.textContent = "✕ Error connecting to server.";
+    }
+  }
+
+  // 14. Host Waiting Room Moderation
+  async function admitParticipant(partId) {
+    const csrf = getCsrfToken();
+    try {
+      const res = await fetch(`/connect/api/${MEETING_ID}/admit/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRFToken": csrf },
+        body: JSON.stringify({ action: "admit", participant_id: partId })
+      });
+      const data = await res.json();
+      if (data.success) {
+        const row = document.getElementById(`waitingRow_${partId}`);
+        if (row) row.remove();
+        decrementWaitingCount();
+      }
+    } catch (e) {
+      console.warn("Admit error:", e);
+    }
+  }
+
+  async function denyParticipant(partId) {
+    const csrf = getCsrfToken();
+    try {
+      const res = await fetch(`/connect/api/${MEETING_ID}/admit/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRFToken": csrf },
+        body: JSON.stringify({ action: "deny", participant_id: partId })
+      });
+      const data = await res.json();
+      if (data.success) {
+        const row = document.getElementById(`waitingRow_${partId}`);
+        if (row) row.remove();
+        decrementWaitingCount();
+      }
+    } catch (e) {
+      console.warn("Deny error:", e);
+    }
+  }
+
+  async function admitAllParticipants() {
+    const csrf = getCsrfToken();
+    try {
+      const res = await fetch(`/connect/api/${MEETING_ID}/admit/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRFToken": csrf },
+        body: JSON.stringify({ action: "admit_all" })
+      });
+      const data = await res.json();
+      if (data.success) {
+        const list = document.getElementById("waitingParticipantsList");
+        if (list) list.innerHTML = `<div style="font-size: 11.5px; color: #10b981; font-style: italic;">All participants admitted!</div>`;
+        const count = document.getElementById("waitingCount");
+        if (count) count.textContent = "0";
+        const btn = document.getElementById("btnAdmitAll");
+        if (btn) btn.style.display = "none";
+      }
+    } catch (e) {
+      console.warn("Admit all error:", e);
+    }
+  }
+
+  function decrementWaitingCount() {
+    const count = document.getElementById("waitingCount");
+    if (count) {
+      const cur = Math.max(0, parseInt(count.textContent || "1") - 1);
+      count.textContent = cur;
+      if (cur === 0) {
+        const list = document.getElementById("waitingParticipantsList");
+        if (list) list.innerHTML = `<div style="font-size: 11.5px; color: #94a3b8; font-style: italic;">No attendees currently waiting.</div>`;
+        const btn = document.getElementById("btnAdmitAll");
+        if (btn) btn.style.display = "none";
+      }
+    }
+  }
+
+  // 15. Live Interview Scorecard Submission
+  const INTERVIEW_ID = "{{ interview.id|default:'' }}";
+  async function submitScorecard() {
+    if (!INTERVIEW_ID) return;
+    const notesEl = document.getElementById("scorecardNotes");
+    const statusEl = document.getElementById("interviewStatusSelect");
+    const notice = document.getElementById("scorecardSavedNotice");
+    const notes = notesEl ? notesEl.value : "";
+    const statusVal = statusEl ? statusEl.value : "";
+
+    try {
+      const res = await fetch(`/api/interviews/${INTERVIEW_ID}/feedback/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCsrfToken()
+        },
+        body: JSON.stringify({ notes: notes, status: statusVal })
+      });
+      if (res.ok) {
+        if (notice) {
+          notice.style.display = "block";
+          setTimeout(() => { notice.style.display = "none"; }, 4000);
+        }
+      } else {
+        alert("Server returned error saving scorecard.");
+      }
+    } catch (e) {
+      console.warn("Scorecard save error:", e);
+      alert("Could not persist scorecard to database.");
+    }
+  }
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,246 @@
+{% extends "accounts/settings/settings_base.html" %}
+
+{% block title %}Platform Owner Governance Settings · HireNexa{% endblock %}
+
+{% block settings_content %}
+<div class="settings-card" style="border-top: 3px solid #fbbf24;">
+  <div class="card-header-bar">
+    <div class="card-title-group">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 22px;">🛡️</span>
+        <h2 class="card-title">Platform Master Governance & Settings</h2>
+      </div>
+      <p class="card-subtitle">Global feature toggles, SMTP delivery, security timeouts, RBAC enforcement, and audit logs.</p>
+    </div>
+    <span class="role-pill-clean owner">SUPER ADMIN PRIVILEGES</span>
+  </div>
+
+  <!-- 1. System Health Snapshot -->
+  <div class="platform-metrics-grid">
+    <div class="p-metric-card">
+      <div class="metric-val">{{ total_users }}</div>
+      <div class="metric-lbl">Total Registered Users</div>
+    </div>
+    <div class="p-metric-card">
+      <div class="metric-val">{{ total_jobs }}</div>
+      <div class="metric-lbl">Active Job Listings</div>
+    </div>
+    <div class="p-metric-card">
+      <div class="metric-val">{{ total_applications }}</div>
+      <div class="metric-lbl">Application Pipeline</div>
+    </div>
+    <div class="p-metric-card">
+      <div class="metric-val" style="color: var(--emerald-600);">Healthy</div>
+      <div class="metric-lbl">Database & Cache Status</div>
+    </div>
+  </div>
+
+  <div class="settings-divider"></div>
+
+  <!-- 2. Feature Toggles (Global) -->
+  <form method="post" class="settings-form">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="save_features">
+
+    <h3 class="form-section-heading">⚡ Global Platform Feature Toggles</h3>
+    <div class="toggle-group-list">
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>HireNexa AI Intelligence Assistant & Resume Matcher</strong>
+          <span>Enables hybrid OpenAI / Ollama assistant engine across job matching and resume analyzer tools.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="AI_ASSISTANT_ENABLED" {% if settings_map.AI_ASSISTANT_ENABLED != 'False' %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>Freelance Gigs & Contractor Marketplace Module</strong>
+          <span>Activates public freelance project listings, proposals, and contractor workspaces.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="FREELANCE_MODULE_ENABLED" {% if settings_map.FREELANCE_MODULE_ENABLED != 'False' %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>Open Public Registrations (Candidates & Recruiters)</strong>
+          <span>Allows new external students and enterprise recruiters to create self-service accounts.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="REGISTRATIONS_OPEN" {% if settings_map.REGISTRATIONS_OPEN != 'False' %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>Maintenance Mode (Restricted Access)</strong>
+          <span>When active, non-admin visitors will see an enterprise maintenance holding screen.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="MAINTENANCE_MODE" {% if settings_map.MAINTENANCE_MODE == 'True' %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-submit-row">
+      <button type="submit" class="btn btn-primary btn-md">
+        Save Feature Toggles
+      </button>
+    </div>
+  </form>
+
+  <div class="settings-divider"></div>
+
+  <!-- 3. General Site Info -->
+  <form method="post" class="settings-form">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="save_general">
+
+    <h3 class="form-section-heading">🌐 General Site Identity & SEO</h3>
+    <div class="form-row-2col">
+      <div class="form-group">
+        <label for="siteNameInput" class="form-label">Platform Brand Name</label>
+        <input type="text" name="site_name" id="siteNameInput" value="{{ settings_map.SITE_NAME|default:'HireNexa' }}" class="form-input">
+      </div>
+      <div class="form-group">
+        <label for="contactEmailInput" class="form-label">Official Support Email</label>
+        <input type="email" name="contact_email" id="contactEmailInput" value="{{ settings_map.CONTACT_EMAIL|default:'support@hirenexa.com' }}" class="form-input">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="seoTitleInput" class="form-label">Default SEO Title Suffix</label>
+      <input type="text" name="seo_title" id="seoTitleInput" value="{{ settings_map.SEO_TITLE|default:'HireNexa · Multi-Role Recruitment & Talent Intelligence' }}" class="form-input">
+    </div>
+
+    <div class="form-submit-row">
+      <button type="submit" class="btn btn-primary btn-md">
+        Save General Settings
+      </button>
+    </div>
+  </form>
+
+  <div class="settings-divider"></div>
+
+  <!-- 4. Security & Moderation Policies -->
+  <form method="post" class="settings-form">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="save_security_policy">
+
+    <h3 class="form-section-heading">🔒 Security, Moderation & Timeout Policies</h3>
+    <div class="form-row-2col">
+      <div class="form-group">
+        <label for="sessionTimeoutInput" class="form-label">Inactivity Session Timeout (Minutes)</label>
+        <input type="number" name="session_timeout" id="sessionTimeoutInput" value="{{ settings_map.SESSION_TIMEOUT_MINUTES|default:'240' }}" min="15" max="1440" class="form-input">
+        <span class="form-help-text">Users inactive beyond this duration will be securely signed out with audit log.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="otpExpiryInput" class="form-label">OTP Verification Expiry (Minutes)</label>
+        <input type="number" name="otp_expiry" id="otpExpiryInput" value="{{ settings_map.OTP_EXPIRY_MINUTES|default:'15' }}" min="5" max="60" class="form-input">
+      </div>
+    </div>
+
+    <div class="toggle-group-list">
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>Mandatory Job Listing Review (Content Moderation)</strong>
+          <span>Require Platform Owner manual approval before new recruiter job postings become publicly visible.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="require_job_approval" {% if settings_map.REQUIRE_JOB_APPROVAL == 'True' %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-submit-row">
+      <button type="submit" class="btn btn-primary btn-md">
+        Save Security Policies
+      </button>
+    </div>
+  </form>
+
+  <div class="settings-divider"></div>
+
+  <!-- 5. Email & SMTP Diagnostics -->
+  <form method="post" class="settings-form">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="test_email">
+
+    <h3 class="form-section-heading">📧 SMTP Email Diagnostics</h3>
+    <p class="card-subtitle">Verify that email notifications and OTP codes can be dispatched via current mail server settings.</p>
+
+    <div style="display: flex; gap: 12px; max-width: 480px; align-items: flex-end;">
+      <div class="form-group" style="flex: 1; margin-bottom: 0;">
+        <label for="testEmailTargetInput" class="form-label">Recipient Email</label>
+        <input type="email" name="test_email_target" id="testEmailTargetInput" value="{{ user.email }}" class="form-input" required>
+      </div>
+      <button type="submit" class="btn btn-outline btn-md">
+        Dispatch Test Email
+      </button>
+    </div>
+  </form>
+
+  <div class="settings-divider"></div>
+
+  <!-- 6. Audit Trail & CSV Export -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+    <div>
+      <h3 class="form-section-heading" style="margin: 0 0 4px 0;">📜 System Security Audit Log</h3>
+      <p class="card-subtitle">Immutable chronological record of logins, security events, role switches, and administrative actions.</p>
+    </div>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="export_audit_csv">
+      <button type="submit" class="btn btn-primary btn-sm">
+        Export Audit Log (CSV)
+      </button>
+    </form>
+  </div>
+
+  <div class="table-responsive">
+    <table class="settings-table">
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>User</th>
+          <th>Action</th>
+          <th>IP Address</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in audit_logs %}
+          <tr>
+            <td style="white-space: nowrap; font-size: 12px; color: var(--slate-500);">{{ a.timestamp|date:"Y-m-d H:i:s" }}</td>
+            <td>
+              <div style="font-weight: 700; color: var(--slate-900);">{{ a.user.username|default:"System / Anon" }}</div>
+            </td>
+            <td>
+              <span class="role-pill-clean" style="font-size: 10px; background: #eef2ff; color: #4338ca; border: 1px solid #c7d2fe;">
+                {{ a.action }}
+              </span>
+            </td>
+            <td><code>{{ a.ip_address }}</code></td>
+            <td style="font-size: 12px; color: var(--slate-600); max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+              {{ a.details }}
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5" style="text-align: center; color: var(--slate-500); padding: 24px;">No audit events logged yet.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

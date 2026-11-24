@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ question.title }} · MCQ Practice | HireNexa{% endblock %}
+
+{% block content %}
+<div class="q-detail-container">
+
+  <!-- Breadcrumbs -->
+  <nav class="breadcrumb-nav">
+    <a href="{% url 'mcq_entrance_hub' %}">MCQ & Entrance Prep</a>
+    <span class="sep">/</span>
+    <a href="{% url 'mcq_entrance_hub' %}?subject={{ question.subject.slug }}">{{ question.subject.name }}</a>
+    <span class="sep">/</span>
+    <span class="current">Question #{{ question.id }}</span>
+  </nav>
+
+  <div class="q-detail-layout">
+
+    <!-- MAIN QUESTION CARD -->
+    <main class="q-main-pane">
+      <div class="q-box-card">
+        
+        <div class="q-box-header">
+          <div class="q-meta-badges">
+            <span class="badge-subject">{{ question.subject.name }}</span>
+            <span class="badge-diff badge-{{ question.difficulty|lower }}">{{ question.get_difficulty_display }}</span>
+            {% if question.is_pyq %}
+              <span class="badge-pyq">⭐ Authentic PYQ · {{ question.pyq_exam }} {{ question.pyq_year }}</span>
+            {% endif %}
+            <span class="badge-type">{{ question.get_question_type_display }}</span>
+          </div>
+          <div class="q-score-badge">
+            <span class="pts-positive">+{{ question.marks }}</span>
+            {% if question.negative_marks %}<span class="pts-negative">-{{ question.negative_marks }}</span>{% endif %}
+          </div>
+        </div>
+
+        <h1 class="q-box-title">{{ question.title }}</h1>
+        <div class="q-box-statement">
+          {{ question.question_text|linebreaksbr }}
+        </div>
+
+        {% if question.code_snippet %}
+        <div class="q-code-snippet">
+          <pre><code>{{ question.code_snippet }}</code></pre>
+        </div>
+        {% endif %}
+
+        {% if question.pyq_source %}
+        <div class="q-source-banner">
+          <span class="icon">📜</span>
+          <span>Verified Exam Citation: <strong>{{ question.pyq_source }}</strong></span>
+        </div>
+        {% endif %}
+
+        <!-- Interactive 4-Options Container -->
+        <div class="options-container" id="optionsContainer">
+          {% for opt in options %}
+          <div class="option-item" data-option-id="{{ opt.id }}" data-is-correct="{% if opt.is_correct %}true{% else %}false{% endif %}" onclick="selectOption(this)">
+            <div class="option-key-bubble">{{ opt.option_key }}</div>
+            <div class="option-text-wrap">
+              <span class="opt-label">{{ opt.option_text }}</span>
+            </div>
+            <div class="option-feedback-icon"></div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Controls Row -->
+        <div class="q-action-controls">
+          <button type="button" class="btn btn-primary" id="btnCheckAnswer" onclick="checkSelectedAnswer()" disabled>
+            <span>✓ Check Answer</span>
+          </button>
+          <button type="button" class="btn btn-outline" id="btnShowExplanation" onclick="toggleExplanation()" style="display: none;">
+            <span>📖 View Detailed Explanation</span>
+          </button>
+          <button type="button" class="btn btn-ghost" onclick="resetPractice()">
+            <span>↺ Try Again</span>
+          </button>
+          <button type="button" class="btn btn-ai" onclick="requestAIExplanation()">
+            <span>⚡ Explain with HireNexa AI</span>
+          </button>
+        </div>
+
+        <!-- Feedback Alert -->
+        <div id="answerFeedbackAlert" class="answer-alert" style="display: none;"></div>
+
+        <!-- Verified Detailed Explanation Panel -->
+        <div class="explanation-panel" id="explanationPanel" style="display: none;">
+          <div class="exp-header">
+            <h3>💡 Verified Step-by-Step Solution & Concept Logic</h3>
+            <span class="badge-verified">✓ Academic Verification</span>
+          </div>
+
+          {% if explanation %}
+          <div class="exp-body">
+            <div class="exp-row">
+              <h4 class="exp-subtitle">Correct Answer Summary</h4>
+              <p class="exp-summary-text">{{ explanation.correct_answer_summary }}</p>
+            </div>
+
+            <div class="exp-row">
+              <h4 class="exp-subtitle">Why this is the correct answer</h4>
+              <p>{{ explanation.why_correct|linebreaksbr }}</p>
+            </div>
+
+            {% if explanation.why_others_incorrect %}
+            <div class="exp-row">
+              <h4 class="exp-subtitle">Misconception Analysis (Why other options are incorrect)</h4>
+              <p>{{ explanation.why_others_incorrect|linebreaksbr }}</p>
+            </div>
+            {% endif %}
+
+            {% if explanation.step_by_step_logic %}
+            <div class="exp-row">
+              <h4 class="exp-subtitle">Step-by-Step Solution Logic</h4>
+              <div class="exp-code-step">
+                {{ explanation.step_by_step_logic|linebreaksbr }}
+              </div>
+            </div>
+            {% endif %}
+
+            {% if explanation.practical_example %}
+            <div class="exp-row">
+              <h4 class="exp-subtitle">Real-World / Programming Example</h4>
+              <p class="exp-example-text">{{ explanation.practical_example|linebreaksbr }}</p>
+            </div>
+            {% endif %}
+          </div>
+          {% else %}
+          <p class="text-muted">Standard verified answer key is active for this question.</p>
+          {% endif %}
+        </div>
+
+        <!-- Dynamic AI Explanation Drawer -->
+        <div class="ai-explanation-drawer" id="aiExpDrawer" style="display: none;">
+          <div class="ai-exp-head">
+            <div class="ai-title-row">
+              <span class="ai-sparkle">⚡</span>
+              <h4>HireNexa AI Interactive Concept Breakdown</h4>
+            </div>
+            <button type="button" class="btn-close-sm" onclick="document.getElementById('aiExpDrawer').style.display='none'">✕</button>
+          </div>
+          <div class="ai-exp-content" id="aiExpContent">
+            <div class="ai-loading">
+              <div class="spinner-sm"></div>
+              <span>Consulting HireNexa AI knowledge engine...</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- SIDEBAR: RELATED QUESTIONS -->
+    <aside class="q-sidebar">
+      <div class="sidebar-card">
+        <h3 class="side-title">More in {{ question.subject.name }}</h3>
+        <div class="side-q-list">
+          {% for rq in related_questions %}
+          <a href="{% url 'question_detail' rq.id %}" class="side-q-item">
+            <span class="side-q-diff badge-{{ rq.difficulty|lower }}">{{ rq.get_difficulty_display }}</span>
+            <span class="side-q-title">{{ rq.title }}</span>
+          </a>
+          {% empty %}
+          <p class="text-muted text-sm">No other questions in this topic currently.</p>
+          {% endfor %}
+        </div>
+        <div class="side-foot">
+          <a href="{% url 'mcq_entrance_hub' %}?subject={{ question.subject.slug }}" class="btn btn-outline btn-sm btn-block">
+            View All {{ question.subject.name }} Questions →
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Mock Test Launcher Widget -->
+      <div class="sidebar-card prep-widget-card">
+        <span class="widget-icon">⏱️</span>
+        <h4>Timed Practice Drill</h4>
+        <p>Ready to test your speed under exam conditions with negative marking?</p>
+        <a href="{% url 'exam_list' %}" class="btn btn-primary btn-sm btn-block">Start Timed Mock Test</a>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<script>
+let selectedOptionEl = null;
+
+function selectOption(el) {
+  if (document.getElementById('optionsContainer').classList.contains('locked')) {
+    return; // Already checked
+  }
+  document.querySelectorAll('.option-item').forEach(opt => opt.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedOptionEl = el;
+  document.getElementById('btnCheckAnswer').disabled = false;
+}
+
+function checkSelectedAnswer() {
+  if (!selectedOptionEl) return;
+  const isCorrect = selectedOptionEl.getAttribute('data-is-correct') === 'true';
+  const container = document.getElementById('optionsContainer');
+  container.classList.add('locked');
+
+  const alertBox = document.getElementById('answerFeedbackAlert');
+  alertBox.style.display = 'block';
+
+  document.querySelectorAll('.option-item').forEach(opt => {
+    const optIsCorrect = opt.getAttribute('data-is-correct') === 'true';
+    if (optIsCorrect) {
+      opt.classList.add('opt-correct');
+      opt.querySelector('.option-feedback-icon').innerHTML = '✓ Correct';
+    } else if (opt === selectedOptionEl && !isCorrect) {
+      opt.classList.add('opt-incorrect');
+      opt.querySelector('.option-feedback-icon').innerHTML = '✗ Incorrect';
+    }
+  });
+
+  if (isCorrect) {
+    alertBox.className = 'answer-alert alert-success';
+    alertBox.innerHTML = '<strong>Excellent! Correct Answer!</strong> You earned +{{ question.marks }} marks. Review the logic below to consolidate the concept.';
+  } else {
+    alertBox.className = 'answer-alert alert-danger';
+    alertBox.innerHTML = '<strong>Incorrect Option.</strong> Review the verified correct answer and misconception breakdown below.';
+  }
+
+  document.getElementById('btnShowExplanation').style.display = 'inline-flex';
+  document.getElementById('explanationPanel').style.display = 'block';
+  document.getElementById('btnCheckAnswer').disabled = true;
+}
+
+function toggleExplanation() {
+  const panel = document.getElementById('explanationPanel');
+  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+function resetPractice() {
+  const container = document.getElementById('optionsContainer');
+  container.classList.remove('locked');
+  document.querySelectorAll('.option-item').forEach(opt => {
+    opt.className = 'option-item';
+    opt.querySelector('.option-feedback-icon').innerHTML = '';
+  });
+  selectedOptionEl = null;
+  document.getElementById('btnCheckAnswer').disabled = true;
+  document.getElementById('answerFeedbackAlert').style.display = 'none';
+  document.getElementById('explanationPanel').style.display = 'none';
+}
+
+function requestAIExplanation() {
+  const drawer = document.getElementById('aiExpDrawer');
+  const content = document.getElementById('aiExpContent');
+  drawer.style.display = 'block';
+  content.innerHTML = '<div class="ai-loading"><div class="spinner-sm"></div><span>Analyzing problem and generating beginner-friendly logic...</span></div>';
+
+  const userChoiceText = selectedOptionEl ? selectedOptionEl.querySelector('.opt-label').innerText : "No option selected";
+
+  fetch("{% url 'api_ai_explain' %}", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": "{{ csrf_token }}"
+    },
+    body: JSON.stringify({
+      question_id: {{ question.id }},
+      user_answer: userChoiceText
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      content.innerHTML = '<div class="ai-markdown-output">' + data.explanation.replace(/\n/g, '<br>') + '</div>';
+    } else {
+      content.innerHTML = '<p class="text-danger">' + (data.error || "Unable to generate AI explanation.") + '</p>';
+    }
+  })
+  .catch(err => {
+    content.innerHTML = '<p class="text-danger">Network error connecting to AI engine.</p>';
+  });
+}
+</script>
+{% endblock %}

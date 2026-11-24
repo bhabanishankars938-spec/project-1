@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Frequently Asked Questions (FAQ) · HireNexa 2.0{% endblock %}
+
+{% block content %}
+<div class="pro-container" style="max-width: 1000px; margin: 40px auto; padding: 0 20px;">
+
+  <!-- Header Banner -->
+  <div style="text-align: center; margin-bottom: 48px;">
+    <span class="meta-badge" style="background: rgba(37, 99, 235, 0.1); color: var(--blue-600); border: 1px solid rgba(37, 99, 235, 0.25); font-weight: 700; padding: 6px 14px; border-radius: 9999px; font-size: 12px; letter-spacing: 0.05em;">
+      COMMONLY ASKED QUESTIONS
+    </span>
+    <h1 style="font-size: 40px; font-weight: 800; color: var(--slate-900); margin: 18px 0 14px; letter-spacing: -0.02em;">
+      Frequently Asked Questions
+    </h1>
+    <p style="font-size: 17px; color: var(--slate-600); max-width: 680px; margin: 0 auto; line-height: 1.6;">
+      Everything you need to know about the HireNexa recruitment ecosystem, AI screening intelligence, and account governance.
+    </p>
+  </div>
+
+  <!-- FAQ Accordion -->
+  <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 50px;">
+    
+    <details style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: 14px; padding: 22px 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); cursor: pointer;" open>
+      <summary style="font-size: 16.5px; font-weight: 700; color: var(--slate-900);">What is HireNexa 2.0 and who is it built for?</summary>
+      <p style="margin-top: 14px; font-size: 14.5px; color: var(--slate-600); line-height: 1.7;">
+        HireNexa 2.0 is an enterprise-grade AI-powered recruitment, talent intelligence, and career development ecosystem. It serves 4 key personas:
+        <br><strong>1. Candidates:</strong> Job discovery, explainable ATS resume diagnostics, candidate project portfolio with Supabase file storage, and entrance exam preparation (NIMCET, OJEE, CUET-PG).
+        <br><strong>2. Employers & Recruiters:</strong> Multi-tenant job posting, India location hierarchy filtering, applicant tracking system (ATS) with 5 pipeline stages, and structured interview scheduling.
+        <br><strong>3. Freelancers:</strong> High-value technical gig marketplace and milestone delivery.
+        <br><strong>4. Platform Owner:</strong> Comprehensive governance suite, company approval/rejection workflows, subscription plans, and audit logs.
+      </p>
+    </details>
+
+    <details style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: 14px; padding: 22px 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); cursor: pointer;">
+      <summary style="font-size: 16.5px; font-weight: 700; color: var(--slate-900);">How does the HireNexa AI Assistant work without external API keys?</summary>
+      <p style="margin-top: 14px; font-size: 14.5px; color: var(--slate-600); line-height: 1.7;">
+        HireNexa features a dual-engine architecture. When external cloud LLM keys (such as Google Gemini) are available, it uses them. When offline or without external keys, HireNexa activates its built-in <strong>LocalPlatformIntelligenceProvider</strong> and <strong>TechnicalKnowledgeEngine</strong>. This engine executes real database queries via Supabase tools (e.g. searching jobs, candidates, and exam syllabus) and provides thorough, verified technical explanations and code walkthroughs right inside the platform—without redirecting users to ChatGPT or external websites.
+      </p>
+    </details>
+
+    <details style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: 14px; padding: 22px 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); cursor: pointer;">
+      <summary style="font-size: 16.5px; font-weight: 700; color: var(--slate-900);">Does HireNexa support locations across all of India?</summary>
+      <p style="margin-top: 14px; font-size: 14.5px; color: var(--slate-600); line-height: 1.7;">
+        Yes. The platform includes a dedicated database hierarchy covering all 36 Indian States and Union Territories, 71+ districts, 73+ cities, and 212+ localities and PIN codes. Users can search and filter opportunities nationally or locally (including Bhubaneswar, Bengaluru, Hyderabad, Mumbai, Delhi-NCR, Pune, etc.) as well as Pan-India Remote.
+      </p>
+    </details>
+
+    <details style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: 14px; padding: 22px 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); cursor: pointer;">
+      <summary style="font-size: 16.5px; font-weight: 700; color: var(--slate-900);">How are candidate project files stored and previewed?</summary>
+      <p style="margin-top: 14px; font-size: 14.5px; color: var(--slate-600); line-height: 1.7;">
+        Candidate project attachments are stored securely in Supabase Cloud Storage (`candidate-projects` bucket). All file downloads and previews use time-limited signed URLs (valid for 1 hour) with virus/mime-type validation, preventing unauthorized direct bucket scraping.
+      </p>
+    </details>
+
+    <details style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: 14px; padding: 22px 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); cursor: pointer;">
+      <summary style="font-size: 16.5px; font-weight: 700; color: var(--slate-900);">Is HireNexa free to use for jobseekers?</summary>
+      <p style="margin-top: 14px; font-size: 14.5px; color: var(--slate-600); line-height: 1.7;">
+        Yes, job discovery, profile creation, portfolio uploads, ATS resume diagnostics, and entrance prep question banks are 100% free for candidates. Monetization is handled through employer enterprise subscription plans and recruitment tier allocations managed by the Platform Owner.
+      </p>
+    </details>
+
+  </div>
+
+  <!-- Still Have Questions CTA -->
+  <div style="text-align: center; padding: 32px; background: #f8fafc; border: 1px solid var(--slate-200); border-radius: 16px;">
+    <h3 style="font-size: 18px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px;">Have a specific question not listed here?</h3>
+    <p style="font-size: 14px; color: var(--slate-600); margin-bottom: 20px;">Our customer support team is available to assist you Monday through Saturday.</p>
+    <a href="{% url 'contact' %}" class="btn btn-primary" style="padding: 10px 24px; font-weight: 600; border-radius: 8px;">
+      Contact Our Team
+    </a>
+  </div>
+
+</div>
+{% endblock %}

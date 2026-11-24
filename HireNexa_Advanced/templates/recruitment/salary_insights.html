@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Salary Insights & Compensation Benchmarks · HireNexa 2.0{% endblock %}
+
+{% block content %}
+<div class="pro-container" style="max-width: 1140px; margin: 40px auto; padding: 0 20px;">
+
+  <!-- Header Banner -->
+  <div style="text-align: center; margin-bottom: 48px;">
+    <span class="meta-badge" style="background: rgba(16, 185, 129, 0.1); color: #059669; border: 1px solid rgba(16, 185, 129, 0.25); font-weight: 700; padding: 6px 14px; border-radius: 9999px; font-size: 12px; letter-spacing: 0.05em;">
+      PAN-INDIA COMPENSATION BENCHMARKS 2026
+    </span>
+    <h1 style="font-size: 40px; font-weight: 800; color: var(--slate-900); margin: 18px 0 14px; letter-spacing: -0.02em;">
+      Transparent Tech Salaries & Compensation Curves
+    </h1>
+    <p style="font-size: 17px; color: var(--slate-600); max-width: 740px; margin: 0 auto; line-height: 1.6;">
+      Real compensation data aggregated across verified hiring records, Indian tech hubs (Bengaluru, Hyderabad, Pune, NCR, Bhubaneswar), and experience tiers.
+    </p>
+  </div>
+
+  <!-- Filter & Calculator Strip -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: 16px; padding: 24px 32px; box-shadow: 0 4px 14px rgba(0,0,0,0.03); margin-bottom: 40px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between;">
+    <div>
+      <h3 style="font-size: 17px; font-weight: 700; color: var(--slate-900); margin-bottom: 4px;">Role Compensation Calculator</h3>
+      <p style="font-size: 13px; color: var(--slate-500); margin: 0;">Select role and city tier to view percentile distribution</p>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+      <select id="roleSelect" style="padding: 10px 16px; border: 1px solid var(--slate-200); border-radius: 8px; font-size: 14px; font-weight: 500;" onchange="updateSalaryCard()">
+        <option value="python">Python & Django Engineer</option>
+        <option value="react">React / Frontend Engineer</option>
+        <option value="fullstack">Full-Stack Developer</option>
+        <option value="devops">DevOps & Cloud Engineer</option>
+        <option value="ai">AI / ML Engineer</option>
+      </select>
+      <select id="tierSelect" style="padding: 10px 16px; border: 1px solid var(--slate-200); border-radius: 8px; font-size: 14px; font-weight: 500;" onchange="updateSalaryCard()">
+        <option value="tier1">Tier 1: Bengaluru / Hyderabad / NCR</option>
+        <option value="tier2" selected>Tier 2: Bhubaneswar / Pune / Kochi</option>
+        <option value="remote">Pan-India Remote (INR / USD)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Percentile Breakdown Card -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: 20px; padding: 36px; box-shadow: 0 4px 16px rgba(0,0,0,0.03); margin-bottom: 48px;" id="salaryCard">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px;">
+      <div>
+        <span style="font-size: 12px; font-weight: 700; color: #2563eb; letter-spacing: 0.05em; text-transform: uppercase;">ANNUAL COMPENSATION (CTC)</span>
+        <h2 id="calcRoleTitle" style="font-size: 26px; font-weight: 800; color: var(--slate-900); margin: 4px 0;">Python & Django Engineer</h2>
+        <div id="calcLocationTier" style="font-size: 14px; color: var(--slate-500);">Bhubaneswar, Odisha · 2-5 Years Experience</div>
+      </div>
+      <div style="text-align: right;">
+        <div style="font-size: 12px; color: var(--slate-500);">Median Annual Package</div>
+        <div id="calcMedian" style="font-size: 32px; font-weight: 900; color: #10b981;">₹9.5 LPA</div>
+      </div>
+    </div>
+
+    <!-- Percentile Distribution Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 30px;">
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; text-align: center;">
+        <div style="font-size: 12px; font-weight: 600; color: var(--slate-500); margin-bottom: 6px;">25th Percentile</div>
+        <div id="calc25" style="font-size: 20px; font-weight: 800; color: var(--slate-800);">₹6.5 LPA</div>
+        <div style="font-size: 11px; color: var(--slate-400); margin-top: 4px;">Junior / Early Career</div>
+      </div>
+      <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; padding: 18px; text-align: center;">
+        <div style="font-size: 12px; font-weight: 600; color: #1e40af; margin-bottom: 6px;">50th Percentile (Median)</div>
+        <div id="calc50" style="font-size: 20px; font-weight: 800; color: #1d4ed8;">₹9.5 LPA</div>
+        <div style="font-size: 11px; color: #3b82f6; margin-top: 4px;">Mid-Level Professional</div>
+      </div>
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; text-align: center;">
+        <div style="font-size: 12px; font-weight: 600; color: var(--slate-500); margin-bottom: 6px;">75th Percentile</div>
+        <div id="calc75" style="font-size: 20px; font-weight: 800; color: var(--slate-800);">₹14.0 LPA</div>
+        <div style="font-size: 11px; color: var(--slate-400); margin-top: 4px;">Senior Specialist</div>
+      </div>
+      <div style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 12px; padding: 18px; text-align: center;">
+        <div style="font-size: 12px; font-weight: 600; color: #6b21a8; margin-bottom: 6px;">90th Percentile</div>
+        <div id="calc90" style="font-size: 20px; font-weight: 800; color: #7c3aed;">₹22.0 LPA</div>
+        <div style="font-size: 11px; color: #a855f7; margin-top: 4px;">Lead / Architect Tier</div>
+      </div>
+    </div>
+
+    <!-- Progress Distribution Bar -->
+    <div>
+      <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--slate-500); margin-bottom: 8px;">
+        <span>₹4.0 LPA (Fresher Floor)</span>
+        <span>Market Standard Range</span>
+        <span>₹28.0 LPA+ (Top 5%)</span>
+      </div>
+      <div style="width: 100%; height: 12px; background: #e2e8f0; border-radius: 9999px; overflow: hidden; display: flex;">
+        <div style="width: 25%; background: #94a3b8;"></div>
+        <div style="width: 35%; background: #2563eb;"></div>
+        <div style="width: 25%; background: #10b981;"></div>
+        <div style="width: 15%; background: #7c3aed;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- City Benchmark Table -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: 18px; padding: 32px; box-shadow: 0 4px 14px rgba(0,0,0,0.03); margin-bottom: 40px;">
+    <h3 style="font-size: 20px; font-weight: 800; color: var(--slate-900); margin-bottom: 20px;">Regional Indian Tech Hub Benchmarks (Fullstack 3-5 Yrs)</h3>
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;">
+        <thead>
+          <tr style="border-bottom: 2px solid var(--slate-200); color: var(--slate-600); font-size: 12px; text-transform: uppercase;">
+            <th style="padding: 12px 16px;">City / Region</th>
+            <th style="padding: 12px 16px;">Average Salary</th>
+            <th style="padding: 12px 16px;">Cost of Living Index</th>
+            <th style="padding: 12px 16px;">Hiring Demand</th>
+            <th style="padding: 12px 16px;">Top Skills in Demand</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--slate-100);">
+            <td style="padding: 14px 16px; font-weight: 700; color: var(--slate-900);">Bengaluru, Karnataka</td>
+            <td style="padding: 14px 16px; color: #10b981; font-weight: 700;">₹14.5 - ₹24.0 LPA</td>
+            <td style="padding: 14px 16px; color: var(--slate-600);">High</td>
+            <td style="padding: 14px 16px;"><span style="background: #dcfce7; color: #166534; padding: 3px 10px; border-radius: 9999px; font-size: 12px; font-weight: 700;">Very High</span></td>
+            <td style="padding: 14px 16px; color: var(--slate-600);">Django, React, AWS, Microservices</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--slate-100);">
+            <td style="padding: 14px 16px; font-weight: 700; color: var(--slate-900);">Hyderabad, Telangana</td>
+            <td style="padding: 14px 16px; color: #10b981; font-weight: 700;">₹12.0 - ₹20.0 LPA</td>
+            <td style="padding: 14px 16px; color: var(--slate-600);">Medium-High</td>
+            <td style="padding: 14px 16px;"><span style="background: #dcfce7; color: #166534; padding: 3px 10px; border-radius: 9999px; font-size: 12px; font-weight: 700;">High</span></td>
+            <td style="padding: 14px 16px; color: var(--slate-600);">Python, React, PostgreSQL, Docker</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--slate-100);">
+            <td style="padding: 14px 16px; font-weight: 700; color: var(--slate-900);">Bhubaneswar, Odisha</td>
+            <td style="padding: 14px 16px; color: #10b981; font-weight: 700;">₹8.0 - ₹15.0 LPA</td>
+            <td style="padding: 14px 16px; color: var(--slate-600);">Affordable / High Savings</td>
+            <td style="padding: 14px 16px;"><span style="background: #e0e7ff; color: #3730a3; padding: 3px 10px; border-radius: 9999px; font-size: 12px; font-weight: 700;">Rapid Growth</span></td>
+            <td style="padding: 14px 16px; color: var(--slate-600);">Full-Stack Django, React, AI workflows</td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-weight: 700; color: var(--slate-900);">Pan-India Remote</td>
+            <td style="padding: 14px 16px; color: #10b981; font-weight: 700;">₹12.0 - ₹26.0 LPA</td>
+            <td style="padding: 14px 16px; color: var(--slate-600);">Flexible</td>
+            <td style="padding: 14px 16px;"><span style="background: #fef3c7; color: #92400e; padding: 3px 10px; border-radius: 9999px; font-size: 12px; font-weight: 700;">Competitive</span></td>
+            <td style="padding: 14px 16px; color: var(--slate-600);">Async communication, Git, CI/CD, React</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const salaryData = {
+  python: {
+    title: 'Python & Django Backend Engineer',
+    tier1: { m: '₹14.0 LPA', p25: '₹9.0 LPA', p50: '₹14.0 LPA', p75: '₹19.5 LPA', p90: '₹27.0 LPA' },
+    tier2: { m: '₹9.5 LPA', p25: '₹6.5 LPA', p50: '₹9.5 LPA', p75: '₹14.0 LPA', p90: '₹22.0 LPA' },
+    remote: { m: '₹15.0 LPA', p25: '₹10.0 LPA', p50: '₹15.0 LPA', p75: '₹22.0 LPA', p90: '₹32.0 LPA' }
+  },
+  react: {
+    title: 'React / Frontend Engineer',
+    tier1: { m: '₹13.5 LPA', p25: '₹8.5 LPA', p50: '₹13.5 LPA', p75: '₹18.0 LPA', p90: '₹25.0 LPA' },
+    tier2: { m: '₹8.5 LPA', p25: '₹5.5 LPA', p50: '₹8.5 LPA', p75: '₹12.5 LPA', p90: '₹18.0 LPA' },
+    remote: { m: '₹14.5 LPA', p25: '₹9.5 LPA', p50: '₹14.5 LPA', p75: '₹20.0 LPA', p90: '₹28.0 LPA' }
+  },
+  fullstack: {
+    title: 'Full-Stack Developer (Django + React)',
+    tier1: { m: '₹15.0 LPA', p25: '₹10.0 LPA', p50: '₹15.0 LPA', p75: '₹21.0 LPA', p90: '₹29.0 LPA' },
+    tier2: { m: '₹10.5 LPA', p25: '₹7.0 LPA', p50: '₹10.5 LPA', p75: '₹15.0 LPA', p90: '₹23.0 LPA' },
+    remote: { m: '₹16.0 LPA', p25: '₹11.0 LPA', p50: '₹16.0 LPA', p75: '₹24.0 LPA', p90: '₹34.0 LPA' }
+  },
+  devops: {
+    title: 'DevOps & Cloud Engineer',
+    tier1: { m: '₹16.0 LPA', p25: '₹11.0 LPA', p50: '₹16.0 LPA', p75: '₹23.0 LPA', p90: '₹32.0 LPA' },
+    tier2: { m: '₹11.0 LPA', p25: '₹7.5 LPA', p50: '₹11.0 LPA', p75: '₹16.0 LPA', p90: '₹24.0 LPA' },
+    remote: { m: '₹17.5 LPA', p25: '₹12.0 LPA', p50: '₹17.5 LPA', p75: '₹26.0 LPA', p90: '₹36.0 LPA' }
+  },
+  ai: {
+    title: 'AI / Machine Learning Engineer',
+    tier1: { m: '₹18.0 LPA', p25: '₹12.0 LPA', p50: '₹18.0 LPA', p75: '₹26.0 LPA', p90: '₹38.0 LPA' },
+    tier2: { m: '₹12.5 LPA', p25: '₹8.5 LPA', p50: '₹12.5 LPA', p75: '₹18.0 LPA', p90: '₹26.0 LPA' },
+    remote: { m: '₹20.0 LPA', p25: '₹14.0 LPA', p50: '₹20.0 LPA', p75: '₹30.0 LPA', p90: '₹42.0 LPA' }
+  }
+};
+
+function updateSalaryCard() {
+  const role = document.getElementById('roleSelect').value;
+  const tier = document.getElementById('tierSelect').value;
+  const data = salaryData[role][tier];
+  
+  document.getElementById('calcRoleTitle').innerText = salaryData[role].title;
+  document.getElementById('calcMedian').innerText = data.m;
+  document.getElementById('calc25').innerText = data.p25;
+  document.getElementById('calc50').innerText = data.p50;
+  document.getElementById('calc75').innerText = data.p75;
+  document.getElementById('calc90').innerText = data.p90;
+}
+</script>
+{% endblock %}

@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block title %}News, Circulars & Campus Bulletins · HireNexa Intelligence{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="section-header" style="align-items: center; margin-bottom: 24px; border-bottom: 1px solid var(--slate-200); padding-bottom: 20px;">
+  <div>
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+      <span class="meta-badge" style="background: #eef2ff; color: var(--primary); font-weight: 700; font-size: 11px;">
+        OFFICIAL BROADCASTS
+      </span>
+      <span style="font-size: 13px; color: var(--slate-500);">Verified Circulars & Schedules</span>
+    </div>
+    <h1 style="font-size: 30px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.03em;">
+      News, Circulars & Hiring Bulletins
+    </h1>
+    <p style="color: var(--slate-600); font-size: 15px; margin-top: 4px;">
+      Live announcements from platform administrators and verified employer partners regarding campus drives, technical hiring sprints, and placement schedules.
+    </p>
+  </div>
+
+  {% if user.is_authenticated and user.is_owner or user.is_company_admin %}
+    <div>
+      <a href="{% url 'news_create' %}" class="btn btn-primary btn-lg">
+        + Publish New Announcement
+      </a>
+    </div>
+  {% endif %}
+</div>
+
+<!-- Urgent Alert Banner if present -->
+{% if urgent_alerts %}
+  <div style="margin-bottom: 28px;">
+    {% for alert in urgent_alerts %}
+      <div style="background: #fff1f2; border: 1px solid #fecdd3; border-left: 4px solid #e11d48; border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #e11d48;"></span>
+          <div>
+            <strong style="color: #9f1239; font-size: 14px;">URGENT NOTICE: {{ alert.title }}</strong>
+            <p style="color: #be123c; font-size: 13px; margin: 2px 0 0 0;">{{ alert.summary }}</p>
+          </div>
+        </div>
+        <a href="{% url 'news_detail' alert.slug %}" class="btn btn-sm" style="background: #e11d48; color: #ffffff; border: none; font-weight: 600;">
+          Read Circular →
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<!-- Filter & Search Controls -->
+<div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 16px 20px; margin-bottom: 28px; box-shadow: var(--shadow-sm);">
+  <form method="get" action="{% url 'news_list' %}" style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+    <!-- Search Field -->
+    <div style="flex: 1; min-width: 260px;">
+      <input type="text" name="q" value="{{ q }}" placeholder="Search notices by keyword, company, or topic..." class="form-input" style="width: 100%;">
+    </div>
+
+    <!-- Category Filter -->
+    <div style="min-width: 200px;">
+      <select name="category" class="form-input" onchange="this.form.submit()">
+        <option value="">All Categories</option>
+        {% for cat_val, cat_label in categories %}
+          <option value="{{ cat_val }}" {% if selected_category == cat_val %}selected{% endif %}>{{ cat_label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Audience Filter -->
+    <div style="min-width: 180px;">
+      <select name="audience" class="form-input" onchange="this.form.submit()">
+        <option value="">All Audiences</option>
+        {% for aud_val, aud_label in audiences %}
+          <option value="{{ aud_val }}" {% if selected_audience == aud_val %}selected{% endif %}>{{ aud_label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div style="display: flex; gap: 8px;">
+      <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+      {% if q or selected_category or selected_audience %}
+        <a href="{% url 'news_list' %}" class="btn btn-ghost btn-sm">Reset</a>
+      {% endif %}
+    </div>
+  </form>
+</div>
+
+<!-- Announcements Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; margin-bottom: 48px;">
+  {% for item in announcements %}
+    <article class="job-card" style="display: flex; flex-direction: column; justify-content: space-between; {% if item.is_pinned %}border-top: 4px solid var(--primary);{% endif %}">
+      <div>
+        <!-- Badges Bar -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            {% if item.is_pinned %}
+              <span class="meta-badge" style="background: #eef2ff; color: var(--primary); font-weight: 700; font-size: 11px;">
+                📌 PINNED
+              </span>
+            {% endif %}
+            <span class="meta-badge" style="background: var(--slate-100); color: var(--slate-700); font-weight: 600; font-size: 11px;">
+              {{ item.get_category_display }}
+            </span>
+          </div>
+
+          <span style="font-size: 12px; color: var(--slate-400);">
+            {{ item.published_at|date:"M d, Y" }}
+          </span>
+        </div>
+
+        <!-- Title -->
+        <h3 style="font-size: 18px; font-weight: 700; color: var(--slate-900); line-height: 1.4; margin-bottom: 8px;">
+          <a href="{% url 'news_detail' item.slug %}" style="color: var(--slate-900);">
+            {{ item.title }}
+          </a>
+        </h3>
+
+        <!-- Summary -->
+        <p style="color: var(--slate-600); font-size: 14px; line-height: 1.5; margin-bottom: 16px;">
+          {{ item.summary }}
+        </p>
+
+        <!-- Authority / Scope -->
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--slate-500); margin-bottom: 14px;">
+          {% if item.organization %}
+            <span style="display: inline-flex; align-items: center; gap: 4px; background: #f0fdf4; color: #166534; padding: 2px 8px; border-radius: 4px; font-weight: 600;">
+              🏢 {{ item.organization.name }}
+            </span>
+          {% else %}
+            <span style="display: inline-flex; align-items: center; gap: 4px; background: #f8fafc; color: var(--slate-700); padding: 2px 8px; border-radius: 4px; font-weight: 600; border: 1px solid var(--slate-200);">
+              🏛️ Platform Authority
+            </span>
+          {% endif %}
+          <span>• Audience: {{ item.get_target_audience_display }}</span>
+        </div>
+      </div>
+
+      <!-- Footer & Action Row -->
+      <div style="border-top: 1px solid var(--slate-100); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 12px; color: var(--slate-400);">
+          👁️ {{ item.views_count }} views
+        </span>
+
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <a href="{% url 'news_detail' item.slug %}" class="btn btn-secondary btn-sm">
+            Read Full Notice →
+          </a>
+
+          {% if user.is_authenticated %}
+            {% if user.is_owner or item.author == user or user.is_company_admin and item.organization == user.recruiter_profile.organization %}
+              <a href="{% url 'news_edit' item.pk %}" class="btn btn-ghost btn-sm" title="Edit Announcement">
+                ✏️
+              </a>
+              <form method="post" action="{% url 'news_delete' item.pk %}" style="display: inline;" onsubmit="return confirm('Are you sure you want to permanently delete this announcement?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--rose-600);" title="Delete Announcement">
+                  🗑️
+                </button>
+              </form>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </article>
+  {% empty %}
+    <div class="stat-box" style="grid-column: 1 / -1; text-align: center; padding: 48px;">
+      <h3 style="font-size: 20px; color: var(--slate-800); margin-bottom: 8px;">No announcements found</h3>
+      <p class="stat-desc">Try clearing your filters or search keywords to view other circulars.</p>
+      {% if user.is_authenticated and user.is_owner or user.is_company_admin %}
+        <div style="margin-top: 16px;">
+          <a href="{% url 'news_create' %}" class="btn btn-primary">+ Post First Announcement</a>
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

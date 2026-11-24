@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}Location Discovery · Nearby Jobs · HireNexa{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1200px; margin: 0 auto; padding: 24px 16px;">
+  <!-- Header -->
+  <div class="section-header" style="margin-bottom: 24px;">
+    <span class="hero-pill" style="background: #eef2ff; color: #4f46e5; font-weight: 700; padding: 4px 12px; border-radius: 9999px; font-size: 12px; display: inline-block; margin-bottom: 8px;">GEOGRAPHIC & NEARBY RECRUITMENT</span>
+    <h1 style="font-size: 28px; font-weight: 800; color: var(--slate-900); margin: 0; letter-spacing: -0.02em;">HireNexa Location Discovery</h1>
+    <p style="color: var(--slate-600); font-size: 14px; margin-top: 4px;">Discover nearby job vacancies, company campuses, and interview venues with privacy-first GPS distance calculation.</p>
+  </div>
+
+  <!-- Search & Location Controls Card -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 22px; margin-bottom: 28px; box-shadow: var(--shadow-sm);">
+    <form id="locationSearchForm" method="GET" action="{% url 'location_discovery' %}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) 140px; gap: 14px; align-items: flex-end;">
+      <input type="hidden" id="latInput" name="lat" value="{{ current_lat|default:'' }}">
+      <input type="hidden" id="lonInput" name="lon" value="{{ current_lon|default:'' }}">
+
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 700; color: var(--slate-700); margin-bottom: 6px;">Job Keyword</label>
+        <input type="text" name="q" value="{{ current_q }}" placeholder="e.g. Developer, Analyst" class="form-control" style="width: 100%; padding: 8px 12px; border: 1px solid var(--slate-300); border-radius: var(--radius-md);">
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 700; color: var(--slate-700); margin-bottom: 6px;">Manual City / Area</label>
+        <input type="text" name="city" value="{{ current_city }}" placeholder="e.g. Bhubaneswar, Bengaluru" class="form-control" style="width: 100%; padding: 8px 12px; border: 1px solid var(--slate-300); border-radius: var(--radius-md);">
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 700; color: var(--slate-700); margin-bottom: 6px;">Workplace Mode</label>
+        <select name="mode" class="form-control" style="width: 100%; padding: 8px 12px; border: 1px solid var(--slate-300); border-radius: var(--radius-md);">
+          <option value="ALL" {% if current_mode == "ALL" %}selected{% endif %}>All Modes</option>
+          <option value="REMOTE" {% if current_mode == "REMOTE" %}selected{% endif %}>Remote Only</option>
+          <option value="HYBRID" {% if current_mode == "HYBRID" %}selected{% endif %}>Hybrid</option>
+          <option value="ONSITE" {% if current_mode == "ONSITE" %}selected{% endif %}>On-site</option>
+        </select>
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 700; color: var(--slate-700); margin-bottom: 6px;">Max Distance</label>
+        <select name="max_dist" class="form-control" style="width: 100%; padding: 8px 12px; border: 1px solid var(--slate-300); border-radius: var(--radius-md);">
+          <option value="25" {% if current_max_dist == 25 %}selected{% endif %}>Within 25 km</option>
+          <option value="50" {% if current_max_dist == 50 %}selected{% endif %}>Within 50 km</option>
+          <option value="100" {% if current_max_dist == 100 %}selected{% endif %}>Within 100 km</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="height: 40px; font-weight: 700;">Find Vacancies</button>
+    </form>
+
+    <!-- Optional GPS Trigger -->
+    <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--slate-100); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <span style="font-size: 12px; color: var(--slate-500);">
+        🔒 <strong>Privacy Assurance:</strong> Geolocation permission is requested only on explicit user click.
+      </span>
+      <button type="button" onclick="requestCurrentLocation()" class="btn btn-outline btn-sm" style="font-size: 12px;">
+        📍 Use My Current Location (GPS)
+      </button>
+    </div>
+  </div>
+
+  <!-- Results Count -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+    <h2 style="font-size: 18px; font-weight: 700; color: var(--slate-900); margin: 0;">
+      Found {{ location_data.total_found }} Nearby Openings
+    </h2>
+    <span style="font-size: 13px; color: var(--slate-500);">Sorted by physical proximity</span>
+  </div>
+
+  <!-- Job Cards -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px;">
+    {% for job in location_data.jobs %}
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 22px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+          <div>
+            <h3 style="font-size: 17px; font-weight: 700; color: var(--slate-900); margin: 0;">
+              <a href="{{ job.apply_url }}">{{ job.title }}</a>
+            </h3>
+            <span style="font-size: 13px; color: var(--slate-600); display: block; margin-top: 2px;">{{ job.company_name }}</span>
+          </div>
+          <span style="background: #e0f2fe; color: #0369a1; font-size: 12px; font-weight: 700; padding: 4px 8px; border-radius: 9999px;">
+            📍 {{ job.distance_label }}
+          </span>
+        </div>
+
+        <div style="display: flex; gap: 10px; font-size: 12px; color: var(--slate-500); margin-bottom: 12px;">
+          <span>🏢 {{ job.workplace_type }}</span>
+          <span>👥 {{ job.vacancies }} openings</span>
+        </div>
+
+        {% if job.office_address %}
+        <div style="background: var(--slate-50); padding: 8px 12px; border-radius: var(--radius-md); font-size: 12px; color: var(--slate-700); margin-bottom: 14px;">
+          <strong>Office Address:</strong> {{ job.office_address }}
+        </div>
+        {% endif %}
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; border-top: 1px solid var(--slate-100); padding-top: 12px;">
+        <a href="{{ job.apply_url }}" class="btn btn-primary btn-sm">View Vacancy →</a>
+      </div>
+    </div>
+    {% empty %}
+    <div style="grid-column: 1 / -1; background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 40px; text-align: center;">
+      <h3 style="font-size: 18px; color: var(--slate-900);">No jobs found in this exact radius.</h3>
+      <p style="color: var(--slate-600); font-size: 14px;">Try expanding distance or choosing "All Modes".</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+function requestCurrentLocation() {
+  if (!navigator.geolocation) {
+    alert("Geolocation is not supported by your browser. Please enter your city manually.");
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    function(position) {
+      document.getElementById("latInput").value = position.coords.latitude;
+      document.getElementById("lonInput").value = position.coords.longitude;
+      document.getElementById("locationSearchForm").submit();
+    },
+    function(error) {
+      alert("Location access was declined or unavailable. You can enter your city manually above.");
+    }
+  );
+}
+</script>
+{% endblock %}

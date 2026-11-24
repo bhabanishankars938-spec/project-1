@@ -1,0 +1,595 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Pre-Join Lobby · {{ interview.round_name }} · HireNexa Meet{% endblock %}
+
+{% block extra_head %}
+<style>
+  .lobby-container {
+    max-width: 1140px;
+    margin: 40px auto 80px auto;
+    padding: 0 16px;
+  }
+  .lobby-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .lobby-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+    margin: 0 0 8px 0;
+  }
+  .lobby-subtitle {
+    font-size: 15px;
+    color: #64748b;
+    margin: 0;
+  }
+  .lobby-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 28px;
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+  }
+  @media (max-width: 900px) {
+    .lobby-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Left: Media Preview & Hardware Check */
+  .lobby-preview-pane {
+    background: #090d16;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #ffffff;
+  }
+  .preview-video-box {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #020617;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .preview-video-box video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1); /* Mirror view for natural self-preview */
+  }
+  .preview-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    font-size: 14px;
+    gap: 8px;
+  }
+  .preview-placeholder .avatar-badge {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .preview-overlay-chips {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+  }
+  .chip-tag {
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(8px);
+    color: #f8fafc;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  /* Audio Meter */
+  .audio-meter-bar {
+    width: 100%;
+    height: 6px;
+    background: #1e293b;
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 14px 0 20px 0;
+  }
+  .audio-meter-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
+    transition: width 0.08s ease;
+  }
+
+  /* Quick Toggles */
+  .preview-btn-row {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .lobby-ctrl-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    background: #1e293b;
+    color: #f8fafc;
+    font-size: 19px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+  .lobby-ctrl-btn:hover {
+    background: #334155;
+    transform: translateY(-2px);
+  }
+  .lobby-ctrl-btn.off {
+    background: #ef4444;
+    color: #ffffff;
+  }
+
+  /* Device Selectors */
+  .device-picker-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 600px) {
+    .device-picker-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .device-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+    display: block;
+  }
+  .device-select {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #1e293b;
+    color: #f8fafc;
+    border: 1px solid #334155;
+    font-size: 12.5px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  /* Right Pane: Meeting Coordinates & CTA */
+  .lobby-details-pane {
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .badge-session-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #ede9fe;
+    color: #6d28d9;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+  .meet-name {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 6px 0;
+    line-height: 1.3;
+  }
+  .meet-sub {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0 0 24px 0;
+  }
+  .detail-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 24px;
+  }
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 13.5px;
+    border-bottom: 1px solid #edf2f7;
+  }
+  .detail-row:last-child {
+    border-bottom: none;
+  }
+  .detail-key {
+    color: #64748b;
+    font-weight: 500;
+  }
+  .detail-val {
+    color: #0f172a;
+    font-weight: 700;
+    text-align: right;
+  }
+  .join-btn {
+    width: 100%;
+    padding: 14px 24px;
+    border-radius: 12px;
+    background: #4f28a9;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 8px 20px rgba(79, 40, 169, 0.35);
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+  }
+  .join-btn:hover {
+    background: #431f94;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(79, 40, 169, 0.45);
+  }
+  .permission-warning {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #b45309;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    margin-top: 14px;
+    display: none;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="lobby-container">
+  <!-- Header -->
+  <div class="lobby-header">
+    <h1 class="lobby-title">HireNexa Meet · Pre-Join Studio</h1>
+    <p class="lobby-subtitle">Verify your camera, microphone, and audio output before entering the secure interview room.</p>
+  </div>
+
+  <!-- Lobby Stage Grid -->
+  <div class="lobby-grid">
+    <!-- Left: Live Hardware Preview -->
+    <div class="lobby-preview-pane">
+      <div>
+        <div class="preview-video-box">
+          <video id="lobbyPreviewVideo" autoplay playsinline muted></video>
+          <div class="preview-placeholder" id="previewPlaceholder" style="display: none;">
+            <div class="avatar-badge">
+              {{ request.user.username|slice:":1"|upper }}
+            </div>
+            <span>Camera is turned off</span>
+          </div>
+          <div class="preview-overlay-chips">
+            <span class="chip-tag" id="camStatusTag">📹 Camera Ready</span>
+            <span class="chip-tag" id="micStatusTag">🎙️ Mic Active</span>
+          </div>
+        </div>
+
+        <!-- Audio Meter Level Indicator -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+          <span style="font-size: 11px; color: #94a3b8; font-weight: 600;">MICROPHONE INPUT LEVEL</span>
+          <span style="font-size: 11px; color: #38bdf8;" id="meterStatusLabel">Listening...</span>
+        </div>
+        <div class="audio-meter-bar">
+          <div class="audio-meter-fill" id="audioMeterFill"></div>
+        </div>
+
+        <!-- Quick Toggles -->
+        <div class="preview-btn-row">
+          <button type="button" class="lobby-ctrl-btn" id="btnToggleCam" onclick="toggleLobbyCam()" title="Turn Camera On/Off">📹</button>
+          <button type="button" class="lobby-ctrl-btn" id="btnToggleMic" onclick="toggleLobbyMic()" title="Mute/Unmute Mic">🎙️</button>
+          <button type="button" class="lobby-ctrl-btn" onclick="playSpeakerTestTone()" title="Test Speaker Audio">🔊</button>
+        </div>
+      </div>
+
+      <!-- Device Dropdowns -->
+      <div>
+        <div class="device-picker-grid">
+          <div>
+            <label class="device-label" for="cameraSelect">Camera</label>
+            <select class="device-select" id="cameraSelect" onchange="switchCamera(this.value)">
+              <option value="">Default Web Camera</option>
+            </select>
+          </div>
+          <div>
+            <label class="device-label" for="micSelect">Microphone</label>
+            <select class="device-select" id="micSelect" onchange="switchMicrophone(this.value)">
+              <option value="">Default Microphone</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="permission-warning" id="permWarning">
+          ⚠️ <strong>Permission Notice:</strong> Camera or microphone access was blocked. Please allow browser access to participate with video.
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Meeting Information & Join CTA -->
+    <div class="lobby-details-pane">
+      <div>
+        <span class="badge-session-type">⚡ SECURE INTERVIEW ROOM</span>
+        <h2 class="meet-name">{{ interview.round_name }}</h2>
+        <p class="meet-sub">{{ job.title }} · {{ job.company_name }}</p>
+
+        <div class="detail-card">
+          <div class="detail-row">
+            <span class="detail-key">Candidate</span>
+            <span class="detail-val">{{ candidate.get_full_name|default:candidate.username }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Scheduled For</span>
+            <span class="detail-val">{{ interview.scheduled_at|date:"D, M d, Y · H:i" }} IST</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Estimated Duration</span>
+            <span class="detail-val">{{ interview.duration_minutes }} Minutes</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Room Identifier</span>
+            <span class="detail-val"><code style="color: #4f28a9;">{{ meeting_id }}</code></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Passcode</span>
+            <span class="detail-val"><code style="color: #4f28a9;">{{ meeting_password }}</code></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-key">Media Engine</span>
+            <span class="detail-val" style="color: #047857;">HireNexa WebRTC Direct</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <a href="{% url 'interview_room' interview.pk %}" class="join-btn" id="joinMeetingBtn">
+          <span>🚀 Enter Interview Room</span>
+        </a>
+        <p style="text-align: center; font-size: 12px; color: #94a3b8; margin: 12px 0 0 0;">
+          All meetings are encrypted end-to-end. Recording remains strictly disabled by default.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let localStream = null;
+let audioContext = null;
+let analyser = null;
+let microphone = null;
+let javascriptNode = null;
+let isCamOn = true;
+let isMicOn = true;
+
+// Initialize hardware preview on page load
+document.addEventListener("DOMContentLoaded", async function() {
+  await initLobbyMedia();
+  await enumerateHardwareDevices();
+});
+
+async function initLobbyMedia(videoSource = null, audioSource = null) {
+  try {
+    if (localStream) {
+      localStream.getTracks().forEach(track => track.stop());
+    }
+
+    const constraints = {
+      video: videoSource ? { deviceId: { exact: videoSource } } : true,
+      audio: audioSource ? { deviceId: { exact: audioSource } } : true
+    };
+
+    localStream = await navigator.mediaDevices.getUserMedia(constraints);
+    const videoElem = document.getElementById("lobbyPreviewVideo");
+    videoElem.srcObject = localStream;
+    document.getElementById("previewPlaceholder").style.display = "none";
+    document.getElementById("permWarning").style.display = "none";
+
+    setupAudioMeter(localStream);
+  } catch (err) {
+    console.warn("Lobby getUserMedia notice:", err);
+    document.getElementById("previewPlaceholder").style.display = "flex";
+    document.getElementById("permWarning").style.display = "block";
+    document.getElementById("camStatusTag").textContent = "📹 Camera Blocked";
+    document.getElementById("micStatusTag").textContent = "🎙️ Mic Blocked";
+  }
+}
+
+function setupAudioMeter(stream) {
+  try {
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    audioContext = new AudioContext();
+    analyser = audioContext.createAnalyser();
+    microphone = audioContext.createMediaStreamSource(stream);
+    javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+
+    analyser.smoothingTimeConstant = 0.8;
+    analyser.fftSize = 1024;
+
+    microphone.connect(analyser);
+    analyser.connect(javascriptNode);
+    javascriptNode.connect(audioContext.destination);
+
+    javascriptNode.onaudioprocess = function() {
+      const array = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(array);
+      let values = 0;
+      const length = array.length;
+      for (let i = 0; i < length; i++) {
+        values += array[i];
+      }
+      const average = values / length;
+      const meterFill = document.getElementById("audioMeterFill");
+      const meterStatus = document.getElementById("meterStatusLabel");
+      if (meterFill && isMicOn) {
+        const percent = Math.min(100, Math.round(average * 2.2));
+        meterFill.style.width = percent + "%";
+        if (percent > 10) {
+          meterStatus.textContent = "Signal Good (" + percent + "%)";
+          meterStatus.style.color = "#10b981";
+        } else {
+          meterStatus.textContent = "Listening...";
+          meterStatus.style.color = "#38bdf8";
+        }
+      } else if (meterFill) {
+        meterFill.style.width = "0%";
+        meterStatus.textContent = "Muted";
+        meterStatus.style.color = "#ef4444";
+      }
+    };
+  } catch(e) {
+    console.warn("Audio meter setup notice:", e);
+  }
+}
+
+async function enumerateHardwareDevices() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
+  try {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const camSelect = document.getElementById("cameraSelect");
+    const micSelect = document.getElementById("micSelect");
+
+    camSelect.innerHTML = "";
+    micSelect.innerHTML = "";
+
+    let camIdx = 1;
+    let micIdx = 1;
+
+    devices.forEach(device => {
+      const opt = document.createElement("option");
+      opt.value = device.deviceId;
+      if (device.kind === "videoinput") {
+        opt.text = device.label || `Camera ${camIdx++}`;
+        camSelect.appendChild(opt);
+      } else if (device.kind === "audioinput") {
+        opt.text = device.label || `Microphone ${micIdx++}`;
+        micSelect.appendChild(opt);
+      }
+    });
+  } catch(e) {
+    console.warn("Error enumerating devices:", e);
+  }
+}
+
+function switchCamera(deviceId) {
+  const micId = document.getElementById("micSelect").value;
+  initLobbyMedia(deviceId, micId);
+}
+
+function switchMicrophone(deviceId) {
+  const camId = document.getElementById("cameraSelect").value;
+  initLobbyMedia(camId, deviceId);
+}
+
+function toggleLobbyCam() {
+  const btn = document.getElementById("btnToggleCam");
+  const videoElem = document.getElementById("lobbyPreviewVideo");
+  const placeholder = document.getElementById("previewPlaceholder");
+  const tag = document.getElementById("camStatusTag");
+
+  if (!localStream) return;
+  const videoTracks = localStream.getVideoTracks();
+  if (videoTracks.length > 0) {
+    isCamOn = !isCamOn;
+    videoTracks[0].enabled = isCamOn;
+    if (isCamOn) {
+      btn.classList.remove("off");
+      btn.textContent = "📹";
+      placeholder.style.display = "none";
+      tag.textContent = "📹 Camera Ready";
+      tag.style.color = "#f8fafc";
+    } else {
+      btn.classList.add("off");
+      btn.textContent = "🚫";
+      placeholder.style.display = "flex";
+      tag.textContent = "🚫 Camera Off";
+      tag.style.color = "#ef4444";
+    }
+  }
+}
+
+function toggleLobbyMic() {
+  const btn = document.getElementById("btnToggleMic");
+  const tag = document.getElementById("micStatusTag");
+
+  if (!localStream) return;
+  const audioTracks = localStream.getAudioTracks();
+  if (audioTracks.length > 0) {
+    isMicOn = !isMicOn;
+    audioTracks[0].enabled = isMicOn;
+    if (isMicOn) {
+      btn.classList.remove("off");
+      btn.textContent = "🎙️";
+      tag.textContent = "🎙️ Mic Active";
+      tag.style.color = "#f8fafc";
+    } else {
+      btn.classList.add("off");
+      btn.textContent = "🔇";
+      tag.textContent = "🔇 Mic Muted";
+      tag.style.color = "#ef4444";
+    }
+  }
+}
+
+function playSpeakerTestTone() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5 chime
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.6);
+  } catch(e) {
+    alert("Speaker test sound triggered.");
+  }
+}
+</script>
+{% endblock %}

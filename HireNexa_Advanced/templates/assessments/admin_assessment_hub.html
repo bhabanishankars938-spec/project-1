@@ -1,0 +1,323 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Assessment Control Center · Platform Owner | HireNexa{% endblock %}
+
+{% block content %}
+<div class="admin-assess-container">
+
+  <!-- Header -->
+  <header class="admin-hero">
+    <div class="admin-hero-left">
+      <span class="badge-cat" style="background: #fbbf24; color: #1e1b4b;">🛡️ Tier-0 Governance Suite</span>
+      <h1 class="admin-hero-title">Assessment & Examination Control Center</h1>
+      <p class="admin-hero-desc">
+        Manage the comprehensive question bank, bulk CSV/JSON question import,
+        AI question generator with review queue, live mock test scheduling, and coding submissions.
+      </p>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="admin-stats-grid">
+      <div class="admin-stat-box">
+        <span class="val">{{ total_questions }}</span>
+        <span class="lbl">Total Questions</span>
+      </div>
+      <div class="admin-stat-box">
+        <span class="val">{{ approved_questions }}</span>
+        <span class="lbl">Verified & Published</span>
+      </div>
+      <div class="admin-stat-box">
+        <span class="val">{{ pending_ai_questions.count }}</span>
+        <span class="lbl">Pending AI Review</span>
+      </div>
+      <div class="admin-stat-box">
+        <span class="val">{{ total_exams }}</span>
+        <span class="lbl">Active Examinations</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Control Operations Grid -->
+  <div class="admin-ops-grid">
+
+    <!-- Card 1: AI Question Generator -->
+    <section class="admin-card">
+      <div class="card-head">
+        <span class="card-icon">⚡</span>
+        <div>
+          <h3>AI Question Generator</h3>
+          <small>Generate verified MCQs with explanations into review queue</small>
+        </div>
+      </div>
+
+      <form id="aiGenForm" onsubmit="event.preventDefault(); submitAIGeneration();" class="admin-form">
+        <div class="form-group-row">
+          <div class="form-col">
+            <label>Subject</label>
+            <select id="genSubject" class="form-input-sm" required>
+              {% for s in subjects %}
+                <option value="{{ s.id }}">{{ s.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-col">
+            <label>Difficulty</label>
+            <select id="genDiff" class="form-input-sm">
+              <option value="BEGINNER">Beginner</option>
+              <option value="INTERMEDIATE" selected>Intermediate</option>
+              <option value="ADVANCED">Advanced</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group-row">
+          <div class="form-col">
+            <label>Topic / Concept</label>
+            <input type="text" id="genTopic" placeholder="e.g. Normalization, Pointers, Limits" class="form-input-sm">
+          </div>
+          <div class="form-col">
+            <label>Target Exam / Context</label>
+            <input type="text" id="genTarget" placeholder="e.g. NIMCET, OJEE, Placement" class="form-input-sm">
+          </div>
+        </div>
+
+        <div class="form-group-row">
+          <div class="form-col">
+            <label>Number of Questions</label>
+            <input type="number" id="genCount" value="3" min="1" max="10" class="form-input-sm">
+          </div>
+          <div class="form-col" style="display: flex; align-items: flex-end;">
+            <button type="submit" class="btn btn-primary btn-sm btn-block" id="btnRunAIGen">
+              <span>⚡ Generate Questions</span>
+            </button>
+          </div>
+        </div>
+        <div id="aiGenFeedback" class="gen-feedback" style="display: none;"></div>
+      </form>
+    </section>
+
+    <!-- Card 2: Bulk CSV / JSON Question Import -->
+    <section class="admin-card">
+      <div class="card-head">
+        <span class="card-icon">📂</span>
+        <div>
+          <h3>Bulk Question Import</h3>
+          <small>Upload verified questions via CSV or JSON files</small>
+        </div>
+      </div>
+
+      <form method="post" action="{% url 'admin_bulk_import_questions' %}" enctype="multipart/form-data" class="admin-form">
+        {% csrf_token %}
+        <div class="file-drop-area">
+          <input type="file" name="question_file" accept=".csv,.json" required id="bulkFile" class="file-input">
+          <p>Drag and drop CSV or JSON question file or click to select.</p>
+          <small class="text-muted">Supports CSV with headers (title, question_text, subject, difficulty, option_a, option_b, option_c, option_d, correct_option).</small>
+        </div>
+
+        <button type="submit" class="btn btn-outline btn-sm btn-block" style="margin-top: 12px;">
+          <span>Import Verified Questions</span>
+        </button>
+      </form>
+    </section>
+
+  </div>
+
+  <!-- Review Queue: AI Generated & Draft Questions -->
+  <section class="admin-section">
+    <div class="section-title-row">
+      <h2>⏳ Review Queue: AI-Generated Questions (Pending Approval)</h2>
+      <p>Verify answer keys, check clarity, and approve questions into the public Question Bank.</p>
+    </div>
+
+    <div class="review-queue-list">
+      {% for q in pending_ai_questions %}
+      <div class="review-card">
+        <div class="review-head">
+          <span class="badge-subject">{{ q.subject.name }}</span>
+          <span class="badge-diff badge-{{ q.difficulty|lower }}">{{ q.get_difficulty_display }}</span>
+          <span class="badge-ai">Certainty: {{ q.verification_certainty }}</span>
+        </div>
+
+        <h4 class="review-title">{{ q.title }}</h4>
+        <div class="review-text">{{ q.question_text|truncatewords:30 }}</div>
+
+        {% if q.options.exists %}
+        <div class="review-options">
+          {% for opt in q.options.all %}
+            <div class="opt-row {% if opt.is_correct %}opt-is-correct{% endif %}">
+              <strong>{{ opt.option_key }}:</strong> {{ opt.option_text }}
+              {% if opt.is_correct %}<span class="correct-tag">✓ Correct Answer Key</span>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="review-actions">
+          <a href="{% url 'admin_question_action' q.id 'approve' %}" class="btn btn-success btn-sm">
+            <span>✓ Approve & Publish</span>
+          </a>
+          <a href="{% url 'admin_question_action' q.id 'reject' %}" class="btn btn-danger btn-sm">
+            <span>✗ Reject</span>
+          </a>
+          <a href="{% url 'admin_question_action' q.id 'delete' %}" class="btn btn-ghost btn-sm" onclick="return confirm('Delete this question permanently?')">
+            <span>Delete</span>
+          </a>
+        </div>
+      </div>
+      {% empty %}
+      <div class="empty-state-card">
+        <p>No questions currently pending in review queue. Generate new questions using the AI Generator above.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Coding Submissions Real-Time Monitor -->
+  <section class="admin-section">
+    <div class="section-title-row">
+      <h2>💻 Real-Time Coding Submissions Monitor</h2>
+      <p>Audit candidate sandbox execution, runtime performance, and pass/fail logs.</p>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table-admin">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Problem</th>
+            <th>Language</th>
+            <th>Status</th>
+            <th>Test Cases</th>
+            <th>Runtime</th>
+            <th>Submitted At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for sub in recent_submissions %}
+          <tr>
+            <td><strong>{{ sub.user.username }}</strong></td>
+            <td>{{ sub.problem.title }}</td>
+            <td><span class="lang-tag">{{ sub.language|upper }}</span></td>
+            <td>
+              <span class="status-pill status-{{ sub.status|lower }}">{{ sub.get_status_display }}</span>
+            </td>
+            <td>{{ sub.passed_cases_count }} / {{ sub.total_cases_count }}</td>
+            <td>{{ sub.execution_time_ms }} ms</td>
+            <td><small class="text-muted">{{ sub.submitted_at|date:"M d, h:i A" }}</small></td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="7" class="text-center text-muted">No coding submissions recorded yet.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  <!-- Topic Question Bank Availability & Duplicate Integrity Check -->
+  <section class="admin-section" style="margin-top: 32px;">
+    <div class="section-title-row" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+      <div>
+        <h2>📊 Topic Question Bank Availability & Duplicate Detection Report</h2>
+        <p>Live inventory of validated questions available per topic. Shows actual counts to maintain test integrity.</p>
+      </div>
+      <div>
+        {% if duplicate_titles_count == 0 %}
+          <span style="background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; padding: 6px 12px; border-radius: 999px; font-weight: 700; font-size: 0.85rem;">
+            ✓ 0 Duplicate Questions Detected
+          </span>
+        {% else %}
+          <span style="background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 6px 12px; border-radius: 999px; font-weight: 700; font-size: 0.85rem;">
+            ⚠️ {{ duplicate_titles_count }} Potential Duplicate Titles
+          </span>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if topic_stats %}
+    <div style="background: #fff; border: 1px solid var(--slate-200, #e2e8f0); border-radius: 12px; overflow: hidden; margin-top: 14px;">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+        <thead>
+          <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0; color: #475569;">
+            <th style="padding: 10px 16px;">Topic Name</th>
+            <th style="padding: 10px 16px;">Subject</th>
+            <th style="padding: 10px 16px;">Available Verified Qs</th>
+            <th style="padding: 10px 16px;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in topic_stats %}
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 10px 16px; font-weight: 600;">{{ t.name }}</td>
+            <td style="padding: 10px 16px; color: #64748b;">{{ t.subject.name }}</td>
+            <td style="padding: 10px 16px; font-weight: 700; color: #0f172a;">{{ t.approved_count }}</td>
+            <td style="padding: 10px 16px;">
+              {% if t.approved_count >= 64 %}
+                <span style="background: #ecfdf5; color: #047857; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px;">Optimal (4 Attempts)</span>
+              {% elif t.approved_count >= 16 %}
+                <span style="background: #f0fdf4; color: #16a34a; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px;">Sufficient (16+ Qs)</span>
+              {% else %}
+                <span style="background: #fffbeb; color: #b45309; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px;">Needs Seeding</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  </section>
+
+</div>
+
+<script>
+function submitAIGeneration() {
+  const subjId = document.getElementById('genSubject').value;
+  const diff = document.getElementById('genDiff').value;
+  const topic = document.getElementById('genTopic').value;
+  const target = document.getElementById('genTarget').value;
+  const count = document.getElementById('genCount').value;
+
+  const btn = document.getElementById('btnRunAIGen');
+  const fb = document.getElementById('aiGenFeedback');
+  btn.disabled = true;
+  btn.innerHTML = '<span>⚡ Generating via AI...</span>';
+  fb.style.display = 'block';
+  fb.className = 'gen-feedback feedback-loading';
+  fb.innerText = 'Calling HireNexa AI engine to synthesize questions with 4 verified options and step-by-step logic...';
+
+  fetch("{% url 'api_ai_generate_questions' %}", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": "{{ csrf_token }}"
+    },
+    body: JSON.stringify({
+      subject_id: subjId,
+      difficulty: diff,
+      topic_name: topic,
+      target_exam: target,
+      count: count
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    btn.disabled = false;
+    btn.innerHTML = '<span>⚡ Generate Questions</span>';
+    if (data.success) {
+      fb.className = 'gen-feedback feedback-success';
+      fb.innerHTML = `<strong>Success!</strong> ${data.message} <a href="" style="color: inherit; text-decoration: underline; margin-left: 6px;">Refresh to view in Review Queue</a>`;
+    } else {
+      fb.className = 'gen-feedback feedback-error';
+      fb.innerText = data.error || 'Failed to generate questions.';
+    }
+  })
+  .catch(err => {
+    btn.disabled = false;
+    btn.innerHTML = '<span>⚡ Generate Questions</span>';
+    fb.className = 'gen-feedback feedback-error';
+    fb.innerText = 'Network error during AI generation.';
+  });
+}
+</script>
+{% endblock %}

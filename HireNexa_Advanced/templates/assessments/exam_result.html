@@ -1,0 +1,382 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Ultra Pro Performance Analytics · {{ exam.title }} | HireNexa{% endblock %}
+
+{% block content %}
+<div class="exam-result-container" style="max-width: 1200px; margin: 0 auto; padding: 24px 20px;">
+
+  <!-- SECTION 9 & 10: ULTRA ADVANCED RESULT HERO & SCORE METRICS -->
+  <section class="result-hero-card"
+    style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fff; border-radius: 16px; padding: 32px; margin-bottom: 24px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);">
+
+    <div
+      style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
+      <div>
+        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+          <span
+            style="background: #2563eb; color: #fff; font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; text-transform: uppercase;">
+            {{ exam.get_kind_display|default:"Topic Test" }}
+          </span>
+          <span
+            style="background: rgba(255, 255, 255, 0.15); color: #f1f5f9; font-size: 0.78rem; font-weight: 600; padding: 3px 10px; border-radius: 999px;">
+            Attempt {{ attempt.attempt_number }} of {{ max_attempts }}
+          </span>
+          {% if result.performance_level %}
+          <span
+            style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 999px;">
+            ★ {{ result.get_performance_level_display }}
+          </span>
+          {% endif %}
+        </div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; margin: 0 0 4px 0; color: #f8fafc;">{{ exam.title }}</h1>
+        <p style="font-size: 0.9rem; color: #94a3b8; margin: 0;">Verified examination submitted on {{ attempt.submitted_at|default:attempt.submission_timestamp|date:"M d, Y · h:i A" }}</p>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        {% if attempts_left > 0 %}
+        <a href="{% url 'exam_start' exam.slug %}" class="btn btn-primary btn-sm"
+          style="background: #2563eb; color: #fff; font-weight: 600; padding: 8px 16px; border-radius: 8px; text-decoration: none;">
+          ↺ Retake Test ({{ attempts_left }} of {{ max_attempts }} Left)
+        </a>
+        {% else %}
+        <span
+          style="background: #334155; color: #94a3b8; font-size: 0.82rem; font-weight: 600; padding: 8px 14px; border-radius: 8px;">
+          ✓ All 5 Attempts Completed
+        </span>
+        {% endif %}
+        {% if attempt.incorrect_count > 0 or attempt.skipped_count > 0 %}
+        <a href="{% url 'practice_wrong_questions' attempt.id %}"
+          style="background: #f59e0b; color: #fff; font-size: 0.82rem; font-weight: 700; padding: 8px 14px; border-radius: 8px; text-decoration: none;">
+          🎯 Practice Mistakes ({{ attempt.incorrect_count|add:attempt.skipped_count }})
+        </a>
+        {% endif %}
+        <a href="{% url 'mcq_entrance_hub' %}"
+          style="background: rgba(255,255,255,0.1); color: #f8fafc; font-size: 0.82rem; font-weight: 600; padding: 8px 14px; border-radius: 8px; text-decoration: none;">
+          ← Hub
+        </a>
+      </div>
+    </div>
+
+    <!-- PRIMARY 4 PERCENTAGES (SECTION 9 MANDATORY METRICS) -->
+    <div
+      style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 24px;">
+
+      <!-- 1. Score Percentage -->
+      <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid #334155; border-radius: 12px; padding: 18px;">
+        <div
+          style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">
+          Score Percentage</div>
+        <div style="font-size: 2.2rem; font-weight: 800; color: #60a5fa; line-height: 1;">
+          {{ result.score_percentage|default:attempt.percentage }}%
+        </div>
+        <div style="font-size: 0.8rem; color: #cbd5e1; margin-top: 6px;">
+          Final Score: <strong>{{ result.final_score|default:attempt.score }}</strong> / {{ result.maximum_score|default:attempt.maximum_score|default:"16.00" }}
+        </div>
+      </div>
+
+      <!-- 2. Accuracy Percentage -->
+      <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid #334155; border-radius: 12px; padding: 18px;">
+        <div
+          style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">
+          Accuracy Percentage</div>
+        <div style="font-size: 2.2rem; font-weight: 800; color: #34d399; line-height: 1;">
+          {{ result.accuracy_percentage|default:"0.00" }}%
+        </div>
+        <div style="font-size: 0.8rem; color: #cbd5e1; margin-top: 6px;">
+          Correct / Attempted: <strong>{{ result.correct_answers|default:attempt.correct_count }} / {{ result.attempted_questions|default:attempt.attempted_questions|default:"0" }}</strong>
+        </div>
+      </div>
+
+      <!-- 3. Completion Percentage -->
+      <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid #334155; border-radius: 12px; padding: 18px;">
+        <div
+          style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">
+          Completion Percentage</div>
+        <div style="font-size: 2.2rem; font-weight: 800; color: #f59e0b; line-height: 1;">
+          {{ result.completion_percentage|default:"0.00" }}%
+        </div>
+        <div style="font-size: 0.8rem; color: #cbd5e1; margin-top: 6px;">
+          Attempted / Total: <strong>{{ result.attempted_questions|default:attempt.attempted_questions|default:"0" }} / {{ result.total_questions|default:attempt.total_questions|default:"16" }}</strong>
+        </div>
+      </div>
+
+      <!-- 4. Time Utilization Percentage -->
+      <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid #334155; border-radius: 12px; padding: 18px;">
+        <div
+          style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">
+          Time Utilization</div>
+        <div style="font-size: 2.2rem; font-weight: 800; color: #a78bfa; line-height: 1;">
+          {{ result.time_utilization_percentage|default:"0.00" }}%
+        </div>
+        <div style="font-size: 0.8rem; color: #cbd5e1; margin-top: 6px;">
+          Time Used: <strong>{{ time_taken_seconds }}s</strong> / 1260s (21M)
+        </div>
+      </div>
+
+    </div>
+
+    <!-- EXACT FORMULA BREAKDOWN STRIP -->
+    <div
+      style="background: rgba(15, 23, 42, 0.6); border: 1px solid #334155; border-radius: 10px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.85rem;">
+      <div>
+        <span style="color: #94a3b8;">Positive Marks (+1.00):</span>
+        <strong style="color: #34d399; margin-left: 4px;">+{{ result.positive_marks|default:"0.00" }}</strong>
+        <span style="color: #64748b; margin: 0 8px;">|</span>
+        <span style="color: #94a3b8;">Negative Marks (-0.25):</span>
+        <strong style="color: #f87171; margin-left: 4px;">-{{ result.negative_marks|default:"0.00" }}</strong>
+        <span style="color: #64748b; margin: 0 8px;">|</span>
+        <span style="color: #94a3b8;">Final Score:</span>
+        <strong style="color: #60a5fa; margin-left: 4px;">{{ result.final_score|default:attempt.score }} / {{ result.maximum_score|default:attempt.maximum_score|default:"16.00" }}</strong>
+      </div>
+      <div>
+        <span style="color: #94a3b8;">Questions:</span>
+        <strong style="color: #34d399;">{{ result.correct_answers|default:attempt.correct_count }} Correct</strong> ·
+        <strong style="color: #f87171;">{{ result.incorrect_answers|default:attempt.incorrect_count }}
+          Incorrect</strong> ·
+        <strong style="color: #94a3b8;">{{ result.skipped_answers|default:attempt.skipped_count }} Skipped</strong>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- SECTION 14: PERSONAL TARGET COMPARISON & GAP ANALYSIS -->
+  <section
+    style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+    <div
+      style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
+      <div>
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin: 0 0 2px 0;">🎯 Personal Target & Gap
+          Analysis</h3>
+        <p style="font-size: 0.85rem; color: #64748b; margin: 0;">Evaluation of your score relative to your customized
+          target benchmark.</p>
+      </div>
+      <div style="font-size: 0.85rem; font-weight: 600; color: #475569;">
+        Current Target: <strong>{{ target_pct }}%</strong>
+      </div>
+    </div>
+
+    <div
+      style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 16px;">
+      <div>
+        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Your Score</div>
+        <div style="font-size: 1.4rem; font-weight: 800; color: #2563eb;">{{ result.score_percentage|default:attempt.percentage }}%</div>
+      </div>
+      <div>
+        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Target Goal</div>
+        <div style="font-size: 1.4rem; font-weight: 800; color: #0f172a;">{{ target_pct }}%</div>
+      </div>
+      <div>
+        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Target Gap</div>
+        <div
+          style="font-size: 1.4rem; font-weight: 800; {% if target_gap >= 0 %}color: #16a34a;{% else %}color: #dc2626;{% endif %}">
+          {% if target_gap >= 0 %}+{{ target_gap }}% (Target Met!){% else %}{{ target_gap }}% (Shortfall){% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 11: ATTEMPTS COMPARISON AND PROGRESSION ENGINE (ATTEMPTS 1 TO 5) -->
+  <section
+    style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+    <div
+      style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+      <div>
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin: 0 0 2px 0;">
+          🔄 Multi-Attempt Comparison & Score Progression ({{ attempts_history|length }} of 5 Attempts Used)
+        </h3>
+        <p style="font-size: 0.85rem; color: #64748b; margin: 0;">
+          Historical progression across all 5 permitted candidate attempts with delta score tracking.
+        </p>
+      </div>
+      <div style="display: flex; gap: 12px; font-size: 0.82rem; font-weight: 600;">
+        <span style="background: #eff6ff; color: #1d4ed8; padding: 4px 10px; border-radius: 6px;">Best Score: {{ best_score }} / 16.00</span>
+        <span style="background: #f1f5f9; color: #334155; padding: 4px 10px; border-radius: 6px;">Avg Score: {{ avg_score }} / 16.00</span>
+      </div>
+    </div>
+
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+        <thead>
+          <tr style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-size: 0.8rem; text-transform: uppercase;">
+            <th style="padding: 10px 12px;">Attempt #</th>
+            <th style="padding: 10px 12px;">Submission Date</th>
+            <th style="padding: 10px 12px;">Score</th>
+            <th style="padding: 10px 12px;">Score %</th>
+            <th style="padding: 10px 12px;">Accuracy %</th>
+            <th style="padding: 10px 12px;">Completion %</th>
+            <th style="padding: 10px 12px;">Time Used</th>
+            <th style="padding: 10px 12px;">Delta (+/-)</th>
+            <th style="padding: 10px 12px;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for h in attempts_history %}
+          <tr
+            style="border-bottom: 1px solid #f1f5f9; {% if h.is_current %}background: #eff6ff; font-weight: 600;{% endif %}">
+            <td style="padding: 12px;">
+              Attempt #{{ h.attempt_number }}
+              {% if h.is_current %}
+              <span
+                style="background: #2563eb; color: #fff; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-left: 4px;">CURRENT</span>
+              {% endif %}
+              {% if h.score == best_score and attempts_history|length > 1 %}
+              <span
+                style="background: #f59e0b; color: #fff; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-left: 4px;">⭐
+                BEST</span>
+              {% endif %}
+            </td>
+            <td style="padding: 12px; color: #64748b;">{{ h.date }}</td>
+            <td style="padding: 12px;"><strong>{{ h.score }}</strong> / 16.00</td>
+            <td style="padding: 12px; color: #2563eb;">{{ h.percentage }}%</td>
+            <td style="padding: 12px; color: #16a34a;">{{ h.accuracy }}%</td>
+            <td style="padding: 12px;">{{ h.completion }}%</td>
+            <td style="padding: 12px; color: #64748b;">{{ h.time_used }}s</td>
+            <td style="padding: 12px;">
+              {% if h.delta is not None %}
+              {% if h.delta > 0 %}
+              <span style="color: #16a34a; font-weight: 700;">+{{ h.delta }} ↑</span>
+              {% elif h.delta < 0 %} <span style="color: #dc2626; font-weight: 700;">{{ h.delta }} ↓</span>
+                {% else %}
+                <span style="color: #64748b;">0.00 —</span>
+                {% endif %}
+                {% else %}
+                <span style="color: #94a3b8;">Baseline</span>
+                {% endif %}
+            </td>
+            <td style="padding: 12px;">
+              {% if not h.is_current %}
+              <a href="{% url 'exam_result' all_attempts|slice:forloop.counter0|last|default:attempt.id %}"
+                style="color: #2563eb; text-decoration: none; font-weight: 600; font-size: 0.8rem;">
+                View Attempt
+              </a>
+              {% else %}
+              <span style="color: #94a3b8; font-size: 0.8rem;">Viewing</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SECTION 7 & 8: QUESTION-BY-QUESTION REVIEW & DETAILED STEP-BY-STEP EXPLANATIONS -->
+  <section
+    style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+    <div style="margin-bottom: 20px;">
+      <h3 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin: 0 0 4px 0;">
+        📝 Detailed Question-by-Question Pedagogical Review (16 Questions)
+      </h3>
+      <p style="font-size: 0.88rem; color: #64748b; margin: 0;">
+        Comprehensive breakdown displaying candidate selected response, verified answer keys, why the choice is correct,
+        and why alternative options are incorrect.
+      </p>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+      {% for resp in responses %}
+      {% with q=resp.question %}
+      <div
+        style="border: 1px solid {% if resp.is_correct %}#bbf7d0{% elif resp.is_correct is False %}#fecaca{% else %}#e2e8f0{% endif %}; border-radius: 10px; padding: 18px; background: {% if resp.is_correct %}#f0fdf4{% elif resp.is_correct is False %}#fef2f2{% else %}#fafafa{% endif %};">
+
+        <!-- Header -->
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span
+              style="font-size: 0.82rem; font-weight: 700; background: #fff; border: 1px solid #cbd5e1; padding: 2px 8px; border-radius: 6px; color: #334155;">
+              Question #{{ forloop.counter }}
+            </span>
+            <span
+              style="font-size: 0.78rem; font-weight: 600; background: #e2e8f0; padding: 2px 8px; border-radius: 4px; color: #475569;">
+              {{ q.get_difficulty_display }}
+            </span>
+            <span style="font-size: 0.78rem; font-weight: 600; color: #64748b;">
+              {{ q.topic.name|default:exam.title }}
+            </span>
+          </div>
+
+          <div>
+            {% if resp.is_correct %}
+            <span
+              style="background: #16a34a; color: #fff; font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 6px;">
+              ✓ Correct (+1.00 Marks)
+            </span>
+            {% elif resp.is_correct is False %}
+            <span
+              style="background: #dc2626; color: #fff; font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 6px;">
+              ✗ Incorrect (-0.25 Marks)
+            </span>
+            {% else %}
+            <span
+              style="background: #64748b; color: #fff; font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 6px;">
+              ⊘ Skipped (0.00 Marks)
+            </span>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Question Title and Statement -->
+        <h4 style="font-size: 1rem; font-weight: 700; color: #0f172a; margin: 0 0 8px 0;">{{ q.title }}</h4>
+        <div style="font-size: 0.95rem; color: #334155; line-height: 1.5; margin-bottom: 14px;">
+          {{ q.question_text|linebreaksbr }}
+        </div>
+
+        <!-- Code snippet if present -->
+        {% if q.code_snippet %}
+        <div
+          style="background: #0f172a; color: #f8fafc; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 0.85rem; margin-bottom: 14px; overflow-x: auto;">
+          <pre style="margin: 0;"><code>{{ q.code_snippet }}</code></pre>
+        </div>
+        {% endif %}
+
+        <!-- Options Review -->
+        <div
+          style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 8px; margin-bottom: 14px;">
+          {% for opt in q.options.all %}
+          <div
+            style="padding: 10px 12px; border-radius: 8px; border: 1px solid {% if opt.is_correct %}#16a34a; background: #ecfdf5;{% elif opt.id in resp.selected_option_ids %}#dc2626; background: #fef2f2;{% else %}#e2e8f0; background: #fff;{% endif %}; font-size: 0.88rem; display: flex; align-items: flex-start; gap: 8px;">
+            <span
+              style="font-weight: 700; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; {% if opt.is_correct %}background: #16a34a; color: #fff;{% elif opt.id in resp.selected_option_ids %}background: #dc2626; color: #fff;{% else %}background: #f1f5f9; color: #475569;{% endif %}">
+              {{ opt.option_key }}
+            </span>
+            <div style="flex: 1;">
+              <span style="color: #1e293b;">{{ opt.option_text }}</span>
+              {% if opt.is_correct %}
+              <span style="display: block; font-size: 0.75rem; color: #16a34a; font-weight: 700; margin-top: 2px;">✓
+                Correct Option</span>
+              {% elif opt.id in resp.selected_option_ids %}
+              <span style="display: block; font-size: 0.75rem; color: #dc2626; font-weight: 700; margin-top: 2px;">✗
+                Your Selected Option</span>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Detailed Explanation Box -->
+        <div style="background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; margin-top: 10px;">
+          <div style="font-size: 0.85rem; font-weight: 700; color: #0f172a; margin-bottom: 6px;">💡 Pedagogical
+            Explanation & Step-by-Step Logic:</div>
+          <p style="font-size: 0.88rem; color: #334155; line-height: 1.5; margin: 0 0 6px 0;">
+            {{ q.explanation }}
+          </p>
+          {% if q.explanation_detail %}
+          <div
+            style="font-size: 0.82rem; color: #475569; border-top: 1px dashed #e2e8f0; padding-top: 6px; margin-top: 6px;">
+            <div><strong>Why Correct:</strong> {{ q.explanation_detail.why_correct }}</div>
+            <div><strong>Distractor Analysis:</strong> {{ q.explanation_detail.why_others_incorrect }}</div>
+          </div>
+          {% endif %}
+        </div>
+
+      </div>
+      {% endwith %}
+      {% endfor %}
+    </div>
+  </section>
+
+</div>
+{% endblock %}

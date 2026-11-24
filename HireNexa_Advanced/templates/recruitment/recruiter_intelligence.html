@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}Recruiter Intelligence Dashboard · HireNexa{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1200px; margin: 0 auto; padding: 24px 16px;">
+  <!-- Header -->
+  <div class="section-header" style="margin-bottom: 24px;">
+    <span class="hero-pill" style="background: #eef2ff; color: #4f46e5; font-weight: 700; padding: 4px 12px; border-radius: 9999px; font-size: 12px; display: inline-block; margin-bottom: 8px;">TALENT PIPELINE INTELLIGENCE</span>
+    <h1 style="font-size: 28px; font-weight: 800; color: var(--slate-900); margin: 0; letter-spacing: -0.02em;">Recruiter Intelligence Dashboard</h1>
+    <p style="color: var(--slate-600); font-size: 14px; margin-top: 4px;">Candidate pipeline funnel conversion, missing requirement alerts, and comparative skill analysis.</p>
+  </div>
+
+  <!-- AI Governance Safety Guard Notice -->
+  <div style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px 18px; border-radius: 0 var(--radius-md) var(--radius-md) 0; margin-bottom: 24px; font-size: 13px; color: #92400e;">
+    ⚖️ <strong>AI Governance Policy:</strong> {{ pipeline.ai_governance_disclaimer }}
+  </div>
+
+  <!-- Pipeline KPI Row -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 18px; box-shadow: var(--shadow-sm);">
+      <span style="font-size: 12px; color: var(--slate-500); text-transform: uppercase; font-weight: 700;">Active Vacancies</span>
+      <strong style="display: block; font-size: 26px; color: var(--slate-900); margin-top: 4px;">{{ pipeline.total_active_jobs }}</strong>
+    </div>
+
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 18px; box-shadow: var(--shadow-sm);">
+      <span style="font-size: 12px; color: var(--slate-500); text-transform: uppercase; font-weight: 700;">Total Applicants</span>
+      <strong style="display: block; font-size: 26px; color: #4f46e5; margin-top: 4px;">{{ pipeline.total_applicants }}</strong>
+    </div>
+
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 18px; box-shadow: var(--shadow-sm);">
+      <span style="font-size: 12px; color: var(--slate-500); text-transform: uppercase; font-weight: 700;">Active in Rounds</span>
+      <strong style="display: block; font-size: 26px; color: #0284c7; margin-top: 4px;">{{ pipeline.active_in_pipeline }}</strong>
+    </div>
+
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 18px; box-shadow: var(--shadow-sm);">
+      <span style="font-size: 12px; color: var(--slate-500); text-transform: uppercase; font-weight: 700;">Hired & Onboarded</span>
+      <strong style="display: block; font-size: 26px; color: #059669; margin-top: 4px;">{{ pipeline.hired_count }}</strong>
+    </div>
+  </div>
+
+  <!-- Funnel Stage Breakdown -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 22px; margin-bottom: 24px; box-shadow: var(--shadow-sm);">
+    <h3 style="font-size: 17px; font-weight: 700; color: var(--slate-900); margin: 0 0 16px 0;">Applicant Pipeline Funnel Conversion</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; text-align: center;">
+      <div style="background: var(--slate-50); padding: 12px 8px; border-radius: var(--radius-md);">
+        <span style="font-size: 11px; color: var(--slate-500); display: block;">Applied</span>
+        <strong style="font-size: 18px; color: var(--slate-900);">{{ pipeline.funnel.applied }}</strong>
+      </div>
+      <div style="background: var(--slate-50); padding: 12px 8px; border-radius: var(--radius-md);">
+        <span style="font-size: 11px; color: var(--slate-500); display: block;">Screening</span>
+        <strong style="font-size: 18px; color: var(--slate-900);">{{ pipeline.funnel.screening }}</strong>
+      </div>
+      <div style="background: var(--slate-50); padding: 12px 8px; border-radius: var(--radius-md);">
+        <span style="font-size: 11px; color: var(--slate-500); display: block;">Round 1</span>
+        <strong style="font-size: 18px; color: #4f46e5;">{{ pipeline.funnel.round_1 }}</strong>
+      </div>
+      <div style="background: var(--slate-50); padding: 12px 8px; border-radius: var(--radius-md);">
+        <span style="font-size: 11px; color: var(--slate-500); display: block;">Round 2</span>
+        <strong style="font-size: 18px; color: #4f46e5;">{{ pipeline.funnel.round_2 }}</strong>
+      </div>
+      <div style="background: var(--slate-50); padding: 12px 8px; border-radius: var(--radius-md);">
+        <span style="font-size: 11px; color: var(--slate-500); display: block;">Final Round</span>
+        <strong style="font-size: 18px; color: #4f46e5;">{{ pipeline.funnel.final_round }}</strong>
+      </div>
+      <div style="background: #eff6ff; padding: 12px 8px; border-radius: var(--radius-md);">
+        <span style="font-size: 11px; color: #1e40af; display: block;">Interview</span>
+        <strong style="font-size: 18px; color: #1d4ed8;">{{ pipeline.funnel.interview }}</strong>
+      </div>
+      <div style="background: #f0fdf4; padding: 12px 8px; border-radius: var(--radius-md);">
+        <span style="font-size: 11px; color: #065f46; display: block;">Hired 🎉</span>
+        <strong style="font-size: 18px; color: #047857;">{{ pipeline.funnel.hired }}</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Two Column Grid: Missing Requirements Alerts vs Top Candidates -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
+    <!-- Missing Job Requirements Alerts -->
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 22px; box-shadow: var(--shadow-sm);">
+      <h3 style="font-size: 17px; font-weight: 700; color: var(--slate-900); margin: 0 0 14px 0;">Missing Job Requirements Diagnostic</h3>
+      <p style="font-size: 13px; color: var(--slate-600); margin-bottom: 14px;">Identifies critical vacancy competencies that are frequently absent across the applicant pool, suggesting syllabus or job description adjustments.</p>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        {% for req in pipeline.missing_requirements %}
+        <div style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: var(--radius-md); padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <strong style="font-size: 13px; color: #9f1239;">{{ req.skill }}</strong>
+            <span style="font-size: 11px; color: #be123c; display: block;">{{ req.alert }}</span>
+          </div>
+          <span style="font-weight: 800; font-size: 14px; color: #e11d48;">{{ req.percentage_of_pool }}%</span>
+        </div>
+        {% empty %}
+        <div style="padding: 16px; background: #ecfdf5; border-radius: var(--radius-md); font-size: 13px; color: #047857;">
+          ✓ Applicant skills closely align with your listed job requirements!
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Top Performing Candidates in Pipeline -->
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 22px; box-shadow: var(--shadow-sm);">
+      <h3 style="font-size: 17px; font-weight: 700; color: var(--slate-900); margin: 0 0 14px 0;">Top Pipeline Candidates</h3>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        {% for cand in pipeline.top_candidates %}
+        <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 12px 14px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <strong style="font-size: 14px; color: var(--slate-900);">{{ cand.candidate_name }}</strong>
+            <span style="font-size: 12px; color: var(--slate-600); display: block;">{{ cand.job_title }} · {{ cand.status }}</span>
+          </div>
+          <div style="text-align: right;">
+            <span style="font-size: 14px; font-weight: 800; color: #4f46e5;">{{ cand.final_score }}%</span>
+            <span style="font-size: 11px; color: var(--slate-500); display: block;">AI Match</span>
+          </div>
+        </div>
+        {% empty %}
+        <p style="color: var(--slate-500); font-size: 13px;">No applicants evaluated yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

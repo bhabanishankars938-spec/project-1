@@ -1,0 +1,124 @@
+{% extends "accounts/settings/settings_base.html" %}
+
+{% block title %}Privacy & GDPR Controls · HireNexa Settings{% endblock %}
+
+{% block settings_content %}
+<div class="settings-card">
+  <div class="card-header-bar">
+    <div class="card-title-group">
+      <h2 class="card-title">Privacy, Data Governance & GDPR</h2>
+      <p class="card-subtitle">Manage employer search visibility, contact info masking, GDPR portable export, and account deletion.</p>
+    </div>
+  </div>
+
+  <!-- 1. Profile & Resume Visibility Form -->
+  <form method="post" class="settings-form">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="update_visibility">
+
+    <h3 class="form-section-heading">👁️ Search & Employer Visibility</h3>
+
+    <div class="form-row-2col">
+      <div class="form-group">
+        <label for="profileVisSelect" class="form-label">Profile Discoverability</label>
+        <select name="profile_visibility" id="profileVisSelect" class="form-input">
+          <option value="PUBLIC" {% if user_settings.profile_visibility == 'PUBLIC' %}selected{% endif %}>Public (Indexed by search engines & all visitors)</option>
+          <option value="RECRUITERS" {% if user_settings.profile_visibility == 'RECRUITERS' %}selected{% endif %}>Verified Recruiters Only (Recommended)</option>
+          <option value="PRIVATE" {% if user_settings.profile_visibility == 'PRIVATE' %}selected{% endif %}>Private (Visible only to jobs you explicitly apply to)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="resumeVisSelect" class="form-label">Resume Document Access</label>
+        <select name="resume_visibility" id="resumeVisSelect" class="form-input">
+          <option value="PUBLIC" {% if user_settings.resume_visibility == 'PUBLIC' %}selected{% endif %}>Public Document</option>
+          <option value="RECRUITERS" {% if user_settings.resume_visibility == 'RECRUITERS' %}selected{% endif %}>Verified Recruiters Only</option>
+          <option value="PRIVATE" {% if user_settings.resume_visibility == 'PRIVATE' %}selected{% endif %}>Strict Private (Applicant view only)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="toggle-group-list">
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>Hide Direct Phone Number</strong>
+          <span>Mask your mobile phone number on candidate search results and public profiles.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="hide_phone" {% if user_settings.hide_phone %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>Hide Direct Email Address</strong>
+          <span>Recruiters contact you via HireNexa proxy messaging without seeing your personal inbox.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="hide_email" {% if user_settings.hide_email %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-submit-row">
+      <button type="submit" class="btn btn-primary btn-md">
+        Save Privacy Preferences
+      </button>
+    </div>
+  </form>
+
+  <div class="settings-divider"></div>
+
+  <!-- 2. GDPR Data Portability & Export -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 12px;">
+    <div>
+      <h3 class="form-section-heading" style="margin: 0 0 4px 0;">📦 GDPR Data Portability (Download My Data)</h3>
+      <p class="card-subtitle">Download a machine-readable JSON archive of your personal profile, application records, and account logs.</p>
+    </div>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="download_gdpr_data">
+      <button type="submit" class="btn btn-outline btn-sm">
+        ⬇️ Export GDPR JSON Archive
+      </button>
+    </form>
+  </div>
+
+  <div class="settings-divider"></div>
+
+  <!-- 3. Account Closure / Deletion (Danger Zone) -->
+  <div class="danger-zone-card">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+      <span style="font-size: 20px;">⚠️</span>
+      <h3 style="font-size: 16px; font-weight: 800; color: var(--rose-600); margin: 0;">Danger Zone: Deactivate or Delete Account</h3>
+    </div>
+    <p style="font-size: 13px; color: var(--slate-600); margin-bottom: 14px;">
+      Once deactivated, your active applications will be closed, your public profiles will be removed from recruiter search, and your login sessions will be terminated immediately.
+    </p>
+
+    <form method="post" class="danger-form" onsubmit="return confirm('WARNING: Are you sure you wish to permanently delete your HireNexa account? This cannot be undone.')">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="delete_account">
+      
+      <div class="form-row-2col">
+        <div class="form-group">
+          <label for="confirmPhraseInput" class="form-label" style="color: var(--rose-600); font-weight: 700;">
+            Type "DELETE" to confirm
+          </label>
+          <input type="text" name="confirm_phrase" id="confirmPhraseInput" placeholder="DELETE" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassInput" class="form-label" style="font-weight: 700;">Account Password</label>
+          <input type="password" name="confirm_password" id="confirmPassInput" class="form-input" placeholder="Enter password to confirm" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-danger btn-sm" style="background: var(--rose-600); color: #fff; border: none; padding: 9px 18px; border-radius: var(--radius-md); font-weight: 700;">
+        Permanently Close Account
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

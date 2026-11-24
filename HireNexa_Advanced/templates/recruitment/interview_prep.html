@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Interview Preparation · HireNexa 2.0{% endblock %}
+
+{% block content %}
+<div class="pro-container" style="max-width: 1140px; margin: 40px auto; padding: 0 20px;">
+  
+  <!-- Header Banner -->
+  <div style="text-align: center; margin-bottom: 50px;">
+    <span class="meta-badge" style="background: rgba(124, 58, 237, 0.1); color: #7c3aed; border: 1px solid rgba(124, 58, 237, 0.25); font-weight: 700; padding: 6px 14px; border-radius: 9999px; font-size: 12px; letter-spacing: 0.05em;">
+      INTERVIEW INTELLIGENCE HUB
+    </span>
+    <h1 style="font-size: 40px; font-weight: 800; color: var(--slate-900); margin: 18px 0 14px; letter-spacing: -0.02em;">
+      Master Your Technical & Behavioral Interviews
+    </h1>
+    <p style="font-size: 17px; color: var(--slate-600); max-width: 740px; margin: 0 auto; line-height: 1.6;">
+      Curated questions, system design walkthroughs, STAR-format behavioral templates, and real interview intelligence for Indian tech enterprises and product companies.
+    </p>
+  </div>
+
+  <!-- Interactive Track Cards -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-bottom: 50px;">
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: 16px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(37, 99, 235, 0.1); color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px;">🐍</div>
+      <h3 style="font-size: 19px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px;">Python & Django Deep-Dive</h3>
+      <p style="font-size: 13.5px; color: var(--slate-600); line-height: 1.6; margin-bottom: 20px;">
+        Generators, decorators, GIL, ORM optimization (`select_related`, `prefetch_related`), Q/F objects, database transactions, and REST APIs.
+      </p>
+      <a href="{% url 'ai_assistant' %}?q=Give+me+20+Django+interview+questions+with+answers" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; padding: 9px 16px; border-radius: 8px;">
+        Practice with HireNexa AI →
+      </a>
+    </div>
+
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: 16px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(14, 165, 233, 0.1); color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px;">⚛️</div>
+      <h3 style="font-size: 19px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px;">React & Modern Frontend</h3>
+      <p style="font-size: 13.5px; color: var(--slate-600); line-height: 1.6; margin-bottom: 20px;">
+        Virtual DOM reconciliation, hook lifecycle (useEffect, useMemo, useCallback), Redux/Zustand state patterns, and SSR with Next.js.
+      </p>
+      <a href="{% url 'special_interview_hub' %}" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; padding: 9px 16px; border-radius: 8px;">
+        React Prep Module →
+      </a>
+    </div>
+
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: 16px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(16, 185, 129, 0.1); color: #059669; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px;">💻</div>
+      <h3 style="font-size: 19px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px;">Data Structures & Algorithms</h3>
+      <p style="font-size: 13.5px; color: var(--slate-600); line-height: 1.6; margin-bottom: 20px;">
+        Binary search, trees, graphs, dynamic programming, sliding window, and space-time complexity analysis.
+      </p>
+      <a href="{% url 'coding_list' %}" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; padding: 9px 16px; border-radius: 8px;">
+        Open Coding Sandbox →
+      </a>
+    </div>
+
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: 16px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(245, 158, 11, 0.1); color: #d97706; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px;">🌟</div>
+      <h3 style="font-size: 19px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px;">Behavioral & Leadership</h3>
+      <p style="font-size: 13.5px; color: var(--slate-600); line-height: 1.6; margin-bottom: 20px;">
+        Amazon Leadership Principles, STAR framework structuring (Situation, Task, Action, Result), conflict resolution, and cross-team communication.
+      </p>
+      <a href="{% url 'ai_assistant' %}?q=Help+me+frame+a+STAR+format+answer+for+a+challenging+project+deadline" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; padding: 9px 16px; border-radius: 8px;">
+        Simulate Mock Behavioral →
+      </a>
+    </div>
+  </div>
+
+  <!-- In-Depth Q&A Accordion Section -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: 20px; padding: 36px; box-shadow: 0 4px 16px rgba(0,0,0,0.03); margin-bottom: 50px;">
+    <h2 style="font-size: 24px; font-weight: 800; color: var(--slate-900); margin-bottom: 24px;">High-Frequency Interview Questions</h2>
+    
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <details style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px 24px; cursor: pointer;">
+        <summary style="font-size: 16px; font-weight: 700; color: #1e293b;">1. How does Django handle database concurrency and atomic transactions?</summary>
+        <p style="margin-top: 14px; font-size: 14px; color: #475569; line-height: 1.7;">
+          Django provides `transaction.atomic()` context manager and decorator to wrap queries in an ACID database transaction. Under the hood, it creates a savepoint (`SAVEPOINT` in PostgreSQL). If an unhandled exception occurs inside the atomic block, Django rolls back all changes to ensure data consistency. For concurrency, `select_for_update()` can be used to acquire row-level locks preventing race conditions during balance or inventory updates.
+        </p>
+      </details>
+
+      <details style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px 24px; cursor: pointer;">
+        <summary style="font-size: 16px; font-weight: 700; color: #1e293b;">2. What is the fundamental difference between `select_related` and `prefetch_related`?</summary>
+        <p style="margin-top: 14px; font-size: 14px; color: #475569; line-height: 1.7;">
+          <strong>`select_related`</strong> performs an SQL `INNER JOIN` (or `LEFT OUTER JOIN`) in the same single database query. It works for single-valued relationships: ForeignKey (`1-to-N` from the child side) and OneToOneField. <br>
+          <strong>`prefetch_related`</strong> performs a separate lookup query and joins the results in Python memory. It is required for multi-valued relationships: ManyToManyField and reverse ForeignKeys (`1-to-N` from parent side).
+        </p>
+      </details>
+
+      <details style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px 24px; cursor: pointer;">
+        <summary style="font-size: 16px; font-weight: 700; color: #1e293b;">3. How does React 18 Concurrent Rendering improve perceived performance?</summary>
+        <p style="margin-top: 14px; font-size: 14px; color: #475569; line-height: 1.7;">
+          React 18 introduces interruptible rendering. Instead of blocking the main JavaScript thread until an entire component tree re-renders, React splits rendering into small chunks. High-priority updates (typing, clicking) can interrupt low-priority transitions (filtering large lists, charts) using `useTransition` or `useDeferredValue`, maintaining 60 FPS responsiveness.
+        </p>
+      </details>
+
+      <details style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px 24px; cursor: pointer;">
+        <summary style="font-size: 16px; font-weight: 700; color: #1e293b;">4. How should you answer "Tell me about a time you had a technical disagreement with a teammate"?</summary>
+        <p style="margin-top: 14px; font-size: 14px; color: #475569; line-height: 1.7;">
+          Follow the STAR framework: Set the <strong>Situation</strong> (e.g. choosing between Redis caching vs Database Indexing for an endpoint with 10k RPM). Define the <strong>Task</strong> (we needed sub-50ms latency without ballooning infrastructure costs). Explain the <strong>Action</strong> (rather than arguing, I proposed building a quick benchmark with `locust`, collected empirical data, and discussed trade-offs openly). Highlight the <strong>Result</strong> (we adopted compound B-tree indexing which saved \$400/month in cache servers while maintaining 38ms p95 latency, and the team established a benchmark-first culture).
+        </p>
+      </details>
+    </div>
+  </div>
+
+  <!-- Live Exam / Assessment CTA -->
+  <div style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); border-radius: 20px; padding: 40px; color: #ffffff; display: flex; flex-direction: column; md:flex-row; align-items: center; justify-content: space-between; gap: 24px;">
+    <div>
+      <span style="background: rgba(124, 58, 237, 0.3); color: #c4b5fd; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 9999px;">ENTRANCE & COMPETITIVE ASSESSMENTS</span>
+      <h3 style="font-size: 26px; font-weight: 800; margin: 12px 0 8px;">Preparing for NIMCET, OJEE or CUET-PG?</h3>
+      <p style="font-size: 14.5px; color: #cbd5e1; max-width: 600px; line-height: 1.6;">
+        Practice across 2,140+ verified entrance questions with official syllabus weightage, timed mock tests, and instant accuracy analytics.
+      </p>
+    </div>
+    <a href="{% url 'mcq_entrance_hub' %}" class="btn" style="background: #ffffff; color: #0f172a; font-weight: 700; padding: 14px 28px; border-radius: 12px; text-decoration: none; white-space: nowrap;">
+      Launch MCQ Practice Hub →
+    </a>
+  </div>
+
+</div>
+{% endblock %}

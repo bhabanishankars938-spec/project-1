@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}HireNexa Premium & Enterprise Pricing Plans · HireNexa{% endblock %}
+
+{% block content %}
+<div class="pricing-container" style="max-width: 1200px; margin: 0 auto; padding: 32px 16px;">
+  <div style="text-align: center; margin-bottom: 48px;">
+    <span class="hero-pill" style="margin-bottom: 12px; display: inline-flex; align-items: center; gap: 6px;">
+      👑 HIRENEXA PRO & ENTERPRISE
+    </span>
+    <h1 style="font-size: 38px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.03em; margin: 8px 0;">
+      Transparent Pricing for Candidates & Fast-Growing Teams
+    </h1>
+    <p style="color: var(--slate-600); font-size: 16px; max-width: 680px; margin: 0 auto;">
+      Unlock advanced AI Career Optimization (ACO), priority candidate matching, and enterprise recruitment pipelines with verified hiring quotas.
+    </p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 48px;">
+    <!-- Starter Tier -->
+    <div class="pricing-card" style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="font-size: 20px; font-weight: 700; color: var(--slate-900); margin: 0;">Candidate Free</h3>
+          <span class="meta-badge" style="background: #f1f5f9; color: var(--slate-600);">ALWAYS FREE</span>
+        </div>
+        <div style="font-size: 36px; font-weight: 800; color: var(--slate-900); margin-bottom: 16px;">
+          ₹0 <span style="font-size: 14px; font-weight: 500; color: var(--slate-500);">/ month</span>
+        </div>
+        <p style="color: var(--slate-600); font-size: 14px; margin-bottom: 24px;">Essential career discovery and CBT preparation for students and freshers.</p>
+        <ul style="list-style: none; padding: 0; margin: 0 0 24px 0; font-size: 14px; color: var(--slate-700); line-height: 2;">
+          <li>✓ Unlimited Job Search & Bookmarking</li>
+          <li>✓ 5 Topic CBT Exams per Day</li>
+          <li>✓ 5-Year Authentic PYQ Bank Practice</li>
+          <li>✓ Basic ATS Resume Analyzer (1/mo)</li>
+          <li>✓ Candidate Profile & Verified Badges</li>
+        </ul>
+      </div>
+      <a href="{% url 'register' %}" class="btn btn-outline" style="width: 100%; text-align: center;">Get Started Free</a>
+    </div>
+
+    <!-- Pro Candidate / Recruiter -->
+    <div class="pricing-card" style="background: #ffffff; border: 2px solid #7c3aed; border-radius: var(--radius-xl); padding: 32px; box-shadow: 0 12px 24px -4px rgba(124, 58, 237, 0.15); display: flex; flex-direction: column; justify-content: space-between; position: relative;">
+      <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff; font-size: 11px; font-weight: 800; padding: 4px 14px; border-radius: 999px; letter-spacing: 0.05em;">
+        MOST POPULAR
+      </div>
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="font-size: 20px; font-weight: 700; color: var(--slate-900); margin: 0;">HireNexa Pro</h3>
+          <span class="meta-badge" style="background: #ede9fe; color: #7c3aed; font-weight: 700;">PRO TIER</span>
+        </div>
+        <div style="font-size: 36px; font-weight: 800; color: var(--slate-900); margin-bottom: 16px;">
+          ₹499 <span style="font-size: 14px; font-weight: 500; color: var(--slate-500);">/ month</span>
+        </div>
+        <p style="color: var(--slate-600); font-size: 14px; margin-bottom: 24px;">Advanced AI Career Optimization, unlimited CBT test attempts, and priority recruiter visibility.</p>
+        <ul style="list-style: none; padding: 0; margin: 0 0 24px 0; font-size: 14px; color: var(--slate-700); line-height: 2;">
+          <li>✓ <strong>Unlimited</strong> CBT Topic Exams (16Q/21Min)</li>
+          <li>✓ Full ACO 8-Module Career Intelligence Suite</li>
+          <li>✓ Unlimited ATS Resume Scans & Keyword Matching</li>
+          <li>✓ Step-by-Step Derivations & Traps Warnings</li>
+          <li>✓ Dedicated Virtual Interview Room Access</li>
+          <li>✓ Top 10% Candidate Badge on Recruiter Feeds</li>
+        </ul>
+      </div>
+      <a href="{% url 'login' %}" class="btn btn-primary" style="width: 100%; text-align: center; background: linear-gradient(135deg, #7c3aed, #4f46e5); border: none;">Upgrade to Pro</a>
+    </div>
+
+    <!-- Enterprise Recruitment -->
+    <div class="pricing-card" style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="font-size: 20px; font-weight: 700; color: var(--slate-900); margin: 0;">Enterprise Hiring</h3>
+          <span class="meta-badge" style="background: #e0f2fe; color: #0284c7; font-weight: 700;">CORPORATE</span>
+        </div>
+        <div style="font-size: 36px; font-weight: 800; color: var(--slate-900); margin-bottom: 16px;">
+          ₹4,999 <span style="font-size: 14px; font-weight: 500; color: var(--slate-500);">/ month</span>
+        </div>
+        <p style="color: var(--slate-600); font-size: 14px; margin-bottom: 24px;">Multi-seat recruitment platform with Zoom/Internal video rooms and GeoHire verified company badges.</p>
+        <ul style="list-style: none; padding: 0; margin: 0 0 24px 0; font-size: 14px; color: var(--slate-700); line-height: 2;">
+          <li>✓ Unlimited Active Vacancy Postings</li>
+          <li>✓ Up to 10 HR Recruiter Seats</li>
+          <li>✓ Integrated Video Interview Studio & Zoom OAuth</li>
+          <li>✓ GeoHire Dual-Office Verification (HQ & Branch)</li>
+          <li>✓ 7-Agent AI Resume Parser & Match Scoring</li>
+          <li>✓ Dedicated Support & Custom Branding</li>
+        </ul>
+      </div>
+      <a href="{% url 'contact' %}" class="btn btn-outline" style="width: 100%; text-align: center;">Contact Enterprise Sales</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

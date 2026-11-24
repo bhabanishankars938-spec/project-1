@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}Register Recruiter Account · HireNexa{% endblock %}
+
+{% block content %}
+<div class="split-auth-container">
+  <div class="auth-showcase-pane" style="background: linear-gradient(135deg, #1e1b4b 0%, #1e293b 100%);">
+    <div>
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 24px;">
+        <div class="brand-icon" style="width: 40px; height: 40px; font-size: 18px; background: #6366f1;">🏢</div>
+        <span style="font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.03em;">HireNexa</span>
+        <span class="role-tag recruiter">EMPLOYER PORTAL</span>
+      </div>
+
+      <h2 style="font-size: 30px; font-weight: 800; color: #ffffff; line-height: 1.25; margin-bottom: 16px;">
+        Scale your engineering hiring with AI talent intelligence.
+      </h2>
+
+      <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6; margin-bottom: 30px;">
+        Join fast-growing companies and university placement partners using HireNexa to find top engineering talent.
+      </p>
+
+      <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); padding: 18px; margin-bottom: 24px;">
+        <strong style="color: #ffffff; font-size: 15px; display: block; margin-bottom: 6px;">Enterprise Ready:</strong>
+        <p style="color: #94a3b8; font-size: 13px; margin: 0; line-height: 1.5;">
+          Post open engineering roles, define canonical skill taxonomies, automatically parse incoming resumes, and score applicant match quality.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-form-pane">
+    <div style="margin-bottom: 24px;">
+      <span class="role-tag recruiter" style="margin-bottom: 6px; display: inline-block;">RECRUITER ONBOARDING</span>
+      <h1 class="auth-title" style="text-align: left; font-size: 26px;">Create Recruiter Account</h1>
+      <p class="auth-subtitle" style="text-align: left;">Register your company to post jobs and screen candidates</p>
+    </div>
+
+    {% if form.non_field_errors %}
+      <div class="alert-message alert-error">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'hr_signup' %}">
+      {% csrf_token %}
+      {{ form.role }}
+
+      <div class="form-group">
+        <label class="form-label" for="id_full_name">Full Name</label>
+        {{ form.full_name }}
+        {% if form.full_name.errors %}<div class="errorlist">{{ form.full_name.errors }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="id_company_name">Company / Organization Name</label>
+        {{ form.company_name }}
+        {% if form.company_name.errors %}<div class="errorlist">{{ form.company_name.errors }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="id_username">Recruiter Username</label>
+        {{ form.username }}
+        {% if form.username.errors %}<div class="errorlist">{{ form.username.errors }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="id_email">Work Email</label>
+        {{ form.email }}
+        {% if form.email.errors %}<div class="errorlist">{{ form.email.errors }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="id_phone_number">Mobile Number (SMS OTP Verification)</label>
+        <div style="display: grid; grid-template-columns: 140px 1fr; gap: 8px;">
+          {{ form.country_code }}
+          {{ form.phone_number }}
+        </div>
+        {% if form.phone_number.errors %}<div class="errorlist">{{ form.phone_number.errors }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="id_password1">Password</label>
+        {{ form.password1 }}
+        {% if form.password1.errors %}<div class="errorlist">{{ form.password1.errors }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="id_password2">Confirm Password</label>
+        {{ form.password2 }}
+        {% if form.password2.errors %}<div class="errorlist">{{ form.password2.errors }}</div>{% endif %}
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 10px;">
+        Register Recruiter Account →
+      </button>
+    </form>
+
+    <div class="auth-footer" style="text-align: left; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--slate-200);">
+      Already have a recruiter account?
+      <a href="{% url 'hr_login' %}" style="font-weight: 700;">
+        Sign In to HR Workspace →
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,501 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Live Exam: {{ exam.title }} | HireNexa CBT{% endblock %}
+
+{% block content %}
+<div class="live-exam-wrapper" id="liveExamRoot">
+
+  <!-- TOP BAR: EXAM HEADER & SYNCED TIMER -->
+  <header class="live-exam-header">
+    <div class="exam-title-group">
+      <span class="exam-badge-live">🔴 LIVE CBT TEST</span>
+      <h1 class="exam-header-name">{{ exam.title }}</h1>
+    </div>
+
+    <!-- Real-time Countdown Timer -->
+    <div class="exam-timer-widget" id="examTimerBox">
+      <span class="timer-icon">⏱️</span>
+      <div class="timer-display">
+        <span class="timer-label">Time Remaining</span>
+        <span class="timer-clock" id="timerClock">00:00:00</span>
+      </div>
+    </div>
+
+    <div class="exam-actions-top">
+      <span id="autoSaveIndicator" class="autosave-pill">✓ Saved</span>
+      <button type="button" class="btn btn-danger btn-sm" onclick="promptSubmitModal()">
+        <span>Submit Test</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN EXAM SPLIT BODY -->
+  <div class="live-exam-body">
+
+    <!-- LEFT: QUESTION PANE -->
+    <main class="live-question-pane">
+      {% for q in questions %}
+      <div class="exam-q-block" id="qBlock_{{ forloop.counter }}" data-q-index="{{ forloop.counter }}" data-question-id="{{ q.id }}" style="{% if not forloop.first %}display: none;{% endif %}">
+        
+        <div class="q-header-meta">
+          <div class="q-num-chip">Question {{ forloop.counter }} of {{ total_questions }}</div>
+          <div class="q-points-row">
+            <span class="pts-pos">+{{ q.marks }} Marks</span>
+            <span class="pts-neg">-{{ exam.negative_marking }} Negative</span>
+          </div>
+        </div>
+
+        <div class="q-content-text">
+          {{ q.question_text|linebreaksbr }}
+        </div>
+
+        {% if q.code_snippet %}
+        <div class="q-code-snippet">
+          <pre><code>{{ q.code_snippet }}</code></pre>
+        </div>
+        {% endif %}
+
+        <!-- 4 Verified Options -->
+        <div class="exam-options-list">
+          {% for opt in q.shuffled_options|default:q.options.all %}
+          <label class="exam-option-card" for="opt_{{ q.id }}_{{ opt.id }}">
+            <input type="radio" 
+                   name="question_choice_{{ q.id }}" 
+                   id="opt_{{ q.id }}_{{ opt.id }}" 
+                   value="{{ opt.id }}"
+                   {% if opt.id in q.user_selected_option_ids %}checked{% endif %}
+                   onchange="onAnswerSelected({{ q.id }}, {{ opt.id }}, {{ forloop.parentloop.counter }})">
+            <span class="opt-key-circle">{{ opt.option_key }}</span>
+            <span class="opt-label-text">{{ opt.option_text }}</span>
+          </label>
+          {% endfor %}
+        </div>
+
+      </div>
+      {% endfor %}
+
+      <!-- BOTTOM CONTROL BAR -->
+      <footer class="live-exam-footer">
+        <div class="footer-left">
+          <button type="button" class="btn btn-outline btn-sm" id="btnPrev" onclick="navigateQuestion(-1)">
+            <span>← Previous</span>
+          </button>
+          <button type="button" class="btn btn-outline btn-sm" id="btnNext" onclick="navigateQuestion(1)">
+            <span>Next →</span>
+          </button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="clearCurrentSelection()">
+            <span>Clear Response</span>
+          </button>
+        </div>
+
+        <div class="footer-right">
+          <button type="button" class="btn btn-review btn-sm" id="btnReview" onclick="toggleMarkForReview()">
+            <span>🔖 Mark for Review</span>
+          </button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="saveAndNext()">
+            <span>Save & Next →</span>
+          </button>
+        </div>
+      </footer>
+    </main>
+
+    <!-- RIGHT: INTERACTIVE QUESTION PALETTE -->
+    <aside class="live-palette-pane">
+      
+      <!-- Palette Legend -->
+      <div class="palette-legend">
+        <div class="legend-item"><span class="legend-color color-answered"></span> Answered</div>
+        <div class="legend-item"><span class="legend-color color-review"></span> Marked for Review</div>
+        <div class="legend-item"><span class="legend-color color-ans-review"></span> Answered & Review</div>
+        <div class="legend-item"><span class="legend-color color-unanswered"></span> Unanswered</div>
+      </div>
+
+      <div class="palette-grid-title">Question Palette ({{ total_questions }} Total)</div>
+      
+      <!-- Grid of Questions -->
+      <div class="palette-grid" id="paletteGrid">
+        {% for p in palette %}
+        <button type="button" 
+                class="palette-btn {{ p.status_class }} {% if forloop.first %}current-q{% endif %}" 
+                id="paletteBtn_{{ p.index }}"
+                onclick="jumpToQuestion({{ p.index }})">
+          {{ p.index }}
+        </button>
+        {% endfor %}
+      </div>
+
+      <!-- Quick Summary Card -->
+      <div class="palette-summary-box">
+        <div class="sum-row">
+          <span>Answered:</span>
+          <strong id="sumAnswered">0</strong>
+        </div>
+        <div class="sum-row">
+          <span>Marked for Review:</span>
+          <strong id="sumReview">0</strong>
+        </div>
+        <div class="sum-row">
+          <span>Unanswered:</span>
+          <strong id="sumUnanswered">{{ total_questions }}</strong>
+        </div>
+      </div>
+
+      <div class="palette-submit-wrap">
+        <button type="button" class="btn btn-primary btn-block" onclick="promptSubmitModal()">
+          <span>✓ Final Submit Examination</span>
+        </button>
+      </div>
+
+    </aside>
+
+  </div>
+</div>
+
+<!-- DEDICATED EXAMINATION FINAL REVIEW SCREEN (SECTION 9) -->
+<div class="modal-backdrop" id="submitModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center;">
+  <div class="modal-card modal-review-screen" style="max-width: 680px; width: 92%; background: #ffffff; border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); overflow: hidden; border: 1px solid #cbd5e1;">
+    <div class="modal-head" style="padding: 18px 24px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #f8fafc;">
+      <div>
+        <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #0f172a;">📋 Final Examination Review</h3>
+        <p style="margin: 4px 0 0; color: #64748b; font-size: 0.85rem;">Review your answers and question statuses before final submission</p>
+      </div>
+      <button type="button" class="btn-close" onclick="closeSubmitModal()" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #64748b;">✕</button>
+    </div>
+
+    <div class="modal-body" style="padding: 20px 24px;">
+      <!-- Detailed Metrics Grid -->
+      <div class="review-metrics-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;">
+        <div class="metric-card" style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 12px; text-align: center;">
+          <div style="font-size: 1.5rem; font-weight: 800; color: #059669;" id="modalAnsweredCount">0</div>
+          <div style="font-size: 0.75rem; font-weight: 700; color: #047857; text-transform: uppercase;">Answered</div>
+        </div>
+        <div class="metric-card" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; text-align: center;">
+          <div style="font-size: 1.5rem; font-weight: 800; color: #64748b;" id="modalUnansweredCount">0</div>
+          <div style="font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase;">Unanswered</div>
+        </div>
+        <div class="metric-card" style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 8px; padding: 12px; text-align: center;">
+          <div style="font-size: 1.5rem; font-weight: 800; color: #7e22ce;" id="modalReviewCount">0</div>
+          <div style="font-size: 0.75rem; font-weight: 700; color: #6b21a8; text-transform: uppercase;">Marked Review</div>
+        </div>
+        <div class="metric-card" style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px; text-align: center;">
+          <div style="font-size: 1.5rem; font-weight: 800; color: #d97706;" id="modalAnsReviewCount">0</div>
+          <div style="font-size: 0.75rem; font-weight: 700; color: #b45309; text-transform: uppercase;">Ans & Review</div>
+        </div>
+      </div>
+
+      <!-- Question Jump Grid -->
+      <div style="margin-bottom: 16px;">
+        <div style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 8px;">
+          Question Status Breakdown (Click any number to jump back into the exam):
+        </div>
+        <div class="review-question-pills" id="modalQuestionPills" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Warning Notice -->
+      <div class="modal-warning-box" id="modalWarningBox" style="background: #fff7ed; border-left: 4px solid #f97316; padding: 12px 16px; border-radius: 6px; font-size: 0.85rem; color: #9a3412;">
+        ⚠️ <strong>Notice:</strong> You have <span id="modalWarnUnanswered" style="font-weight: 800;">0</span> unanswered question(s). Once submitted, your examination answers are permanently finalized and cannot be modified.
+      </div>
+    </div>
+
+    <div class="modal-foot" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0;">
+      <button type="button" class="btn btn-outline" onclick="closeSubmitModal()" style="border: 1px solid #cbd5e1; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+        ← Return to Examination
+      </button>
+      <button type="button" class="btn btn-danger" onclick="executeFinalSubmission()" style="background: #dc2626; color: #ffffff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+        ✓ Confirm & Final Submit
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentQuestionIndex = 1;
+const totalQuestions = {{ total_questions }};
+let secondsRemaining = {{ seconds_remaining }};
+const attemptId = {{ attempt.id }};
+const csrfToken = "{{ csrf_token }}";
+
+// State tracker: index -> { answered: bool, review: bool, selectedOption: id }
+const savedStateFromServer = {{ saved_state_json|safe|default:"{}" }};
+const questionState = {};
+
+// Initialize state and rehydrate saved choices
+for (let i = 1; i <= totalQuestions; i++) {
+  if (savedStateFromServer[i]) {
+    questionState[i] = {
+      answered: Boolean(savedStateFromServer[i].answered),
+      review: Boolean(savedStateFromServer[i].review),
+      selectedOption: savedStateFromServer[i].selectedOption || null
+    };
+    if (questionState[i].selectedOption) {
+      const qBlock = document.getElementById(`qBlock_${i}`);
+      if (qBlock) {
+        const radio = qBlock.querySelector(`input[value="${questionState[i].selectedOption}"]`);
+        if (radio) radio.checked = true;
+      }
+    }
+  } else {
+    questionState[i] = { answered: false, review: false, selectedOption: null };
+  }
+}
+
+// Countdown Timer Engine
+function updateTimer() {
+  if (secondsRemaining <= 0) {
+    document.getElementById('timerClock').innerText = "00:00:00";
+    autoSubmitOnExpiry();
+    return;
+  }
+  const h = Math.floor(secondsRemaining / 3600);
+  const m = Math.floor((secondsRemaining % 3600) / 60);
+  const s = secondsRemaining % 60;
+  document.getElementById('timerClock').innerText = 
+    String(h).padStart(2, '0') + ":" + 
+    String(m).padStart(2, '0') + ":" + 
+    String(s).padStart(2, '0');
+  secondsRemaining--;
+}
+const timerInterval = setInterval(updateTimer, 1000);
+updateTimer();
+
+function autoSubmitOnExpiry() {
+  clearInterval(timerInterval);
+  document.getElementById('timerClock').innerText = "EXPIRED";
+  alert("Time has expired! Submitting your examination automatically.");
+  executeFinalSubmission();
+}
+
+function showQuestion(index) {
+  if (index < 1 || index > totalQuestions) return;
+  document.querySelectorAll('.exam-q-block').forEach(b => b.style.display = 'none');
+  const target = document.getElementById(`qBlock_${index}`);
+  if (target) target.style.display = 'block';
+
+  document.querySelectorAll('.palette-btn').forEach(btn => btn.classList.remove('current-q'));
+  const targetBtn = document.getElementById(`paletteBtn_${index}`);
+  if (targetBtn) targetBtn.classList.add('current-q');
+
+  currentQuestionIndex = index;
+  document.getElementById('btnPrev').disabled = (index === 1);
+  document.getElementById('btnNext').disabled = (index === totalQuestions);
+
+  // Update Review button appearance
+  const isRev = questionState[index].review;
+  const revBtn = document.getElementById('btnReview');
+  if (isRev) {
+    revBtn.classList.add('active-review');
+    revBtn.innerHTML = '<span>✓ Marked for Review</span>';
+  } else {
+    revBtn.classList.remove('active-review');
+    revBtn.innerHTML = '<span>🔖 Mark for Review</span>';
+  }
+}
+
+function navigateQuestion(delta) {
+  showQuestion(currentQuestionIndex + delta);
+}
+
+function jumpToQuestion(index) {
+  showQuestion(index);
+}
+
+function onAnswerSelected(qId, optId, qIndex) {
+  questionState[qIndex].answered = true;
+  questionState[qIndex].selectedOption = optId;
+  updatePaletteButton(qIndex);
+  updateSummaryCounters();
+  syncAnswerToServer(qId, [optId], questionState[qIndex].review);
+}
+
+function toggleMarkForReview() {
+  const current = questionState[currentQuestionIndex];
+  current.review = !current.review;
+  showQuestion(currentQuestionIndex);
+  updatePaletteButton(currentQuestionIndex);
+  updateSummaryCounters();
+
+  const qBlock = document.getElementById(`qBlock_${currentQuestionIndex}`);
+  const qId = qBlock.getAttribute('data-question-id');
+  syncAnswerToServer(qId, current.selectedOption ? [current.selectedOption] : [], current.review);
+}
+
+function clearCurrentSelection() {
+  const qBlock = document.getElementById(`qBlock_${currentQuestionIndex}`);
+  const qId = qBlock.getAttribute('data-question-id');
+  qBlock.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+
+  questionState[currentQuestionIndex].answered = false;
+  questionState[currentQuestionIndex].selectedOption = null;
+  updatePaletteButton(currentQuestionIndex);
+  updateSummaryCounters();
+
+  syncAnswerToServer(qId, [], questionState[currentQuestionIndex].review);
+}
+
+function saveAndNext() {
+  if (currentQuestionIndex < totalQuestions) {
+    navigateQuestion(1);
+  } else {
+    promptSubmitModal();
+  }
+}
+
+function updatePaletteButton(idx) {
+  const st = questionState[idx];
+  const btn = document.getElementById(`paletteBtn_${idx}`);
+  if (!btn) return;
+
+  btn.className = 'palette-btn';
+  if (idx === currentQuestionIndex) btn.classList.add('current-q');
+
+  if (st.answered && st.review) {
+    btn.classList.add('answered-review');
+  } else if (st.review) {
+    btn.classList.add('marked-review');
+  } else if (st.answered) {
+    btn.classList.add('answered');
+  } else {
+    btn.classList.add('unanswered');
+  }
+}
+
+function updateSummaryCounters() {
+  let ans = 0, rev = 0;
+  for (let i = 1; i <= totalQuestions; i++) {
+    if (questionState[i].answered) ans++;
+    if (questionState[i].review) rev++;
+  }
+  document.getElementById('sumAnswered').innerText = ans;
+  document.getElementById('sumReview').innerText = rev;
+  document.getElementById('sumUnanswered').innerText = totalQuestions - ans;
+}
+
+function populateReviewModal() {
+  let ans = 0, rev = 0, ansRev = 0, unans = 0;
+  const pillsContainer = document.getElementById('modalQuestionPills');
+  if (!pillsContainer) return;
+  pillsContainer.innerHTML = '';
+
+  for (let i = 1; i <= totalQuestions; i++) {
+    const st = questionState[i];
+    let statusLabel = 'Unanswered';
+    let badgeColor = '#64748b';
+    let bgColor = '#f1f5f9';
+
+    if (st.answered && st.review) {
+      statusLabel = 'Answered & Review';
+      badgeColor = '#d97706';
+      bgColor = '#fffbeb';
+      ansRev++;
+    } else if (st.review) {
+      statusLabel = 'Marked Review';
+      badgeColor = '#7e22ce';
+      bgColor = '#faf5ff';
+      rev++;
+    } else if (st.answered) {
+      statusLabel = 'Answered';
+      badgeColor = '#059669';
+      bgColor = '#ecfdf5';
+      ans++;
+    } else {
+      unans++;
+    }
+
+    const pill = document.createElement('button');
+    pill.type = 'button';
+    pill.style.cssText = `background: ${bgColor}; border: 1px solid ${badgeColor}; color: ${badgeColor}; border-radius: 6px; padding: 6px 4px; font-size: 0.8rem; font-weight: 700; cursor: pointer; text-align: center;`;
+    pill.innerHTML = `Q${i}`;
+    pill.title = `Question ${i}: ${statusLabel}`;
+    const targetIdx = i;
+    pill.onclick = function() {
+      closeSubmitModal();
+      jumpToQuestion(targetIdx);
+    };
+    pillsContainer.appendChild(pill);
+  }
+
+  const elAns = document.getElementById('modalAnsweredCount');
+  if (elAns) elAns.innerText = ans;
+  const elUnans = document.getElementById('modalUnansweredCount');
+  if (elUnans) elUnans.innerText = unans;
+  const elRev = document.getElementById('modalReviewCount');
+  if (elRev) elRev.innerText = rev;
+  const elAnsRev = document.getElementById('modalAnsReviewCount');
+  if (elAnsRev) elAnsRev.innerText = ansRev;
+  const elWarn = document.getElementById('modalWarnUnanswered');
+  if (elWarn) elWarn.innerText = unans;
+}
+
+function syncAnswerToServer(questionId, optionIds, isReview) {
+  const indicator = document.getElementById('autoSaveIndicator');
+  indicator.innerText = "Saving...";
+  indicator.style.opacity = "0.7";
+
+  fetch("{% url 'api_exam_save_answer' attempt.id %}", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": csrfToken
+    },
+    body: JSON.stringify({
+      question_id: questionId,
+      selected_option_ids: optionIds,
+      is_marked_for_review: isReview
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      indicator.innerText = "✓ Saved";
+      indicator.style.opacity = "1";
+    }
+  })
+  .catch(() => {
+    indicator.innerText = "⚠️ Offline";
+  });
+}
+
+function promptSubmitModal() {
+  updateSummaryCounters();
+  populateReviewModal();
+  document.getElementById('submitModal').style.display = 'flex';
+}
+
+function closeSubmitModal() {
+  document.getElementById('submitModal').style.display = 'none';
+}
+
+function executeFinalSubmission() {
+  fetch("{% url 'api_exam_submit' attempt.id %}", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": csrfToken
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success && data.redirect_url) {
+      window.location.href = data.redirect_url;
+    } else {
+      window.location.href = "{% url 'exam_result' attempt.id %}";
+    }
+  })
+  .catch(() => {
+    window.location.href = "{% url 'exam_result' attempt.id %}";
+  });
+}
+
+// Initial UI synchronization on load
+document.addEventListener("DOMContentLoaded", function() {
+  for (let i = 1; i <= totalQuestions; i++) {
+    updatePaletteButton(i);
+  }
+  updateSummaryCounters();
+  showQuestion(1);
+});
+</script>
+{% endblock %}

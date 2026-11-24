@@ -1,0 +1,562 @@
+[
+  {
+    "order": 1,
+    "title": "Para-summary Problem #1",
+    "difficulty": "EASY",
+    "topic": "Para-summary",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Para-summary (Case #1):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 2,
+    "title": "Para-summary Problem #2",
+    "difficulty": "EASY",
+    "topic": "Para-summary",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Para-summary (Case #2):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 3,
+    "title": "Para-summary Problem #3",
+    "difficulty": "EASY",
+    "topic": "Para-summary",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Para-summary (Case #3):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 4,
+    "title": "Para-summary Problem #4",
+    "difficulty": "MEDIUM",
+    "topic": "Para-summary",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Para-summary (Case #4):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 5,
+    "title": "Para-summary Problem #5",
+    "difficulty": "MEDIUM",
+    "topic": "Para-summary",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Para-summary (Case #5):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 6,
+    "title": "Para-summary Problem #6",
+    "difficulty": "MEDIUM",
+    "topic": "Para-summary",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Para-summary (Case #6):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 7,
+    "title": "Para-summary Problem #7",
+    "difficulty": "MEDIUM",
+    "topic": "Para-summary",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Para-summary (Case #7):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 8,
+    "title": "Para-summary Problem #8",
+    "difficulty": "MEDIUM",
+    "topic": "Para-summary",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Para-summary (Case #8):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 9,
+    "title": "Para-summary Problem #9",
+    "difficulty": "MEDIUM",
+    "topic": "Para-summary",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Para-summary (Case #9):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 10,
+    "title": "Para-summary Problem #10",
+    "difficulty": "MEDIUM",
+    "topic": "Para-summary",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Para-summary (Case #10):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 11,
+    "title": "Para-summary Problem #11",
+    "difficulty": "MEDIUM",
+    "topic": "Para-summary",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Para-summary (Case #11):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 12,
+    "title": "Para-summary Problem #12",
+    "difficulty": "HARD",
+    "topic": "Para-summary",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Para-summary (Case #12):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 13,
+    "title": "Para-summary Problem #13",
+    "difficulty": "HARD",
+    "topic": "Para-summary",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Para-summary (Case #13):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 14,
+    "title": "Para-summary Problem #14",
+    "difficulty": "HARD",
+    "topic": "Para-summary",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Para-summary (Case #14):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 15,
+    "title": "Para-summary Problem #15",
+    "difficulty": "HARD",
+    "topic": "Para-summary",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Para-summary (Case #15):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 16,
+    "title": "Para-summary Problem #16",
+    "difficulty": "HARD",
+    "topic": "Para-summary",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Para-summary (Case #16):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  }
+]

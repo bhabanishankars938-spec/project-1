@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block title %}AI Resume Analyzer · 100% Explainable Match Diagnostics · HireNexa{% endblock %}
+
+{% block content %}
+<div class="section-header" style="align-items: center; margin-bottom: 24px;">
+  <div>
+    <span class="hero-pill" style="margin-bottom: 8px;">✨ EXPLAINABLE RESUME INTELLIGENCE</span>
+    <h1 style="font-size: 32px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.03em;">
+      AI Resume Screening & Benchmarking Engine
+    </h1>
+    <p style="color: var(--slate-600); font-size: 15px; margin-top: 4px;">
+      Upload your resume to benchmark your technical competencies against top industry hiring requirements with 100% transparent diagnostics.
+    </p>
+  </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 48px; align-items: start;">
+  <!-- Upload Form Pane -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--shadow-sm);">
+    <h2 style="font-size: 20px; font-weight: 800; color: var(--slate-900); margin-bottom: 8px;">
+      1. Upload Your Resume
+    </h2>
+    <p style="font-size: 13px; color: var(--slate-500); margin-bottom: 24px;">
+      Accepted formats: PDF or DOCX (max 5MB). Files are analyzed privately and never shared without consent.
+    </p>
+
+    <form method="post" enctype="multipart/form-data" action="{% url 'resume_analyzer' %}">
+      {% csrf_token %}
+
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label class="form-label" style="font-weight: 700;">Select Target Role / Discipline:</label>
+        <select name="target_role" class="form-input" style="font-weight: 600;">
+          {% for role_name, spec in sample_roles.items %}
+            <option value="{{ role_name }}" {% if selected_role == role_name %}selected{% endif %}>
+              {{ role_name }} ({{ spec.dept }})
+            </option>
+          {% endfor %}
+        </select>
+        <span style="font-size: 12px; color: var(--slate-400); margin-top: 4px; display: block;">
+          Select the exact specialization you wish to benchmark your resume against.
+        </span>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 24px;">
+        <label class="form-label" style="font-weight: 700;">Upload Resume Document:</label>
+        <div style="border: 2px dashed var(--slate-300); border-radius: var(--radius-lg); padding: 28px; text-align: center; background: var(--slate-50); transition: var(--transition);">
+          <div style="font-size: 32px; margin-bottom: 10px;">📄</div>
+          <input type="file" name="resume_file" accept=".pdf,.docx" required style="display: block; margin: 0 auto; max-width: 250px;">
+          <span style="font-size: 12px; color: var(--slate-500); margin-top: 8px; display: block;">
+            Supports standard text PDFs & Word files
+          </span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+        Run AI Diagnostic Analysis →
+      </button>
+    </form>
+  </div>
+
+  <!-- Role Requirements & Diagnostic Info -->
+  <div>
+    {% if analysis %}
+      <!-- Match Diagnostic Results Card -->
+      <div style="background: #ffffff; border: 2px solid var(--primary); border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--shadow-md);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div>
+            <span class="meta-badge" style="background: #ecfdf5; color: #065f46; font-weight: 700;">ANALYSIS COMPLETE</span>
+            <h3 style="font-size: 22px; font-weight: 800; color: var(--slate-900); margin: 6px 0 0 0;">
+              {{ analysis.target_role }}
+            </h3>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 36px; font-weight: 900; color: var(--primary); line-height: 1;">
+              {{ analysis.final_score }}%
+            </div>
+            <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase;">Overall Match Score</span>
+          </div>
+        </div>
+
+        <!-- Score Breakdown Bars -->
+        <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+            <span>Direct Skill Overlap (70% weight)</span>
+            <strong>{{ analysis.skill_score }}%</strong>
+          </div>
+          <div style="height: 6px; background: var(--slate-200); border-radius: 99px; margin-bottom: 12px; overflow: hidden;">
+            <div style="height: 100%; width: {{ analysis.skill_score }}%; background: #3b82f6;"></div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+            <span>Semantic Narrative Alignment (30% weight)</span>
+            <strong>{{ analysis.semantic_score }}%</strong>
+          </div>
+          <div style="height: 6px; background: var(--slate-200); border-radius: 99px; overflow: hidden;">
+            <div style="height: 100%; width: {{ analysis.semantic_score }}%; background: #10b981;"></div>
+          </div>
+        </div>
+
+        <!-- Matched Skills -->
+        <div style="margin-bottom: 18px;">
+          <label style="font-size: 13px; font-weight: 700; color: #065f46; display: block; margin-bottom: 8px;">
+            ✓ Matched Competencies ({{ analysis.matched_skills|length }}):
+          </label>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            {% for skill in analysis.matched_skills %}
+              <span class="meta-badge" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; font-weight: 600;">
+                ✓ {{ skill }}
+              </span>
+            {% empty %}
+              <span style="font-size: 12px; color: var(--slate-400);">No direct skill matches detected.</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Missing Skills -->
+        <div style="margin-bottom: 20px;">
+          <label style="font-size: 13px; font-weight: 700; color: #991b1b; display: block; margin-bottom: 8px;">
+            ⚠ Skill Gaps to Improve ({{ analysis.missing_skills|length }}):
+          </label>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            {% for skill in analysis.missing_skills %}
+              <span class="meta-badge" style="background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; font-weight: 600;">
+                + {{ skill }}
+              </span>
+            {% empty %}
+              <span style="font-size: 12px; color: #065f46;">Full skill coverage achieved!</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- AI Recommendation -->
+        <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 14px 16px; border-radius: 0 var(--radius-md) var(--radius-md) 0; margin-bottom: 18px;">
+          <strong style="font-size: 13px; color: #1e40af; display: block; margin-bottom: 4px;">🎯 Actionable Recommendation:</strong>
+          <p style="font-size: 13px; color: #1e3a8a; margin: 0; line-height: 1.5;">{{ analysis.recommendation }}</p>
+        </div>
+
+        <p style="font-size: 12px; color: var(--slate-500); line-height: 1.5; margin: 0;">
+          {{ analysis.explanation }}
+        </p>
+      </div>
+    {% else %}
+      <!-- Empty State / Explainer -->
+      <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--shadow-sm);">
+        <h3 style="font-size: 18px; font-weight: 800; color: var(--slate-900); margin-bottom: 14px;">
+          How the 100% Explainable Engine Works:
+        </h3>
+        <ul style="padding-left: 20px; font-size: 14px; color: var(--slate-600); line-height: 1.8; margin-bottom: 24px;">
+          <li><strong>Text & Layout Extraction:</strong> PyMuPDF extracts raw character streams and sections.</li>
+          <li><strong>Enterprise 130+ Taxonomy:</strong> Canonical technical, management & cloud aliases are detected.</li>
+          <li><strong>Direct Skill Overlap:</strong> Mandatory and preferred job skills are directly scored.</li>
+          <li><strong>Semantic Similarity:</strong> Transformer embeddings measure real contextual alignment.</li>
+          <li><strong>Zero Black-Box Bias:</strong> Scores explain the exact match and missing skills.</li>
+        </ul>
+
+        <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 16px;">
+          <strong style="font-size: 13px; color: var(--slate-800); display: block; margin-bottom: 6px;">Looking for jobs matching your skills?</strong>
+          <p style="font-size: 13px; color: var(--slate-500); margin-bottom: 12px;">Browse verified positions with transparent skill requirements.</p>
+          <a href="{% url 'job_list' %}" class="btn btn-outline btn-sm">Explore Open Jobs →</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

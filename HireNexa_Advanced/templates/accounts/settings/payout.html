@@ -1,0 +1,55 @@
+{% extends "accounts/settings/settings_base.html" %}
+
+{% block title %}Freelance Payout & Banking · HireNexa Settings{% endblock %}
+
+{% block settings_content %}
+<div class="settings-card">
+  <div class="card-header-bar">
+    <div class="card-title-group">
+      <h2 class="card-title">Freelance Payout & Banking Details</h2>
+      <p class="card-subtitle">Encrypted payment coordinates for escrow releases, contract payouts, and tax receipts.</p>
+    </div>
+    <span class="badge-verified-sm">🔒 AES-256 Masked</span>
+  </div>
+
+  <form method="post" class="settings-form">
+    {% csrf_token %}
+
+    <div class="form-row-2col">
+      <div class="form-group">
+        <label for="bankNameInput" class="form-label">Beneficiary Bank Name</label>
+        <input type="text" name="bank_name" id="bankNameInput" value="{{ payout.bank_name|default:'' }}" class="form-input" placeholder="e.g. HDFC Bank / ICICI / State Bank of India">
+      </div>
+
+      <div class="form-group">
+        <label for="accNumInput" class="form-label">
+          Bank Account Number
+          {% if payout.account_number_masked %}
+            <span style="font-size: 11px; color: var(--emerald-600); font-weight: 700;">({{ payout.account_number_masked }})</span>
+          {% endif %}
+        </label>
+        <input type="password" name="account_number" id="accNumInput" class="form-input" placeholder="Enter full account number to update">
+        <span class="form-help-text">Only the last 4 digits will remain visible once saved.</span>
+      </div>
+    </div>
+
+    <div class="form-row-2col">
+      <div class="form-group">
+        <label for="ifscInput" class="form-label">IFSC Code / SWIFT Identifier</label>
+        <input type="text" name="ifsc_swift" id="ifscInput" value="{{ payout.ifsc_swift|default:'' }}" class="form-input" placeholder="e.g. HDFC0001234">
+      </div>
+
+      <div class="form-group">
+        <label for="panTaxInput" class="form-label">PAN Number / Tax Identification</label>
+        <input type="text" name="pan_tax_id" id="panTaxInput" value="{{ payout.pan_tax_id|default:'' }}" class="form-input" placeholder="e.g. ABCDE1234F">
+      </div>
+    </div>
+
+    <div class="form-submit-row">
+      <button type="submit" class="btn btn-primary btn-md">
+        Save Encrypted Payout Details
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

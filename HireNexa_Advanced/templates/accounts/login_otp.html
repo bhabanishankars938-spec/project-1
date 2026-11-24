@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Verify Security Code · HireNexa{% endblock %}
+
+{% block content %}
+<div style="max-width: 480px; margin: 60px auto; background: #ffffff; border-radius: var(--radius-xl); box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.2); border: 1px solid #e2e8f0; padding: 40px; text-align: center;">
+
+  <div style="width: 54px; height: 54px; margin: 0 auto 18px; background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #fff;">
+    🔒
+  </div>
+
+  <span style="font-size: 11px; font-weight: 800; color: #4338ca; text-transform: uppercase; letter-spacing: 0.08em; background: #e0e7ff; padding: 4px 12px; border-radius: 999px; display: inline-block; margin-bottom: 12px;">
+    TWO-STEP AUTHENTICATION
+  </span>
+
+  <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">
+    Enter Security Code
+  </h2>
+
+  <p style="font-size: 13px; color: #64748b; margin-bottom: 24px; line-height: 1.5;">
+    We sent a 6-digit verification code to:<br>
+    <strong style="color: #0f172a; font-weight: 700;">{{ masked_email|default:target_user.email }}</strong>
+  </p>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert-message alert-{{ message.tags }}" style="margin-bottom: 18px; padding: 12px; border-radius: 8px; font-size: 13px; text-align: left;">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="post" action="{% url 'unified_login_otp_verify' %}">
+    {% csrf_token %}
+
+    <div style="margin-bottom: 24px;">
+      <input type="text" name="otp_code" maxlength="6" pattern="[0-9]{6}" required autofocus
+             placeholder="• • • • • •"
+             style="width: 100%; text-align: center; font-size: 30px; letter-spacing: 10px; font-weight: 800; padding: 12px; border: 2px solid #cbd5e1; border-radius: 10px; font-family: monospace; box-sizing: border-box; color: #0f172a;">
+      <span style="font-size: 12px; color: #94a3b8; margin-top: 8px; display: block;">
+        Code is valid for 10 minutes.
+      </span>
+    </div>
+
+    <button type="submit" style="width: 100%; background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%); color: #ffffff; padding: 13px; font-size: 14px; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);">
+      Verify Code & Sign In →
+    </button>
+  </form>
+
+  <div style="margin-top: 24px; display: flex; justify-content: space-between; font-size: 12px;">
+    <a href="{% url 'login' %}" style="color: #64748b; text-decoration: none;">← Back to Sign In</a>
+    <a href="{% url 'unified_login_otp_resend' %}" style="color: #4f46e5; font-weight: 700; text-decoration: none;">Resend OTP Code</a>
+  </div>
+
+</div>
+{% endblock %}

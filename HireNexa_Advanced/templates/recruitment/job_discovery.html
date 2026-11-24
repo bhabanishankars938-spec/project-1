@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block title %}Intelligent Job Discovery · HireNexa{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1200px; margin: 0 auto; padding: 24px 16px;">
+  <!-- Header -->
+  <div class="section-header" style="margin-bottom: 24px;">
+    <span class="hero-pill" style="background: #eef2ff; color: #4f46e5; font-weight: 700; padding: 4px 12px; border-radius: 9999px; font-size: 12px; display: inline-block; margin-bottom: 8px;">MULTI-FACTOR RECOMMENDATION ENGINE</span>
+    <h1 style="font-size: 28px; font-weight: 800; color: var(--slate-900); margin: 0; letter-spacing: -0.02em;">Intelligent Job Discovery</h1>
+    <p style="color: var(--slate-600); font-size: 14px; margin-top: 4px;">Personalized job matching based on your verified skills, experience, location, and preferred work mode with transparent reasoning.</p>
+  </div>
+
+  <!-- Interactive Preference Filter Bar -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 20px; margin-bottom: 28px; box-shadow: var(--shadow-sm);">
+    <form method="GET" action="{% url 'job_discovery' %}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) 120px; gap: 14px; align-items: flex-end;">
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 700; color: var(--slate-700); margin-bottom: 6px;">Target Role or Keyword</label>
+        <input type="text" name="target_role" value="{{ current_role }}" placeholder="e.g. Backend Developer" class="form-control" style="width: 100%; padding: 8px 12px; border: 1px solid var(--slate-300); border-radius: var(--radius-md);">
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 700; color: var(--slate-700); margin-bottom: 6px;">Preferred City / Area</label>
+        <input type="text" name="city" value="{{ current_city }}" placeholder="e.g. Bhubaneswar, Bengaluru" class="form-control" style="width: 100%; padding: 8px 12px; border: 1px solid var(--slate-300); border-radius: var(--radius-md);">
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 700; color: var(--slate-700); margin-bottom: 6px;">Workplace Mode</label>
+        <select name="work_mode" class="form-control" style="width: 100%; padding: 8px 12px; border: 1px solid var(--slate-300); border-radius: var(--radius-md);">
+          <option value="ALL" {% if current_work_mode == "ALL" %}selected{% endif %}>All Work Modes</option>
+          <option value="REMOTE" {% if current_work_mode == "REMOTE" %}selected{% endif %}>Remote Only</option>
+          <option value="HYBRID" {% if current_work_mode == "HYBRID" %}selected{% endif %}>Hybrid</option>
+          <option value="ONSITE" {% if current_work_mode == "ONSITE" %}selected{% endif %}>On-site</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="height: 40px; font-weight: 700;">Filter Matches</button>
+    </form>
+  </div>
+
+  <!-- Results Count -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+    <h2 style="font-size: 18px; font-weight: 700; color: var(--slate-900); margin: 0;">
+      Found {{ discovery.total_matches }} Matched Vacancies
+    </h2>
+    <span style="font-size: 13px; color: var(--slate-500);">Ranked by composite suitability score</span>
+  </div>
+
+  <!-- Job Discovery Grid -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px;">
+    {% for job in discovery.recommendations %}
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 22px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <!-- Top Row: Title, Company, Score Badge -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+          <div>
+            <h3 style="font-size: 17px; font-weight: 700; color: var(--slate-900); margin: 0;">
+              <a href="{{ job.apply_url }}" style="color: var(--slate-900); text-decoration: none;">{{ job.title }}</a>
+            </h3>
+            <span style="font-size: 13px; color: var(--slate-600); display: block; margin-top: 2px;">
+              {{ job.company_name }} · {{ job.location }} ({{ job.workplace_type }})
+            </span>
+          </div>
+          <span style="background: #ecfdf5; color: #047857; font-weight: 800; font-size: 13px; padding: 4px 10px; border-radius: 9999px; border: 1px solid #a7f3d0;">
+            {{ job.total_score }}% Match
+          </span>
+        </div>
+
+        <!-- Compensation & Vacancies -->
+        <div style="display: flex; gap: 12px; font-size: 12px; color: var(--slate-500); margin-bottom: 14px;">
+          <span>💰 {{ job.salary }}</span>
+          <span>👥 {{ job.vacancies }} openings</span>
+          <span>💼 {{ job.job_type }}</span>
+        </div>
+
+        <!-- Score Breakdown Meters -->
+        <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 10px 12px; margin-bottom: 14px;">
+          <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; display: block; margin-bottom: 6px;">Suitability Dimensions:</span>
+          <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; text-align: center; font-size: 11px;">
+            <div>
+              <span style="color: var(--slate-500); display: block;">Skill</span>
+              <strong style="color: #4f46e5;">{{ job.breakdown.skill_score }}/40</strong>
+            </div>
+            <div>
+              <span style="color: var(--slate-500); display: block;">Role</span>
+              <strong style="color: #4f46e5;">{{ job.breakdown.role_score }}/20</strong>
+            </div>
+            <div>
+              <span style="color: var(--slate-500); display: block;">Mode</span>
+              <strong style="color: #4f46e5;">{{ job.breakdown.work_mode_score }}/15</strong>
+            </div>
+            <div>
+              <span style="color: var(--slate-500); display: block;">Exp</span>
+              <strong style="color: #4f46e5;">{{ job.breakdown.experience_score }}/15</strong>
+            </div>
+            <div>
+              <span style="color: var(--slate-500); display: block;">Location</span>
+              <strong style="color: #4f46e5;">{{ job.breakdown.location_score }}/10</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Explainable Rationale -->
+        <div style="margin-bottom: 14px;">
+          <span style="font-size: 11px; font-weight: 700; color: var(--slate-600); text-transform: uppercase;">Why Recommended:</span>
+          <ul style="margin: 4px 0 0 16px; padding: 0; font-size: 12px; color: var(--slate-700); line-height: 1.5;">
+            {% for r in job.reasons %}
+            <li>{{ r }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- Matching vs Missing Skills -->
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px;">
+          {% for ms in job.matched_skills %}
+          <span style="background: #ecfdf5; color: #047857; font-size: 11px; padding: 2px 6px; border-radius: 4px;">✓ {{ ms }}</span>
+          {% endfor %}
+          {% for miss in job.missing_skills|slice:":3" %}
+          <span style="background: #fff1f2; color: #be123c; font-size: 11px; padding: 2px 6px; border-radius: 4px;">+ {{ miss }}</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Action Footer -->
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--slate-100); padding-top: 12px;">
+        <a href="{% url 'report_suspicious_job' job.job_id %}" style="font-size: 12px; color: var(--slate-400); text-decoration: none;">🚩 Report</a>
+        <a href="{{ job.apply_url }}" class="btn btn-primary btn-sm" style="font-weight: 600;">View & Apply →</a>
+      </div>
+    </div>
+    {% empty %}
+    <div style="grid-column: 1 / -1; background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 40px; text-align: center;">
+      <h3 style="font-size: 18px; font-weight: 700; color: var(--slate-900);">No vacancies match your exact preference filters.</h3>
+      <p style="color: var(--slate-600); font-size: 14px; margin-top: 6px;">Try selecting "All Work Modes" or clearing the city filter to see broader opportunities.</p>
+      <a href="{% url 'job_discovery' %}" class="btn btn-outline" style="margin-top: 12px;">Reset All Filters</a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block title %}Data Intelligence Center · Platform Analytics · HireNexa{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1200px; margin: 0 auto; padding: 24px 16px;">
+  <!-- Header -->
+  <div class="section-header" style="margin-bottom: 24px;">
+    <span class="hero-pill" style="background: #eef2ff; color: #4f46e5; font-weight: 700; padding: 4px 12px; border-radius: 9999px; font-size: 12px; display: inline-block; margin-bottom: 8px;">EXECUTIVE DATA PLATFORM</span>
+    <h1 style="font-size: 28px; font-weight: 800; color: var(--slate-900); margin: 0; letter-spacing: -0.02em;">Data Intelligence Center</h1>
+    <p style="color: var(--slate-600); font-size: 14px; margin-top: 4px;">Comprehensive operational telemetry computed directly from active HireNexa database records.</p>
+  </div>
+
+  <!-- KPI Overview Row -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 20px; box-shadow: var(--shadow-sm);">
+      <span style="font-size: 12px; color: var(--slate-500); text-transform: uppercase; font-weight: 700;">Total Candidates</span>
+      <strong style="display: block; font-size: 26px; color: var(--slate-900); margin-top: 4px;">{{ intel.candidate_activity.total_candidates }}</strong>
+      <span style="font-size: 11px; color: #047857;">{{ intel.candidate_activity.active_rate_pct }}% active last 30d</span>
+    </div>
+
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 20px; box-shadow: var(--shadow-sm);">
+      <span style="font-size: 12px; color: var(--slate-500); text-transform: uppercase; font-weight: 700;">Applications Processed</span>
+      <strong style="display: block; font-size: 26px; color: #4f46e5; margin-top: 4px;">{{ intel.recruitment_pipeline.total_applications }}</strong>
+      <span style="font-size: 11px; color: var(--slate-500);">Across {{ intel.recruitment_pipeline.total_jobs }} vacancies</span>
+    </div>
+
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 20px; box-shadow: var(--shadow-sm);">
+      <span style="font-size: 12px; color: var(--slate-500); text-transform: uppercase; font-weight: 700;">Overall Exam Pass Rate</span>
+      <strong style="display: block; font-size: 26px; color: #0284c7; margin-top: 4px;">{{ intel.examination_analytics.overall_pass_rate_pct }}%</strong>
+      <span style="font-size: 11px; color: var(--slate-500);">Avg Score: {{ intel.examination_analytics.average_candidate_score_pct }}%</span>
+    </div>
+
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 20px; box-shadow: var(--shadow-sm);">
+      <span style="font-size: 12px; color: var(--slate-500); text-transform: uppercase; font-weight: 700;">Verified Question Bank</span>
+      <strong style="display: block; font-size: 26px; color: #059669; margin-top: 4px;">{{ intel.question_bank_quality.verified_questions }}</strong>
+      <span style="font-size: 11px; color: #047857;">{{ intel.question_bank_quality.verified_percentage }}% syllabus verified</span>
+    </div>
+  </div>
+
+  <!-- Row 2: Recruitment Pipeline & AI Recommendation Quality -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px; margin-bottom: 24px;">
+    <!-- Pipeline Stage Distribution -->
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 24px; box-shadow: var(--shadow-sm);">
+      <h3 style="font-size: 17px; font-weight: 700; color: var(--slate-900); margin: 0 0 16px 0;">Recruitment Pipeline Velocity</h3>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+          <span style="color: var(--slate-700);">Shortlisted Candidates</span>
+          <strong style="color: var(--slate-900);">{{ intel.recruitment_pipeline.shortlisted_count }}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+          <span style="color: var(--slate-700);">Interviews Conducted</span>
+          <strong style="color: #4f46e5;">{{ intel.recruitment_pipeline.interview_count }}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+          <span style="color: var(--slate-700);">Hired Candidates</span>
+          <strong style="color: #047857;">{{ intel.recruitment_pipeline.hired_count }}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+          <span style="color: var(--slate-700);">Pipeline Conversion Rate</span>
+          <strong style="color: #047857;">{{ intel.recruitment_pipeline.conversion_rate_pct }}%</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+          <span style="color: var(--slate-700);">Avg Applicants per Opening</span>
+          <strong style="color: var(--slate-900);">{{ intel.recruitment_pipeline.average_applicants_per_job }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Recommendation Quality -->
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 24px; box-shadow: var(--shadow-sm);">
+      <h3 style="font-size: 17px; font-weight: 700; color: var(--slate-900); margin: 0 0 16px 0;">AI Matching Engine Quality</h3>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+          <span style="color: var(--slate-700);">Total Scored Applications</span>
+          <strong style="color: var(--slate-900);">{{ intel.ai_quality_metrics.total_scored_applications }}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+          <span style="color: var(--slate-700);">Average Match Score</span>
+          <strong style="color: #4f46e5;">{{ intel.ai_quality_metrics.average_match_score }}%</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+          <span style="color: var(--slate-700);">High Match Tier (≥ 75%)</span>
+          <strong style="color: #047857;">{{ intel.ai_quality_metrics.high_match_pct }}% ({{ intel.ai_quality_metrics.high_match_count }})</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+          <span style="color: var(--slate-700);">Mid Match Tier (50-74%)</span>
+          <strong style="color: #f59e0b;">{{ intel.ai_quality_metrics.mid_match_count }}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+          <span style="color: var(--slate-700);">Low Match Tier (&lt; 50%)</span>
+          <strong style="color: #be123c;">{{ intel.ai_quality_metrics.low_match_count }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 3: Location Search Dynamics & Hardest Exam Questions -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
+    <!-- Regional Work Mode Demand -->
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 24px; box-shadow: var(--shadow-sm);">
+      <h3 style="font-size: 17px; font-weight: 700; color: var(--slate-900); margin: 0 0 16px 0;">Workplace Mode Distribution</h3>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--slate-50); border-radius: var(--radius-md);">
+          <span>Remote Roles</span>
+          <strong style="color: #047857;">{{ intel.location_dynamics.work_mode_distribution.Remote }}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--slate-50); border-radius: var(--radius-md);">
+          <span>Hybrid Roles</span>
+          <strong style="color: #0284c7;">{{ intel.location_dynamics.work_mode_distribution.Hybrid }}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--slate-50); border-radius: var(--radius-md);">
+          <span>On-site Roles</span>
+          <strong style="color: var(--slate-700);">{{ intel.location_dynamics.work_mode_distribution.Onsite }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question Bank Quality Diagnostic -->
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 24px; box-shadow: var(--shadow-sm);">
+      <h3 style="font-size: 17px; font-weight: 700; color: var(--slate-900); margin: 0 0 16px 0;">Diagnostic High-Error Questions</h3>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        {% for q in intel.question_bank_quality.hardest_diagnostic_questions %}
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fff1f2; border-radius: var(--radius-md); font-size: 12px;">
+          <div>
+            <strong style="color: #9f1239; display: block;">{{ q.title }}</strong>
+            <span style="color: #be123c;">{{ q.subject }} · {{ q.difficulty }}</span>
+          </div>
+          <span style="font-weight: 800; color: #e11d48;">{{ q.error_frequency }} errors</span>
+        </div>
+        {% empty %}
+        <p style="color: var(--slate-500); font-size: 13px;">No question anomalies detected.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

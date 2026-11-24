@@ -1,0 +1,390 @@
+{% extends "base.html" %}
+{% block title %}Hiring Pipeline for {{ job.title }} · HireNexa{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+  <a href="{% url 'dashboard' %}"
+    style="font-size: 14px; font-weight: 500; color: var(--slate-500); display: inline-flex; align-items: center; gap: 6px;">
+    ← Back to Dashboard
+  </a>
+
+  <div>
+    {% if is_owner %}
+      <span class="meta-badge" style="background: #0f172a; color: #fbbf24; border: 1px solid #334155; font-weight: 700;">
+        👑 Platform Owner Oversight & Control
+      </span>
+    {% elif is_company_admin %}
+      <span class="meta-badge" style="background: #1e293b; color: #38bdf8; border: 1px solid #334155; font-weight: 700;">
+        🏛️ Company Admin Hiring Workspace
+      </span>
+    {% else %}
+      <span class="meta-badge" style="background: var(--primary-light); color: var(--primary); font-weight: 700;">
+        💼 HR Recruiter Hiring Workspace
+      </span>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Header & Position Meta -->
+<div class="section-header" style="align-items: flex-start; margin-bottom: 24px;">
+  <div>
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
+      <span class="hero-pill" style="margin-bottom: 0;">HIRING PIPELINE & ROUND TRACKER</span>
+      {% if job.target_course == 'MCA' or 'mca' in job.department|lower %}
+        <span class="meta-badge" style="background: #e0f2fe; color: #0369a1; font-weight: 700;">💻 MCA Specialization</span>
+      {% elif job.target_course == 'MBA' or 'mba' in job.department|lower %}
+        <span class="meta-badge" style="background: #fef3c7; color: #b45309; font-weight: 700;">📊 MBA Specialization</span>
+      {% else %}
+        <span class="meta-badge" style="background: #f1f5f9; color: var(--slate-700);">🎓 {{ job.get_target_course_display }}</span>
+      {% endif %}
+      {% if job.department %}
+        <span class="meta-badge" style="background: var(--slate-100); color: var(--slate-700);">📂 {{ job.department }}</span>
+      {% endif %}
+    </div>
+
+    <h1 style="font-size: 32px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.03em; margin: 4px 0;">
+      {{ job.title }}
+    </h1>
+    <p style="color: var(--slate-600); font-size: 15px; margin-top: 2px;">
+      🏢 <strong>{{ job.company_name }}</strong> · 📍 {{ job.location|default:"Remote" }} · Required skills: {{ job.required_skills }}
+    </p>
+  </div>
+
+  <div style="display: flex; gap: 10px;">
+    <a href="{% url 'job_detail' job.pk %}" class="btn btn-white btn-sm" target="_blank">View Live Posting ↗</a>
+  </div>
+</div>
+
+<!-- Company Hiring Quota & Funnel Health Card -->
+<div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm); margin-bottom: 28px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
+    <div>
+      <span style="font-size: 12px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.05em;">
+        Company Hiring Goal & Quota
+      </span>
+      <h3 style="font-size: 22px; font-weight: 800; color: var(--slate-900); margin: 4px 0 0 0;">
+        🎯 Target: {{ job.vacancies }} Candidate{{ job.vacancies|pluralize }} 
+        <span style="font-size: 16px; font-weight: 600; color: #059669; margin-left: 8px;">
+          ({{ funnel.hired }} Hired / {{ job.remaining_vacancies }} Openings Remaining)
+        </span>
+      </h3>
+    </div>
+
+    <div style="text-align: right;">
+      <span style="font-size: 26px; font-weight: 800; color: #10b981;">
+        {{ job.hiring_progress_percentage }}%
+      </span>
+      <span style="font-size: 12px; font-weight: 600; color: var(--slate-500); display: block;">
+        Quota Filled
+      </span>
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div style="width: 100%; height: 10px; background: #e2e8f0; border-radius: 9999px; overflow: hidden; margin-bottom: 20px;">
+    <div style="height: 100%; width: {{ job.hiring_progress_percentage }}%; background: #10b981; border-radius: 9999px; transition: width 0.3s ease;"></div>
+  </div>
+
+  <!-- Round-by-Round Visual Funnel Strip -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px;">
+    <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 12px; text-align: center;">
+      <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase;">📥 Applied</span>
+      <div style="font-size: 20px; font-weight: 800; color: var(--slate-800); margin-top: 2px;">{{ funnel.applied }}</div>
+    </div>
+    <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-md); padding: 12px; text-align: center;">
+      <span style="font-size: 11px; font-weight: 700; color: #15803d; text-transform: uppercase;">📝 1st Round</span>
+      <div style="font-size: 20px; font-weight: 800; color: #166534; margin-top: 2px;">{{ funnel.round_1 }}</div>
+    </div>
+    <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-md); padding: 12px; text-align: center;">
+      <span style="font-size: 11px; font-weight: 700; color: #1d4ed8; text-transform: uppercase;">💻 2nd Round</span>
+      <div style="font-size: 20px; font-weight: 800; color: #1e40af; margin-top: 2px;">{{ funnel.round_2 }}</div>
+    </div>
+    <div style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: var(--radius-md); padding: 12px; text-align: center;">
+      <span style="font-size: 11px; font-weight: 700; color: #7e22ce; text-transform: uppercase;">🎯 3rd Round</span>
+      <div style="font-size: 20px; font-weight: 800; color: #6b21a8; margin-top: 2px;">{{ funnel.round_3 }}</div>
+    </div>
+    <div style="background: #fff7ed; border: 1px solid #fed7aa; border-radius: var(--radius-md); padding: 12px; text-align: center;">
+      <span style="font-size: 11px; font-weight: 700; color: #c2410c; text-transform: uppercase;">🏆 Final Round</span>
+      <div style="font-size: 20px; font-weight: 800; color: #9a3412; margin-top: 2px;">{{ funnel.final_round }}</div>
+    </div>
+    <div style="background: #ecfdf5; border: 1px solid #6ee7b7; border-radius: var(--radius-md); padding: 12px; text-align: center;">
+      <span style="font-size: 11px; font-weight: 700; color: #047857; text-transform: uppercase;">🎉 Selected / Hired</span>
+      <div style="font-size: 20px; font-weight: 800; color: #065f46; margin-top: 2px;">{{ funnel.hired }}</div>
+    </div>
+    <div style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: var(--radius-md); padding: 12px; text-align: center;">
+      <span style="font-size: 11px; font-weight: 700; color: #be123c; text-transform: uppercase;">❌ Rejected</span>
+      <div style="font-size: 20px; font-weight: 800; color: #9f1239; margin-top: 2px;">{{ funnel.rejected }}</div>
+    </div>
+  </div>
+</div>
+
+<!-- Round Pipeline Filter Tabs -->
+<div style="display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;">
+  <a href="{% url 'applicants' job.pk %}" 
+     class="btn {% if not round_filter %}btn-primary{% else %}btn-white{% endif %} btn-sm" style="border-radius: 9999px;">
+    All Candidates ({{ funnel.total }})
+  </a>
+  <a href="{% url 'applicants' job.pk %}?round=ROUND_1" 
+     class="btn {% if round_filter == 'ROUND_1' %}btn-primary{% else %}btn-white{% endif %} btn-sm" style="border-radius: 9999px;">
+    📝 1st Round ({{ funnel.round_1 }})
+  </a>
+  <a href="{% url 'applicants' job.pk %}?round=ROUND_2" 
+     class="btn {% if round_filter == 'ROUND_2' %}btn-primary{% else %}btn-white{% endif %} btn-sm" style="border-radius: 9999px;">
+    💻 2nd Round ({{ funnel.round_2 }})
+  </a>
+  <a href="{% url 'applicants' job.pk %}?round=ROUND_3" 
+     class="btn {% if round_filter == 'ROUND_3' %}btn-primary{% else %}btn-white{% endif %} btn-sm" style="border-radius: 9999px;">
+    🎯 3rd Round ({{ funnel.round_3 }})
+  </a>
+  <a href="{% url 'applicants' job.pk %}?round=FINAL_ROUND" 
+     class="btn {% if round_filter == 'FINAL_ROUND' %}btn-primary{% else %}btn-white{% endif %} btn-sm" style="border-radius: 9999px;">
+    🏆 Final Round ({{ funnel.final_round }})
+  </a>
+  <a href="{% url 'applicants' job.pk %}?round=HIRED" 
+     class="btn {% if round_filter == 'HIRED' %}btn-primary{% else %}btn-white{% endif %} btn-sm" style="border-radius: 9999px;">
+    🎉 Hired ({{ funnel.hired }})
+  </a>
+  <a href="{% url 'applicants' job.pk %}?round=REJECTED" 
+     class="btn {% if round_filter == 'REJECTED' %}btn-primary{% else %}btn-white{% endif %} btn-sm" style="border-radius: 9999px;">
+    ❌ Rejected ({{ funnel.rejected }})
+  </a>
+</div>
+
+<!-- Candidate Applications List -->
+<div style="display: flex; flex-direction: column; gap: 24px;">
+  {% for app in applications %}
+  <article class="job-card" style="padding: 24px; box-shadow: var(--shadow-md); border-top: 4px solid {% if app.status == 'HIRED' %}#10b981{% elif app.status == 'REJECTED' %}#ef4444{% else %}var(--primary){% endif %};">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap;">
+      <div style="display: flex; align-items: flex-start; gap: 14px;">
+        <div class="user-avatar"
+          style="width: 52px; height: 52px; font-size: 20px; background: var(--primary-gradient);">
+          {{ app.candidate.username|slice:":1" }}
+        </div>
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <h3 style="font-size: 19px; font-weight: 700; color: var(--slate-900); margin: 0;">
+              {{ app.candidate.candidate_profile.full_name|default:app.candidate.username }}
+            </h3>
+
+            <!-- Current Stage Pill -->
+            <span class="meta-badge" style="background: #1e293b; color: #38bdf8; font-weight: 700;">
+              🔄 Current: {{ app.get_status_display }}
+            </span>
+
+            {% if app.recruiter_rating > 0 %}
+            <span class="meta-badge" style="background: var(--amber-50); color: var(--amber-600); font-weight: 700;">
+              ⭐ {{ app.recruiter_rating }}/5
+            </span>
+            {% endif %}
+          </div>
+          <p style="font-size: 13px; color: var(--slate-500); margin: 4px 0 0 0;">
+            ✉️ {{ app.candidate.email }} · Applied on {{ app.created_at|date:"M d, Y" }}
+          </p>
+
+          <!-- Student Portfolio Summary -->
+          <div
+            style="display: flex; align-items: center; gap: 12px; margin-top: 8px; font-size: 13px; color: var(--slate-600); flex-wrap: wrap;">
+            {% if app.candidate.candidate_profile.university %}
+            <span>🎓 {{ app.candidate.candidate_profile.university }}</span>
+            {% endif %}
+            {% if app.candidate.candidate_profile.education %}
+            <span>📚 {{ app.candidate.candidate_profile.education }}</span>
+            {% endif %}
+            {% if app.candidate.candidate_profile.cgpa %}
+            <span class="meta-badge" style="background: var(--primary-light); color: var(--primary);">CGPA: {{ app.candidate.candidate_profile.cgpa }}</span>
+            {% endif %}
+            {% if app.candidate.candidate_profile.github_url %}
+            <a href="{{ app.candidate.candidate_profile.github_url }}" target="_blank" class="meta-badge">🐙 GitHub</a>
+            {% endif %}
+            {% if app.candidate.candidate_profile.linkedin_url %}
+            <a href="{{ app.candidate.candidate_profile.linkedin_url }}" target="_blank" class="meta-badge" style="color: #0077b5;">💼 LinkedIn</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Overall Match Score Pill -->
+      <div style="text-align: right;">
+        <div style="font-size: 32px; font-weight: 800; color: var(--primary); line-height: 1;">
+          {{ app.skill_score }}%
+        </div>
+        <span style="font-size: 12px; font-weight: 600; color: var(--slate-500); text-transform: uppercase;">
+          ATS Match Score
+        </span>
+      </div>
+    </div>
+
+    <!-- Skills Comparison Breakdown -->
+    <div
+      style="margin: 18px 0; padding: 16px; background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md);">
+      <div style="margin-bottom: 10px;">
+        <strong style="font-size: 12px; color: var(--slate-700); text-transform: uppercase; letter-spacing: 0.04em;">
+          ✓ Matched Canonical Skills:
+        </strong>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;">
+          {% for s in app.matched_skills %}
+          <span class="meta-badge"
+            style="background: var(--emerald-50); color: var(--emerald-600); border: 1px solid var(--emerald-100); font-weight: 600;">
+            ✓ {{ s }}
+          </span>
+          {% empty %}
+          <span style="font-size: 13px; color: var(--slate-400);">No direct skill overlaps identified</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div>
+        <strong style="font-size: 12px; color: var(--slate-700); text-transform: uppercase; letter-spacing: 0.04em;">
+          ✗ Missing Required Skills:
+        </strong>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;">
+          {% for s in app.missing_skills %}
+          <span class="meta-badge"
+            style="background: var(--rose-50); color: var(--rose-600); border: 1px solid var(--rose-100);">
+            ✗ {{ s }}
+          </span>
+          {% empty %}
+          <span style="font-size: 13px; color: var(--emerald-600); font-weight: 600;">✓ Possesses all required skills!</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      {% if app.explanation %}
+      <div
+        style="margin-top: 10px; font-size: 13px; color: var(--slate-600); border-top: 1px solid var(--slate-200); padding-top: 8px;">
+        <strong>🤖 AI Screening Diagnostic:</strong> {{ app.explanation }}
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Candidate Supabase Projects & Portfolio Showcase -->
+    {% if app.candidate.portfolios.exists %}
+    <div style="margin: 16px 0; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-md);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+        <strong style="font-size: 13px; color: var(--slate-800); text-transform: uppercase; letter-spacing: 0.04em; display: inline-flex; align-items: center; gap: 6px;">
+          🚀 Candidate Projects ({{ app.candidate.portfolios.count }})
+        </strong>
+        <a href="{% url 'hr_candidate_portfolio_view' app.candidate.id %}" target="_blank" class="btn btn-white btn-sm" style="font-size: 11px; padding: 4px 8px;">
+          View Full Portfolio ↗
+        </a>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        {% for proj in app.candidate.portfolios.all|slice:":3" %}
+        <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-sm); padding: 12px 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 6px;">
+            <div>
+              <span style="font-size: 14px; font-weight: 700; color: var(--slate-900);">{{ proj.project_name }}</span>
+              <span class="meta-badge" style="background: #e0e7ff; color: #4338ca; font-size: 11px; margin-left: 6px;">{{ proj.get_category_display }}</span>
+            </div>
+            <div style="display: flex; gap: 6px;">
+              {% if proj.github_url %}
+              <a href="{{ proj.github_url }}" target="_blank" class="meta-badge" style="font-size: 11px;">🐙 Codebase</a>
+              {% endif %}
+              {% if proj.live_demo_url %}
+              <a href="{{ proj.live_demo_url }}" target="_blank" class="meta-badge" style="font-size: 11px; color: var(--primary);">🌐 Live Demo</a>
+              {% endif %}
+            </div>
+          </div>
+          <p style="font-size: 12px; color: var(--slate-600); margin: 6px 0;">{{ proj.description|truncatewords:25 }}</p>
+          {% if proj.files.exists %}
+          <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;">
+            {% for f in proj.files.all %}
+            <a href="{% url 'candidate_project_file_download' f.pk %}" class="meta-badge" style="font-size: 11px; background: #f1f5f9;" title="Download {{ f.file_name }}">
+              📎 {{ f.file_name|truncatechars:20 }} ({{ f.formatted_size }})
+            </a>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Evaluation & Round Progression Form -->
+    <div style="border-top: 1px solid var(--slate-200); padding-top: 16px;">
+      <form method="post" action="{% url 'update_application_status' app.pk %}">
+        {% csrf_token %}
+        <div
+          style="display: grid; grid-template-columns: 1fr 140px 220px auto; gap: 12px; align-items: end; flex-wrap: wrap; margin-bottom: 12px;">
+          <div>
+            <label
+              style="font-size: 12px; font-weight: 600; color: var(--slate-600); display: block; margin-bottom: 4px;">
+              Hiring Notes (Owner, HR & Company view)
+            </label>
+            <input type="text" name="notes" value="{{ app.recruiter_notes }}" class="form-input"
+              placeholder="e.g. Cleared 1st Round aptitude test with 92% score, advance to technical interview..."
+              style="padding: 7px 12px; font-size: 13px;">
+          </div>
+
+          <div>
+            <label
+              style="font-size: 12px; font-weight: 600; color: var(--slate-600); display: block; margin-bottom: 4px;">Candidate Rating</label>
+            <select name="rating" class="form-input" style="padding: 7px 12px; font-size: 13px;">
+              <option value="0" {% if app.recruiter_rating == 0 %}selected{% endif %}>Unrated</option>
+              <option value="5" {% if app.recruiter_rating == 5 %}selected{% endif %}>⭐⭐⭐⭐⭐ (Strong Hire)</option>
+              <option value="4" {% if app.recruiter_rating == 4 %}selected{% endif %}>⭐⭐⭐⭐ (Hire)</option>
+              <option value="3" {% if app.recruiter_rating == 3 %}selected{% endif %}>⭐⭐⭐ (Neutral)</option>
+              <option value="2" {% if app.recruiter_rating == 2 %}selected{% endif %}>⭐⭐ (Weak)</option>
+              <option value="1" {% if app.recruiter_rating == 1 %}selected{% endif %}>⭐ (Reject)</option>
+            </select>
+          </div>
+
+          <div>
+            <label
+              style="font-size: 12px; font-weight: 600; color: var(--slate-600); display: block; margin-bottom: 4px;">
+              Advance Hiring Round Stage
+            </label>
+            <select name="status" class="form-input" style="padding: 7px 12px; font-size: 13px; font-weight: 600;">
+              {% for value, label in status_choices %}
+              <option value="{{ value }}" {% if app.status == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div>
+            <button type="submit" class="btn btn-primary btn-sm" style="height: 35px; white-space: nowrap;">
+              Save & Advance Round
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size: 12px; font-weight: 600; color: var(--slate-600); display: block; margin-bottom: 4px;">
+            Rejection Reason (Audit-logged if marking application as Rejected)
+          </label>
+          <input type="text" name="rejection_reason" value="{{ app.rejection_reason }}" class="form-input"
+            placeholder="e.g. Candidate did not qualify in 2nd Round Technical Assessment"
+            style="padding: 6px 12px; font-size: 12px;">
+        </div>
+      </form>
+
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--slate-200); flex-wrap: wrap; gap: 10px;">
+        {% if app.candidate.candidate_profile.resume_consent %}
+          <a href="{% url 'download_resume' app.resume.pk %}" class="btn btn-white btn-sm">
+            📥 Download Candidate Resume
+          </a>
+        {% else %}
+          <span class="meta-badge" style="background: var(--rose-50); color: var(--rose-600);">
+            🔒 Candidate Resume Sharing Withheld
+          </span>
+        {% endif %}
+        <a href="{% url 'schedule_interview' app.pk %}" class="btn btn-secondary btn-sm">
+          📅 Schedule Next Interview Round →
+        </a>
+      </div>
+    </div>
+  </article>
+  {% empty %}
+  <div class="stat-box" style="text-align: center; padding: 48px;">
+    <h3 style="font-size: 20px; color: var(--slate-800); margin-bottom: 8px;">No candidates in this stage</h3>
+    <p class="stat-desc">Try clearing the round filter or wait for candidate applications.</p>
+    <div style="margin-top: 12px;">
+      <a href="{% url 'applicants' job.pk %}" class="btn btn-primary btn-sm">View All Candidates</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

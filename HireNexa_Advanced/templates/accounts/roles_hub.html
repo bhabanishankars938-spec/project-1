@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}HireNexa Login System · Select Your Role{% endblock %}
+
+{% block content %}
+<div style="max-width: 960px; margin: 30px auto; padding: 0 16px;">
+  <!-- Section Header matching specification -->
+  <div style="text-align: center; margin-bottom: 28px;">
+    <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(79, 70, 229, 0.1); border: 1px solid rgba(79, 70, 229, 0.25); padding: 6px 14px; border-radius: var(--radius-full); font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 12px;">
+      <span>🔐</span> 4-ROLE SECURE AUTHENTICATION ARCHITECTURE
+    </div>
+    <h1 style="font-size: 30px; font-weight: 900; color: var(--slate-900); letter-spacing: -0.03em; margin: 0 0 8px 0;">
+      1. HireNexa Login System
+    </h1>
+    <p style="font-size: 15px; color: var(--slate-600); margin: 0;">
+      Select your dedicated portal to access your authorized recruitment workspace:
+    </p>
+  </div>
+
+  <!-- 4 Roles Grid Card Container matching the User's Screenshot -->
+  <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 36px;">
+
+    <!-- Card 1: OWNER / SUPER ADMIN (Top Hero Navy Card) -->
+    <a href="{% url 'owner_login' %}" style="text-decoration: none; display: block;" class="role-portal-card role-card-owner">
+      <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #172554 100%); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 18px; padding: 28px 24px; text-align: center; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.35); transition: transform 0.2s ease, box-shadow 0.2s ease; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: -20px; right: -20px; width: 140px; height: 140px; background: radial-gradient(circle, rgba(251, 191, 36, 0.18) 0%, transparent 70%); pointer-events: none;"></div>
+        
+        <div style="font-size: 32px; line-height: 1; margin-bottom: 8px;">👑</div>
+        <h2 style="font-size: 20px; font-weight: 900; letter-spacing: 0.04em; margin: 0 0 6px 0; color: #ffffff; text-transform: uppercase;">
+          OWNER / SUPER ADMIN
+        </h2>
+        <div style="font-size: 14px; font-weight: 700; color: #34d399; letter-spacing: 0.02em; margin-bottom: 6px;">
+          Full Platform Access
+        </div>
+        <div style="font-size: 13px; color: #cbd5e1; font-weight: 500;">
+          आपका Developer / Platform Owner Account
+        </div>
+      </div>
+    </a>
+
+    <!-- Row 2: HR Login + Freelancer Login (2 Columns) -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+
+      <!-- Card 2: HR Login (Company Dashboard) -->
+      <a href="{% url 'hr_login' %}" style="text-decoration: none; display: block;" class="role-portal-card">
+        <div style="background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%); border: 1.5px solid #bfdbfe; border-radius: 16px; padding: 26px 20px; text-align: center; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08); transition: transform 0.2s ease, box-shadow 0.2s ease; height: 100%;">
+          <div style="font-size: 32px; line-height: 1; margin-bottom: 10px; color: #2563eb;">🏢</div>
+          <h3 style="font-size: 19px; font-weight: 800; color: #1e3a8a; margin: 0 0 4px 0;">
+            HR Login
+          </h3>
+          <div style="font-size: 13px; font-weight: 600; color: #3b82f6;">
+            Company Dashboard
+          </div>
+          <div style="font-size: 12px; color: #64748b; margin-top: 8px;">
+            Post Jobs, ATS Screening & Candidate Pipeline
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 3: Freelancer Login (Freelancer Dashboard) -->
+      <a href="{% url 'freelancer_login' %}" style="text-decoration: none; display: block;" class="role-portal-card">
+        <div style="background: linear-gradient(180deg, #ecfdf5 0%, #d1fae5 100%); border: 1.5px solid #a7f3d0; border-radius: 16px; padding: 26px 20px; text-align: center; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.08); transition: transform 0.2s ease, box-shadow 0.2s ease; height: 100%;">
+          <div style="font-size: 32px; line-height: 1; margin-bottom: 10px; color: #059669;">👤</div>
+          <h3 style="font-size: 19px; font-weight: 800; color: #064e3b; margin: 0 0 4px 0;">
+            Freelancer Login
+          </h3>
+          <div style="font-size: 13px; font-weight: 600; color: #10b981;">
+            Freelancer Dashboard
+          </div>
+          <div style="font-size: 12px; color: #64748b; margin-top: 8px;">
+            Bid on Gigs, Milestone Tracking & Client Work
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Card 4: Student / Candidate Login (Bottom Wide Lavender Card) -->
+    <a href="{% url 'candidate_login' %}" style="text-decoration: none; display: block;" class="role-portal-card">
+      <div style="background: linear-gradient(180deg, #f5f3ff 0%, #ede9fe 100%); border: 1.5px solid #ddd6fe; border-radius: 16px; padding: 26px 20px; text-align: center; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.08); transition: transform 0.2s ease, box-shadow 0.2s ease;">
+        <div style="font-size: 32px; line-height: 1; margin-bottom: 10px; color: #7c3aed;">🎓</div>
+        <h3 style="font-size: 19px; font-weight: 800; color: #4c1d95; margin: 0 0 4px 0;">
+          Student / Candidate Login
+        </h3>
+        <div style="font-size: 13px; font-weight: 600; color: #7c3aed;">
+          Resume Upload and Job Applications
+        </div>
+        <div style="font-size: 12px; color: #64748b; margin-top: 8px;">
+          AI Resume Scoring, ATS Match Insights & Instant Job Applications
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Alternative Sign-In Options (Mobile OTP & Unified Identifier) -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 24px; box-shadow: var(--shadow-sm); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+    <div>
+      <div style="font-size: 15px; font-weight: 800; color: var(--slate-900);">
+        ⚡ Prefer Passwordless Sign In?
+      </div>
+      <div style="font-size: 13px; color: var(--slate-600);">
+        Log in instantly using your verified Mobile Phone Number and 6-digit OTP.
+      </div>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <a href="{% url 'phone_otp_login' %}" class="btn btn-primary" style="padding: 10px 18px; font-size: 13px;">
+        📱 Sign In with Phone OTP →
+      </a>
+      <a href="{% url 'login' %}" class="btn btn-outline" style="padding: 10px 18px; font-size: 13px;">
+        Standard Password Sign In
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+.role-portal-card:hover > div {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12) !important;
+}
+.role-card-owner:hover > div {
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.45) !important;
+}
+</style>
+{% endblock %}

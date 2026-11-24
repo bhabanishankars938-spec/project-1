@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Instructions · {{ exam.title }} | HireNexa{% endblock %}
+
+{% block content %}
+<div class="exam-instructions-container">
+  <div class="instructions-card">
+
+    <div class="inst-top">
+      <span class="inst-category-chip">{{ exam.get_category_display }}</span>
+      {% if exam.target_entrance_exam %}
+        <span class="badge-pyq">{{ exam.target_entrance_exam }} Target</span>
+      {% endif %}
+    </div>
+
+    <h1 class="inst-title">{{ exam.title }}</h1>
+    <p class="inst-desc">{{ exam.description }}</p>
+
+    <!-- Key Metrics Grid -->
+    <div class="inst-metrics-grid">
+      <div class="inst-metric">
+        <span class="icon">⏱️</span>
+        <div>
+          <span class="val">{{ exam.duration_minutes }} Minutes</span>
+          <span class="lbl">Strict Test Duration</span>
+        </div>
+      </div>
+      <div class="inst-metric">
+        <span class="icon">📝</span>
+        <div>
+          <span class="val">{{ questions_count }} Questions</span>
+          <span class="lbl">Standard Question Count</span>
+        </div>
+      </div>
+      <div class="inst-metric">
+        <span class="icon">🎯</span>
+        <div>
+          <span class="val">{{ exam.total_marks }} Marks</span>
+          <span class="lbl">Total Possible Score (+1.00/Q)</span>
+        </div>
+      </div>
+      <div class="inst-metric">
+        <span class="icon">📉</span>
+        <div>
+          <span class="val">-{{ exam.negative_marking }} per Wrong</span>
+          <span class="lbl">Negative Marking</span>
+        </div>
+      </div>
+      <div class="inst-metric">
+        <span class="icon">🔄</span>
+        <div>
+          <span class="val">{{ attempts_left }} of {{ max_attempts }} Left</span>
+          <span class="lbl">Attempts Remaining</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Official Guidelines -->
+    <div class="inst-rules-box">
+      <h3>📋 Important Instructions & Candidate Conduct</h3>
+      <ul>
+        <li><strong>Fixed Format:</strong> Every test consists of exactly <strong>{{ questions_count }} questions</strong> with a duration of <strong>{{ exam.duration_minutes }} minutes</strong>.</li>
+        <li><strong>Scoring Formula:</strong> Each correct response awards <strong>+1.00 Mark</strong>. Each incorrect response incurs a penalty of <strong>-{{ exam.negative_marking }} Marks</strong>. Unattempted questions carry 0 penalty.</li>
+        <li><strong>Maximum {{ max_attempts }} Attempts:</strong> Candidates are allowed a maximum of <strong>{{ max_attempts }} attempts</strong> per examination. Your best attempt will be highlighted on your performance transcript.</li>
+        <li><strong>Server-Side Countdown:</strong> The examination clock begins immediately upon launching. The timer is calculated by the server and counts down continuously even if the page is refreshed.</li>
+        <li><strong>Auto-Save Persistence:</strong> Answers are immediately synchronized to the server whenever you select or change an option.</li>
+        <li><strong>Palette Navigation:</strong> Use the interactive question palette on the right to navigate between all 16 questions.</li>
+        <li><strong>Automatic Submission:</strong> When the countdown timer reaches 00:00:00, your examination will automatically submit and finalize your score.</li>
+      </ul>
+    </div>
+
+    <!-- Launch Form -->
+    <div class="inst-launch-area">
+      {% if active_attempt %}
+        <div class="alert-message alert-warning" style="margin-bottom: 16px;">
+          <span>⚠️ You have an active attempt currently in progress (Attempt #{{ active_attempt.attempt_number }}). Seconds remaining: <strong>{{ active_attempt.seconds_remaining }}s</strong></span>
+        </div>
+        <a href="{% url 'exam_live' active_attempt.id %}" class="btn btn-primary btn-lg">
+          <span>⚡ Resume Examination In Progress</span>
+        </a>
+      {% elif attempts_left <= 0 %}
+        <div class="alert-message alert-danger" style="margin-bottom: 16px;">
+          <span>🚫 <strong>Maximum Attempts Reached:</strong> You have completed all {{ max_attempts }} allowed attempts for this examination.</span>
+        </div>
+        {% with last_attempt=user_attempts.last %}
+          {% if last_attempt %}
+            <a href="{% url 'exam_result' last_attempt.id %}" class="btn btn-secondary btn-lg">
+              <span>📊 View Your Most Recent Result (Score: {{ last_attempt.score }}/{{ exam.total_marks }})</span>
+            </a>
+          {% endif %}
+        {% endwith %}
+      {% else %}
+        <form method="post" action="{% url 'exam_start' exam.slug %}" id="examStartForm" onsubmit="const btn = this.querySelector('button[type=submit]'); if (btn.getAttribute('data-submitted') === 'true') { return false; } btn.setAttribute('data-submitted', 'true'); btn.disabled = true; btn.innerHTML = '<span>⏳ Initializing Examination...</span>'; return true;">
+          {% csrf_token %}
+          <div class="terms-checkbox">
+            <label>
+              <input type="checkbox" required checked>
+              <span>I have read and understood all examination rules ({{ questions_count }} Questions, {{ exam.duration_minutes }} Minutes, -{{ exam.negative_marking }} Negative Marking, Max {{ max_attempts }} Attempts) and agree to adhere to standard assessment conduct.</span>
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg" id="btnStartExam">
+            <span>🚀 Start Examination Now (Attempt {{ attempts_count|add:1 }} of {{ max_attempts }})</span>
+          </button>
+        </form>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+{% endblock %}

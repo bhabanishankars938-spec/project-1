@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+{% block title %}Freelancer Workspace · HireNexa Talent Platform{% endblock %}
+
+{% block content %}
+<div class="section-header" style="align-items: center;">
+  <div>
+    <span class="hero-pill" style="margin-bottom: 8px; background: rgba(2, 132, 199, 0.1); color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.2);">
+      FREELANCER WORKSPACE
+    </span>
+    <h1 style="font-size: 32px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.03em;">
+      Freelance Contractor Dashboard
+    </h1>
+    <p style="color: var(--slate-600); font-size: 15px; margin-top: 4px;">
+      Welcome back, <strong>{{ profile.full_name|default:user.username }}</strong>! Manage your technical portfolio, browse open project gigs, and track proposal bids.
+    </p>
+  </div>
+  <div style="display: flex; gap: 10px;">
+    <a href="{% url 'freelancer_profile_edit' %}" class="btn btn-outline btn-lg" style="color: var(--slate-800); border-color: var(--slate-300);">
+      ✏️ Edit Profile & Rates
+    </a>
+    <a href="{% url 'project_list' %}" class="btn btn-primary btn-lg" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border-color: #0284c7;">
+      ⚡ Browse Projects
+    </a>
+  </div>
+</div>
+
+<!-- Freelancer Profile Header Card -->
+<div class="detail-main" style="padding: 28px; margin: 24px 0 32px; background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); box-shadow: var(--shadow-sm);">
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap;">
+    <div style="display: flex; align-items: flex-start; gap: 16px;">
+      <div class="user-avatar" style="width: 54px; height: 54px; font-size: 22px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+        {{ user.username|slice:":1" }}
+      </div>
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <h2 style="font-size: 22px; font-weight: 800; color: var(--slate-900); margin: 0;">
+            {{ profile.full_name|default:user.username }}
+          </h2>
+          <span class="role-tag freelancer">FREELANCER</span>
+          {% if profile.availability == 'AVAILABLE' %}
+            <span style="font-size: 12px; color: var(--emerald-600); font-weight: 700;">● Available for Work</span>
+          {% elif profile.availability == 'PART_TIME' %}
+            <span style="font-size: 12px; color: var(--amber-600); font-weight: 700;">● Part-Time Only</span>
+          {% else %}
+            <span style="font-size: 12px; color: var(--rose-600); font-weight: 700;">● Currently Booked</span>
+          {% endif %}
+        </div>
+        <p style="color: var(--slate-600); font-size: 14px; font-weight: 500; margin: 4px 0 0 0;">
+          {{ profile.headline|default:"Full-Stack Software Engineer & Technical Contractor" }}
+        </p>
+
+        <div style="display: flex; align-items: center; gap: 16px; font-size: 13px; color: var(--slate-500); margin-top: 8px; flex-wrap: wrap;">
+          {% if profile.hourly_rate %}
+            <span class="meta-badge" style="background: #e0f2fe; color: #0369a1; font-weight: 700; padding: 3px 8px; border-radius: var(--radius-sm);">
+              Rate: ${{ profile.hourly_rate }}/hr
+            </span>
+          {% endif %}
+          {% if profile.experience_years %}
+            <span>💼 {{ profile.experience_years }} Years Experience</span>
+          {% endif %}
+          {% if profile.portfolio_url %}
+            <a href="{{ profile.portfolio_url }}" target="_blank" style="color: var(--primary); font-weight: 600;">
+              🌐 Live Portfolio ↗
+            </a>
+          {% endif %}
+          {% if profile.github_url %}
+            <a href="{{ profile.github_url }}" target="_blank" style="color: var(--slate-700); font-weight: 600;">
+              🐙 GitHub ↗
+            </a>
+          {% endif %}
+        </div>
+
+        {% if profile.bio %}
+          <p style="color: var(--slate-700); font-size: 13px; line-height: 1.5; margin-top: 12px; max-width: 650px;">
+            {{ profile.bio }}
+          </p>
+        {% endif %}
+
+        {% if profile.skill_list %}
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px;">
+            {% for s in profile.skill_list %}
+              <span class="skill-pill" style="font-size: 11px; padding: 3px 8px; background: var(--slate-100); border: 1px solid var(--slate-200); border-radius: var(--radius-full); color: var(--slate-700);">
+                {{ s }}
+              </span>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Profile Completeness Indicator -->
+    <div style="min-width: 220px; text-align: right;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <span style="font-size: 12px; font-weight: 700; color: var(--slate-700); text-transform: uppercase;">Profile Strength</span>
+        <strong style="font-size: 14px; color: #0284c7;">{{ completion_rate }}%</strong>
+      </div>
+      <div style="width: 100%; height: 8px; background: var(--slate-100); border-radius: var(--radius-full); overflow: hidden;">
+        <div style="width: {{ completion_rate }}%; height: 100%; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border-radius: var(--radius-full);"></div>
+      </div>
+      <a href="{% url 'freelancer_profile_edit' %}" style="display: inline-block; font-size: 12px; color: #0284c7; font-weight: 600; margin-top: 6px;">
+        Update profile details →
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- My Submitted Project Proposals / Bids -->
+<div class="section-header" style="margin-top: 36px;">
+  <div>
+    <h2 class="section-title">📄 My Project Proposals & Status</h2>
+    <p class="section-subtitle">Real-time status updates on contracts you have applied for.</p>
+  </div>
+</div>
+
+<div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); overflow: hidden; margin-bottom: 40px; box-shadow: var(--shadow-sm);">
+  {% if proposals %}
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
+        <thead>
+          <tr style="border-bottom: 2px solid var(--slate-200); color: var(--slate-600); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;">
+            <th style="padding: 14px;">Project Title</th>
+            <th style="padding: 14px;">Proposed Quote</th>
+            <th style="padding: 14px;">Timeline</th>
+            <th style="padding: 14px;">Applied Date</th>
+            <th style="padding: 14px;">Application Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in proposals %}
+            <tr style="border-bottom: 1px solid var(--slate-100);">
+              <td style="padding: 14px;">
+                <a href="{% url 'project_detail' p.project.id %}" style="font-weight: 700; color: var(--slate-900);">
+                  {{ p.project.title }}
+                </a>
+                <span style="display: block; font-size: 12px; color: var(--slate-500);">
+                  Client: {{ p.project.company_name|default:p.project.client.username }}
+                </span>
+              </td>
+              <td style="padding: 14px; font-weight: 700; color: var(--slate-900);">
+                ${{ p.bid_amount }}
+              </td>
+              <td style="padding: 14px; color: var(--slate-600);">
+                {{ p.estimated_days }} Days
+              </td>
+              <td style="padding: 14px; color: var(--slate-500); font-size: 12px;">
+                {{ p.created_at|date:"M d, Y" }}
+              </td>
+              <td style="padding: 14px;">
+                {% if p.status == 'ACCEPTED' %}
+                  <span class="role-tag" style="background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; font-weight: 700;">
+                    ✓ ACCEPTED
+                  </span>
+                {% elif p.status == 'UNDER_REVIEW' %}
+                  <span class="role-tag" style="background: #fffbeb; color: #d97706; border: 1px solid #fde68a; font-weight: 700;">
+                    ⏳ UNDER REVIEW
+                  </span>
+                {% elif p.status == 'DECLINED' %}
+                  <span class="role-tag" style="background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; font-weight: 700;">
+                    ✕ DECLINED
+                  </span>
+                {% else %}
+                  <span class="role-tag" style="background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; font-weight: 700;">
+                    ● PENDING
+                  </span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div style="padding: 40px; text-align: center;">
+      <p style="color: var(--slate-500); font-size: 14px; margin-bottom: 14px;">
+        You haven't submitted any proposals yet.
+      </p>
+      <a href="{% url 'project_list' %}" class="btn btn-primary btn-sm" style="background: #0284c7; border-color: #0284c7;">
+        Explore Open Freelance Projects →
+      </a>
+    </div>
+  {% endif %}
+</div>
+
+<!-- Recommended Freelance Projects -->
+<div class="section-header">
+  <div>
+    <h2 class="section-title">⚡ Available Freelance Opportunities</h2>
+    <p class="section-subtitle">Verified contracts ready for contractor bids.</p>
+  </div>
+  <a href="{% url 'project_list' %}" class="btn btn-outline btn-sm">View All Projects →</a>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; margin-bottom: 40px;">
+  {% for proj in available_projects %}
+    <div class="job-card" style="padding: 22px; border-left: 4px solid #0284c7;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+        <span class="role-tag freelancer" style="font-size: 10px;">{{ proj.budget_type }}</span>
+        <strong style="color: var(--slate-900); font-size: 15px;">
+          {% if proj.budget_max %}${{ proj.budget_min }} - ${{ proj.budget_max }}{% else %}${{ proj.budget_min }}{% endif %}
+        </strong>
+      </div>
+      <h3 style="font-size: 16px; font-weight: 700; color: var(--slate-900); margin: 0 0 6px 0;">
+        <a href="{% url 'project_detail' proj.id %}" style="color: inherit; text-decoration: none;">
+          {{ proj.title }}
+        </a>
+      </h3>
+      <p style="font-size: 13px; color: var(--slate-500); margin-bottom: 12px;">
+        {{ proj.company_name|default:proj.client.username }} · Duration: {{ proj.duration }}
+      </p>
+      <p style="font-size: 13px; color: var(--slate-600); line-height: 1.5; margin-bottom: 16px;">
+        {{ proj.description|truncatewords:20 }}
+      </p>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--slate-100);">
+        <span style="font-size: 11px; color: var(--slate-400);">{{ proj.created_at|timesince }} ago</span>
+        <a href="{% url 'project_apply' proj.id %}" class="btn btn-outline btn-sm" style="border-color: #0284c7; color: #0284c7; font-size: 12px;">
+          Submit Proposal →
+        </a>
+      </div>
+    </div>
+  {% empty %}
+    <div style="grid-column: 1/-1; padding: 30px; text-align: center; color: var(--slate-500); background: #fff; border: 1px solid var(--slate-200); border-radius: var(--radius-lg);">
+      No active freelance projects at this time. Check back soon!
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,242 @@
+[
+  {
+    "order": 1,
+    "title": "Power Sets and Non-Empty Proper Subsets",
+    "difficulty": "EASY",
+    "topic": "Power Sets & Cardinality",
+    "text": "If a finite set A contains exactly 6 distinct elements, what is the total number of non-empty proper subsets that can be formed from A?",
+    "code_snippet": "",
+    "explanation": "A set with n elements has 2^n total subsets. Excluding the empty set and the set A itself yields 2^n - 2 proper non-empty subsets. For n = 6: 2^6 - 2 = 64 - 2 = 62.",
+    "options": [
+      {"key": "A", "text": "64", "is_correct": false, "explanation": "64 includes the empty set and the improper subset A."},
+      {"key": "B", "text": "62", "is_correct": true, "explanation": "2^6 - 2 = 64 - 2 = 62."},
+      {"key": "C", "text": "63", "is_correct": false, "explanation": "63 excludes only the empty set, not the improper subset."},
+      {"key": "D", "text": "30", "is_correct": false, "explanation": "Incorrect formula."}
+    ]
+  },
+  {
+    "order": 2,
+    "title": "Three-Set Principle of Inclusion-Exclusion",
+    "difficulty": "EASY",
+    "topic": "Inclusion-Exclusion Principle",
+    "text": "In an MCA entrance batch of 120 aspirants, 65 study Discrete Mathematics, 55 study C Programming, and 40 study DBMS. Furthermore, 25 study both Mathematics and C, 20 study both Mathematics and DBMS, 15 study both C and DBMS, and 8 study all three subjects. How many aspirants study none of these three subjects?",
+    "code_snippet": "",
+    "explanation": "By the Principle of Inclusion-Exclusion: |M u C u D| = (65 + 55 + 40) - (25 + 20 + 15) + 8 = 160 - 60 + 8 = 108. Total studying none = 120 - 108 = 12.",
+    "options": [
+      {"key": "A", "text": "12", "is_correct": true, "explanation": "120 - 108 = 12 aspirants study none."},
+      {"key": "B", "text": "18", "is_correct": false, "explanation": "Miscalculated intersection terms."},
+      {"key": "C", "text": "15", "is_correct": false, "explanation": "Omitted the 3-way intersection addition."},
+      {"key": "D", "text": "8", "is_correct": false, "explanation": "Confuses none with all-three count."}
+    ]
+  },
+  {
+    "order": 3,
+    "title": "Symmetric Difference of Quadratic Solution Sets",
+    "difficulty": "EASY",
+    "topic": "Symmetric Difference",
+    "text": "Let A = {x in Z : x^2 - 7x + 10 = 0} and B = {x in Z : x^2 - 9x + 20 = 0}. What is the sum of all elements in the symmetric difference A Delta B?",
+    "code_snippet": "",
+    "explanation": "A has roots {2, 5} and B has roots {4, 5}. The symmetric difference A Delta B = (A \\ B) u (B \\ A) = {2} u {4} = {2, 4}. The sum of elements is 2 + 4 = 6.",
+    "options": [
+      {"key": "A", "text": "5", "is_correct": false, "explanation": "5 is in the intersection A n B, which is excluded from symmetric difference."},
+      {"key": "B", "text": "11", "is_correct": false, "explanation": "Sum of all roots including intersection."},
+      {"key": "C", "text": "6", "is_correct": true, "explanation": "The symmetric difference is {2, 4}, sum = 6."},
+      {"key": "D", "text": "9", "is_correct": false, "explanation": "Arithmetic mistake."}
+    ]
+  },
+  {
+    "order": 4,
+    "title": "Reflexive Relations Cardinality",
+    "difficulty": "MEDIUM",
+    "topic": "Reflexive Relations",
+    "text": "Let set A = {1, 2, 3, 4}. What is the total number of distinct reflexive relations that can be defined on A?",
+    "code_snippet": "",
+    "explanation": "A reflexive relation on a set with n elements must contain all n diagonal pairs (a, a). The remaining n(n-1) ordered pairs can independently be chosen or omitted. For n = 4, count = 2^{4*3} = 2^12 = 4096.",
+    "options": [
+      {"key": "A", "text": "2^16", "is_correct": false, "explanation": "Total number of all possible binary relations on A."},
+      {"key": "B", "text": "2^10", "is_correct": false, "explanation": "Number of symmetric relations on A."},
+      {"key": "C", "text": "2^4", "is_correct": false, "explanation": "Only accounts for diagonal choices."},
+      {"key": "D", "text": "2^12 = 4096", "is_correct": true, "explanation": "2^{4*(4-1)} = 2^12 = 4096."}
+    ]
+  },
+  {
+    "order": 5,
+    "title": "Symmetric Relations Counting Formula",
+    "difficulty": "MEDIUM",
+    "topic": "Symmetric Relations",
+    "text": "For a finite set S having cardinality |S| = 4, how many distinct symmetric relations can be formed on S?",
+    "code_snippet": "",
+    "explanation": "A symmetric relation satisfies (a, b) in R <=> (b, a) in R. The n diagonal pairs have 2 choices each, and the n(n-1)/2 off-diagonal unordered pairs have 2 choices each. Total = 2^{n(n+1)/2} = 2^{4*5/2} = 2^10 = 1024.",
+    "options": [
+      {"key": "A", "text": "2^10 = 1024", "is_correct": true, "explanation": "2^{n(n+1)/2} = 2^10 = 1024."},
+      {"key": "B", "text": "2^6 = 64", "is_correct": false, "explanation": "Omits diagonal pairs."},
+      {"key": "C", "text": "2^12 = 4096", "is_correct": false, "explanation": "Number of reflexive relations, not symmetric."},
+      {"key": "D", "text": "2^16 = 65536", "is_correct": false, "explanation": "Total arbitrary relations."}
+    ]
+  },
+  {
+    "order": 6,
+    "title": "Reflexive and Symmetric Relations Cardinality",
+    "difficulty": "MEDIUM",
+    "topic": "Reflexive & Symmetric Relations",
+    "text": "What is the total number of relations on a set with 5 elements that are simultaneously reflexive and symmetric?",
+    "code_snippet": "",
+    "explanation": "Reflexivity fixes all 5 diagonal elements (1 choice). Symmetry requires that for each of the 5*4/2 = 10 off-diagonal pairs, both (a, b) and (b, a) are either in R or not in R (2 choices). Total = 2^10 = 1024.",
+    "options": [
+      {"key": "A", "text": "2^20", "is_correct": false, "explanation": "Number of reflexive relations on 5 elements."},
+      {"key": "B", "text": "2^10 = 1024", "is_correct": true, "explanation": "2^{n(n-1)/2} = 2^{10} = 1024."},
+      {"key": "C", "text": "2^5 = 32", "is_correct": false, "explanation": "Underestimates off-diagonal combinations."},
+      {"key": "D", "text": "2^15", "is_correct": false, "explanation": "Number of symmetric relations on 5 elements."}
+    ]
+  },
+  {
+    "order": 7,
+    "title": "Equivalence Relations and Bell Number B3",
+    "difficulty": "MEDIUM",
+    "topic": "Equivalence Relations",
+    "text": "What is the total number of distinct equivalence relations that can be defined on the set A = {a, b, c}?",
+    "code_snippet": "",
+    "explanation": "Every equivalence relation corresponds to a set partition. The number of partitions of a 3-element set is the Bell number B_3 = 5 (1 partition of size 3, 3 partitions of shape 2+1, 1 partition of singletons).",
+    "options": [
+      {"key": "A", "text": "4", "is_correct": false, "explanation": "Misses the partition into three singletons."},
+      {"key": "B", "text": "8", "is_correct": false, "explanation": "Equates to 2^3, which is power set size, not partitions."},
+      {"key": "C", "text": "5", "is_correct": true, "explanation": "Bell number B_3 = 5."},
+      {"key": "D", "text": "6", "is_correct": false, "explanation": "Counts permutations instead of partitions."}
+    ]
+  },
+  {
+    "order": 8,
+    "title": "Congruence Modulo Equivalence Class Bounds",
+    "difficulty": "MEDIUM",
+    "topic": "Equivalence Classes",
+    "text": "A relation R on the set of integers Z is defined by x R y <=> (3x + 4y) is divisible by 7. How many integers x belonging to the equivalence class [3] satisfy 1 <= x <= 100?",
+    "code_snippet": "",
+    "explanation": "Note that 3x + 4y = 3(x - y) + 7y. Since gcd(3, 7) = 1, 7 divides 3(x - y) iff x = y (mod 7). Thus [3] = {7k + 3 : k in Z}. For 1 <= 7k + 3 <= 100, k ranges from 0 to 13 inclusive, giving exactly 14 integers.",
+    "options": [
+      {"key": "A", "text": "13", "is_correct": false, "explanation": "Forgot k = 0 (x = 3)."},
+      {"key": "B", "text": "15", "is_correct": false, "explanation": "Includes 101, which exceeds 100."},
+      {"key": "C", "text": "7", "is_correct": false, "explanation": "Arbitrary divider."},
+      {"key": "D", "text": "14", "is_correct": true, "explanation": "k in {0, 1, ..., 13} yields 14 elements."}
+    ]
+  },
+  {
+    "order": 9,
+    "title": "Composition of Binary Relations",
+    "difficulty": "MEDIUM",
+    "topic": "Composition of Relations",
+    "text": "Let A = {1, 2, 3, 4}. Given relations R = {(1, 2), (2, 3), (3, 4), (2, 4)} and S = {(2, 1), (3, 2), (4, 3)}, what is the cardinality of the composition relation S o R?",
+    "code_snippet": "",
+    "explanation": "(a, c) in S o R <=> exists b with (a, b) in R and (b, c) in S. (1,2)->(2,1) gives (1,1); (2,3)->(3,2) gives (2,2); (3,4)->(4,3) gives (3,3); (2,4)->(4,3) gives (2,3). S o R = {(1,1), (2,2), (3,3), (2,3)}, which has 4 elements.",
+    "options": [
+      {"key": "A", "text": "2", "is_correct": false, "explanation": "Misses indirect composition pairs."},
+      {"key": "B", "text": "3", "is_correct": false, "explanation": "Misses the branch from (2, 4) in R to (4, 3) in S."},
+      {"key": "C", "text": "4", "is_correct": true, "explanation": "S o R = {(1, 1), (2, 2), (3, 3), (2, 3)} with cardinality 4."},
+      {"key": "D", "text": "5", "is_correct": false, "explanation": "Overcounts duplicated coordinates."}
+    ]
+  },
+  {
+    "order": 10,
+    "title": "Antisymmetric Relations Enumeration",
+    "difficulty": "MEDIUM",
+    "topic": "Antisymmetric Relations",
+    "text": "How many distinct antisymmetric relations can be defined on a set with 3 elements?",
+    "code_snippet": "",
+    "explanation": "For each pair {a, b} with a != b, there are 3 mutually exclusive choices: (a, b) in R, (b, a) in R, or neither in R. There are 3*2/2 = 3 such pairs => 3^3 = 27. The 3 diagonal elements (a, a) have 2 choices each => 2^3 = 8. Total = 8 * 27 = 216.",
+    "options": [
+      {"key": "A", "text": "216", "is_correct": true, "explanation": "2^n * 3^{n(n-1)/2} = 8 * 27 = 216."},
+      {"key": "B", "text": "64", "is_correct": false, "explanation": "4^3 mistake."},
+      {"key": "C", "text": "512", "is_correct": false, "explanation": "Total relations on set of size 3 is 2^9 = 512."},
+      {"key": "D", "text": "108", "is_correct": false, "explanation": "Arithmetic miscalculation."}
+    ]
+  },
+  {
+    "order": 11,
+    "title": "Poset Divisibility Lattice Extremal Elements",
+    "difficulty": "MEDIUM",
+    "topic": "Posets & Extremal Elements",
+    "text": "Consider the poset (S, |) where S = {2, 3, 4, 6, 8, 12, 24} is partially ordered by divisibility (a | b). Let m be the number of minimal elements and M be the number of maximal elements in S. What is m + M?",
+    "code_snippet": "",
+    "explanation": "Minimal elements have no proper divisor in S: 2 and 3 have no divisors in S => m = 2. Maximal elements divide no other strictly larger element in S: only 24 divides no other element in S => M = 1. Thus m + M = 2 + 1 = 3.",
+    "options": [
+      {"key": "A", "text": "2", "is_correct": false, "explanation": "Counts only the minimal elements."},
+      {"key": "B", "text": "3", "is_correct": true, "explanation": "Minimal {2, 3} (2) + Maximal {24} (1) = 3."},
+      {"key": "C", "text": "4", "is_correct": false, "explanation": "Incorrectly classifies 8 or 12 as maximal."},
+      {"key": "D", "text": "5", "is_correct": false, "explanation": "Incorrect classification of intermediate lattice nodes."}
+    ]
+  },
+  {
+    "order": 12,
+    "title": "Cartesian Product Power Sets and Non-Empty Relations",
+    "difficulty": "HARD",
+    "topic": "Cartesian Product & Relations",
+    "text": "Let A and B be two finite sets such that the power set P(A) contains 16 elements and P(B) contains 8 elements. What is the total number of non-empty relations that can be defined from A to B?",
+    "code_snippet": "",
+    "explanation": "|P(A)| = 2^|A| = 16 => |A| = 4. |P(B)| = 2^|B| = 8 => |B| = 3. |A x B| = 4 * 3 = 12. Total relations = 2^12 = 4096. Excluding the empty relation leaves 4096 - 1 = 4095.",
+    "options": [
+      {"key": "A", "text": "1023", "is_correct": false, "explanation": "Assumes |A x B| = 10."},
+      {"key": "B", "text": "2047", "is_correct": false, "explanation": "Assumes |A x B| = 11."},
+      {"key": "C", "text": "8191", "is_correct": false, "explanation": "Assumes |A x B| = 13."},
+      {"key": "D", "text": "4095", "is_correct": true, "explanation": "2^{4*3} - 1 = 4096 - 1 = 4095."}
+    ]
+  },
+  {
+    "order": 13,
+    "title": "Equivalence Relations Intersection and Union Closure",
+    "difficulty": "HARD",
+    "topic": "Equivalence Theorems",
+    "text": "Let R1 and R2 be two arbitrary equivalence relations defined on a non-empty set A. Which of the following statements is mathematically guaranteed to be true?",
+    "code_snippet": "",
+    "explanation": "Intersection of equivalence relations preserves reflexivity, symmetry, and transitivity unconditionally. Union fails transitivity in general (e.g., for A={1,2,3}, R1={(1,2),(2,1),diagonals} and R2={(2,3),(3,2),diagonals} gives (1,2) and (2,3) in R1 u R2 but not (1,3)).",
+    "options": [
+      {"key": "A", "text": "R1 n R2 is always an equivalence relation, but R1 u R2 is not necessarily an equivalence relation.", "is_correct": true, "explanation": "Intersection is always transitive and symmetric; union generally violates transitivity."},
+      {"key": "B", "text": "Both R1 n R2 and R1 u R2 are always equivalence relations.", "is_correct": false, "explanation": "Union of equivalence relations is not necessarily transitive."},
+      {"key": "C", "text": "R1 u R2 is always an equivalence relation, but R1 n R2 is not.", "is_correct": false, "explanation": "False; intersection is always an equivalence relation."},
+      {"key": "D", "text": "Neither R1 n R2 nor R1 u R2 is necessarily an equivalence relation.", "is_correct": false, "explanation": "False; intersection is guaranteed to be an equivalence relation."}
+    ]
+  },
+  {
+    "order": 14,
+    "title": "Minimal Equivalence Closure Construction",
+    "difficulty": "HARD",
+    "topic": "Equivalence Closure",
+    "text": "Let A = {1, 2, 3} and relation R = {(1, 2), (2, 3)} on A. What is the minimum number of ordered pairs that must be added to R to produce the smallest equivalence relation containing R?",
+    "code_snippet": "",
+    "explanation": "Must add reflexive pairs (1,1), (2,2), (3,3) (3 pairs). Must add symmetric pairs (2,1), (3,2) (2 pairs). Transitivity requires (1,3) and by symmetry (3,1) (2 pairs). The resulting relation is A x A containing 9 pairs. Added = 9 - 2 = 7 pairs.",
+    "options": [
+      {"key": "A", "text": "5", "is_correct": false, "explanation": "Omitted the transitive bridge pairs (1,3) and (3,1)."},
+      {"key": "B", "text": "6", "is_correct": false, "explanation": "Omitted one symmetric or diagonal pair."},
+      {"key": "C", "text": "7", "is_correct": true, "explanation": "9 total pairs in A x A minus 2 initial = 7 added."},
+      {"key": "D", "text": "8", "is_correct": false, "explanation": "Initial relation already contains 2 pairs."}
+    ]
+  },
+  {
+    "order": 15,
+    "title": "Symmetric Difference and Intersection Orthogonality",
+    "difficulty": "HARD",
+    "topic": "Set Theory Identities",
+    "text": "For any two arbitrary non-empty subsets A and B of a universal set U, simplify the expression: [ (A \\ B) u (B \\ A) ] n (A n B).",
+    "code_snippet": "",
+    "explanation": "(A \\ B) u (B \\ A) is the symmetric difference A Delta B, representing elements in exactly one of the sets. A n B represents elements in both sets simultaneously. These two subsets are mutually disjoint, so their intersection is the empty set.",
+    "options": [
+      {"key": "A", "text": "A u B", "is_correct": false, "explanation": "Union contains both symmetric difference and intersection."},
+      {"key": "B", "text": "A n B", "is_correct": false, "explanation": "Intersection is disjoint from symmetric difference."},
+      {"key": "C", "text": "A \\ B", "is_correct": false, "explanation": "Contains elements not in B."},
+      {"key": "D", "text": "The empty set (O)", "is_correct": true, "explanation": "Symmetric difference and intersection are strictly mutually disjoint."}
+    ]
+  },
+  {
+    "order": 16,
+    "title": "Divisibility Relation Property Classification",
+    "difficulty": "HARD",
+    "topic": "Relation Properties",
+    "text": "Let N denote the set of positive integers. A binary relation R on N is defined by: a R b <=> a divides b^2. Which statement accurately describes R?",
+    "code_snippet": "",
+    "explanation": "Reflexive: a divides a^2 for all positive integers a (True). Not symmetric: 8 divides 12^2 = 144, so (8, 12) in R; but 12 does not divide 8^2 = 64. Not transitive: 8 divides 4^2 = 16 and 4 divides 2^2 = 4; but 8 does not divide 2^2 = 4. Hence R is reflexive, but neither symmetric nor transitive.",
+    "options": [
+      {"key": "A", "text": "R is an equivalence relation.", "is_correct": false, "explanation": "Fails symmetry and transitivity."},
+      {"key": "B", "text": "R is reflexive, but neither symmetric nor transitive.", "is_correct": true, "explanation": "Reflexive as a|a^2; counterexamples (8, 12) for symmetry and (8, 4, 2) for transitivity."},
+      {"key": "C", "text": "R is reflexive and transitive, but not symmetric.", "is_correct": false, "explanation": "Transitivity fails: 8|16 and 4|4, but 8 does not divide 4."},
+      {"key": "D", "text": "R is symmetric and transitive, but not reflexive.", "is_correct": false, "explanation": "Reflexivity holds unconditionally."}
+    ]
+  }
+]

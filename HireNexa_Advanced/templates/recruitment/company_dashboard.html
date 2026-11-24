@@ -1,0 +1,367 @@
+{% extends "base.html" %}
+{% block title %}{{ org.name }} · Company Administration Workspace · HireNexa{% endblock %}
+
+{% block content %}
+<!-- Company Admin Header -->
+<div class="section-header" style="align-items: center; margin-bottom: 24px; border-bottom: 1px solid var(--slate-200); padding-bottom: 20px;">
+  <div>
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+      <span class="meta-badge" style="background: #0f172a; color: #38bdf8; font-weight: 700; font-size: 11px;">
+        COMPANY ADMINISTRATION
+      </span>
+      <span class="meta-badge" style="background: var(--primary-light); color: var(--primary); font-weight: 700; font-size: 11px;">
+        PLAN: {{ subscription.get_plan_name_display }}
+      </span>
+    </div>
+    <h1 style="font-size: 32px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.03em;">
+      {{ org.name }}
+    </h1>
+    <p style="color: var(--slate-600); font-size: 15px; margin-top: 4px;">
+      Centralized command center for managing company vacancies, candidate pipelines, recruitment notices, and recruiter seats.
+    </p>
+  </div>
+  <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+    <a href="{% url 'company_profile_edit' %}" class="btn btn-outline btn-lg" style="color: var(--slate-800); border-color: var(--slate-300);">
+      Edit Company Info
+    </a>
+    <a href="{% url 'company_verification_upload' %}" class="btn btn-outline btn-lg" style="color: var(--slate-800); border-color: var(--slate-300);">
+      🛡️ Verification Center
+    </a>
+    <a href="{% url 'news_create' %}" class="btn btn-outline btn-lg">
+      + Post Company Notice
+    </a>
+    <a href="{% url 'job_create' %}" class="btn btn-primary btn-lg">
+      + Post New Vacancy
+    </a>
+  </div>
+</div>
+
+<!-- Metrics Strip -->
+<section class="stats-strip" style="margin-bottom: 32px;">
+  <div class="stat-box">
+    <span class="stat-value">{{ job_count }}</span>
+    <span class="stat-label">Active Vacancies</span>
+    <p class="stat-desc">Openings receiving applications.</p>
+  </div>
+  <div class="stat-box">
+    <span class="stat-value" style="color: #0284c7;">{{ total_vacancies }}</span>
+    <span class="stat-label">Hiring Target</span>
+    <p class="stat-desc">Total headcount to recruit.</p>
+  </div>
+  <div class="stat-box">
+    <span class="stat-value" style="color: #10b981;">{{ total_hired }}</span>
+    <span class="stat-label">Hired Candidates</span>
+    <p class="stat-desc">Finalized across all rounds.</p>
+  </div>
+  <div class="stat-box">
+    <span class="stat-value">{{ app_count }}</span>
+    <span class="stat-label">Total Applications</span>
+    <p class="stat-desc">AI scored candidate dossiers.</p>
+  </div>
+</section>
+
+<!-- SECTION 1: COMPANY VACANCIES & HEADCOUNT MANAGEMENT -->
+<div class="section-header" style="margin-top: 20px;">
+  <div>
+    <h2 class="section-title">Job Vacancies & Headcount Quota Management</h2>
+    <p class="section-subtitle">Add new vacancies, adjust hiring quota (+/-), pause or resume hiring, and manage candidate round progressions.</p>
+  </div>
+  <a href="{% url 'job_create' %}" class="btn btn-primary btn-sm">+ Post New Role</a>
+</div>
+
+<div class="jobs-grid" style="margin-bottom: 40px;">
+  {% for job in company_jobs %}
+    {% with funnel=job.get_round_funnel_counts %}
+    <article class="job-card" style="display: flex; flex-direction: column; justify-content: space-between; border-top: 4px solid {% if job.status == 'PAUSED' %}#f59e0b{% elif job.status == 'CLOSED' %}#64748b{% else %}var(--primary){% endif %};">
+      <div>
+        <!-- Top Badges & Status Control -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 6px;">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            {% if job.target_course == 'MCA' or 'mca' in job.department|lower %}
+              <span class="meta-badge" style="background: #e0f2fe; color: #0369a1; font-weight: 700;">MCA Stream</span>
+            {% elif job.target_course == 'MBA' or 'mba' in job.department|lower %}
+              <span class="meta-badge" style="background: #fef3c7; color: #b45309; font-weight: 700;">MBA Stream</span>
+            {% else %}
+              <span class="meta-badge" style="background: #f1f5f9; color: var(--slate-700);">{{ job.get_target_course_display }}</span>
+            {% endif %}
+            {% if job.department %}
+              <span class="meta-badge" style="background: var(--slate-100); color: var(--slate-700);">{{ job.department }}</span>
+            {% endif %}
+          </div>
+
+          <!-- Status Pill -->
+          <div>
+            {% if job.status == 'ACTIVE' %}
+              <span class="meta-badge" style="background: #ecfdf5; color: #059669; font-weight: 700;">● Active</span>
+            {% elif job.status == 'PAUSED' %}
+              <span class="meta-badge" style="background: #fffbeb; color: #d97706; font-weight: 700;">⏸ Paused</span>
+            {% elif job.status == 'FILLED' %}
+              <span class="meta-badge" style="background: #eef2ff; color: #4338ca; font-weight: 700;">✓ Target Filled</span>
+            {% else %}
+              <span class="meta-badge" style="background: #f1f5f9; color: #64748b; font-weight: 700;">Archived</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="job-header">
+          <div class="company-logo">{{ job.company_name|slice:":1" }}</div>
+          <div>
+            <h3 class="job-title" style="margin: 0 0 4px 0;">
+              <a href="{% url 'job_detail' job.pk %}" style="color: var(--slate-900);">{{ job.title }}</a>
+            </h3>
+            <div class="company-name">📍 {{ job.location|default:"Remote / Flexible" }} · {{ job.get_job_type_display }}</div>
+          </div>
+        </div>
+
+        <!-- Headcount Quota Control Strip -->
+        <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 12px; margin: 12px 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <strong style="font-size: 13px; color: var(--slate-800);">Target Vacancies:</strong>
+              <span style="font-size: 16px; font-weight: 800; color: var(--primary);">{{ job.vacancies }}</span>
+
+              <!-- In-line Quick Adjuster Form -->
+              <div style="display: inline-flex; align-items: center; gap: 3px; margin-left: 4px;">
+                <form method="post" action="{% url 'job_headcount_adjust' job.pk %}" style="display: inline;">
+                  {% csrf_token %}
+                  <input type="hidden" name="delta" value="-1">
+                  <button type="submit" class="btn btn-ghost btn-sm" style="padding: 1px 6px; font-size: 13px; font-weight: 800; border: 1px solid var(--slate-300);" title="Reduce Vacancy Count">-</button>
+                </form>
+                <form method="post" action="{% url 'job_headcount_adjust' job.pk %}" style="display: inline;">
+                  {% csrf_token %}
+                  <input type="hidden" name="delta" value="1">
+                  <button type="submit" class="btn btn-ghost btn-sm" style="padding: 1px 6px; font-size: 13px; font-weight: 800; border: 1px solid var(--slate-300);" title="Increase Vacancy Count">+</button>
+                </form>
+              </div>
+            </div>
+
+            <span style="font-size: 12px; font-weight: 700; color: #059669;">
+              {{ job.hired_count }} Hired ({{ job.remaining_vacancies }} Open)
+            </span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 9999px; overflow: hidden; margin-bottom: 8px;">
+            <div style="height: 100%; width: {{ job.hiring_progress_percentage }}%; background: #10b981; border-radius: 9999px;"></div>
+          </div>
+
+          <!-- Round Stages Grid -->
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; font-size: 11px; text-align: center;">
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px;">
+              <span style="color: var(--slate-500); display: block;">1st Round</span>
+              <strong style="color: #166534;">{{ funnel.round_1 }}</strong>
+            </div>
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px;">
+              <span style="color: var(--slate-500); display: block;">2nd Round</span>
+              <strong style="color: #1e40af;">{{ funnel.round_2 }}</strong>
+            </div>
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px;">
+              <span style="color: var(--slate-500); display: block;">Final Round</span>
+              <strong style="color: #9a3412;">{{ funnel.final_round }}</strong>
+            </div>
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px;">
+              <span style="color: var(--slate-500); display: block;">Hired</span>
+              <strong style="color: #047857;">{{ funnel.hired }}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="skills-wrap">
+          {% for s in job.skill_list %}
+            <span class="skill-tag">{{ s }}</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Action Footer -->
+      <div style="margin-top: 14px; border-top: 1px solid var(--slate-100); padding-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <a href="{% url 'applicants' job.pk %}" class="btn btn-primary btn-sm">
+          Review Candidates ({{ job.applications.count }}) →
+        </a>
+
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <!-- Toggle Pause / Active Form -->
+          <form method="post" action="{% url 'job_toggle_status' job.pk %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-ghost btn-sm" title="Toggle Active / Pause">
+              {% if job.status == 'ACTIVE' %}⏸ Pause{% else %}▶ Resume{% endif %}
+            </button>
+          </form>
+
+          <!-- Edit Vacancy -->
+          <a href="{% url 'job_edit' job.pk %}" class="btn btn-ghost btn-sm" title="Edit Vacancy Details">
+            ✏️ Edit
+          </a>
+
+          <!-- Delete Vacancy Form -->
+          <form method="post" action="{% url 'job_delete' job.pk %}" style="display: inline;" onsubmit="return confirm('Delete vacancy: {{ job.title }}? If candidates have applied, consider archiving instead.');">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="delete">
+            <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--rose-600);" title="Delete Vacancy">
+              🗑️ Delete
+            </button>
+          </form>
+        </div>
+      </div>
+    </article>
+    {% endwith %}
+  {% empty %}
+    <div class="stat-box" style="grid-column: 1 / -1; text-align: center; padding: 48px;">
+      <h3 style="font-size: 20px; color: var(--slate-800); margin-bottom: 8px;">No job vacancies posted yet</h3>
+      <p class="stat-desc">Create your company's first vacancy to start receiving automated candidate matches.</p>
+      <div style="margin-top: 18px;">
+        <a href="{% url 'job_create' %}" class="btn btn-primary btn-lg">+ Post Your First Job</a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- SECTION 2: COMPANY RECRUITMENT NOTICES & ANNOUNCEMENTS -->
+<div class="section-header" style="margin-top: 20px;">
+  <div>
+    <h2 class="section-title">Company Announcements & Drive Circulars</h2>
+    <p class="section-subtitle">Publish hiring drives, webinar notices, and interview schedules visible to candidates across HireNexa.</p>
+  </div>
+  <a href="{% url 'news_create' %}" class="btn btn-outline btn-sm">+ Publish Announcement</a>
+</div>
+
+<div class="detail-main" style="padding: 0; overflow: hidden; margin-bottom: 36px;">
+  <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+    <thead>
+      <tr style="background: var(--slate-50); border-bottom: 1px solid var(--slate-200); color: var(--slate-600); text-align: left;">
+        <th style="padding: 12px 16px;">Notice Title</th>
+        <th style="padding: 12px 16px;">Category</th>
+        <th style="padding: 12px 16px;">Audience</th>
+        <th style="padding: 12px 16px;">Date</th>
+        <th style="padding: 12px 16px;">Views</th>
+        <th style="padding: 12px 16px; text-align: right;">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in company_news %}
+        <tr style="border-bottom: 1px solid var(--slate-100);">
+          <td style="padding: 12px 16px;">
+            <strong style="color: var(--slate-900);">
+              <a href="{% url 'news_detail' item.slug %}">{{ item.title }}</a>
+            </strong>
+            <span style="font-size: 12px; color: var(--slate-500); display: block;">{{ item.summary|truncatechars:80 }}</span>
+          </td>
+          <td style="padding: 12px 16px;">
+            <span class="meta-badge" style="background: var(--slate-100); color: var(--slate-700);">
+              {{ item.get_category_display }}
+            </span>
+          </td>
+          <td style="padding: 12px 16px; color: var(--slate-600);">
+            {{ item.get_target_audience_display }}
+          </td>
+          <td style="padding: 12px 16px; color: var(--slate-500);">
+            {{ item.published_at|date:"M d, Y" }}
+          </td>
+          <td style="padding: 12px 16px; color: var(--slate-600);">
+            {{ item.views_count }}
+          </td>
+          <td style="padding: 12px 16px; text-align: right;">
+            <div style="display: flex; gap: 6px; justify-content: flex-end;">
+              <a href="{% url 'news_edit' item.pk %}" class="btn btn-ghost btn-sm">Edit</a>
+              <form method="post" action="{% url 'news_delete' item.pk %}" style="display: inline;" onsubmit="return confirm('Delete announcement: {{ item.title }}?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--rose-600);">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6" style="padding: 24px; text-align: center; color: var(--slate-400);">
+            No company announcements published yet. Click '+ Publish Announcement' to notify candidates.
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 3: HR TEAM MANAGEMENT & PROVISIONING -->
+<div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; margin-bottom: 36px;">
+  <!-- Left: HR Recruiter Roster -->
+  <div>
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Company HR & Recruiter Team</h2>
+        <p class="section-subtitle">Recruiters authorized to review candidates and schedule interviews.</p>
+      </div>
+    </div>
+
+    <div class="detail-main" style="padding: 0; overflow: hidden;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+        <thead>
+          <tr style="background: var(--slate-50); border-bottom: 1px solid var(--slate-200); color: var(--slate-600); text-align: left;">
+            <th style="padding: 12px 16px;">Recruiter</th>
+            <th style="padding: 12px 16px;">Department / Role</th>
+            <th style="padding: 12px 16px;">Status</th>
+            <th style="padding: 12px 16px;">Joined</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for member in hr_members %}
+          <tr style="border-bottom: 1px solid var(--slate-100);">
+            <td style="padding: 12px 16px;">
+              <strong style="color: var(--slate-900);">{{ member.user.username }}</strong>
+              <span style="font-size: 12px; color: var(--slate-400); display: block;">{{ member.user.email }}</span>
+            </td>
+            <td style="padding: 12px 16px; color: var(--slate-600);">
+              {{ member.department|default:"Talent Acquisition" }} ({{ member.get_role_display }})
+            </td>
+            <td style="padding: 12px 16px;">
+              <span class="meta-badge" style="background: var(--emerald-50); color: var(--emerald-600); font-weight: 700;">● Active</span>
+            </td>
+            <td style="padding: 12px 16px; color: var(--slate-400);">
+              {{ member.joined_at|date:"M d, Y" }}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="4" style="padding: 20px; text-align: center; color: var(--slate-400);">No additional HR recruiters added yet.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Right: Add New HR Member Form -->
+  <div>
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Provision HR Account</h2>
+        <p class="section-subtitle">Add a recruiter seat to your organization.</p>
+      </div>
+    </div>
+
+    <div class="detail-main" style="padding: 20px;">
+      <form method="post" action="{% url 'company_add_hr' %}">
+        {% csrf_token %}
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label class="form-label" style="font-size: 12px;">Recruiter Username</label>
+          {{ create_hr_form.username }}
+        </div>
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label class="form-label" style="font-size: 12px;">Work Email Address</label>
+          {{ create_hr_form.email }}
+        </div>
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label class="form-label" style="font-size: 12px;">Initial Password</label>
+          {{ create_hr_form.password }}
+        </div>
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label" style="font-size: 12px;">Department</label>
+          {{ create_hr_form.department }}
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          Create & Authorize HR Account
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

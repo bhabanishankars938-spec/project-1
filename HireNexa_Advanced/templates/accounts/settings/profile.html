@@ -1,0 +1,133 @@
+{% extends "accounts/settings/settings_base.html" %}
+
+{% block title %}My Profile · HireNexa Settings{% endblock %}
+
+{% block settings_content %}
+<div class="settings-card">
+  <div class="card-header-bar">
+    <div class="card-title-group">
+      <h2 class="card-title">My Profile & Public Identity</h2>
+      <p class="card-subtitle">Manage your personal information, headline, location, and professional portfolio links.</p>
+    </div>
+    <span class="role-pill-clean {{ current_role_badge_class }}">{{ current_role_display }}</span>
+  </div>
+
+  <form method="post" enctype="multipart/form-data" class="settings-form">
+    {% csrf_token %}
+
+    <!-- Avatar Upload with Preview -->
+    <div class="form-section-block">
+      <label class="form-label" style="font-weight: 700;">Profile Avatar</label>
+      <div class="avatar-upload-row">
+        <div class="avatar-preview-box {{ current_role_badge_class }}">
+          {% if user_settings.avatar %}
+            <img src="{{ user_settings.avatar.url }}" alt="{{ user.username }}" id="avatarPreviewImg" class="avatar-img-round">
+          {% else %}
+            <span id="avatarPreviewInitial" style="font-size: 24px; font-weight: 800;">{{ user.username|slice:":1"|upper }}</span>
+          {% endif %}
+        </div>
+        <div class="avatar-upload-controls">
+          <input type="file" name="avatar" id="avatarFileInput" accept="image/*" class="file-input-hidden" onchange="previewAvatar(this)">
+          <label for="avatarFileInput" class="btn btn-outline btn-sm">
+            <span>📷 Upload New Photo</span>
+          </label>
+          <span class="upload-hint">JPG, PNG or GIF up to 5MB. Recommended size: 256×256 px.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Basic Name & Phone Row -->
+    <div class="form-row-2col">
+      <div class="form-group">
+        <label for="firstNameInput" class="form-label">First Name</label>
+        <input type="text" name="first_name" id="firstNameInput" value="{{ user.first_name }}" class="form-input" placeholder="e.g. Priya">
+      </div>
+      <div class="form-group">
+        <label for="lastNameInput" class="form-label">Last Name</label>
+        <input type="text" name="last_name" id="lastNameInput" value="{{ user.last_name }}" class="form-input" placeholder="e.g. Sharma">
+      </div>
+    </div>
+
+    <div class="form-row-2col">
+      <div class="form-group">
+        <label for="headlineInput" class="form-label">Professional Headline</label>
+        <input type="text" name="headline" id="headlineInput" value="{{ user_settings.headline }}" class="form-input" placeholder="e.g. Senior Full Stack Engineer & Cloud Architect">
+        <span class="form-help-text">Displayed on your candidate profile, proposal cards, and candidate searches.</span>
+      </div>
+      <div class="form-group">
+        <label for="locationInput" class="form-label">Location / City</label>
+        <input type="text" name="location" id="locationInput" value="{{ user_settings.location }}" class="form-input" placeholder="e.g. Bhubaneswar, Odisha / Remote">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="phoneInput" class="form-label">
+        Mobile Phone Number
+        {% if user.is_phone_verified %}
+          <span class="badge-verified-sm">✓ VERIFIED</span>
+        {% else %}
+          <span class="badge-unverified-sm">UNVERIFIED</span>
+        {% endif %}
+      </label>
+      <input type="text" name="phone_number" id="phoneInput" value="{{ user.phone_number|default:'' }}" class="form-input" placeholder="+91 9876543210">
+      <span class="form-help-text">Used for SMS job alerts and emergency two-factor recovery.</span>
+    </div>
+
+    <div class="form-group">
+      <label for="bioInput" class="form-label">Professional Bio / About Me</label>
+      <textarea name="bio" id="bioInput" rows="4" class="form-textarea" placeholder="Describe your key strengths, years of experience, or company mission...">{{ user_settings.bio }}</textarea>
+    </div>
+
+    <!-- Social / Portfolio Links -->
+    <h3 class="form-section-heading">🔗 Portfolio & Professional Links</h3>
+    <div class="form-row-2col">
+      <div class="form-group">
+        <label for="websiteInput" class="form-label">Personal Website / Portfolio</label>
+        <input type="url" name="website_url" id="websiteInput" value="{{ user_settings.website_url }}" class="form-input" placeholder="https://yourdomain.com">
+      </div>
+      <div class="form-group">
+        <label for="linkedinInput" class="form-label">LinkedIn Profile URL</label>
+        <input type="url" name="linkedin_url" id="linkedinInput" value="{{ user_settings.linkedin_url }}" class="form-input" placeholder="https://linkedin.com/in/username">
+      </div>
+    </div>
+
+    <div class="form-row-2col">
+      <div class="form-group">
+        <label for="githubInput" class="form-label">GitHub Profile URL</label>
+        <input type="url" name="github_url" id="githubInput" value="{{ user_settings.github_url }}" class="form-input" placeholder="https://github.com/username">
+      </div>
+      <div class="form-group">
+        <label for="twitterInput" class="form-label">Twitter / X URL</label>
+        <input type="url" name="twitter_url" id="twitterInput" value="{{ user_settings.twitter_url }}" class="form-input" placeholder="https://x.com/username">
+      </div>
+    </div>
+
+    <div class="form-submit-row">
+      <button type="submit" class="btn btn-primary btn-md">
+        Save Profile Changes
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  function previewAvatar(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        let img = document.getElementById('avatarPreviewImg');
+        const initial = document.getElementById('avatarPreviewInitial');
+        if (initial) initial.style.display = 'none';
+        if (!img) {
+          img = document.createElement('img');
+          img.id = 'avatarPreviewImg';
+          img.className = 'avatar-img-round';
+          document.querySelector('.avatar-preview-box').appendChild(img);
+        }
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,508 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} · HireNexa Intelligence{% endblock %}
+
+{% block content %}
+<div style="max-width: 980px; margin: 0 auto; padding-bottom: 60px;">
+  <!-- Header Breadcrumb & Title -->
+  <div style="margin-bottom: 24px;">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+      <a href="{% url 'dashboard' %}" style="color: var(--slate-500); font-size: 13px; text-decoration: none;">Dashboard</a>
+      <span style="color: var(--slate-400); font-size: 13px;">/</span>
+      <span style="color: var(--primary); font-size: 13px; font-weight: 600;">Vacancy Studio</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
+      <div>
+        <h1 style="font-size: 28px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.03em;">
+          {% if is_edit %}Edit Vacancy: {{ job.title }}{% else %}Advanced Vacancy Creation Studio{% endif %}
+        </h1>
+        <p style="color: var(--slate-600); font-size: 14px; margin-top: 4px;">
+          Multi-step enterprise recruitment wizard with dynamic compensation modeling, quota tracking, and AI screening integration.
+        </p>
+      </div>
+      {% if is_edit %}
+        <div style="display: flex; gap: 8px;">
+          <form method="post" action="{% url 'job_duplicate' job.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline btn-sm">Duplicate Vacancy</button>
+          </form>
+          <a href="{% url 'job_detail' job.pk %}" class="btn btn-ghost btn-sm" target="_blank">View Live Posting ↗</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Wizard Step Indicator -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 18px 24px; margin-bottom: 28px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+    <div style="display: flex; justify-content: space-between; align-items: center; position: relative;">
+      <div id="step-btn-1" class="step-indicator active" onclick="goToStep(1)">
+        <div class="step-circle">1</div>
+        <span class="step-text">Details</span>
+      </div>
+      <div class="step-line"></div>
+      <div id="step-btn-2" class="step-indicator" onclick="goToStep(2)">
+        <div class="step-circle">2</div>
+        <span class="step-text">Salary</span>
+      </div>
+      <div class="step-line"></div>
+      <div id="step-btn-3" class="step-indicator" onclick="goToStep(3)">
+        <div class="step-circle">3</div>
+        <span class="step-text">Targets</span>
+      </div>
+      <div class="step-line"></div>
+      <div id="step-btn-4" class="step-indicator" onclick="goToStep(4)">
+        <div class="step-circle">4</div>
+        <span class="step-text">Skills</span>
+      </div>
+      <div class="step-line"></div>
+      <div id="step-btn-5" class="step-indicator" onclick="goToStep(5)">
+        <div class="step-circle">5</div>
+        <span class="step-text">Settings</span>
+      </div>
+      <div class="step-line"></div>
+      <div id="step-btn-6" class="step-indicator" onclick="goToStep(6)">
+        <div class="step-circle">6</div>
+        <span class="step-text">Review</span>
+      </div>
+    </div>
+  </div>
+
+  <form method="post" id="job-wizard-form" novalidate>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <div style="background: var(--rose-50); border: 1px solid var(--rose-200); border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 24px; color: var(--rose-700); font-size: 14px;">
+        {% for error in form.non_field_errors %}
+          <p style="margin: 0;">{{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- =====================================================================
+         STEP 1: JOB DETAILS
+         ===================================================================== -->
+    <div id="step-panel-1" class="wizard-panel">
+      <div class="detail-main" style="padding: 28px; margin-bottom: 20px;">
+        <h2 style="font-size: 18px; font-weight: 700; color: var(--slate-900); margin-bottom: 6px;">
+          Step 1: Role Overview & Organizational Identity
+        </h2>
+        <p style="color: var(--slate-500); font-size: 13px; margin-bottom: 22px;">
+          Specify the core position title, department, target academic discipline, and workplace location mode.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 18px; margin-bottom: 18px;">
+          <div class="form-group">
+            <label class="form-label">Position Title <span style="color: var(--rose-600); font-weight: 700;">*</span></label>
+            {{ form.title }}
+            {% if form.title.errors %}<span style="color: var(--rose-600); font-size: 12px;">{{ form.title.errors.0 }}</span>{% endif %}
+          </div>
+          <div class="form-group">
+            <label class="form-label">Department / Unit</label>
+            {{ form.department }}
+            {% if form.department.errors %}<span style="color: var(--rose-600); font-size: 12px;">{{ form.department.errors.0 }}</span>{% endif %}
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 18px;">
+          <div class="form-group">
+            <label class="form-label">Target Stream / Course</label>
+            {{ form.target_course }}
+            {% if form.target_course.errors %}<span style="color: var(--rose-600); font-size: 12px;">{{ form.target_course.errors.0 }}</span>{% endif %}
+          </div>
+          <div class="form-group">
+            <label class="form-label">Employment Type</label>
+            {{ form.job_type }}
+            {% if form.job_type.errors %}<span style="color: var(--rose-600); font-size: 12px;">{{ form.job_type.errors.0 }}</span>{% endif %}
+          </div>
+          <div class="form-group">
+            <label class="form-label">Workplace Mode</label>
+            {{ form.workplace_type }}
+            {% if form.workplace_type.errors %}<span style="color: var(--rose-600); font-size: 12px;">{{ form.workplace_type.errors.0 }}</span>{% endif %}
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 18px;">
+          <label class="form-label">Office / Work Location</label>
+          {{ form.location }}
+          {% if form.location.errors %}<span style="color: var(--rose-600); font-size: 12px;">{{ form.location.errors.0 }}</span>{% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Job Description & Responsibilities <span style="color: var(--rose-600); font-weight: 700;">*</span></label>
+          {{ form.description }}
+          {% if form.description.errors %}<span style="color: var(--rose-600); font-size: 12px;">{{ form.description.errors.0 }}</span>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         STEP 2: SALARY CONFIGURATION
+         ===================================================================== -->
+    <div id="step-panel-2" class="wizard-panel" style="display: none;">
+      <div class="detail-main" style="padding: 28px; margin-bottom: 20px;">
+        <h2 style="font-size: 18px; font-weight: 700; color: var(--slate-900); margin-bottom: 6px;">
+          Step 2: Compensation Structure & Currency
+        </h2>
+        <p style="color: var(--slate-500); font-size: 13px; margin-bottom: 22px;">
+          Define transparent salary brackets, calculation periodicity, and public display preferences.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px;">
+          <div class="form-group">
+            <label class="form-label">Currency</label>
+            {{ form.salary_currency }}
+          </div>
+          <div class="form-group">
+            <label class="form-label">Salary Period</label>
+            {{ form.salary_period }}
+          </div>
+          <div class="form-group">
+            <label class="form-label">Minimum Salary</label>
+            {{ form.salary_min }}
+            {% if form.salary_min.errors %}<span style="color: var(--rose-600); font-size: 12px;">{{ form.salary_min.errors.0 }}</span>{% endif %}
+          </div>
+          <div class="form-group">
+            <label class="form-label">Maximum Salary</label>
+            {{ form.salary_max }}
+            {% if form.salary_max.errors %}<span style="color: var(--rose-600); font-size: 12px;">{{ form.salary_max.errors.0 }}</span>{% endif %}
+          </div>
+        </div>
+
+        <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            {{ form.is_salary_negotiable }}
+            <div>
+              <strong style="color: var(--slate-800); font-size: 13px; display: block;">Salary is Negotiable</strong>
+              <span style="font-size: 12px; color: var(--slate-500);">Permits candidates to propose their expectations during interview rounds.</span>
+            </div>
+          </label>
+          <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            {{ form.display_salary_publicly }}
+            <div>
+              <strong style="color: var(--slate-800); font-size: 13px; display: block;">Display Publicly on Job Board</strong>
+              <span style="font-size: 12px; color: var(--slate-500);">Show exact compensation range on candidate job feed.</span>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         STEP 3: HIRING TARGET
+         ===================================================================== -->
+    <div id="step-panel-3" class="wizard-panel" style="display: none;">
+      <div class="detail-main" style="padding: 28px; margin-bottom: 20px;">
+        <h2 style="font-size: 18px; font-weight: 700; color: var(--slate-900); margin-bottom: 6px;">
+          Step 3: Headcount Targets & Interview Rounds
+        </h2>
+        <p style="color: var(--slate-500); font-size: 13px; margin-bottom: 22px;">
+          Configure total planned openings and specify the sequence of candidate evaluation rounds.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin-bottom: 20px;">
+          <div class="form-group">
+            <label class="form-label">Total Vacancies / Openings <span style="color: var(--rose-600); font-weight: 700;">*</span></label>
+            {{ form.vacancies }}
+            {% if form.vacancies.errors %}<span style="color: var(--rose-600); font-size: 12px;">{{ form.vacancies.errors.0 }}</span>{% endif %}
+            <span style="font-size: 11px; color: var(--slate-500); margin-top: 4px; display: block;">Total headcount planned for this recruitment requisition.</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hiring Round Structure</label>
+            {{ form.hiring_rounds }}
+            <span style="font-size: 11px; color: var(--slate-500); margin-top: 4px; display: block;">e.g. Round 1 (Online Aptitude), Round 2 (Coding & System Design), Round 3 (HR Final)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         STEP 4: REQUIREMENTS
+         ===================================================================== -->
+    <div id="step-panel-4" class="wizard-panel" style="display: none;">
+      <div class="detail-main" style="padding: 28px; margin-bottom: 20px;">
+        <h2 style="font-size: 18px; font-weight: 700; color: var(--slate-900); margin-bottom: 6px;">
+          Step 4: Skill Taxonomy & Experience Criteria
+        </h2>
+        <p style="color: var(--slate-500); font-size: 13px; margin-bottom: 22px;">
+          Configure required technical keywords parsed by the HireNexa AI matching engine.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+          <div class="form-group">
+            <label class="form-label">Seniority / Experience Level</label>
+            {{ form.experience_level }}
+          </div>
+          <div class="form-group">
+            <label class="form-label">Minimum Experience (Years)</label>
+            {{ form.min_experience_years }}
+            {% if form.min_experience_years.errors %}<span style="color: var(--rose-600); font-size: 12px;">{{ form.min_experience_years.errors.0 }}</span>{% endif %}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Required Skills (Comma separated) <span style="color: var(--rose-600); font-weight: 700;">*</span></label>
+          {{ form.required_skills }}
+          <span style="font-size: 12px; color: var(--slate-500); margin-top: 4px; display: block;">
+            The AI engine checks 130+ technical synonyms against candidate resumes (e.g. Python, Django, PostgreSQL, Docker, AWS).
+          </span>
+          {% if form.required_skills.errors %}<span style="color: var(--rose-600); font-size: 12px;">{{ form.required_skills.errors.0 }}</span>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         STEP 5: APPLICATION SETTINGS
+         ===================================================================== -->
+    <div id="step-panel-5" class="wizard-panel" style="display: none;">
+      <div class="detail-main" style="padding: 28px; margin-bottom: 20px;">
+        <h2 style="font-size: 18px; font-weight: 700; color: var(--slate-900); margin-bottom: 6px;">
+          Step 5: Pre-Screening Questions & AI Automation
+        </h2>
+        <p style="color: var(--slate-500); font-size: 13px; margin-bottom: 22px;">
+          Configure automated screening rules and vacancy operational status.
+        </p>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label class="form-label">Custom Pre-Screening Questions (One per line)</label>
+          {{ form.screening_questions }}
+          <span style="font-size: 12px; color: var(--slate-500); margin-top: 4px; display: block;">
+            Candidates must answer these questions upon submitting their application.
+          </span>
+        </div>
+
+        <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+          <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            {{ form.is_ai_screening_enabled }}
+            <div>
+              <strong style="color: var(--slate-800); font-size: 13px; display: block;">Automated AI Match Evaluation</strong>
+              <span style="font-size: 12px; color: var(--slate-500);">Auto-rank incoming resumes using 7-Agent matching pipeline.</span>
+            </div>
+          </label>
+          <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            {{ form.is_active }}
+            <div>
+              <strong style="color: var(--slate-800); font-size: 13px; display: block;">Vacancy is Live & Receiving Applications</strong>
+              <span style="font-size: 12px; color: var(--slate-500);">Uncheck to save as an inactive draft.</span>
+            </div>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Requisition Status</label>
+          {{ form.status }}
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         STEP 6: PREVIEW AND PUBLISH
+         ===================================================================== -->
+    <div id="step-panel-6" class="wizard-panel" style="display: none;">
+      <div class="detail-main" style="padding: 28px; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+          <div>
+            <h2 style="font-size: 18px; font-weight: 700; color: var(--slate-900); margin-bottom: 4px;">
+              Step 6: Live Pre-Publication Inspection
+            </h2>
+            <p style="color: var(--slate-500); font-size: 13px;">Review the finalized vacancy details before publishing to the platform talent feed.</p>
+          </div>
+          <span class="meta-badge" style="background: #ecfdf5; color: #059669; font-weight: 700;">Ready to Publish</span>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 22px; margin-bottom: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
+            <div>
+              <h3 id="prev-title" style="font-size: 20px; font-weight: 800; color: var(--slate-900); margin: 0 0 4px 0;">--</h3>
+              <p id="prev-dept-course" style="color: var(--slate-600); font-size: 13px; margin: 0;">--</p>
+            </div>
+            <div id="prev-salary-badge" class="meta-badge" style="background: #e0e7ff; color: #3730a3; font-weight: 700; font-size: 13px;">
+              ₹ --
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding-top: 14px; border-top: 1px solid var(--slate-200); margin-bottom: 14px; font-size: 13px;">
+            <div>
+              <span style="color: var(--slate-500); display: block;">Planned Headcount</span>
+              <strong id="prev-vacancies" style="color: var(--slate-800);">-- Positions</strong>
+            </div>
+            <div>
+              <span style="color: var(--slate-500); display: block;">Workplace / Mode</span>
+              <strong id="prev-workplace" style="color: var(--slate-800);">--</strong>
+            </div>
+            <div>
+              <span style="color: var(--slate-500); display: block;">Experience Level</span>
+              <strong id="prev-exp" style="color: var(--slate-800);">--</strong>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <span style="color: var(--slate-500); font-size: 12px; display: block; margin-bottom: 4px;">Required Competencies</span>
+            <div id="prev-skills" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+          </div>
+
+          <div>
+            <span style="color: var(--slate-500); font-size: 12px; display: block; margin-bottom: 4px;">Hiring Round Funnel</span>
+            <span id="prev-rounds" style="font-size: 13px; color: var(--slate-700); font-weight: 500;">--</span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+          <button type="submit" name="action" value="draft" class="btn btn-outline btn-lg" onclick="setDraftMode()">
+            Save as Inactive Draft
+          </button>
+          <button type="submit" name="action" value="publish" class="btn btn-primary btn-lg" style="background: #059669; border-color: #059669;">
+            ✓ Confirm & Publish Vacancy
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wizard Navigation Footer -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+      <button type="button" id="prev-step-btn" class="btn btn-outline" onclick="changeStep(-1)" style="visibility: hidden;">
+        ← Back
+      </button>
+      <div style="display: flex; gap: 10px;">
+        <a href="{% url 'dashboard' %}" class="btn btn-ghost" style="color: var(--slate-500);">Cancel</a>
+        <button type="button" id="next-step-btn" class="btn btn-primary" onclick="changeStep(1)">
+          Continue to Step 2 →
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<style>
+  .step-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    z-index: 2;
+  }
+  .step-circle {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--slate-100);
+    border: 2px solid var(--slate-300);
+    color: var(--slate-600);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    transition: all 0.2s ease;
+  }
+  .step-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--slate-500);
+  }
+  .step-indicator.active .step-circle {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+  }
+  .step-indicator.active .step-text {
+    color: var(--primary);
+    font-weight: 700;
+  }
+  .step-indicator.completed .step-circle {
+    background: #059669;
+    border-color: #059669;
+    color: #ffffff;
+  }
+  .step-line {
+    flex: 1;
+    height: 2px;
+    background: var(--slate-200);
+    margin: 0 8px;
+    margin-bottom: 20px;
+  }
+</style>
+
+<script>
+  let currentStep = 1;
+  const totalSteps = 6;
+
+  function updatePreview() {
+    const title = document.querySelector('[name="title"]')?.value || 'Untitled Vacancy';
+    const dept = document.querySelector('[name="department"]')?.value || '';
+    const course = document.querySelector('[name="target_course"] option:checked')?.text || '';
+    const sMin = document.querySelector('[name="salary_min"]')?.value || '0';
+    const sMax = document.querySelector('[name="salary_max"]')?.value || '0';
+    const curr = document.querySelector('[name="salary_currency"]')?.value || 'INR';
+    const period = document.querySelector('[name="salary_period"]')?.value || 'YEAR';
+    const vacancies = document.querySelector('[name="vacancies"]')?.value || '1';
+    const workplace = document.querySelector('[name="workplace_type"] option:checked')?.text || 'On-site';
+    const exp = document.querySelector('[name="experience_level"] option:checked')?.text || 'Entry';
+    const skills = document.querySelector('[name="required_skills"]')?.value || '';
+    const rounds = document.querySelector('[name="hiring_rounds"]')?.value || 'Standard Evaluation';
+
+    document.getElementById('prev-title').innerText = title;
+    document.getElementById('prev-dept-course').innerText = `${course ? course + ' · ' : ''}${dept || 'General'}`;
+    const periodStr = period === 'MONTH' ? '/mo' : '/yr';
+    document.getElementById('prev-salary-badge').innerText = `${curr} ${Number(sMin).toLocaleString()} – ${Number(sMax).toLocaleString()} ${periodStr}`;
+    document.getElementById('prev-vacancies').innerText = `${vacancies} Positions`;
+    document.getElementById('prev-workplace').innerText = workplace;
+    document.getElementById('prev-exp').innerText = exp;
+    document.getElementById('prev-rounds').innerText = rounds;
+
+    const skillsContainer = document.getElementById('prev-skills');
+    skillsContainer.innerHTML = '';
+    skills.split(',').map(s => s.trim()).filter(Boolean).forEach(skill => {
+      const tag = document.createElement('span');
+      tag.className = 'meta-badge';
+      tag.style.background = '#f1f5f9';
+      tag.style.color = '#334155';
+      tag.innerText = skill;
+      skillsContainer.appendChild(tag);
+    });
+  }
+
+  function goToStep(step) {
+    if (step < 1 || step > totalSteps) return;
+    currentStep = step;
+
+    for (let i = 1; i <= totalSteps; i++) {
+      const panel = document.getElementById(`step-panel-${i}`);
+      const btn = document.getElementById(`step-btn-${i}`);
+      if (panel) panel.style.display = i === currentStep ? 'block' : 'none';
+      if (btn) {
+        btn.classList.remove('active', 'completed');
+        if (i === currentStep) btn.classList.add('active');
+        else if (i < currentStep) btn.classList.add('completed');
+      }
+    }
+
+    const prevBtn = document.getElementById('prev-step-btn');
+    const nextBtn = document.getElementById('next-step-btn');
+
+    if (currentStep === 1) {
+      prevBtn.style.visibility = 'hidden';
+    } else {
+      prevBtn.style.visibility = 'visible';
+    }
+
+    if (currentStep === totalSteps) {
+      nextBtn.style.display = 'none';
+      updatePreview();
+    } else {
+      nextBtn.style.display = 'inline-flex';
+      nextBtn.innerText = `Continue to Step ${currentStep + 1} →`;
+    }
+    window.scrollTo({ top: 120, behavior: 'smooth' });
+  }
+
+  function changeStep(delta) {
+    goToStep(currentStep + delta);
+  }
+
+  function setDraftMode() {
+    const activeBox = document.querySelector('[name="is_active"]');
+    if (activeBox) activeBox.checked = false;
+  }
+</script>
+{% endblock %}

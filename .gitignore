@@ -1,0 +1,65 @@
+# Environment and secrets (CRITICAL: Do not commit sensitive keys)
+.env
+.env.*
+*.env
+!.env.example
+
+# SQLite Databases & Backups
+*.sqlite3
+*.sqlite3*
+db.sqlite3
+db.sqlite3*
+*.db
+db_backup.sqlite3
+*.bak
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing & logs
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+*.pot
+
+# Media & uploaded assets
+media/
+staticfiles/
+
+# IDE and OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Scratch and temporary work
+scratch/

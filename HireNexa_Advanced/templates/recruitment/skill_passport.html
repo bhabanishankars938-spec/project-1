@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block title %}HireNexa Professional Skill Passport · {{ passport.self_declared.full_name }}{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1000px; margin: 0 auto; padding: 24px 16px;">
+  <!-- Header & Actions -->
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+    <div>
+      <span class="hero-pill" style="background: #eef2ff; color: #4f46e5; font-weight: 700; padding: 4px 12px; border-radius: 9999px; font-size: 12px; display: inline-block; margin-bottom: 8px;">VERIFIED TALENT CREDENTIAL</span>
+      <h1 style="font-size: 28px; font-weight: 800; color: var(--slate-900); margin: 0; letter-spacing: -0.02em;">Professional Skill Passport</h1>
+      <p style="color: var(--slate-600); font-size: 14px; margin-top: 4px;">Portable candidate profile separating self-declared claims from independently verified achievements.</p>
+    </div>
+    {% if is_owner %}
+    <div style="display: flex; gap: 10px;">
+      <button onclick="navigator.clipboard.writeText(window.location.origin + '{{ passport.verification_url }}'); alert('Public verification link copied to clipboard!');" class="btn btn-outline" style="font-weight: 600;">🔗 Copy Verification Link</button>
+      <button onclick="window.print();" class="btn btn-primary" style="font-weight: 600;">🖨️ Export PDF</button>
+    </div>
+    {% else %}
+    <div>
+      <span style="background: #ecfdf5; color: #047857; font-weight: 800; font-size: 13px; padding: 6px 14px; border-radius: 9999px; border: 1px solid #a7f3d0; display: inline-block;">
+        ✓ Authenticated Employer Verification View
+      </span>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Passport Card Shell -->
+  <div style="background: #ffffff; border: 2px solid var(--slate-200); border-radius: var(--radius-xl); box-shadow: var(--shadow-md); overflow: hidden; margin-bottom: 30px;">
+    <!-- Passport Header Ribbon -->
+    <div style="background: linear-gradient(135deg, #0f172a, #1e293b); color: #ffffff; padding: 24px 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <span style="font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 700; letter-spacing: 0.08em;">HIRENEXA OFFICIAL CREDENTIAL</span>
+        <h2 style="font-size: 22px; font-weight: 800; margin: 4px 0 0 0; color: #ffffff;">{{ passport.self_declared.full_name }}</h2>
+        <span style="font-size: 13px; color: #cbd5e1;">{{ passport.self_declared.headline }}</span>
+      </div>
+      <div style="text-align: right;">
+        <span style="font-size: 11px; color: #94a3b8; text-transform: uppercase; display: block;">Passport ID</span>
+        <strong style="font-size: 16px; color: #38bdf8; font-family: monospace; letter-spacing: 0.05em;">{{ passport.passport_id }}</strong>
+        <span style="font-size: 10px; color: #64748b; display: block; margin-top: 2px;">SHA-256: {{ passport.integrity_hash|slice:":16" }}...</span>
+      </div>
+    </div>
+
+    <div style="padding: 28px;">
+      <!-- Security Governance Notice -->
+      <div style="background: #f8fafc; border-left: 4px solid #4f46e5; padding: 12px 16px; border-radius: 0 var(--radius-md) var(--radius-md) 0; margin-bottom: 24px; font-size: 12px; color: var(--slate-700);">
+        🛡️ <strong>Integrity Guarantee:</strong> Achievements under the <em>Independently Verified</em> section are backed by proctored examination scores, automated sandbox test runs, and audited code repository files in the HireNexa database.
+      </div>
+
+      <!-- SECTION 1: INDEPENDENTLY VERIFIED ACHIEVEMENTS (The Value Layer) -->
+      <div style="margin-bottom: 32px;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; border-bottom: 2px solid #10b981; padding-bottom: 8px;">
+          <span style="background: #10b981; color: #ffffff; border-radius: 9999px; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800;">✓</span>
+          <h3 style="font-size: 18px; font-weight: 800; color: var(--slate-900); margin: 0;">Independently Verified Achievements</h3>
+          <span style="font-size: 12px; color: #047857; font-weight: 700; background: #ecfdf5; padding: 2px 8px; border-radius: 9999px; margin-left: auto;">
+            {{ passport.total_verified_achievements }} Verified Entries
+          </span>
+        </div>
+
+        <!-- 1.1 Proctored Assessments -->
+        <h4 style="font-size: 13px; font-weight: 700; color: var(--slate-600); text-transform: uppercase; margin-bottom: 10px;">Proctored Examination Scores:</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 20px;">
+          {% for exam in passport.verified_achievements.verified_assessments %}
+          <div style="border: 1px solid #a7f3d0; background: #f0fdf4; border-radius: var(--radius-lg); padding: 14px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+              <span style="font-size: 11px; font-weight: 700; color: #047857; text-transform: uppercase;">{{ exam.subject }}</span>
+              <strong style="font-size: 14px; color: #047857;">{{ exam.score_percentage }}%</strong>
+            </div>
+            <strong style="font-size: 14px; color: var(--slate-900); display: block; margin-bottom: 4px;">{{ exam.exam_title }}</strong>
+            <span style="font-size: 11px; color: var(--slate-500); display: block;">{{ exam.performance_level }} · Verified {{ exam.verified_at }}</span>
+          </div>
+          {% empty %}
+          <p style="color: var(--slate-500); font-size: 13px;">No verified assessments recorded yet.</p>
+          {% endfor %}
+        </div>
+
+        <!-- 1.2 Coding Challenges -->
+        {% if passport.verified_achievements.verified_coding_challenges %}
+        <h4 style="font-size: 13px; font-weight: 700; color: var(--slate-600); text-transform: uppercase; margin-bottom: 10px;">Sandbox Evaluated Coding Challenges:</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 20px;">
+          {% for code in passport.verified_achievements.verified_coding_challenges %}
+          <div style="border: 1px solid #c7d2fe; background: #eef2ff; border-radius: var(--radius-lg); padding: 14px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+              <span style="font-size: 11px; font-weight: 700; color: #4338ca;">{{ code.language }}</span>
+              <span style="font-size: 11px; background: #ffffff; padding: 2px 6px; border-radius: 4px; font-weight: 700; color: #4f46e5;">{{ code.cases_passed }} Tests Passed</span>
+            </div>
+            <strong style="font-size: 14px; color: var(--slate-900); display: block; margin-bottom: 4px;">{{ code.problem_title }}</strong>
+            <span style="font-size: 11px; color: var(--slate-500);">Difficulty: {{ code.difficulty }} · Verified {{ code.verified_at }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- 1.3 Verified Portfolio Projects -->
+        {% if passport.verified_achievements.verified_portfolio_projects %}
+        <h4 style="font-size: 13px; font-weight: 700; color: var(--slate-600); text-transform: uppercase; margin-bottom: 10px;">Audited Portfolio Projects & Repositories:</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
+          {% for proj in passport.verified_achievements.verified_portfolio_projects %}
+          <div style="border: 1px solid var(--slate-200); background: #ffffff; border-radius: var(--radius-lg); padding: 16px; box-shadow: var(--shadow-sm);">
+            <strong style="font-size: 15px; color: var(--slate-900); display: block; margin-bottom: 4px;">{{ proj.project_name }}</strong>
+            <span style="font-size: 12px; color: #4f46e5; display: block; margin-bottom: 8px;">Stack: {{ proj.technologies|join:", " }}</span>
+            <div style="display: flex; gap: 10px; font-size: 12px;">
+              {% if proj.github_url %}
+              <a href="{{ proj.github_url }}" target="_blank" rel="noopener" style="color: var(--slate-700); font-weight: 600;">GitHub Repo ↗</a>
+              {% endif %}
+              {% if proj.live_demo_url %}
+              <a href="{{ proj.live_demo_url }}" target="_blank" rel="noopener" style="color: #4f46e5; font-weight: 600;">Live Demo ↗</a>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- SECTION 2: SELF-DECLARED CANDIDATE CLAIMS -->
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px; border-bottom: 2px solid var(--slate-200); padding-bottom: 8px;">
+          <span style="background: var(--slate-200); color: var(--slate-600); border-radius: 9999px; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800;">ℹ</span>
+          <h3 style="font-size: 18px; font-weight: 700; color: var(--slate-800); margin: 0;">Self-Declared Profile Claims</h3>
+          <span style="font-size: 11px; color: var(--slate-400); margin-left: auto;">Candidate Provided</span>
+        </div>
+
+        {% if passport.self_declared.bio %}
+        <p style="font-size: 13px; color: var(--slate-700); line-height: 1.5; margin-bottom: 14px;">{{ passport.self_declared.bio }}</p>
+        {% endif %}
+
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+          {% for sk in passport.self_declared.self_declared_skills %}
+          <span style="background: var(--slate-100); border: 1px solid var(--slate-200); color: var(--slate-700); font-size: 12px; padding: 4px 10px; border-radius: var(--radius-md);">
+            {{ sk.skill_name }} <span style="font-size: 10px; color: var(--slate-400);">(Self-Declared)</span>
+          </span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends "connect/base_connect.html" %}
+{% load static %}
+
+{% block title %}{{ event.title }} · HireNexa Career Webinars{% endblock %}
+
+{% block meta %}
+<meta name="description" content="{{ event.description|truncatewords:30 }}">
+<meta property="og:title" content="{{ event.title }} | HireNexa Connect">
+<meta property="og:description" content="{{ event.description|truncatewords:30 }}">
+<meta property="og:type" content="event">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationEvent",
+  "name": "{{ event.title|escapejs }}",
+  "description": "{{ event.description|escapejs }}",
+  "startDate": "{{ event.scheduled_at|date:'c' }}",
+  "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "location": {
+    "@type": "VirtualLocation",
+    "url": "https://hirenexa.com/connect/events/{{ event.slug }}/"
+  },
+  "organizer": {
+    "@type": "Organization",
+    "name": "HireNexa",
+    "url": "https://hirenexa.com"
+  },
+  "performer": {
+    "@type": "Person",
+    "name": "{{ event.presenter_name|default:'Industry Expert'|escapejs }}"
+  }
+}
+</script>
+{% endblock %}
+
+{% block connect_content %}
+<div style="max-width: 900px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 36px; box-shadow: 0 2px 14px rgba(0,0,0,0.04);">
+
+  <!-- Event Header -->
+  <div style="border-bottom: 1px solid #f1f5f9; padding-bottom: 24px; margin-bottom: 24px;">
+    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
+      <span style="font-size: 11px; font-weight: 700; background: #eff6ff; color: #1d4ed8; padding: 4px 10px; border-radius: 9999px;">
+        {{ event.get_category_display }}
+      </span>
+      <span style="font-size: 11px; font-weight: 700; background: #f0fdf4; color: #16a34a; padding: 4px 10px; border-radius: 9999px;">
+        {{ event.cover_tag }}
+      </span>
+    </div>
+
+    <h1 style="font-size: 26px; font-weight: 900; color: #0f172a; margin: 0 0 10px; line-height: 1.3;">
+      {{ event.title }}
+    </h1>
+    {% if event.subtitle %}
+    <p style="font-size: 16px; color: #475569; margin: 0 0 16px; line-height: 1.5;">
+      {{ event.subtitle }}
+    </p>
+    {% endif %}
+
+    <div style="display: flex; gap: 20px; font-size: 13.5px; color: #64748b; flex-wrap: wrap;">
+      <div>🕒 <strong>Date & Time:</strong> {{ event.scheduled_at|date:"l, d F Y · h:i A" }}</div>
+      <div>⏳ <strong>Duration:</strong> {{ event.duration_minutes }} Minutes</div>
+      <div>💺 <strong>Capacity:</strong> {{ event.registered_count }} / {{ event.capacity }} Registered</div>
+    </div>
+  </div>
+
+  <!-- Presenter Bio Card -->
+  <div style="background: #f8fafc; border-radius: 12px; padding: 20px; margin-bottom: 28px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
+    <div style="width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800;">
+      {{ event.presenter_name|slice:":1"|upper }}
+    </div>
+    <div>
+      <div style="font-size: 16px; font-weight: 700; color: #0f172a;">{{ event.presenter_name }}</div>
+      <div style="font-size: 13px; color: #2563eb; font-weight: 600;">{{ event.presenter_title }}</div>
+      {% if event.presenter_bio %}
+      <div style="font-size: 12.5px; color: #64748b; margin-top: 4px;">{{ event.presenter_bio }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Agenda & Description -->
+  <div style="margin-bottom: 32px; font-size: 14.5px; color: #334155; line-height: 1.7;">
+    <h3 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 12px;">📋 Webinar Agenda & Key Takeaways</h3>
+    <div style="white-space: pre-line;">{{ event.description }}</div>
+  </div>
+
+  <!-- Registration Actions -->
+  <div style="border-top: 1px solid #f1f5f9; padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+    <div>
+      <span style="font-size: 13px; color: #64748b;">Admission:</span>
+      <span style="font-size: 16px; font-weight: 800; color: #10b981; margin-left: 6px;">100% Free · Moderated Webinar</span>
+    </div>
+
+    <div>
+      {% if is_registered %}
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <span style="font-size: 13.5px; font-weight: 700; color: #10b981; background: #ecfdf5; padding: 8px 14px; border-radius: 8px;">
+          ✓ You are Registered
+        </span>
+        <a href="{% url 'connect:public_event_room' event.slug %}" class="btn btn-primary" style="background: #2563eb; color: #fff; font-weight: 700; font-size: 14px; padding: 10px 22px; border-radius: 8px; text-decoration: none;">
+          Join Webinar Stage →
+        </a>
+      </div>
+      {% else %}
+      {% if event.is_full %}
+      <button disabled style="background: #e2e8f0; color: #94a3b8; font-weight: 700; font-size: 14px; padding: 10px 22px; border-radius: 8px; border: none; cursor: not-allowed;">
+        Webinar Full (Capacity Reached)
+      </button>
+      {% else %}
+      <form method="post" action="{% url 'connect:public_event_register' event.slug %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary" style="background: #2563eb; color: #fff; font-weight: 700; font-size: 14px; padding: 10px 26px; border-radius: 8px; border: none; cursor: pointer;">
+          🚀 Register for Free Now
+        </button>
+      </form>
+      {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

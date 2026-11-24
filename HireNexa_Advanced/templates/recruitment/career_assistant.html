@@ -1,0 +1,523 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}AI Career Optimization (ACO) Suite · HireNexa Enterprise{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1280px; margin: 0 auto; padding: 28px 20px;">
+
+  <!-- Hero Header & Global Actions -->
+  <div
+    style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 32px 36px; margin-bottom: 28px; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25); border: 1px solid rgba(255,255,255,0.08);">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px;">
+      <div>
+        <div
+          style="display: inline-flex; align-items: center; gap: 8px; background: rgba(37, 99, 235, 0.2); border: 1px solid rgba(59, 130, 246, 0.35); padding: 4px 14px; border-radius: 9999px; margin-bottom: 12px;">
+          <span style="font-size: 13px;">⚡</span>
+          <span
+            style="font-size: 12px; font-weight: 700; color: #93c5fd; letter-spacing: 0.04em; text-transform: uppercase;">AI Career Assistant · AI Career Optimization (ACO)</span>
+        </div>
+        <h1 style="font-size: 30px; font-weight: 800; color: #ffffff; margin: 0 0 8px 0; letter-spacing: -0.02em;">AI Career Assistant — Unified 8-Module Career Intelligence</h1>
+        <p style="color: #cbd5e1; font-size: 15px; margin: 0; max-width: 720px; line-height: 1.5;">
+          Data-driven, explainable career planning backed by authentic assessment performance, candidate portfolio
+          artifacts, and real-time market hiring criteria.
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <a href="{% url 'candidate_passport' %}" class="btn"
+          style="background: rgba(255,255,255,0.12); color: #ffffff; border: 1px solid rgba(255,255,255,0.25); font-weight: 600; padding: 8px 16px; border-radius: 8px; text-decoration: none;">🎓
+          Skill Passport</a>
+        <a href="{% url 'job_discovery' %}" class="btn"
+          style="background: #2563eb; color: #ffffff; border: none; font-weight: 600; padding: 8px 18px; border-radius: 8px; text-decoration: none;">🔍
+          Job Discovery</a>
+        <a href="{% url 'mcq_entrance_hub' %}" class="btn"
+          style="background: rgba(255,255,255,0.12); color: #ffffff; border: 1px solid rgba(255,255,255,0.25); font-weight: 600; padding: 8px 16px; border-radius: 8px; text-decoration: none;">📝
+          CBT Practice</a>
+      </div>
+    </div>
+
+    <!-- Quick Jump Sub-Navigation Bar -->
+    <div
+      style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 8px; flex-wrap: wrap;">
+      <a href="#module-profile"
+        style="color: #94a3b8; font-size: 13px; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.05); font-weight: 500;">1.
+        Profile Intel</a>
+      <a href="#module-gaps"
+        style="color: #94a3b8; font-size: 13px; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.05); font-weight: 500;">2.
+        Skill Gaps</a>
+      <a href="#module-roadmap"
+        style="color: #94a3b8; font-size: 13px; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.05); font-weight: 500;">3.
+        Career Roadmap</a>
+      <a href="#module-resume"
+        style="color: #94a3b8; font-size: 13px; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.05); font-weight: 500;">4.
+        Resume ATS</a>
+      <a href="#module-jobs"
+        style="color: #94a3b8; font-size: 13px; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.05); font-weight: 500;">5.
+        Job Fit Intel</a>
+      <a href="#module-plan"
+        style="color: #94a3b8; font-size: 13px; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.05); font-weight: 500;">6.
+        4-Week Plan</a>
+      <a href="#module-interview"
+        style="color: #94a3b8; font-size: 13px; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.05); font-weight: 500;">7.
+        Interview Prep</a>
+      <a href="#module-analytics"
+        style="color: #94a3b8; font-size: 13px; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.05); font-weight: 500;">8.
+        Career Analytics</a>
+    </div>
+  </div>
+
+  <!-- MODULE 1: Candidate Career Intelligence & Key Stats -->
+  <section id="module-profile"
+    style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+    <div
+      style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span
+          style="display: inline-flex; width: 32px; height: 32px; background: #eef2ff; color: #2563eb; border-radius: 8px; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">01</span>
+        <div>
+          <h2 style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">Candidate Career Intelligence</h2>
+          <span style="font-size: 12px; color: #64748b;">Verified profile parameters, academic department, and target
+            trajectory</span>
+        </div>
+      </div>
+      <a href="{% url 'profile_edit' %}"
+        style="font-size: 13px; color: #2563eb; text-decoration: none; font-weight: 600;">Edit Profile →</a>
+    </div>
+
+    <div
+      style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; align-items: center;">
+      <div>
+        <span
+          style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: #64748b; letter-spacing: 0.05em;">Target
+          Career Role</span>
+        <h3 style="font-size: 22px; font-weight: 800; color: #0f172a; margin: 4px 0;">{{ candidate.target_role }}</h3>
+        <p style="margin: 0; color: #475569; font-size: 14px;"><strong>Candidate:</strong> {{ candidate.full_name }} ({{ candidate.username }})</p>
+        <p style="margin: 4px 0 0 0; color: #64748b; font-size: 13px;">{{ candidate.education }}{% if candidate.university %} · {{ candidate.university }}{% endif %}{% if candidate.cgpa %} · CGPA: {{ candidate.cgpa }}{% endif %}</p>
+      </div>
+
+      <!-- Key Stats Triad -->
+      <div
+        style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; text-align: center;">
+        <div>
+          <span style="font-size: 20px; font-weight: 800; color: #0f172a; display: block;">{{
+            candidate.user_skills|length }}</span>
+          <span style="font-size: 12px; color: #64748b; font-weight: 500;">Verified Skills</span>
+        </div>
+        <div>
+          <span style="font-size: 20px; font-weight: 800; color: #0f172a; display: block;">{{ candidate.portfolio_count
+            }}</span>
+          <span style="font-size: 12px; color: #64748b; font-weight: 500;">Portfolio Projects</span>
+        </div>
+        <div>
+          <span style="font-size: 20px; font-weight: 800; color: #0f172a; display: block;">{{
+            development.test_attempts_count }}</span>
+          <span style="font-size: 12px; color: #64748b; font-weight: 500;">Exams Taken</span>
+        </div>
+      </div>
+
+      <!-- Placement Readiness Progress Meter -->
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span style="font-size: 12px; font-weight: 700; color: #334155;">Placement Readiness</span>
+          <span style="font-size: 16px; font-weight: 800; color: #2563eb;">{{ development.readiness_score }}%</span>
+        </div>
+        <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 9999px; overflow: hidden;">
+          <div
+            style="width: {{ development.readiness_score }}%; height: 100%; background: linear-gradient(90deg, #2563eb, #0ea5e9); border-radius: 9999px;">
+          </div>
+        </div>
+        <span style="font-size: 11px; color: #64748b; margin-top: 6px; display: block;">Calculated from verified skills,
+          code repositories, and assessments.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TWO-COLUMN SECTION: MODULE 2 & MODULE 4 -->
+  <div
+    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 24px; margin-bottom: 24px;">
+
+    <!-- MODULE 2: Skill Gap Analyzer -->
+    <section id="module-gaps"
+      style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span
+            style="display: inline-flex; width: 32px; height: 32px; background: #eef2ff; color: #2563eb; border-radius: 8px; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">02</span>
+          <div>
+            <h2 style="font-size: 17px; font-weight: 700; color: #0f172a; margin: 0;">Skill Gap Analyzer</h2>
+            <span style="font-size: 12px; color: #64748b;">Market demand comparison vs {{
+              skill_gaps.sample_jobs_analyzed }} live positions</span>
+          </div>
+        </div>
+      </div>
+
+      <p style="font-size: 13px; color: #475569; margin: 0 0 16px 0; line-height: 1.5;">{{ skill_gaps.reasoning }}</p>
+
+      <div style="margin-bottom: 18px;">
+        <span
+          style="font-size: 12px; font-weight: 700; color: #b91c1c; text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 8px;">High-Yield
+          Missing Competencies:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          {% for gap in skill_gaps.missing_skills %}
+          <div
+            style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 6px 12px; font-size: 12px; color: #991b1b; display: flex; align-items: center; gap: 6px;">
+            <span style="font-weight: 700;">{{ gap.skill }}</span>
+            <span
+              style="background: #fee2e2; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 600;">{{
+              gap.market_demand_pct }}% demand</span>
+          </div>
+          {% empty %}
+          <p style="color: #64748b; font-size: 13px; margin: 0;">No major skill gaps identified for your target role!
+            You are fully aligned with active vacancies.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div>
+        <span
+          style="font-size: 12px; font-weight: 700; color: #15803d; text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 8px;">Verified
+          Strengths:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          {% for present in skill_gaps.present_skills %}
+          <div
+            style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 5px 10px; font-size: 12px; color: #166534; font-weight: 600;">
+            ✓ {{ present.skill }}
+          </div>
+          {% empty %}
+          <span style="color: #64748b; font-size: 13px;">Add your technical skills in your candidate profile to populate
+            strengths.</span>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- MODULE 4: Resume Optimization Intelligence -->
+    <section id="module-resume"
+      style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span
+            style="display: inline-flex; width: 32px; height: 32px; background: #eef2ff; color: #2563eb; border-radius: 8px; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">04</span>
+          <div>
+            <h2 style="font-size: 17px; font-weight: 700; color: #0f172a; margin: 0;">Resume Optimization Intelligence
+            </h2>
+            <span style="font-size: 12px; color: #64748b;">ATS readability audit & keyword density validation</span>
+          </div>
+        </div>
+        <a href="{% url 'resume_analyzer' %}"
+          style="font-size: 13px; color: #2563eb; text-decoration: none; font-weight: 600;">Analyzer Tool →</a>
+      </div>
+
+      <!-- ATS Score Badge -->
+      <div
+        style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;">
+        <div>
+          <span style="font-size: 12px; color: #64748b; font-weight: 600;">ATS Parseability Score:</span>
+          <span
+            style="font-size: 22px; font-weight: 800; color: {{ resume_improvements.ats_color }}; display: block;">{{
+            resume_improvements.ats_score }} / 100</span>
+        </div>
+        <span
+          style="background: #ffffff; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 9999px; font-size: 12px; font-weight: 700; color: {{ resume_improvements.ats_color }};">
+          {{ resume_improvements.ats_status }}
+        </span>
+      </div>
+
+      <!-- Action Verbs Cloud -->
+      <div style="margin-bottom: 16px;">
+        <span
+          style="font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 6px;">Recommended
+          Power Action Verbs:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          {% for verb in resume_improvements.action_verbs %}
+          <span
+            style="background: #f1f5f9; color: #334155; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 4px;">{{
+            verb }}</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Concrete Recommendations -->
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        {% for tip in resume_improvements.recommendations %}
+        <div
+          style="border-left: 3px solid #2563eb; background: #f8fafc; padding: 10px 14px; border-radius: 0 8px 8px 0;">
+          <strong style="font-size: 13px; color: #0f172a; display: block; margin-bottom: 2px;">{{ tip.category
+            }}</strong>
+          <p style="font-size: 12px; color: #475569; margin: 0 0 4px 0; line-height: 1.4;">{{ tip.suggestion }}</p>
+          <span style="font-size: 11px; color: #2563eb; font-weight: 600;">💡 {{ tip.impact }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+
+  <!-- MODULE 3: Career Roadmap Generator -->
+  <section id="module-roadmap"
+    style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+    <div
+      style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; flex-wrap: wrap; gap: 12px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span
+          style="display: inline-flex; width: 32px; height: 32px; background: #eef2ff; color: #2563eb; border-radius: 8px; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">03</span>
+        <div>
+          <h2 style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">Career Roadmap Generator</h2>
+          <span style="font-size: 12px; color: #64748b;">Step-by-step career milestones for {{
+            career_roadmap.target_role }} ({{ career_roadmap.completed_milestones }} of {{
+            career_roadmap.total_milestones }} completed)</span>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 13px; font-weight: 700; color: #2563eb;">{{ career_roadmap.overall_progress_pct }}%
+          Progress</span>
+        <div style="width: 120px; height: 8px; background: #e2e8f0; border-radius: 9999px; overflow: hidden;">
+          <div
+            style="width: {{ career_roadmap.overall_progress_pct }}%; height: 100%; background: #2563eb; border-radius: 9999px;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Milestones Horizontal / Grid Flow -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+      {% for m in career_roadmap.milestones %}
+      <div
+        style="background: #f8fafc; border: 1px solid {% if m.status == 'COMPLETED' %}#bbf7d0{% elif m.status == 'IN_PROGRESS' %}#bfdbfe{% else %}#e2e8f0{% endif %}; border-radius: 10px; padding: 16px; position: relative; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span
+              style="font-size: 11px; font-weight: 800; color: #64748b; background: #ffffff; border: 1px solid #e2e8f0; padding: 2px 8px; border-radius: 4px;">STEP
+              {{ m.step }} · {{ m.weeks }}</span>
+            {% if m.status == 'COMPLETED' %}
+            <span
+              style="background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 9999px;">✓
+              Completed</span>
+            {% elif m.status == 'IN_PROGRESS' %}
+            <span
+              style="background: #dbeafe; color: #1d4ed8; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 9999px;">⚡
+              In Progress</span>
+            {% else %}
+            <span
+              style="background: #f1f5f9; color: #64748b; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 9999px;">🔒
+              Upcoming</span>
+            {% endif %}
+          </div>
+          <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0 0 6px 0;">{{ m.title }}</h3>
+          <p style="font-size: 12px; color: #475569; margin: 0 0 8px 0; line-height: 1.4;"><strong>Theory:</strong> {{
+            m.theory }}</p>
+        </div>
+        <div style="border-top: 1px solid #e2e8f0; padding-top: 8px; margin-top: 8px;">
+          <span style="font-size: 11px; color: #2563eb; font-weight: 600; display: block;">🎯 Practical: {{ m.practical
+            }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- MODULE 5: Job Fit Intelligence -->
+  <section id="module-jobs"
+    style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+    <div
+      style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span
+          style="display: inline-flex; width: 32px; height: 32px; background: #eef2ff; color: #2563eb; border-radius: 8px; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">05</span>
+        <div>
+          <h2 style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">Job Fit Intelligence</h2>
+          <span style="font-size: 12px; color: #64748b;">Contextual job recommendations with transparent multi-factor
+            match explanations</span>
+        </div>
+      </div>
+      <a href="{% url 'job_discovery' %}"
+        style="font-size: 13px; color: #2563eb; text-decoration: none; font-weight: 600;">Tune Preference Filters →</a>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+      {% for job in recommended_jobs %}
+      <div
+        style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <div>
+              <h3 style="font-size: 16px; font-weight: 700; color: #0f172a; margin: 0;"><a href="{{ job.apply_url }}"
+                  style="color: inherit; text-decoration: none;">{{ job.title }}</a></h3>
+              <span style="font-size: 13px; color: #64748b;">{{ job.company_name }} · {{ job.location }} ({{
+                job.workplace_type }})</span>
+            </div>
+            <span
+              style="background: #dcfce7; color: #15803d; font-weight: 800; font-size: 13px; padding: 4px 10px; border-radius: 9999px;">
+              {{ job.match_score }}% Match
+            </span>
+          </div>
+
+          <!-- Explainable Rationale -->
+          <div
+            style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 12px; margin: 10px 0;">
+            <span
+              style="font-size: 11px; font-weight: 700; color: #2563eb; text-transform: uppercase; display: block; margin-bottom: 2px;">Transparent
+              Matching Reason:</span>
+            <p style="font-size: 12px; color: #475569; margin: 0; line-height: 1.4;">{{ job.reasoning }}</p>
+          </div>
+
+          <!-- Matched vs Missing Skills -->
+          <div style="margin-bottom: 12px;">
+            <div style="font-size: 11px; color: #166534; font-weight: 600; margin-bottom: 4px;">✓ Matched: {{
+              job.matched_skills|join:", "|default:"General criteria" }}</div>
+            {% if job.missing_skills %}
+            <div style="font-size: 11px; color: #991b1b; font-weight: 600;">⚠️ Gaps to acquire: {{
+              job.missing_skills|join:", " }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e2e8f0; padding-top: 10px;">
+          <span style="font-size: 12px; color: #64748b;">{{ job.vacancies }} hiring openings</span>
+          <a href="{{ job.apply_url }}" class="btn"
+            style="background: #2563eb; color: #ffffff; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; text-decoration: none;">Apply
+            Now</a>
+        </div>
+      </div>
+      {% empty %}
+      <p style="color: #64748b; font-size: 13px; grid-column: 1 / -1; padding: 16px; text-align: center;">No direct job
+        vacancies currently found matching your profile. Update your skills or explore the complete job directory.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- TWO-COLUMN SECTION: MODULE 6 & MODULE 7 -->
+  <div
+    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 24px; margin-bottom: 24px;">
+
+    <!-- MODULE 6: Personalized 4-Week Improvement Plan -->
+    <section id="module-plan"
+      style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span
+            style="display: inline-flex; width: 32px; height: 32px; background: #eef2ff; color: #2563eb; border-radius: 8px; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">06</span>
+          <div>
+            <h2 style="font-size: 17px; font-weight: 700; color: #0f172a; margin: 0;">Personalized Improvement Plan</h2>
+            <span style="font-size: 12px; color: #64748b;">Actionable 4-week learning sprints tailored to your weak
+              topics</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        {% for week in improvement_plan.plan_weeks %}
+        <div
+          style="background: #f8fafc; border: 1px solid {% if week.status == 'IN_PROGRESS' %}#bfdbfe{% else %}#e2e8f0{% endif %}; border-radius: 10px; padding: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span
+              style="font-size: 11px; font-weight: 800; color: #2563eb; background: #eef2ff; padding: 2px 8px; border-radius: 4px;">WEEK
+              {{ week.week }} · {{ week.phase }}</span>
+            <span style="font-size: 11px; color: #64748b; font-weight: 600;">{{ week.time_commitment }}</span>
+          </div>
+          <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Focus: {{ week.focus_area }}
+          </h4>
+          <p style="font-size: 12px; color: #475569; margin: 0 0 8px 0;">{{ week.goal }}</p>
+          <ul style="margin: 0 0 8px 0; padding-left: 18px; font-size: 12px; color: #64748b;">
+            {% for task in week.tasks %}
+            <li style="margin-bottom: 2px;">{{ task }}</li>
+            {% endfor %}
+          </ul>
+          <span
+            style="font-size: 11px; font-weight: 700; color: #059669; display: block; border-top: 1px dashed #e2e8f0; padding-top: 6px;">🏁
+            Checkpoint: {{ week.checkpoint }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- MODULE 7: Interview Preparation Engine -->
+    <section id="module-interview"
+      style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span
+            style="display: inline-flex; width: 32px; height: 32px; background: #eef2ff; color: #2563eb; border-radius: 8px; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">07</span>
+          <div>
+            <h2 style="font-size: 17px; font-weight: 700; color: #0f172a; margin: 0;">Interview Preparation Engine</h2>
+            <span style="font-size: 12px; color: #64748b;">Targeted technical questions with step-by-step solving
+              logic</span>
+          </div>
+        </div>
+        <a href="{% url 'question_bank' %}"
+          style="font-size: 13px; color: #2563eb; text-decoration: none; font-weight: 600;">Question Bank →</a>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        {% for q in interview_practice %}
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span
+              style="font-size: 11px; font-weight: 700; color: #2563eb; background: #eef2ff; padding: 2px 8px; border-radius: 4px;">{{
+              q.subject }}{% if q.topic %} · {{ q.topic }}{% endif %}</span>
+            <span
+              style="font-size: 11px; background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-weight: 700;">{{
+              q.difficulty }}</span>
+          </div>
+          <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">{{ q.title }}</h4>
+          <p style="font-size: 12px; color: #475569; margin: 0 0 8px 0; line-height: 1.4;">{{ q.prompt }}</p>
+          {% if q.explanation_preview %}
+          <div
+            style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; font-size: 11px; color: #64748b;">
+            <strong style="color: #334155;">Solving Logic:</strong> {{ q.explanation_preview }}
+          </div>
+          {% endif %}
+        </div>
+        {% empty %}
+        <p style="color: #64748b; font-size: 13px;">Explore the full question bank to practice verified assessment
+          questions.</p>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+
+  <!-- MODULE 8: Career Analytics & Placement Readiness -->
+  <section id="module-analytics"
+    style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+    <div
+      style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span
+          style="display: inline-flex; width: 32px; height: 32px; background: #eef2ff; color: #2563eb; border-radius: 8px; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">08</span>
+        <div>
+          <h2 style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">Career Analytics & Placement
+            Readiness</h2>
+          <span style="font-size: 12px; color: #64748b;">Comprehensive milestone auditing and verified competency
+            tracking</span>
+        </div>
+      </div>
+      <span style="font-size: 12px; font-weight: 700; color: #64748b;">Avg Exam Score: {{ development.average_test_score
+        }}%</span>
+    </div>
+
+    <!-- Milestones Checklist Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+      {% for m in development.milestones %}
+      <div
+        style="background: #f8fafc; border: 1px solid {% if m.completed %}#bbf7d0{% else %}#e2e8f0{% endif %}; border-radius: 10px; padding: 14px; display: flex; align-items: center; gap: 12px;">
+        <div
+          style="width: 28px; height: 28px; border-radius: 50%; background: {% if m.completed %}#dcfce7{% else %}#f1f5f9{% endif %}; color: {% if m.completed %}#15803d{% else %}#94a3b8{% endif %}; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0;">
+          {% if m.completed %}✓{% else %}○{% endif %}
+        </div>
+        <div>
+          <strong style="font-size: 13px; color: #0f172a; display: block;">{{ m.title }}</strong>
+          <span
+            style="font-size: 11px; color: {% if m.completed %}#15803d{% else %}#64748b{% endif %}; font-weight: 600;">{{
+            m.current }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+</div>
+{% endblock %}

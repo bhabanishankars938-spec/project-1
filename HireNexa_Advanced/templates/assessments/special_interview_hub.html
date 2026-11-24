@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Special Technical Interview Modules | HireNexa{% endblock %}
+
+{% block content %}
+<div class="special-hub-container">
+
+  <!-- Hero Header -->
+  <section class="special-hero">
+    <span class="badge-cat">🎯 Deep Conceptual Modules</span>
+    <h1 class="special-title">Special Interview Topics & Architectural Modules</h1>
+    <p class="special-desc">
+      Master high-impact architectural topics asked in top product companies and engineering interviews:
+      React internals, Angular architecture, Forward Deployed Engineering, HackerRank techniques,
+      AI project monitoring, and production deployment pipelines.
+    </p>
+  </section>
+
+  <!-- Packages Grid -->
+  <div class="special-grid">
+    {% for pkg in packages %}
+    <div class="special-card">
+      <div class="special-card-top">
+        <span class="special-badge">{{ pkg.badge_label }}</span>
+        <span class="special-q-count">{{ pkg.questions.count }} Questions</span>
+      </div>
+
+      <div class="special-icon-box">
+        {% if 'react' in pkg.slug %}⚛️
+        {% elif 'angular' in pkg.slug %}🅰️
+        {% elif 'frontend' in pkg.slug %}🌐
+        {% elif 'forward' in pkg.slug or 'fde' in pkg.slug %}🚀
+        {% elif 'hackerrank' in pkg.slug or 'coding' in pkg.slug %}💻
+        {% elif 'ai' in pkg.slug %}🤖
+        {% else %}⚙️{% endif %}
+      </div>
+
+      <h3 class="special-card-title">
+        <a href="{% url 'special_interview_detail' pkg.slug %}">{{ pkg.title }}</a>
+      </h3>
+
+      <p class="special-card-desc">{{ pkg.description }}</p>
+
+      <div class="special-card-foot">
+        <a href="{% url 'special_interview_detail' pkg.slug %}" class="btn btn-outline btn-sm btn-block">
+          <span>Start Module Practice →</span>
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

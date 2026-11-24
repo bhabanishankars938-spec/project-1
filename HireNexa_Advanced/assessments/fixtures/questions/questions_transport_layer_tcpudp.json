@@ -1,0 +1,562 @@
+[
+  {
+    "order": 1,
+    "title": "Transport Layer (TCP/UDP) Problem #1",
+    "difficulty": "EASY",
+    "topic": "Transport Layer (TCP/UDP)",
+    "text": "In Transport Layer (TCP/UDP) (Network Configuration #1), given an IPv4 subnet mask of /25, how many valid, assignable host IP addresses can be configured on this network?",
+    "code_snippet": "",
+    "explanation": "A /25 mask has 7 host bits. 2^7 - 2 = 126 assignable addresses.",
+    "options": [
+      {
+        "key": "A",
+        "text": "128 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "124 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "128 addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "126 assignable host addresses",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 2,
+    "title": "Transport Layer (TCP/UDP) Problem #2",
+    "difficulty": "EASY",
+    "topic": "Transport Layer (TCP/UDP)",
+    "text": "In Transport Layer (TCP/UDP) (Network Configuration #2), given an IPv4 subnet mask of /26, how many valid, assignable host IP addresses can be configured on this network?",
+    "code_snippet": "",
+    "explanation": "A /26 mask has 6 host bits. 2^6 - 2 = 62 assignable addresses.",
+    "options": [
+      {
+        "key": "A",
+        "text": "64 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "62 assignable host addresses",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "60 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "64 addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 3,
+    "title": "Transport Layer (TCP/UDP) Problem #3",
+    "difficulty": "EASY",
+    "topic": "Transport Layer (TCP/UDP)",
+    "text": "In Transport Layer (TCP/UDP) (Network Configuration #3), given an IPv4 subnet mask of /27, how many valid, assignable host IP addresses can be configured on this network?",
+    "code_snippet": "",
+    "explanation": "A /27 mask has 5 host bits. 2^5 - 2 = 30 assignable addresses.",
+    "options": [
+      {
+        "key": "A",
+        "text": "32 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "30 assignable host addresses",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "28 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "32 addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 4,
+    "title": "Transport Layer (TCP/UDP) Problem #4",
+    "difficulty": "MEDIUM",
+    "topic": "Transport Layer (TCP/UDP)",
+    "text": "In Transport Layer (TCP/UDP) (Network Configuration #4), given an IPv4 subnet mask of /28, how many valid, assignable host IP addresses can be configured on this network?",
+    "code_snippet": "",
+    "explanation": "A /28 mask has 4 host bits. 2^4 - 2 = 14 assignable addresses.",
+    "options": [
+      {
+        "key": "A",
+        "text": "16 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "12 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "14 assignable host addresses",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "16 addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 5,
+    "title": "Transport Layer (TCP/UDP) Problem #5",
+    "difficulty": "MEDIUM",
+    "topic": "Transport Layer (TCP/UDP)",
+    "text": "In Transport Layer (TCP/UDP) (Network Configuration #5), given an IPv4 subnet mask of /29, how many valid, assignable host IP addresses can be configured on this network?",
+    "code_snippet": "",
+    "explanation": "A /29 mask has 3 host bits. 2^3 - 2 = 6 assignable addresses.",
+    "options": [
+      {
+        "key": "A",
+        "text": "8 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "4 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "6 assignable host addresses",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "8 addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 6,
+    "title": "Transport Layer (TCP/UDP) Problem #6",
+    "difficulty": "MEDIUM",
+    "topic": "Transport Layer (TCP/UDP)",
+    "text": "In Transport Layer (TCP/UDP) (Network Configuration #6), given an IPv4 subnet mask of /24, how many valid, assignable host IP addresses can be configured on this network?",
+    "code_snippet": "",
+    "explanation": "A /24 mask has 8 host bits. 2^8 - 2 = 254 assignable addresses.",
+    "options": [
+      {
+        "key": "A",
+        "text": "256 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "252 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "254 assignable host addresses",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "256 addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 7,
+    "title": "Transport Layer (TCP/UDP) Problem #7",
+    "difficulty": "MEDIUM",
+    "topic": "Transport Layer (TCP/UDP)",
+    "text": "In Transport Layer (TCP/UDP) (Network Configuration #7), given an IPv4 subnet mask of /25, how many valid, assignable host IP addresses can be configured on this network?",
+    "code_snippet": "",
+    "explanation": "A /25 mask has 7 host bits. 2^7 - 2 = 126 assignable addresses.",
+    "options": [
+      {
+        "key": "A",
+        "text": "126 assignable host addresses",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "128 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "124 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "128 addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 8,
+    "title": "Transport Layer (TCP/UDP) Problem #8",
+    "difficulty": "MEDIUM",
+    "topic": "Transport Layer (TCP/UDP)",
+    "text": "In Transport Layer (TCP/UDP) (Network Configuration #8), given an IPv4 subnet mask of /26, how many valid, assignable host IP addresses can be configured on this network?",
+    "code_snippet": "",
+    "explanation": "A /26 mask has 6 host bits. 2^6 - 2 = 62 assignable addresses.",
+    "options": [
+      {
+        "key": "A",
+        "text": "62 assignable host addresses",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "64 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "60 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "64 addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 9,
+    "title": "Transport Layer (TCP/UDP) Problem #9",
+    "difficulty": "MEDIUM",
+    "topic": "Transport Layer (TCP/UDP)",
+    "text": "In Transport Layer (TCP/UDP) (Network Configuration #9), given an IPv4 subnet mask of /27, how many valid, assignable host IP addresses can be configured on this network?",
+    "code_snippet": "",
+    "explanation": "A /27 mask has 5 host bits. 2^5 - 2 = 30 assignable addresses.",
+    "options": [
+      {
+        "key": "A",
+        "text": "32 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "30 assignable host addresses",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "28 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "32 addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 10,
+    "title": "Transport Layer (TCP/UDP) Problem #10",
+    "difficulty": "MEDIUM",
+    "topic": "Transport Layer (TCP/UDP)",
+    "text": "In Transport Layer (TCP/UDP) (Network Configuration #10), given an IPv4 subnet mask of /28, how many valid, assignable host IP addresses can be configured on this network?",
+    "code_snippet": "",
+    "explanation": "A /28 mask has 4 host bits. 2^4 - 2 = 14 assignable addresses.",
+    "options": [
+      {
+        "key": "A",
+        "text": "16 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "12 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "14 assignable host addresses",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "16 addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 11,
+    "title": "Transport Layer (TCP/UDP) Problem #11",
+    "difficulty": "MEDIUM",
+    "topic": "Transport Layer (TCP/UDP)",
+    "text": "In Transport Layer (TCP/UDP) (Network Configuration #11), given an IPv4 subnet mask of /29, how many valid, assignable host IP addresses can be configured on this network?",
+    "code_snippet": "",
+    "explanation": "A /29 mask has 3 host bits. 2^3 - 2 = 6 assignable addresses.",
+    "options": [
+      {
+        "key": "A",
+        "text": "8 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "6 assignable host addresses",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "4 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "8 addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 12,
+    "title": "Transport Layer (TCP/UDP) Problem #12",
+    "difficulty": "HARD",
+    "topic": "Transport Layer (TCP/UDP)",
+    "text": "In Transport Layer (TCP/UDP) (Network Configuration #12), given an IPv4 subnet mask of /24, how many valid, assignable host IP addresses can be configured on this network?",
+    "code_snippet": "",
+    "explanation": "A /24 mask has 8 host bits. 2^8 - 2 = 254 assignable addresses.",
+    "options": [
+      {
+        "key": "A",
+        "text": "256 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "252 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "256 addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "254 assignable host addresses",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 13,
+    "title": "Transport Layer (TCP/UDP) Problem #13",
+    "difficulty": "HARD",
+    "topic": "Transport Layer (TCP/UDP)",
+    "text": "In Transport Layer (TCP/UDP) (Network Configuration #13), given an IPv4 subnet mask of /25, how many valid, assignable host IP addresses can be configured on this network?",
+    "code_snippet": "",
+    "explanation": "A /25 mask has 7 host bits. 2^7 - 2 = 126 assignable addresses.",
+    "options": [
+      {
+        "key": "A",
+        "text": "126 assignable host addresses",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "128 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "124 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "128 addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 14,
+    "title": "Transport Layer (TCP/UDP) Problem #14",
+    "difficulty": "HARD",
+    "topic": "Transport Layer (TCP/UDP)",
+    "text": "In Transport Layer (TCP/UDP) (Network Configuration #14), given an IPv4 subnet mask of /26, how many valid, assignable host IP addresses can be configured on this network?",
+    "code_snippet": "",
+    "explanation": "A /26 mask has 6 host bits. 2^6 - 2 = 62 assignable addresses.",
+    "options": [
+      {
+        "key": "A",
+        "text": "64 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "60 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "64 addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "62 assignable host addresses",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 15,
+    "title": "Transport Layer (TCP/UDP) Problem #15",
+    "difficulty": "HARD",
+    "topic": "Transport Layer (TCP/UDP)",
+    "text": "In Transport Layer (TCP/UDP) (Network Configuration #15), given an IPv4 subnet mask of /27, how many valid, assignable host IP addresses can be configured on this network?",
+    "code_snippet": "",
+    "explanation": "A /27 mask has 5 host bits. 2^5 - 2 = 30 assignable addresses.",
+    "options": [
+      {
+        "key": "A",
+        "text": "30 assignable host addresses",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "32 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "28 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "32 addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 16,
+    "title": "Transport Layer (TCP/UDP) Problem #16",
+    "difficulty": "HARD",
+    "topic": "Transport Layer (TCP/UDP)",
+    "text": "In Transport Layer (TCP/UDP) (Network Configuration #16), given an IPv4 subnet mask of /28, how many valid, assignable host IP addresses can be configured on this network?",
+    "code_snippet": "",
+    "explanation": "A /28 mask has 4 host bits. 2^4 - 2 = 14 assignable addresses.",
+    "options": [
+      {
+        "key": "A",
+        "text": "16 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "12 host addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "16 addresses",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "14 assignable host addresses",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  }
+]

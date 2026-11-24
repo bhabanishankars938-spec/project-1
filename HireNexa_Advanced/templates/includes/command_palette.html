@@ -1,0 +1,47 @@
+<!-- ==========================================================================
+     HireNexa Global Command Palette (Ctrl+K)
+     Instant keyboard-first navigation for Jobs, Portals, Settings & Actions
+     ========================================================================== -->
+<div class="cmd-palette-backdrop" id="cmdPaletteBackdrop" style="display: none;" onclick="closeCmdPalette()">
+  <div class="cmd-palette-modal" id="cmdPaletteModal" onclick="event.stopPropagation();" role="dialog" aria-modal="true" aria-label="HireNexa Command Palette">
+    
+    <!-- Search Bar Input Header -->
+    <div class="cmd-palette-search-wrap">
+      <svg class="cmd-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input 
+        type="text" 
+        class="cmd-palette-input" 
+        id="cmdPaletteInput" 
+        placeholder="Type a command, job, company, or settings page... (Esc to close)" 
+        autocomplete="off" 
+        spellcheck="false"
+      >
+      <button type="button" class="cmd-close-chip" onclick="closeCmdPalette()">ESC</button>
+    </div>
+
+    <!-- Results List -->
+    <div class="cmd-palette-results" id="cmdPaletteResults" role="listbox">
+      <!-- Injected via JavaScript -->
+    </div>
+
+    <!-- Footer Shortcuts -->
+    <div class="cmd-palette-footer">
+      <div class="cmd-hint-group">
+        <span class="cmd-key">↑</span>
+        <span class="cmd-key">↓</span>
+        <span class="cmd-hint-text">to navigate</span>
+      </div>
+      <div class="cmd-hint-group">
+        <span class="cmd-key">↵</span>
+        <span class="cmd-hint-text">to select</span>
+      </div>
+      <div class="cmd-hint-group">
+        <span class="cmd-key">Esc</span>
+        <span class="cmd-hint-text">to close</span>
+      </div>
+    </div>
+  </div>
+</div>

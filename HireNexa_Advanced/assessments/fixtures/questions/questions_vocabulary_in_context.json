@@ -1,0 +1,562 @@
+[
+  {
+    "order": 1,
+    "title": "Vocabulary in Context Problem #1",
+    "difficulty": "EASY",
+    "topic": "Vocabulary in Context",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Vocabulary in Context (Case #1):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 2,
+    "title": "Vocabulary in Context Problem #2",
+    "difficulty": "EASY",
+    "topic": "Vocabulary in Context",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Vocabulary in Context (Case #2):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 3,
+    "title": "Vocabulary in Context Problem #3",
+    "difficulty": "EASY",
+    "topic": "Vocabulary in Context",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Vocabulary in Context (Case #3):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 4,
+    "title": "Vocabulary in Context Problem #4",
+    "difficulty": "MEDIUM",
+    "topic": "Vocabulary in Context",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Vocabulary in Context (Case #4):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 5,
+    "title": "Vocabulary in Context Problem #5",
+    "difficulty": "MEDIUM",
+    "topic": "Vocabulary in Context",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Vocabulary in Context (Case #5):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 6,
+    "title": "Vocabulary in Context Problem #6",
+    "difficulty": "MEDIUM",
+    "topic": "Vocabulary in Context",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Vocabulary in Context (Case #6):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 7,
+    "title": "Vocabulary in Context Problem #7",
+    "difficulty": "MEDIUM",
+    "topic": "Vocabulary in Context",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Vocabulary in Context (Case #7):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 8,
+    "title": "Vocabulary in Context Problem #8",
+    "difficulty": "MEDIUM",
+    "topic": "Vocabulary in Context",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Vocabulary in Context (Case #8):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 9,
+    "title": "Vocabulary in Context Problem #9",
+    "difficulty": "MEDIUM",
+    "topic": "Vocabulary in Context",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Vocabulary in Context (Case #9):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 10,
+    "title": "Vocabulary in Context Problem #10",
+    "difficulty": "MEDIUM",
+    "topic": "Vocabulary in Context",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Vocabulary in Context (Case #10):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 11,
+    "title": "Vocabulary in Context Problem #11",
+    "difficulty": "MEDIUM",
+    "topic": "Vocabulary in Context",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Vocabulary in Context (Case #11):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 12,
+    "title": "Vocabulary in Context Problem #12",
+    "difficulty": "HARD",
+    "topic": "Vocabulary in Context",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Vocabulary in Context (Case #12):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 13,
+    "title": "Vocabulary in Context Problem #13",
+    "difficulty": "HARD",
+    "topic": "Vocabulary in Context",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Vocabulary in Context (Case #13):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 14,
+    "title": "Vocabulary in Context Problem #14",
+    "difficulty": "HARD",
+    "topic": "Vocabulary in Context",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Vocabulary in Context (Case #14):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 15,
+    "title": "Vocabulary in Context Problem #15",
+    "difficulty": "HARD",
+    "topic": "Vocabulary in Context",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Vocabulary in Context (Case #15):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 16,
+    "title": "Vocabulary in Context Problem #16",
+    "difficulty": "HARD",
+    "topic": "Vocabulary in Context",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Vocabulary in Context (Case #16):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  }
+]

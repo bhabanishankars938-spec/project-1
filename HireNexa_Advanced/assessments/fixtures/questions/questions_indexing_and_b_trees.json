@@ -1,0 +1,562 @@
+[
+  {
+    "order": 1,
+    "title": "Indexing and B+ Trees Problem #1",
+    "difficulty": "EASY",
+    "topic": "Indexing and B+ Trees",
+    "text": "In SQL standard relational databases (Query #1), under what condition does the HAVING clause filter rows for this query in Indexing and B+ Trees with threshold 51000?",
+    "code_snippet": "SELECT dept_id, COUNT(*) \nFROM Employees \nGROUP BY dept_id \nHAVING AVG(salary) > 51000;",
+    "explanation": "WHERE filters individual tuples before grouping, whereas HAVING filters aggregated groups after GROUP BY.",
+    "options": [
+      {
+        "key": "A",
+        "text": "Before individual table rows are grouped",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "During the initial table scan prior to WHERE evaluation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Only if a nested subquery is explicitly defined",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "After the GROUP BY aggregation is applied to groups",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 2,
+    "title": "Indexing and B+ Trees Problem #2",
+    "difficulty": "EASY",
+    "topic": "Indexing and B+ Trees",
+    "text": "Consider a relational schema R(A, B, C, D) with functional dependencies (Case #2) for Indexing and B+ Trees. If attribute C determines all attributes, which normal form is guaranteed?",
+    "code_snippet": "",
+    "explanation": "In BCNF, for every non-trivial functional dependency X -> Y, X must strictly be a superkey.",
+    "options": [
+      {
+        "key": "A",
+        "text": "First Normal Form only (1NF)",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Boyce-Codd Normal Form (BCNF) if every determinant is a superkey",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Second Normal Form without satisfying 3NF",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Non-relational flat representation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 3,
+    "title": "Indexing and B+ Trees Problem #3",
+    "difficulty": "EASY",
+    "topic": "Indexing and B+ Trees",
+    "text": "In SQL standard relational databases (Query #3), under what condition does the HAVING clause filter rows for this query in Indexing and B+ Trees with threshold 53000?",
+    "code_snippet": "SELECT dept_id, COUNT(*) \nFROM Employees \nGROUP BY dept_id \nHAVING AVG(salary) > 53000;",
+    "explanation": "WHERE filters individual tuples before grouping, whereas HAVING filters aggregated groups after GROUP BY.",
+    "options": [
+      {
+        "key": "A",
+        "text": "Before individual table rows are grouped",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "After the GROUP BY aggregation is applied to groups",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "During the initial table scan prior to WHERE evaluation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Only if a nested subquery is explicitly defined",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 4,
+    "title": "Indexing and B+ Trees Problem #4",
+    "difficulty": "MEDIUM",
+    "topic": "Indexing and B+ Trees",
+    "text": "Consider a relational schema R(A, B, C, D) with functional dependencies (Case #4) for Indexing and B+ Trees. If attribute A determines all attributes, which normal form is guaranteed?",
+    "code_snippet": "",
+    "explanation": "In BCNF, for every non-trivial functional dependency X -> Y, X must strictly be a superkey.",
+    "options": [
+      {
+        "key": "A",
+        "text": "First Normal Form only (1NF)",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Second Normal Form without satisfying 3NF",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Boyce-Codd Normal Form (BCNF) if every determinant is a superkey",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "Non-relational flat representation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 5,
+    "title": "Indexing and B+ Trees Problem #5",
+    "difficulty": "MEDIUM",
+    "topic": "Indexing and B+ Trees",
+    "text": "In SQL standard relational databases (Query #5), under what condition does the HAVING clause filter rows for this query in Indexing and B+ Trees with threshold 55000?",
+    "code_snippet": "SELECT dept_id, COUNT(*) \nFROM Employees \nGROUP BY dept_id \nHAVING AVG(salary) > 55000;",
+    "explanation": "WHERE filters individual tuples before grouping, whereas HAVING filters aggregated groups after GROUP BY.",
+    "options": [
+      {
+        "key": "A",
+        "text": "Before individual table rows are grouped",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "During the initial table scan prior to WHERE evaluation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "After the GROUP BY aggregation is applied to groups",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "Only if a nested subquery is explicitly defined",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 6,
+    "title": "Indexing and B+ Trees Problem #6",
+    "difficulty": "MEDIUM",
+    "topic": "Indexing and B+ Trees",
+    "text": "Consider a relational schema R(A, B, C, D) with functional dependencies (Case #6) for Indexing and B+ Trees. If attribute C determines all attributes, which normal form is guaranteed?",
+    "code_snippet": "",
+    "explanation": "In BCNF, for every non-trivial functional dependency X -> Y, X must strictly be a superkey.",
+    "options": [
+      {
+        "key": "A",
+        "text": "First Normal Form only (1NF)",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Second Normal Form without satisfying 3NF",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Boyce-Codd Normal Form (BCNF) if every determinant is a superkey",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "Non-relational flat representation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 7,
+    "title": "Indexing and B+ Trees Problem #7",
+    "difficulty": "MEDIUM",
+    "topic": "Indexing and B+ Trees",
+    "text": "In SQL standard relational databases (Query #7), under what condition does the HAVING clause filter rows for this query in Indexing and B+ Trees with threshold 57000?",
+    "code_snippet": "SELECT dept_id, COUNT(*) \nFROM Employees \nGROUP BY dept_id \nHAVING AVG(salary) > 57000;",
+    "explanation": "WHERE filters individual tuples before grouping, whereas HAVING filters aggregated groups after GROUP BY.",
+    "options": [
+      {
+        "key": "A",
+        "text": "After the GROUP BY aggregation is applied to groups",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Before individual table rows are grouped",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "During the initial table scan prior to WHERE evaluation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Only if a nested subquery is explicitly defined",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 8,
+    "title": "Indexing and B+ Trees Problem #8",
+    "difficulty": "MEDIUM",
+    "topic": "Indexing and B+ Trees",
+    "text": "Consider a relational schema R(A, B, C, D) with functional dependencies (Case #8) for Indexing and B+ Trees. If attribute A determines all attributes, which normal form is guaranteed?",
+    "code_snippet": "",
+    "explanation": "In BCNF, for every non-trivial functional dependency X -> Y, X must strictly be a superkey.",
+    "options": [
+      {
+        "key": "A",
+        "text": "Boyce-Codd Normal Form (BCNF) if every determinant is a superkey",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "First Normal Form only (1NF)",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Second Normal Form without satisfying 3NF",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Non-relational flat representation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 9,
+    "title": "Indexing and B+ Trees Problem #9",
+    "difficulty": "MEDIUM",
+    "topic": "Indexing and B+ Trees",
+    "text": "In SQL standard relational databases (Query #9), under what condition does the HAVING clause filter rows for this query in Indexing and B+ Trees with threshold 59000?",
+    "code_snippet": "SELECT dept_id, COUNT(*) \nFROM Employees \nGROUP BY dept_id \nHAVING AVG(salary) > 59000;",
+    "explanation": "WHERE filters individual tuples before grouping, whereas HAVING filters aggregated groups after GROUP BY.",
+    "options": [
+      {
+        "key": "A",
+        "text": "Before individual table rows are grouped",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "After the GROUP BY aggregation is applied to groups",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "During the initial table scan prior to WHERE evaluation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Only if a nested subquery is explicitly defined",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 10,
+    "title": "Indexing and B+ Trees Problem #10",
+    "difficulty": "MEDIUM",
+    "topic": "Indexing and B+ Trees",
+    "text": "Consider a relational schema R(A, B, C, D) with functional dependencies (Case #10) for Indexing and B+ Trees. If attribute C determines all attributes, which normal form is guaranteed?",
+    "code_snippet": "",
+    "explanation": "In BCNF, for every non-trivial functional dependency X -> Y, X must strictly be a superkey.",
+    "options": [
+      {
+        "key": "A",
+        "text": "First Normal Form only (1NF)",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Second Normal Form without satisfying 3NF",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Boyce-Codd Normal Form (BCNF) if every determinant is a superkey",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "Non-relational flat representation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 11,
+    "title": "Indexing and B+ Trees Problem #11",
+    "difficulty": "MEDIUM",
+    "topic": "Indexing and B+ Trees",
+    "text": "In SQL standard relational databases (Query #11), under what condition does the HAVING clause filter rows for this query in Indexing and B+ Trees with threshold 61000?",
+    "code_snippet": "SELECT dept_id, COUNT(*) \nFROM Employees \nGROUP BY dept_id \nHAVING AVG(salary) > 61000;",
+    "explanation": "WHERE filters individual tuples before grouping, whereas HAVING filters aggregated groups after GROUP BY.",
+    "options": [
+      {
+        "key": "A",
+        "text": "Before individual table rows are grouped",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "After the GROUP BY aggregation is applied to groups",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "During the initial table scan prior to WHERE evaluation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Only if a nested subquery is explicitly defined",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 12,
+    "title": "Indexing and B+ Trees Problem #12",
+    "difficulty": "HARD",
+    "topic": "Indexing and B+ Trees",
+    "text": "Consider a relational schema R(A, B, C, D) with functional dependencies (Case #12) for Indexing and B+ Trees. If attribute A determines all attributes, which normal form is guaranteed?",
+    "code_snippet": "",
+    "explanation": "In BCNF, for every non-trivial functional dependency X -> Y, X must strictly be a superkey.",
+    "options": [
+      {
+        "key": "A",
+        "text": "First Normal Form only (1NF)",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Second Normal Form without satisfying 3NF",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Non-relational flat representation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Boyce-Codd Normal Form (BCNF) if every determinant is a superkey",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 13,
+    "title": "Indexing and B+ Trees Problem #13",
+    "difficulty": "HARD",
+    "topic": "Indexing and B+ Trees",
+    "text": "In SQL standard relational databases (Query #13), under what condition does the HAVING clause filter rows for this query in Indexing and B+ Trees with threshold 63000?",
+    "code_snippet": "SELECT dept_id, COUNT(*) \nFROM Employees \nGROUP BY dept_id \nHAVING AVG(salary) > 63000;",
+    "explanation": "WHERE filters individual tuples before grouping, whereas HAVING filters aggregated groups after GROUP BY.",
+    "options": [
+      {
+        "key": "A",
+        "text": "After the GROUP BY aggregation is applied to groups",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Before individual table rows are grouped",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "During the initial table scan prior to WHERE evaluation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Only if a nested subquery is explicitly defined",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 14,
+    "title": "Indexing and B+ Trees Problem #14",
+    "difficulty": "HARD",
+    "topic": "Indexing and B+ Trees",
+    "text": "Consider a relational schema R(A, B, C, D) with functional dependencies (Case #14) for Indexing and B+ Trees. If attribute C determines all attributes, which normal form is guaranteed?",
+    "code_snippet": "",
+    "explanation": "In BCNF, for every non-trivial functional dependency X -> Y, X must strictly be a superkey.",
+    "options": [
+      {
+        "key": "A",
+        "text": "First Normal Form only (1NF)",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Second Normal Form without satisfying 3NF",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Non-relational flat representation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Boyce-Codd Normal Form (BCNF) if every determinant is a superkey",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 15,
+    "title": "Indexing and B+ Trees Problem #15",
+    "difficulty": "HARD",
+    "topic": "Indexing and B+ Trees",
+    "text": "In SQL standard relational databases (Query #15), under what condition does the HAVING clause filter rows for this query in Indexing and B+ Trees with threshold 65000?",
+    "code_snippet": "SELECT dept_id, COUNT(*) \nFROM Employees \nGROUP BY dept_id \nHAVING AVG(salary) > 65000;",
+    "explanation": "WHERE filters individual tuples before grouping, whereas HAVING filters aggregated groups after GROUP BY.",
+    "options": [
+      {
+        "key": "A",
+        "text": "After the GROUP BY aggregation is applied to groups",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Before individual table rows are grouped",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "During the initial table scan prior to WHERE evaluation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Only if a nested subquery is explicitly defined",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 16,
+    "title": "Indexing and B+ Trees Problem #16",
+    "difficulty": "HARD",
+    "topic": "Indexing and B+ Trees",
+    "text": "Consider a relational schema R(A, B, C, D) with functional dependencies (Case #16) for Indexing and B+ Trees. If attribute A determines all attributes, which normal form is guaranteed?",
+    "code_snippet": "",
+    "explanation": "In BCNF, for every non-trivial functional dependency X -> Y, X must strictly be a superkey.",
+    "options": [
+      {
+        "key": "A",
+        "text": "First Normal Form only (1NF)",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Second Normal Form without satisfying 3NF",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Non-relational flat representation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Boyce-Codd Normal Form (BCNF) if every determinant is a superkey",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  }
+]

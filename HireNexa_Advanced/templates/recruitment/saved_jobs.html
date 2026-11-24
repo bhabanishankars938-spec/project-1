@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Saved Jobs · Bookmarked Roles · HireNexa{% endblock %}
+
+{% block content %}
+<div class="section-header" style="align-items: center; margin-bottom: 24px;">
+  <div>
+    <span class="hero-pill" style="margin-bottom: 8px;">CANDIDATE BOOKMARKS</span>
+    <h1 style="font-size: 32px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.03em;">
+      Your Saved Jobs
+    </h1>
+    <p style="color: var(--slate-600); font-size: 15px; margin-top: 4px;">
+      Revisit and apply to positions you've bookmarked for later review.
+    </p>
+  </div>
+  <div>
+    <a href="{% url 'job_list' %}" class="btn btn-outline" style="border-color: var(--slate-300); color: var(--slate-700);">
+      Browse More Jobs →
+    </a>
+  </div>
+</div>
+
+<div class="jobs-grid">
+  {% for item in saved_items %}
+    {% with job=item.job %}
+      <article class="job-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              {% if job.target_course == 'MCA' %}
+                <span class="meta-badge" style="background: #e0f2fe; color: #0369a1; font-weight: 700;">💻 MCA</span>
+              {% elif job.target_course == 'MBA' %}
+                <span class="meta-badge" style="background: #fef3c7; color: #b45309; font-weight: 700;">📊 MBA</span>
+              {% else %}
+                <span class="meta-badge">🎓 {{ job.get_target_course_display }}</span>
+              {% endif %}
+              <span class="meta-badge">{{ job.department }}</span>
+            </div>
+
+            <!-- Unsave Button -->
+            <form method="post" action="{% url 'toggle_save_job' job.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-ghost btn-sm" title="Remove from bookmarks" style="color: #ef4444; font-size: 13px;">
+                ★ Saved
+              </button>
+            </form>
+          </div>
+
+          <div class="job-header">
+            <div class="company-logo">{{ job.company_name|slice:":1" }}</div>
+            <div>
+              <h3 class="job-title"><a href="{% url 'job_detail' job.pk %}">{{ job.title }}</a></h3>
+              <div class="company-name">🏢 {{ job.company_name }}</div>
+            </div>
+          </div>
+
+          <div class="job-meta-row" style="margin: 8px 0;">
+            <span class="meta-badge">📍 {{ job.location|default:"Remote / Flexible" }}</span>
+            <span class="meta-badge">🎯 {{ job.vacancies }} Vacanc{{ job.vacancies|pluralize:"y,ies" }}</span>
+          </div>
+
+          <div class="skills-wrap">
+            {% for skill in job.skill_list %}
+              <span class="skill-tag">{{ skill }}</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="job-footer" style="margin-top: 14px;">
+          <span class="posted-date">Bookmarked {{ item.saved_at|date:"M d, Y" }}</span>
+          <a href="{% url 'job_detail' job.pk %}" class="btn btn-primary btn-sm">Apply Now →</a>
+        </div>
+      </article>
+    {% endwith %}
+  {% empty %}
+    <div style="grid-column: 1 / -1; text-align: center; padding: 48px; background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl);">
+      <div style="font-size: 36px; margin-bottom: 12px;">🔖</div>
+      <h3>No saved jobs yet</h3>
+      <p style="color: var(--slate-500); margin: 6px 0 16px 0;">Bookmark roles while browsing the marketplace to view them here anytime.</p>
+      <a href="{% url 'job_list' %}" class="btn btn-primary">Find Jobs Now</a>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

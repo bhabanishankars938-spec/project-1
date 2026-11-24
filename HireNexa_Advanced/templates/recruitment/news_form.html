@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} · HireNexa Intelligence{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper" style="max-width: 760px; margin: 32px auto;">
+  <div class="auth-card" style="box-shadow: var(--shadow-lg); border-radius: var(--radius-xl); padding: 36px;">
+    <!-- Form Header -->
+    <div style="margin-bottom: 24px; border-bottom: 1px solid var(--slate-200); padding-bottom: 18px;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+        <span class="meta-badge" style="background: #eef2ff; color: var(--primary); font-weight: 700; font-size: 11px;">
+          BROADCAST ENGINE
+        </span>
+        <span style="font-size: 12px; color: var(--slate-500);">Verified Publisher Portal</span>
+      </div>
+      <h1 class="auth-title" style="font-size: 26px; text-align: left; margin: 0 0 6px 0;">
+        {{ title }}
+      </h1>
+      <p class="auth-subtitle" style="text-align: left; margin: 0;">
+        Publish verified notices, placement schedules, and recruitment bulletins across target user cohorts.
+      </p>
+    </div>
+
+    {% if form.errors %}
+      <div class="alert-message alert-error" style="margin-bottom: 20px;">
+        <span>Please review and correct the errors below before submitting.</span>
+      </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <!-- Title -->
+      <div class="form-group" style="margin-bottom: 18px;">
+        <label class="form-label" style="font-size: 13px; font-weight: 600;">
+          Announcement Title <span style="color: var(--rose-600);">*</span>
+        </label>
+        {{ form.title }}
+        {% if form.title.errors %}<div class="errorlist" style="color: var(--rose-600); font-size: 12px;">{{ form.title.errors }}</div>{% endif %}
+      </div>
+
+      <!-- 3-Column Metadata Row -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 18px;">
+        <div class="form-group">
+          <label class="form-label" style="font-size: 12px; font-weight: 600;">Category</label>
+          {{ form.category }}
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="font-size: 12px; font-weight: 600;">Target Audience</label>
+          {{ form.target_audience }}
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="font-size: 12px; font-weight: 600;">Priority Level</label>
+          {{ form.priority }}
+        </div>
+      </div>
+
+      <!-- If Owner: Organization Scope Option -->
+      {% if organizations %}
+        <div class="form-group" style="margin-bottom: 18px;">
+          <label class="form-label" style="font-size: 12px; font-weight: 600;">
+            Publish on behalf of specific company (Optional)
+          </label>
+          <select name="organization_id" class="form-input">
+            <option value="">-- Platform-Wide Broadcast (Official Central Notice) --</option>
+            {% for org in organizations %}
+              <option value="{{ org.id }}">{{ org.name }}</option>
+            {% endfor %}
+          </select>
+          <small style="color: var(--slate-500); font-size: 12px; display: block; margin-top: 4px;">
+            Leave blank to publish as a Platform Authority notice, or select a verified company.
+          </small>
+        </div>
+      {% endif %}
+
+      <!-- Summary -->
+      <div class="form-group" style="margin-bottom: 18px;">
+        <label class="form-label" style="font-size: 13px; font-weight: 600;">
+          Brief Executive Summary <span style="color: var(--rose-600);">*</span>
+        </label>
+        {{ form.summary }}
+        <small style="color: var(--slate-500); font-size: 12px; display: block; margin-top: 4px;">
+          1-2 sentences displayed on ticker banners and search listings.
+        </small>
+        {% if form.summary.errors %}<div class="errorlist" style="color: var(--rose-600); font-size: 12px;">{{ form.summary.errors }}</div>{% endif %}
+      </div>
+
+      <!-- Content -->
+      <div class="form-group" style="margin-bottom: 18px;">
+        <label class="form-label" style="font-size: 13px; font-weight: 600;">
+          Detailed Announcement Content <span style="color: var(--rose-600);">*</span>
+        </label>
+        {{ form.content }}
+        {% if form.content.errors %}<div class="errorlist" style="color: var(--rose-600); font-size: 12px;">{{ form.content.errors }}</div>{% endif %}
+      </div>
+
+      <!-- Links & Attachments Grid -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px;">
+        <div class="form-group">
+          <label class="form-label" style="font-size: 12px; font-weight: 600;">External Link (Optional)</label>
+          {{ form.external_link }}
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="font-size: 12px; font-weight: 600;">Attachment / Circular PDF</label>
+          {{ form.attachment }}
+        </div>
+      </div>
+
+      <!-- Checkboxes & Expiry -->
+      <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+        <div style="display: flex; gap: 20px; align-items: center;">
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+            {{ form.is_pinned }} <strong>📌 Pin to Top</strong>
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+            {{ form.is_active }} <strong>● Active / Published</strong>
+          </label>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <label style="font-size: 12px; font-weight: 600; color: var(--slate-600);">Expiration Date:</label>
+          {{ form.expires_at }}
+        </div>
+      </div>
+
+      <!-- Submit & Cancel Actions -->
+      <div style="display: flex; gap: 14px; border-top: 1px solid var(--slate-200); padding-top: 20px;">
+        <button type="submit" class="btn btn-primary btn-lg" style="flex: 1;">
+          Confirm & Publish Announcement
+        </button>
+        <a href="{% url 'news_list' %}" class="btn btn-white btn-lg">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

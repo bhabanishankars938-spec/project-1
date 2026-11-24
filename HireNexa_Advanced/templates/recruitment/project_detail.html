@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}{{ project.title }} · Freelance Project · HireNexa{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 20px auto 40px;">
+  <div style="margin-bottom: 20px;">
+    <a href="{% url 'project_list' %}" style="color: var(--slate-500); font-size: 13px; text-decoration: none;">
+      ← Back to All Freelance Projects
+    </a>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 36px; box-shadow: var(--shadow-sm);">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; border-bottom: 1px solid var(--slate-200); padding-bottom: 24px;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+          <span class="role-tag freelancer">{{ project.budget_type }}</span>
+          <span style="font-size: 13px; color: var(--slate-500);">Posted {{ project.created_at|timesince }} ago</span>
+        </div>
+        <h1 style="font-size: 28px; font-weight: 800; color: var(--slate-900); margin: 0 0 8px 0;">
+          {{ project.title }}
+        </h1>
+        <div style="font-size: 14px; color: var(--slate-600);">
+          Client: <strong>{{ project.company_name|default:project.client.username }}</strong>
+        </div>
+      </div>
+
+      <div style="text-align: right;">
+        <span style="font-size: 12px; color: var(--slate-500); text-transform: uppercase; font-weight: 700; display: block;">Estimated Budget</span>
+        <strong style="font-size: 24px; color: #0284c7; display: block;">
+          {% if project.budget_max %}${{ project.budget_min }} - ${{ project.budget_max }}{% else %}${{ project.budget_min }}{% endif %}
+        </strong>
+        <span style="font-size: 12px; color: var(--slate-500);">Est. Duration: {{ project.duration }}</span>
+      </div>
+    </div>
+
+    <!-- Required Skills -->
+    <div style="margin-bottom: 24px;">
+      <h3 style="font-size: 14px; font-weight: 700; color: var(--slate-700); text-transform: uppercase; margin-bottom: 10px;">
+        Required Technical Skills
+      </h3>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        {% for s in project.skill_list %}
+          <span class="skill-pill" style="font-size: 13px; padding: 4px 12px; background: var(--primary-light); color: var(--primary); border: 1px solid var(--primary-border); border-radius: var(--radius-full); font-weight: 600;">
+            {{ s }}
+          </span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Detailed Scope -->
+    <div style="margin-bottom: 32px;">
+      <h3 style="font-size: 14px; font-weight: 700; color: var(--slate-700); text-transform: uppercase; margin-bottom: 10px;">
+        Project Deliverables & Scope of Work
+      </h3>
+      <div style="font-size: 15px; color: var(--slate-800); line-height: 1.7; white-space: pre-line;">
+        {{ project.description }}
+      </div>
+    </div>
+
+    <!-- Actions / Application CTA -->
+    <div style="padding-top: 24px; border-top: 1px solid var(--slate-200); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+      <div>
+        {% if already_applied %}
+          <span style="font-size: 14px; color: var(--emerald-600); font-weight: 700;">
+            ✓ You have submitted a proposal for this project.
+          </span>
+        {% else %}
+          <span style="font-size: 13px; color: var(--slate-500);">
+            Ready to bid on this contract?
+          </span>
+        {% endif %}
+      </div>
+
+      <div>
+        {% if not already_applied %}
+          {% if user.is_authenticated and user.is_freelancer or user.is_owner %}
+            <a href="{% url 'project_apply' project.id %}" class="btn btn-primary btn-lg" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border-color: #0284c7;">
+              Submit Proposal Now →
+            </a>
+          {% elif user.is_authenticated %}
+            <a href="{% url 'project_apply' project.id %}" class="btn btn-primary btn-lg" style="background: #0284c7; border-color: #0284c7;">
+              Apply as Freelancer →
+            </a>
+          {% else %}
+            <a href="{% url 'freelancer_login' %}?next={% url 'project_apply' project.id %}" class="btn btn-primary btn-lg" style="background: #0284c7; border-color: #0284c7;">
+              Sign In to Apply →
+            </a>
+          {% endif %}
+        {% else %}
+          <a href="{% url 'freelancer_dashboard' %}" class="btn btn-outline btn-md">
+            View in Dashboard →
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,562 @@
+[
+  {
+    "order": 1,
+    "title": "Odd-one-out Problem #1",
+    "difficulty": "EASY",
+    "topic": "Odd-one-out",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Odd-one-out (Case #1):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 2,
+    "title": "Odd-one-out Problem #2",
+    "difficulty": "EASY",
+    "topic": "Odd-one-out",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Odd-one-out (Case #2):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 3,
+    "title": "Odd-one-out Problem #3",
+    "difficulty": "EASY",
+    "topic": "Odd-one-out",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Odd-one-out (Case #3):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 4,
+    "title": "Odd-one-out Problem #4",
+    "difficulty": "MEDIUM",
+    "topic": "Odd-one-out",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Odd-one-out (Case #4):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 5,
+    "title": "Odd-one-out Problem #5",
+    "difficulty": "MEDIUM",
+    "topic": "Odd-one-out",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Odd-one-out (Case #5):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 6,
+    "title": "Odd-one-out Problem #6",
+    "difficulty": "MEDIUM",
+    "topic": "Odd-one-out",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Odd-one-out (Case #6):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 7,
+    "title": "Odd-one-out Problem #7",
+    "difficulty": "MEDIUM",
+    "topic": "Odd-one-out",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Odd-one-out (Case #7):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 8,
+    "title": "Odd-one-out Problem #8",
+    "difficulty": "MEDIUM",
+    "topic": "Odd-one-out",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Odd-one-out (Case #8):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 9,
+    "title": "Odd-one-out Problem #9",
+    "difficulty": "MEDIUM",
+    "topic": "Odd-one-out",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Odd-one-out (Case #9):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 10,
+    "title": "Odd-one-out Problem #10",
+    "difficulty": "MEDIUM",
+    "topic": "Odd-one-out",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Odd-one-out (Case #10):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 11,
+    "title": "Odd-one-out Problem #11",
+    "difficulty": "MEDIUM",
+    "topic": "Odd-one-out",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Odd-one-out (Case #11):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 12,
+    "title": "Odd-one-out Problem #12",
+    "difficulty": "HARD",
+    "topic": "Odd-one-out",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Odd-one-out (Case #12):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 13,
+    "title": "Odd-one-out Problem #13",
+    "difficulty": "HARD",
+    "topic": "Odd-one-out",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Odd-one-out (Case #13):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 14,
+    "title": "Odd-one-out Problem #14",
+    "difficulty": "HARD",
+    "topic": "Odd-one-out",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Odd-one-out (Case #14):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 15,
+    "title": "Odd-one-out Problem #15",
+    "difficulty": "HARD",
+    "topic": "Odd-one-out",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Odd-one-out (Case #15):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 16,
+    "title": "Odd-one-out Problem #16",
+    "difficulty": "HARD",
+    "topic": "Odd-one-out",
+    "text": "Identify the grammatically correct sentence structure or verbal meaning in Odd-one-out (Case #16):",
+    "code_snippet": "",
+    "explanation": "Subject-verb agreement: when subjects are joined by 'neither... nor', the verb agrees with the closer subject ('teachers' -> 'were').",
+    "options": [
+      {
+        "key": "A",
+        "text": "Neither the principal nor the teachers was present at the convention.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Either the principal and the teachers are absent yesterday.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "None of the teacher were attending the seminar.",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Neither the principal nor the teachers were present at the convention.",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  }
+]

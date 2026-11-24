@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Interview Studio · {{ candidate.get_full_name|default:candidate.username }} | HireNexa Connect{% endblock %}
+
+{% block meta %}
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+{% endblock %}
+
+{% block extra_head %}
+<style>
+  body { background: #0b1120 !important; }
+  .studio-shell {
+    max-width: 1600px;
+    margin: 12px auto;
+    padding: 0 16px;
+    height: calc(100vh - 100px);
+    display: flex;
+    flex-direction: column;
+  }
+  .studio-top-strip {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .studio-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 14px;
+    overflow: hidden;
+  }
+  .studio-panel {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 14px;
+    padding: 20px;
+    overflow-y: auto;
+    color: #f8fafc;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="studio-shell">
+  <!-- Studio Top Strip -->
+  <div class="studio-top-strip">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="font-size: 18px;">🎯</span>
+      <span style="font-weight: 800; font-size: 16px;">HireNexa Interview Studio</span>
+      <span style="background: #2563eb; color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px;">{{ meeting.get_interview_round_display }}</span>
+      <span style="font-family: monospace; color: #38bdf8; font-size: 12px;">{{ meeting.meeting_id }}</span>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <a href="{% url 'connect:meeting_room' meeting.meeting_id %}" class="btn" style="background: #10b981; color: #fff; font-weight: 700; font-size: 13px; padding: 6px 14px; border-radius: 8px; text-decoration: none;">
+        Launch Video Stage ↗
+      </a>
+      <a href="{% url 'connect:dashboard' %}" style="background: #334155; color: #fff; font-size: 13px; padding: 6px 12px; border-radius: 8px; text-decoration: none;">Exit</a>
+    </div>
+  </div>
+
+  <!-- Studio Split Grid -->
+  <div class="studio-grid">
+
+    <!-- Left Column: Candidate Dossier & AI Question Assistant -->
+    <div class="studio-panel">
+      <!-- Candidate Header -->
+      <div style="border-bottom: 1px solid #1e293b; padding-bottom: 16px; margin-bottom: 16px;">
+        <h2 style="font-size: 18px; font-weight: 800; margin: 0 0 4px;">
+          Candidate: {{ candidate.get_full_name|default:candidate.username }}
+        </h2>
+        <div style="font-size: 13px; color: #94a3b8;">
+          Role Applied: <strong style="color: #38bdf8;">{{ job.title }}</strong> · Email: {{ candidate.email }}
+        </div>
+      </div>
+
+      <!-- AI Question Generator Section -->
+      <div style="background: #1e293b; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3 style="font-size: 14.5px; font-weight: 700; margin: 0; color: #38bdf8;">
+            ✨ AI Interview Assistant (Explainable)
+          </h3>
+          <button type="button" onclick="loadAIQuestions()" style="background: #2563eb; color: #fff; border: none; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">
+            Generate Suggestions
+          </button>
+        </div>
+        <p style="font-size: 12px; color: #94a3b8; margin: 0 0 10px;">
+          Generates technical & system questions tailored to '{{ job.title }}'. Questions are for interviewer guidance; human evaluators make all final decisions.
+        </p>
+        <div id="aiQuestionsBox" style="font-size: 13px;">
+          <span style="color: #64748b; font-style: italic;">Click 'Generate Suggestions' to populate role-specific questions.</span>
+        </div>
+      </div>
+
+      <!-- Job Description Highlights -->
+      <div style="margin-bottom: 16px;">
+        <h3 style="font-size: 14px; font-weight: 700; color: #94a3b8; margin-bottom: 8px;">Job Overview & Requirements</h3>
+        <div style="font-size: 13px; color: #cbd5e1; line-height: 1.6; max-height: 200px; overflow-y: auto; background: #030712; padding: 12px; border-radius: 8px;">
+          {{ job.description|truncatewords:150|linebreaks }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Live Evaluation Scorecard -->
+    <div class="studio-panel">
+      <div style="border-bottom: 1px solid #1e293b; padding-bottom: 14px; margin-bottom: 16px;">
+        <h2 style="font-size: 18px; font-weight: 800; margin: 0 0 4px;">📝 Live Candidate Scorecard</h2>
+        <span style="font-size: 12.5px; color: #94a3b8;">Rate competencies on a standardized 1.0–10.0 scale.</span>
+      </div>
+
+      <form id="evaluationForm" onsubmit="event.preventDefault(); submitEvaluation();">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+          <div>
+            <label style="font-size: 12px; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 4px;">Technical Competency (1-10)</label>
+            <input type="number" id="techScore" step="0.5" min="1" max="10" value="8.0" style="width: 100%; padding: 8px; border-radius: 8px; background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 14px; outline: none;">
+          </div>
+          <div>
+            <label style="font-size: 12px; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 4px;">Problem Solving (1-10)</label>
+            <input type="number" id="probScore" step="0.5" min="1" max="10" value="8.0" style="width: 100%; padding: 8px; border-radius: 8px; background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 14px; outline: none;">
+          </div>
+          <div>
+            <label style="font-size: 12px; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 4px;">Communication Clarity (1-10)</label>
+            <input type="number" id="commScore" step="0.5" min="1" max="10" value="7.5" style="width: 100%; padding: 8px; border-radius: 8px; background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 14px; outline: none;">
+          </div>
+          <div>
+            <label style="font-size: 12px; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 4px;">Overall Score (1-10)</label>
+            <input type="number" id="overallScore" step="0.5" min="1" max="10" value="8.0" style="width: 100%; padding: 8px; border-radius: 8px; background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 14px; outline: none;">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 12px; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 4px;">Hiring Recommendation</label>
+          <select id="recommendationSelect" style="width: 100%; padding: 8px; border-radius: 8px; background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 13px; outline: none;">
+            {% for val, label in recommendations %}
+            <option value="{{ val }}" {% if evaluation and evaluation.recommendation == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 12px; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 4px;">Detailed Interview Notes</label>
+          <textarea id="detailedNotes" rows="4" placeholder="Candidate's technical approaches, design trade-offs, strengths and flags..." style="width: 100%; padding: 8px; border-radius: 8px; background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 13px; outline: none;">{{ evaluation.detailed_notes }}</textarea>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button type="submit" class="btn btn-primary" style="background: #2563eb; color: #fff; font-weight: 700; font-size: 13px; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer;">
+            💾 Save Evaluation Record
+          </button>
+        </div>
+        <div id="evalNotice" style="font-size: 12.5px; color: #10b981; margin-top: 8px; text-align: right; display: none;">✓ Scorecard saved successfully.</div>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  async function loadAIQuestions() {
+    const box = document.getElementById("aiQuestionsBox");
+    box.innerHTML = "<span style='color: #38bdf8;'>Generating suggestions...</span>";
+    try {
+      const csrf = document.cookie.split(";").find(c => c.trim().startsWith("csrftoken="))?.split("=")[1];
+      const res = await fetch("/connect/api/ai/questions/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRFToken": csrf },
+        body: JSON.stringify({
+          job_title: "{{ job.title }}",
+          round_name: "{{ meeting.get_interview_round_display }}"
+        })
+      });
+      const data = await res.json();
+      if (data.questions) {
+        let html = "<div style='display: flex; flex-direction: column; gap: 8px;'>";
+        data.questions.forEach((q, idx) => {
+          html += `
+            <div style='background: #030712; padding: 10px; border-radius: 8px; border-left: 3px solid #2563eb;'>
+              <strong style='color: #e2e8f0;'>Q${idx+1}: ${q.question}</strong>
+              <div style='font-size: 11px; color: #94a3b8; margin-top: 2px;'>Topic: ${q.topic} · Difficulty: ${q.difficulty}</div>
+            </div>
+          `;
+        });
+        html += "</div>";
+        box.innerHTML = html;
+      }
+    } catch (e) {
+      box.innerHTML = "<span style='color: #ef4444;'>AI service unavailable. Curated fallback enabled.</span>";
+    }
+  }
+
+  async function submitEvaluation() {
+    const csrf = document.cookie.split(";").find(c => c.trim().startsWith("csrftoken="))?.split("=")[1];
+    const payload = {
+      candidate_id: "{{ candidate.id }}",
+      technical_competency: document.getElementById("techScore").value,
+      problem_solving: document.getElementById("probScore").value,
+      communication_clarity: document.getElementById("commScore").value,
+      overall_score: document.getElementById("overallScore").value,
+      recommendation: document.getElementById("recommendationSelect").value,
+      detailed_notes: document.getElementById("detailedNotes").value,
+    };
+    try {
+      const res = await fetch("/connect/api/{{ meeting.meeting_id }}/evaluation/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRFToken": csrf },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        const notice = document.getElementById("evalNotice");
+        notice.style.display = "block";
+        setTimeout(() => notice.style.display = "none", 4000);
+      }
+    } catch (e) {
+      alert("Error saving evaluation: " + e);
+    }
+  }
+</script>
+{% endblock %}

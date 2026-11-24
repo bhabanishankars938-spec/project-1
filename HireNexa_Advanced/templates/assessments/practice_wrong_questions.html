@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Practice Weak Questions: {{ exam.title }} | HireNexa{% endblock %}
+
+{% block content %}
+<div class="exam-result-container" style="max-width: 900px; margin: 0 auto; padding: 24px 16px;">
+
+  <!-- HEADER HERO CARD -->
+  <header style="background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 16px; padding: 28px; color: #ffffff; margin-bottom: 24px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
+      <span style="background: #f59e0b; color: #000; font-weight: 800; font-size: 0.75rem; padding: 4px 10px; border-radius: 999px; text-transform: uppercase;">
+        🎯 Targeted Practice Drill
+      </span>
+      <span style="background: rgba(255, 255, 255, 0.15); color: #fff; font-size: 0.8rem; padding: 4px 10px; border-radius: 999px;">
+        Attempt #{{ attempt.attempt_number }} Review
+      </span>
+      <span style="background: rgba(255, 255, 255, 0.15); color: #fff; font-size: 0.8rem; padding: 4px 10px; border-radius: 999px;">
+        {{ wrong_count }} Questions to Master
+      </span>
+    </div>
+
+    <h1 style="font-size: 1.5rem; font-weight: 800; margin: 0 0 8px 0;">Practice Incorrect & Skipped Questions</h1>
+    <p style="margin: 0; color: #94a3b8; font-size: 0.95rem;">
+      Exam: <strong>{{ exam.title }}</strong> · Reinforce your conceptual understanding with instant feedback.
+    </p>
+
+    <div style="margin-top: 16px; background: rgba(245, 158, 11, 0.15); border-left: 4px solid #f59e0b; padding: 10px 14px; border-radius: 6px; font-size: 0.85rem; color: #fde68a;">
+      ℹ️ <strong>Note:</strong> This practice drill is un-timed. Solving questions here will not alter your original score of <strong>{{ attempt.score }} / {{ attempt.total_possible_marks }}</strong>.
+    </div>
+  </header>
+
+  <!-- ACTION BAR -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px;">
+    <a href="{% url 'exam_result' attempt.id %}" class="btn btn-outline btn-sm" style="border: 1px solid #cbd5e1; padding: 8px 16px; border-radius: 8px; font-weight: 600; text-decoration: none; color: inherit;">
+      ← Return to Result Report
+    </a>
+    <a href="{% url 'mcq_entrance_hub' %}" class="btn btn-ghost btn-sm" style="text-decoration: none; color: var(--primary);">
+      MCQ Entrance Hub →
+    </a>
+  </div>
+
+  <!-- QUESTIONS LIST -->
+  {% if responses %}
+  <div class="practice-questions-list" style="display: flex; flex-direction: column; gap: 24px;">
+    {% for resp in responses %}
+    {% with q=resp.question exp=resp.question.explanation_detail %}
+    <div class="practice-card" id="practiceCard_{{ q.id }}" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <span style="background: #e2e8f0; color: #334155; font-weight: 800; font-size: 0.8rem; padding: 2px 8px; border-radius: 6px;">
+            Q{{ forloop.counter }} of {{ wrong_count }}
+          </span>
+          <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;">{{ q.subject.name }}{% if q.topic %} · {{ q.topic.name }}{% elif q.chapter %} · {{ q.chapter.name }}{% endif %}</span>
+        </div>
+        <span style="font-size: 0.75rem; font-weight: 700; color: #dc2626; background: #fef2f2; border: 1px solid #fecaca; padding: 2px 8px; border-radius: 6px;">
+          {% if resp.is_correct == False %}Originally Incorrect{% else %}Originally Skipped{% endif %}
+        </span>
+      </div>
+
+      <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0 0 10px 0; color: #0f172a;">{{ q.title }}</h3>
+      <div style="font-size: 0.95rem; color: #334155; line-height: 1.6; margin-bottom: 16px;">
+        {{ q.question_text|linebreaksbr }}
+      </div>
+
+      {% if q.code_snippet %}
+      <div style="background: #0f172a; color: #f8fafc; padding: 14px; border-radius: 8px; font-family: monospace; font-size: 0.88rem; margin-bottom: 16px; overflow-x: auto;">
+        <pre style="margin: 0;"><code>{{ q.code_snippet }}</code></pre>
+      </div>
+      {% endif %}
+
+      <!-- Practice Options -->
+      <div class="practice-options" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+        {% for opt in q.options.all %}
+        <label class="practice-option-label" id="optLabel_{{ q.id }}_{{ opt.id }}" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
+          <input type="radio" name="practice_q_{{ q.id }}" value="{{ opt.id }}" data-is-correct="{{ opt.is_correct|yesno:'true,false' }}" style="accent-color: var(--primary);">
+          <span style="width: 26px; height: 26px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; color: #475569;">
+            {{ opt.option_key }}
+          </span>
+          <span style="font-size: 0.92rem; color: #1e293b;">{{ opt.option_text }}</span>
+        </label>
+        {% endfor %}
+      </div>
+
+      <!-- Action & Instant Check Button -->
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <button type="button" class="btn btn-sm btn-primary" onclick="verifyPracticeAnswer({{ q.id }})" id="btnCheck_{{ q.id }}" style="font-weight: 700; padding: 6px 16px; border-radius: 6px;">
+          ✓ Check Answer
+        </button>
+        <span id="feedbackText_{{ q.id }}" style="font-weight: 700; font-size: 0.9rem;"></span>
+      </div>
+
+      <!-- Verified Explanation (Revealed on check) -->
+      <div id="expBox_{{ q.id }}" style="display: none; margin-top: 16px; background: #f8fafc; border-left: 4px solid #3b82f6; border-radius: 6px; padding: 14px; font-size: 0.9rem; color: #1e293b;">
+        <h4 style="margin: 0 0 6px 0; color: #1e40af; font-size: 0.92rem;">💡 Conceptual Logic & Explanation</h4>
+        {% if q.explanation %}
+          <p style="margin: 0 0 6px 0;">{{ q.explanation|linebreaksbr }}</p>
+        {% endif %}
+        {% if exp.why_correct %}
+          <p style="margin: 0 0 6px 0;"><strong>Why Correct:</strong> {{ exp.why_correct }}</p>
+        {% endif %}
+        {% if exp.why_others_incorrect %}
+          <p style="margin: 0;"><strong>Common Misconceptions:</strong> {{ exp.why_others_incorrect }}</p>
+        {% endif %}
+      </div>
+
+    </div>
+    {% endwith %}
+    {% endfor %}
+  </div>
+  {% else %}
+  <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 48px 24px; text-align: center;">
+    <h3 style="margin: 0 0 8px 0; font-size: 1.2rem; font-weight: 800; color: #16a34a;">🎉 Perfect Attempt!</h3>
+    <p style="color: #64748b; margin: 0 0 16px 0;">You have zero incorrect or skipped questions in this examination attempt.</p>
+    <a href="{% url 'mcq_entrance_hub' %}" class="btn btn-primary btn-sm">Explore More Tests →</a>
+  </div>
+  {% endif %}
+
+</div>
+
+<script>
+function verifyPracticeAnswer(qId) {
+  const selectedRadio = document.querySelector(`input[name="practice_q_${qId}"]:checked`);
+  const feedback = document.getElementById(`feedbackText_${qId}`);
+  const expBox = document.getElementById(`expBox_${qId}`);
+
+  if (!selectedRadio) {
+    if (feedback) {
+      feedback.innerText = "Please select an option first.";
+      feedback.style.color = "#d97706";
+    }
+    return;
+  }
+
+  const isCorrect = selectedRadio.getAttribute('data-is-correct') === 'true';
+
+  // Highlight all options appropriately
+  const allLabels = document.querySelectorAll(`[id^="optLabel_${qId}_"]`);
+  allLabels.forEach(label => {
+    const radio = label.querySelector('input[type="radio"]');
+    if (radio && radio.getAttribute('data-is-correct') === 'true') {
+      label.style.background = '#f0fdf4';
+      label.style.borderColor = '#16a34a';
+      label.style.color = '#15803d';
+    } else if (radio && radio.checked && !isCorrect) {
+      label.style.background = '#fef2f2';
+      label.style.borderColor = '#dc2626';
+      label.style.color = '#b91c1c';
+    } else {
+      label.style.opacity = '0.6';
+    }
+  });
+
+  if (isCorrect) {
+    feedback.innerText = "✓ Correct! Well done.";
+    feedback.style.color = "#16a34a";
+  } else {
+    feedback.innerText = "✗ Incorrect. Review the verified logic below.";
+    feedback.style.color = "#dc2626";
+  }
+
+  if (expBox) expBox.style.display = 'block';
+  const btn = document.getElementById(`btnCheck_${qId}`);
+  if (btn) btn.disabled = true;
+}
+</script>
+{% endblock %}

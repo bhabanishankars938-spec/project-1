@@ -1,0 +1,195 @@
+{% extends "accounts/settings/settings_base.html" %}
+
+{% block title %}Security & 2FA · HireNexa Settings{% endblock %}
+
+{% block settings_content %}
+<div class="settings-card">
+  <div class="card-header-bar">
+    <div class="card-title-group">
+      <h2 class="card-title">Security & Two-Factor Authentication</h2>
+      <p class="card-subtitle">Argon2id password hashing, two-factor authorization challenge, active session invalidation.</p>
+    </div>
+    <span class="badge-verified-sm">🛡️ AES-256 / Argon2id</span>
+  </div>
+
+  <!-- 1. Change Password Section -->
+  <form method="post" class="settings-form">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="change_password">
+
+    <h3 class="form-section-heading">🔑 Change Password</h3>
+    
+    <div class="form-group">
+      <label for="currentPassInput" class="form-label">Current Password</label>
+      <input type="password" name="current_password" id="currentPassInput" class="form-input" required autocomplete="current-password">
+    </div>
+
+    <div class="form-row-2col">
+      <div class="form-group">
+        <label for="newPass1Input" class="form-label">New Password</label>
+        <input type="password" name="new_password1" id="newPass1Input" class="form-input" required autocomplete="new-password" oninput="checkPassStrength(this.value)">
+        <!-- Password Strength Meter -->
+        <div class="strength-meter-wrap">
+          <div class="strength-bar" id="strengthBar"></div>
+        </div>
+        <span class="form-help-text" id="strengthLabel">Strength: Enter password</span>
+      </div>
+
+      <div class="form-group">
+        <label for="newPass2Input" class="form-label">Confirm New Password</label>
+        <input type="password" name="new_password2" id="newPass2Input" class="form-input" required autocomplete="new-password">
+      </div>
+    </div>
+
+    <div class="form-submit-row">
+      <button type="submit" class="btn btn-primary btn-md">
+        Update Password
+      </button>
+    </div>
+  </form>
+
+  <div class="settings-divider"></div>
+
+  <!-- 2. Two-Factor Authentication (2FA) -->
+  <form method="post" class="settings-form">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="toggle_2fa">
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
+      <div>
+        <h3 class="form-section-heading" style="margin: 0 0 6px 0;">🛡️ Two-Factor Authentication (2FA)</h3>
+        <p class="card-subtitle">
+          Adds an extra layer of protection by requiring a 6-digit confirmation code on every login.
+        </p>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" name="two_factor_enabled" {% if user_settings.two_factor_enabled %}checked{% endif %} onchange="this.form.submit()">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    {% if user_settings.two_factor_enabled %}
+      <div class="two-fa-config-box">
+        <label class="form-label" style="font-weight: 700;">2FA Delivery Method</label>
+        <div class="radio-card-group">
+          <label class="radio-card {% if user_settings.two_factor_method == 'EMAIL' %}selected{% endif %}">
+            <input type="radio" name="two_factor_method" value="EMAIL" {% if user_settings.two_factor_method == 'EMAIL' %}checked{% endif %} onchange="this.form.submit()">
+            <div class="card-body-meta">
+              <strong>📧 Email Verification Code</strong>
+              <span>Sends a secure 6-digit OTP to {{ user.email|truncatechars:25 }}</span>
+            </div>
+          </label>
+          <label class="radio-card {% if user_settings.two_factor_method == 'TOTP' %}selected{% endif %}">
+            <input type="radio" name="two_factor_method" value="TOTP" {% if user_settings.two_factor_method == 'TOTP' %}checked{% endif %} onchange="this.form.submit()">
+            <div class="card-body-meta">
+              <strong>📱 Authenticator App (TOTP)</strong>
+              <span>Compatible with Google Authenticator, Authy, or 1Password</span>
+            </div>
+          </label>
+        </div>
+      </div>
+    {% endif %}
+  </form>
+
+  <!-- 3. One-Time Backup Codes -->
+  {% if user_settings.two_factor_enabled %}
+    <div class="settings-divider"></div>
+    <div class="card-title-group" style="margin-bottom: 12px;">
+      <h3 class="form-section-heading" style="margin: 0 0 4px 0;">🎟️ Backup Security Codes</h3>
+      <p class="card-subtitle">Keep these 8 single-use codes in a safe place. You can use them to recover access if you lose your authentication device.</p>
+    </div>
+
+    {% if user_settings.backup_codes %}
+      <div class="backup-codes-grid">
+        {% for code in user_settings.backup_codes %}
+          <div class="backup-code-item"><code>{{ code }}</code></div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post" style="margin-top: 12px;">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="generate_backup_codes">
+      <button type="submit" class="btn btn-outline btn-sm">
+        🔄 Generate 8 New Backup Codes
+      </button>
+    </form>
+  {% endif %}
+
+  <div class="settings-divider"></div>
+
+  <!-- 4. Active Sessions & Device Management -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+    <div>
+      <h3 class="form-section-heading" style="margin: 0 0 4px 0;">💻 Active Devices & Login Sessions</h3>
+      <p class="card-subtitle">Current IP: <strong>{{ current_ip }}</strong> · Terminate sessions across other devices if you suspect unauthorized activity.</p>
+    </div>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="logout_other_devices">
+      <button type="submit" class="btn btn-outline btn-sm" style="color: var(--rose-600); border-color: rgba(225, 29, 72, 0.4);" onclick="return confirm('Are you sure you want to terminate all other active login sessions?')">
+        Logout All Other Devices
+      </button>
+    </form>
+  </div>
+
+  <div class="table-responsive">
+    <table class="settings-table">
+      <thead>
+        <tr>
+          <th>Device / Browser</th>
+          <th>IP Address</th>
+          <th>Timestamp</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <strong>Current Device</strong>
+            <div style="font-size: 11px; color: var(--slate-500);">Active Browser Session</div>
+          </td>
+          <td><code>{{ current_ip }}</code></td>
+          <td>Now</td>
+          <td><span class="badge-verified-sm">ACTIVE</span></td>
+        </tr>
+        {% for h in login_history %}
+          <tr>
+            <td>{{ h.device_type|default:"Desktop Browser" }}</td>
+            <td><code>{{ h.ip_address }}</code></td>
+            <td>{{ h.created_at|date:"Y-m-d H:i" }}</td>
+            <td>
+              {% if h.is_active %}
+                <span class="badge-verified-sm">VALID</span>
+              {% else %}
+                <span style="font-size: 11px; color: var(--slate-400);">Signed out</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  function checkPassStrength(val) {
+    const bar = document.getElementById('strengthBar');
+    const label = document.getElementById('strengthLabel');
+    let score = 0;
+    if (val.length >= 8) score++;
+    if (val.length >= 12) score++;
+    if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+
+    const widths = ['0%', '20%', '40%', '65%', '85%', '100%'];
+    const colors = ['#e2e8f0', '#ef4444', '#f97316', '#eab308', '#10b981', '#059669'];
+    const labels = ['Empty', 'Very Weak', 'Weak', 'Fair', 'Strong', 'Enterprise Grade 🛡️'];
+
+    bar.style.width = widths[score];
+    bar.style.backgroundColor = colors[score];
+    label.textContent = 'Strength: ' + labels[score];
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+{% block title %}Profile & Security Verification Center · HireNexa{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 30px auto; padding: 0 16px;">
+
+  <!-- Header -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+        <h1 style="font-size: 26px; font-weight: 800; color: var(--slate-900); margin: 0;">
+          Profile & Security Verification Center
+        </h1>
+        <span class="role-tag {{ user.get_role_badge_class }}">{{ user.get_role_display }}</span>
+      </div>
+      <p style="font-size: 14px; color: var(--slate-600); margin: 0;">
+        Manage your personal information, enterprise verification badges, and account security.
+      </p>
+    </div>
+    <a href="{% url 'dashboard' %}" class="btn btn-outline btn-sm">
+      ← Return to Workspace
+    </a>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; align-items: start;">
+
+    <!-- Left Column: Profile Information Form -->
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 28px; box-shadow: var(--shadow-sm);">
+      <h2 style="font-size: 18px; font-weight: 800; color: var(--slate-900); margin: 0 0 18px 0; display: flex; align-items: center; gap: 8px;">
+        <span>📝</span> Personal & Professional Details
+      </h2>
+
+      <form method="post">
+        {% csrf_token %}
+
+        {% if form.errors %}
+          <div class="alert-message alert-error" style="margin-bottom: 18px;">
+            <span>Please correct the errors indicated below.</span>
+          </div>
+        {% endif %}
+
+        {% for field in form %}
+          <div class="form-group" style="margin-bottom: 18px;">
+            <label class="form-label" for="{{ field.id_for_label }}" style="font-weight: 700;">
+              {{ field.label }}
+              {% if field.field.required %}<span style="color: var(--rose-600);">*</span>{% endif %}
+            </label>
+            {{ field }}
+            {% if field.help_text %}
+              <span style="font-size: 12px; color: var(--slate-500); display: block; margin-top: 4px;">{{ field.help_text }}</span>
+            {% endif %}
+            {% if field.errors %}
+              {% for error in field.errors %}
+                <span style="font-size: 12px; color: var(--rose-600); display: block; margin-top: 2px;">{{ error }}</span>
+              {% endfor %}
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 10px;">
+          Save Profile Updates →
+        </button>
+      </form>
+    </div>
+
+    <!-- Right Column: Verification & Trust Badges (Pro Developer Specification) -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+
+      <!-- 1. Email Verification Box -->
+      <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 22px; box-shadow: var(--shadow-sm);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3 style="font-size: 15px; font-weight: 800; color: var(--slate-900); margin: 0; display: flex; align-items: center; gap: 6px;">
+            <span>📧</span> Email Verification
+          </h3>
+          {% if user.is_email_verified %}
+            <span class="meta-badge" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; font-weight: 800; font-size: 11px;">
+              ✓ VERIFIED
+            </span>
+          {% else %}
+            <span class="meta-badge" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a; font-weight: 800; font-size: 11px;">
+              ⚠ UNVERIFIED
+            </span>
+          {% endif %}
+        </div>
+
+        <p style="font-size: 13px; color: var(--slate-600); margin-bottom: 12px;">
+          Registered Email: <strong style="color: var(--slate-900);">{{ user.email|default:"None set" }}</strong>
+        </p>
+
+        {% if user.is_email_verified %}
+          <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: var(--radius-md); padding: 10px 12px; font-size: 12px; color: #065f46; display: flex; align-items: center; gap: 8px;">
+            <span>🛡️</span>
+            <span>Your email is verified. You will receive interview notifications and recruiter alerts.</span>
+          </div>
+        {% else %}
+          <div style="margin-bottom: 12px;">
+            <a href="{% url 'send_email_verification' %}" class="btn btn-outline btn-sm" style="width: 100%; text-align: center; justify-content: center;">
+              Send Email OTP Code →
+            </a>
+          </div>
+
+          <!-- Enter OTP Form -->
+          <form method="post" action="{% url 'verify_email_otp' %}" style="display: flex; gap: 8px;">
+            {% csrf_token %}
+            <input
+              type="text"
+              name="otp_code"
+              required
+              maxlength="6"
+              pattern="[0-9]{6}"
+              placeholder="6-digit OTP"
+              class="form-input"
+              style="padding: 8px 10px; font-size: 13px; text-align: center; font-family: monospace; letter-spacing: 0.15em;"
+            >
+            <button type="submit" class="btn btn-primary btn-sm" style="white-space: nowrap;">
+              Verify Code
+            </button>
+          </form>
+        {% endif %}
+      </div>
+
+      <!-- 2. Mobile Phone Verification Box -->
+      <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 22px; box-shadow: var(--shadow-sm);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3 style="font-size: 15px; font-weight: 800; color: var(--slate-900); margin: 0; display: flex; align-items: center; gap: 6px;">
+            <span>📱</span> Mobile Phone OTP
+          </h3>
+          {% if user.is_phone_verified %}
+            <span class="meta-badge" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; font-weight: 800; font-size: 11px;">
+              ✓ VERIFIED
+            </span>
+          {% else %}
+            <span class="meta-badge" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a; font-weight: 800; font-size: 11px;">
+              ⚠ UNVERIFIED
+            </span>
+          {% endif %}
+        </div>
+
+        <p style="font-size: 13px; color: var(--slate-600); margin-bottom: 12px;">
+          Registered Mobile: <strong style="color: var(--slate-900);">{{ user.phone_number|default:"Not linked" }}</strong>
+        </p>
+
+        {% if user.is_phone_verified %}
+          <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: var(--radius-md); padding: 10px 12px; font-size: 12px; color: #065f46; display: flex; align-items: center; gap: 8px;">
+            <span>🔒</span>
+            <span>Mobile OTP authentication and 2FA logins are active on this account.</span>
+          </div>
+        {% else %}
+          <!-- Request OTP Form -->
+          <form method="post" action="{% url 'send_phone_verification' %}" style="margin-bottom: 12px;">
+            {% csrf_token %}
+            <div style="display: flex; gap: 8px;">
+              <input
+                type="tel"
+                name="phone_number"
+                value="{{ user.phone_number|default:'' }}"
+                required
+                placeholder="+91 9876543210"
+                class="form-input"
+                style="padding: 8px 10px; font-size: 13px;"
+              >
+              <button type="submit" class="btn btn-outline btn-sm" style="white-space: nowrap;">
+                Send OTP
+              </button>
+            </div>
+          </form>
+
+          <!-- Verify OTP Form -->
+          <form method="post" action="{% url 'verify_phone_verification' %}" style="display: flex; gap: 8px;">
+            {% csrf_token %}
+            <input
+              type="text"
+              name="otp_code"
+              required
+              maxlength="6"
+              pattern="[0-9]{6}"
+              placeholder="6-digit OTP"
+              class="form-input"
+              style="padding: 8px 10px; font-size: 13px; text-align: center; font-family: monospace; letter-spacing: 0.15em;"
+            >
+            <button type="submit" class="btn btn-primary btn-sm" style="background: #059669; border-color: #059669; white-space: nowrap;">
+              Confirm OTP
+            </button>
+          </form>
+        {% endif %}
+      </div>
+
+      <!-- 3. Password & Security Standards Box -->
+      <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 22px; box-shadow: var(--shadow-sm);">
+        <h3 style="font-size: 15px; font-weight: 800; color: var(--slate-900); margin: 0 0 10px 0; display: flex; align-items: center; gap: 6px;">
+          <span>🛡️</span> Security & Encryption
+        </h3>
+        <ul style="font-size: 12px; color: var(--slate-600); list-style: none; padding: 0; margin: 0 0 14px 0; display: flex; flex-direction: column; gap: 6px;">
+          <li style="display: flex; align-items: center; gap: 6px;">
+            <span style="color: #10b981;">✓</span> Argon2id Zero-Knowledge Password Hashing
+          </li>
+          <li style="display: flex; align-items: center; gap: 6px;">
+            <span style="color: #10b981;">✓</span> 6-Digit Time-Based One-Time Passwords (OTP)
+          </li>
+          <li style="display: flex; align-items: center; gap: 6px;">
+            <span style="color: #10b981;">✓</span> Immutable Access Audit Logs
+          </li>
+        </ul>
+        <a href="{% url 'forgot_password' %}" class="btn btn-ghost btn-sm" style="width: 100%; text-align: center; justify-content: center; font-size: 12px; border: 1px solid var(--slate-200);">
+          Change / Reset Password via OTP →
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

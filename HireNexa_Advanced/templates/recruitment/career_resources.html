@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Career Resources & Placement Interview Preparation · HireNexa{% endblock %}
+
+{% block content %}
+<div class="section-header" style="align-items: center; margin-bottom: 32px;">
+  <div>
+    <span class="hero-pill" style="margin-bottom: 8px;">CAMPUS & LATERAL HIRING RESOURCES</span>
+    <h1 style="font-size: 32px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.03em;">
+      Career Development & Interview Resources
+    </h1>
+    <p style="color: var(--slate-600); font-size: 15px; margin-top: 4px;">
+      Essential preparation guides, interview frameworks, resume optimization strategies, and compensation benchmarks.
+    </p>
+  </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-bottom: 48px;">
+  <!-- MCA & Engineering Tech Interview Guide -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 28px; box-shadow: var(--shadow-sm);">
+    <div style="font-size: 32px; margin-bottom: 14px;">💻</div>
+    <span class="meta-badge" style="background: #e0f2fe; color: #0369a1; font-weight: 700; margin-bottom: 8px;">MCA / IT / SOFTWARE</span>
+    <h3 style="font-size: 18px; font-weight: 800; color: var(--slate-900); margin: 6px 0 10px;">
+      Technical Interview Mastery Guide
+    </h3>
+    <p style="font-size: 13px; color: var(--slate-600); line-height: 1.6; margin-bottom: 16px;">
+      Comprehensive cheat-sheet covering Data Structures & Algorithms, System Design basics, REST API architecture, Django/Python patterns, and database query optimization.
+    </p>
+    <ul style="font-size: 13px; color: var(--slate-600); line-height: 1.8; margin-bottom: 20px; padding-left: 18px;">
+      <li>Mastering Big-O complexity & SQL indexing</li>
+      <li>Production Django REST Framework architecture</li>
+      <li>Docker containerization & CI/CD deployment</li>
+      <li>Handling concurrency & caching with Redis</li>
+    </ul>
+    <a href="{% url 'job_list' %}?course=MCA" class="btn btn-primary btn-sm">Explore MCA Jobs →</a>
+  </div>
+
+  <!-- MBA & Management Placement Playbook -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 28px; box-shadow: var(--shadow-sm);">
+    <div style="font-size: 32px; margin-bottom: 14px;">📊</div>
+    <span class="meta-badge" style="background: #fef3c7; color: #b45309; font-weight: 700; margin-bottom: 8px;">MBA / MANAGEMENT</span>
+    <h3 style="font-size: 18px; font-weight: 800; color: var(--slate-900); margin: 6px 0 10px;">
+      HR & Marketing Case Study Frameworks
+    </h3>
+    <p style="font-size: 13px; color: var(--slate-600); line-height: 1.6; margin-bottom: 16px;">
+      Structured approaches to solving live business cases, HR policy simulations, talent retention challenges, digital marketing funnels, and financial forecasting exercises.
+    </p>
+    <ul style="font-size: 13px; color: var(--slate-600); line-height: 1.8; margin-bottom: 20px; padding-left: 18px;">
+      <li>STAR method for leadership behavioral rounds</li>
+      <li>KPI & OKR design in Talent Management</li>
+      <li>Customer acquisition cost (CAC) vs. LTV analysis</li>
+      <li>Corporate financial statement variance analysis</li>
+    </ul>
+    <a href="{% url 'job_list' %}?course=MBA" class="btn btn-primary btn-sm">Explore MBA Jobs →</a>
+  </div>
+
+  <!-- High-Impact Resume Optimization Guide -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 28px; box-shadow: var(--shadow-sm);">
+    <div style="font-size: 32px; margin-bottom: 14px;">📄</div>
+    <span class="meta-badge" style="background: #ecfdf5; color: #065f46; font-weight: 700; margin-bottom: 8px;">ATS READINESS</span>
+    <h3 style="font-size: 18px; font-weight: 800; color: var(--slate-900); margin: 6px 0 10px;">
+      High-Impact Tech Resume Blueprint
+    </h3>
+    <p style="font-size: 13px; color: var(--slate-600); line-height: 1.6; margin-bottom: 16px;">
+      Learn how modern AI screening engines read your resume. Avoid common scanning pitfalls and format your projects for maximum recruiter clarity.
+    </p>
+    <ul style="font-size: 13px; color: var(--slate-600); line-height: 1.8; margin-bottom: 20px; padding-left: 18px;">
+      <li>Using standard single-column ATS layouts</li>
+      <li>Writing metric-driven achievement bullets</li>
+      <li>Highlighting canonical technologies from our 130+ taxonomy</li>
+      <li>Including verifiable GitHub & live portfolio links</li>
+    </ul>
+    <a href="{% url 'resume_analyzer' %}" class="btn btn-outline btn-sm">Analyze Your Resume →</a>
+  </div>
+</div>
+{% endblock %}

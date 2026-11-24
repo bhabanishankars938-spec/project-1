@@ -1,0 +1,96 @@
+{% extends "accounts/settings/settings_base.html" %}
+
+{% block title %}Appearance & Theme · HireNexa Settings{% endblock %}
+
+{% block settings_content %}
+<div class="settings-card">
+  <div class="card-header-bar">
+    <div class="card-title-group">
+      <h2 class="card-title">Theme & Visual Experience</h2>
+      <p class="card-subtitle">Customize application color themes, typography scaling, interface compactness, and motion preferences.</p>
+    </div>
+  </div>
+
+  <form method="post" class="settings-form" id="appearanceForm">
+    {% csrf_token %}
+
+    <!-- 1. Color Theme Mode -->
+    <h3 class="form-section-heading">🎨 Color Theme</h3>
+    <div class="theme-cards-grid">
+      <label class="theme-select-card {% if user_settings.theme == 'system' %}selected{% endif %}" onclick="setThemeMode('system')">
+        <input type="radio" name="theme" value="system" {% if user_settings.theme == 'system' %}checked{% endif %} class="theme-radio">
+        <div class="theme-card-preview preview-system">
+          <div class="split-preview-l"></div>
+          <div class="split-preview-r"></div>
+        </div>
+        <div class="theme-card-meta">
+          <strong>System Default</strong>
+          <span>Syncs with your OS light/dark schedule</span>
+        </div>
+      </label>
+
+      <label class="theme-select-card {% if user_settings.theme == 'light' %}selected{% endif %}" onclick="setThemeMode('light')">
+        <input type="radio" name="theme" value="light" {% if user_settings.theme == 'light' %}checked{% endif %} class="theme-radio">
+        <div class="theme-card-preview preview-light"></div>
+        <div class="theme-card-meta">
+          <strong>Light Mode</strong>
+          <span>High clarity for daytime environments</span>
+        </div>
+      </label>
+
+      <label class="theme-select-card {% if user_settings.theme == 'dark' %}selected{% endif %}" onclick="setThemeMode('dark')">
+        <input type="radio" name="theme" value="dark" {% if user_settings.theme == 'dark' %}checked{% endif %} class="theme-radio">
+        <div class="theme-card-preview preview-dark"></div>
+        <div class="theme-card-meta">
+          <strong>Dark Mode</strong>
+          <span>Deep obsidian palette, easy on eyes</span>
+        </div>
+      </label>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <!-- 2. Typography Scaling -->
+    <h3 class="form-section-heading">🔤 Typography & Density</h3>
+    <div class="form-group">
+      <label for="fontSizeSelect" class="form-label">Font Size Scale</label>
+      <select name="font_size" id="fontSizeSelect" class="form-input" style="max-width: 320px;">
+        <option value="normal" {% if user_settings.font_size == 'normal' %}selected{% endif %}>Standard (100% / Default)</option>
+        <option value="medium" {% if user_settings.font_size == 'medium' %}selected{% endif %}>Medium (110% / +1.5px)</option>
+        <option value="large" {% if user_settings.font_size == 'large' %}selected{% endif %}>Large (120% / Accessibility enhanced)</option>
+      </select>
+    </div>
+
+    <!-- 3. Compact Mode & Reduced Motion -->
+    <div class="toggle-group-list">
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>Compact Table & Workspace Density</strong>
+          <span>Decreases table padding and card margins to display more candidates and jobs per screen.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="compact_mode" {% if user_settings.compact_mode %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-meta">
+          <strong>Reduce Motion (Accessibility)</strong>
+          <span>Disables CSS slide-in animations and modal scaling transitions for sensitivity.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" name="reduce_motion" {% if user_settings.reduce_motion %}checked{% endif %}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-submit-row">
+      <button type="submit" class="btn btn-primary btn-md">
+        Save Appearance Settings
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

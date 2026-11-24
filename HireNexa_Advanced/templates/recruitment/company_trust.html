@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Company Trust & Verification · {{ org.name }}{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1000px; margin: 0 auto; padding: 24px 16px;">
+  <!-- Header -->
+  <div class="section-header" style="margin-bottom: 24px;">
+    <a href="{% url 'companies_list' %}" style="font-size: 13px; color: #4f46e5; text-decoration: none; font-weight: 600; display: inline-block; margin-bottom: 8px;">← Back to Companies Directory</a>
+    <h1 style="font-size: 28px; font-weight: 800; color: var(--slate-900); margin: 0; letter-spacing: -0.02em;">Company Trust & Verification Layer</h1>
+    <p style="color: var(--slate-600); font-size: 14px; margin-top: 4px;">Audited business credentials, physical office verification, and recruitment authority profile.</p>
+  </div>
+
+  <!-- Trust Score Hero Card -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 28px; margin-bottom: 24px; box-shadow: var(--shadow-sm);">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+      <div>
+        <span style="font-size: 12px; font-weight: 700; color: var(--slate-500); text-transform: uppercase;">Employer Organization</span>
+        <h2 style="font-size: 24px; font-weight: 800; color: var(--slate-900); margin: 4px 0 6px;">{{ org.name }}</h2>
+        <p style="color: var(--slate-600); font-size: 14px; margin: 0;">{{ org.industry|default:"Enterprise Organization" }} · {{ org.company_size }}</p>
+        {% if org.website %}
+        <a href="{{ org.website }}" target="_blank" rel="noopener" style="font-size: 13px; color: #4f46e5; margin-top: 4px; display: inline-block;">🌐 {{ org.website }} ↗</a>
+        {% endif %}
+      </div>
+
+      <!-- Trust Score & Status Badge -->
+      <div style="text-align: right;">
+        <span style="display: block; font-size: 12px; color: var(--slate-500); text-transform: uppercase; font-weight: 700;">Verified Trust Score</span>
+        <span style="font-size: 36px; font-weight: 900; color: {% if trust.is_fully_verified %}#047857{% else %}#4f46e5{% endif %};">
+          {{ trust.trust_score }}<span style="font-size: 20px; color: var(--slate-400);">/100</span>
+        </span>
+        <div>
+          <span style="display: inline-block; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 700; 
+            {% if trust.is_fully_verified %}background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0;
+            {% else %}background: #fef3c7; color: #92400e; border: 1px solid #fde68a;{% endif %}">
+            🛡️ {{ trust.tier_label }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Physical Office & Geographic Verification (GeoHire) -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow-sm);">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+      <div>
+        <h3 style="font-size: 18px; font-weight: 700; color: var(--slate-900); margin: 0;">📍 Physical Office & Geographic Verification</h3>
+        <p style="color: var(--slate-600); font-size: 13px; margin: 4px 0 0;">GeoHire verified physical workplace locations with registered HQ vs operating branch differentiation.</p>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <a href="{{ org.google_maps_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background: #0284c7; color: #ffffff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">
+          🗺️ View on Google Maps
+        </a>
+        <a href="{{ org.directions_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background: #047857; color: #ffffff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">
+          🧭 Get Directions
+        </a>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+      <!-- Registered Office Address -->
+      <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: 8px; padding: 16px;">
+        <span style="font-size: 11px; font-weight: 700; color: #4f46e5; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 6px;">
+          🏢 Registered Headquarters (Legal Entity)
+        </span>
+        <p style="font-size: 14px; color: var(--slate-900); margin: 0; font-weight: 600; line-height: 1.5;">
+          {{ org.effective_registered_address }}
+        </p>
+        <div style="margin-top: 10px; font-size: 12px; color: var(--slate-500);">
+          <span>State: <strong>{{ org.state|default:"Verified" }}</strong></span> · 
+          <span>City: <strong>{{ org.city|default:"Verified" }}</strong></span> · 
+          <span>PIN: <strong>{{ org.pin_code|default:"Verified" }}</strong></span>
+        </div>
+      </div>
+
+      <!-- Operating Branch Address -->
+      <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: 8px; padding: 16px;">
+        <span style="font-size: 11px; font-weight: 700; color: #047857; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 6px;">
+          🌿 Operating Branch / Development Center
+        </span>
+        <p style="font-size: 14px; color: var(--slate-900); margin: 0; font-weight: 600; line-height: 1.5;">
+          {{ org.effective_branch_address }}
+        </p>
+        <div style="margin-top: 10px; font-size: 12px; color: var(--slate-500);">
+          <span>Locality: <strong>{{ org.area|default:"Main Campus" }}</strong></span> · 
+          <span>Country: <strong>{{ org.country|default:"India" }}</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Verification Checks Breakdown -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow-sm);">
+    <h3 style="font-size: 18px; font-weight: 700; color: var(--slate-900); margin: 0 0 16px 0;">Audited Verification Criteria</h3>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      {% for check in trust.audit_checks %}
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md);">
+        <div>
+          <strong style="font-size: 14px; color: var(--slate-900);">{{ check.name }}</strong>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 12px; font-weight: 700; 
+            {% if check.status == 'VERIFIED' or check.status == 'CLEAN' %}color: #047857;{% else %}color: var(--slate-500);{% endif %}">
+            {{ check.status }}
+          </span>
+          <span style="font-size: 12px; font-weight: 800; color: #4f46e5; background: #e0e7ff; padding: 2px 8px; border-radius: 4px;">
+            +{{ check.points }} pts
+          </span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Verified Badges & Proof -->
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow-sm);">
+    <h3 style="font-size: 18px; font-weight: 700; color: var(--slate-900); margin: 0 0 16px 0;">Active Verification Badges</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
+      {% for badge in trust.badges %}
+      <div style="border: 1px solid #a7f3d0; background: #ecfdf5; border-radius: var(--radius-lg); padding: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+          <span style="font-size: 18px;">✓</span>
+          <strong style="color: #047857; font-size: 15px;">{{ badge.label }}</strong>
+        </div>
+        <p style="margin: 0; font-size: 12px; color: #065f46;">{{ badge.description }}</p>
+      </div>
+      {% empty %}
+      <div style="grid-column: 1 / -1; padding: 16px; background: var(--slate-50); border: 1px dashed var(--slate-300); border-radius: var(--radius-md); text-align: center; color: var(--slate-600); font-size: 13px;">
+        No badges active yet. Company documentation is currently under verification. Badges are never fabricated on HireNexa.
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Verification History Audit Trail -->
+  {% if trust.verification_history %}
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 24px; box-shadow: var(--shadow-sm);">
+    <h3 style="font-size: 18px; font-weight: 700; color: var(--slate-900); margin: 0 0 14px 0;">Verification Audit Log</h3>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      {% for audit in trust.verification_history %}
+      <div style="display: flex; justify-content: space-between; font-size: 12px; padding: 8px 12px; border-bottom: 1px solid var(--slate-100);">
+        <strong style="color: var(--slate-800);">{{ audit.action }}</strong>
+        <span style="color: var(--slate-500);">{{ audit.timestamp|date:"M d, Y · H:i" }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "connect/base_connect.html" %}
+{% load static %}
+
+{% block title %}Meeting Settings & Devices · HireNexa Connect{% endblock %}
+
+{% block connect_content %}
+<div style="max-width: 700px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; box-shadow: 0 2px 14px rgba(0,0,0,0.04);">
+  <div style="margin-bottom: 24px;">
+    <h2 style="font-size: 20px; font-weight: 800; color: #0f172a; margin: 0 0 4px;">⚙️ Meeting & Audio/Video Preferences</h2>
+    <p style="font-size: 13.5px; color: #64748b; margin: 0;">Configure your default camera, microphone, and room entry conduct.</p>
+  </div>
+
+  <form method="post" action="{% url 'connect:meeting_settings' %}">
+    {% csrf_token %}
+
+    <div style="background: #f8fafc; border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+      <h3 style="font-size: 14.5px; font-weight: 700; color: #0f172a; margin: 0 0 12px;">Default Join Behavior</h3>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <label style="display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: #334155; cursor: pointer;">
+          <input type="checkbox" name="mute_default" {% if mute_default %}checked{% endif %} style="width: 16px; height: 16px;">
+          <span>Always mute my microphone when joining a meeting</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: #334155; cursor: pointer;">
+          <input type="checkbox" name="cam_off_default" {% if cam_off_default %}checked{% endif %} style="width: 16px; height: 16px;">
+          <span>Turn off my video camera when joining a meeting</span>
+        </label>
+      </div>
+    </div>
+
+    <div style="background: #f8fafc; border-radius: 12px; padding: 18px; margin-bottom: 24px;">
+      <h3 style="font-size: 14.5px; font-weight: 700; color: #0f172a; margin: 0 0 12px;">Camera & Microphone Hardware Test</h3>
+      <p style="font-size: 13px; color: #64748b; margin: 0 0 14px;">Test your browser media permissions before your scheduled interview.</p>
+      <div style="display: flex; gap: 10px;">
+        <button type="button" onclick="testHardware()" class="btn" style="background: #0f172a; color: #fff; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;">
+          🎥 Test Camera & Mic
+        </button>
+        <span id="hardwareTestStatus" style="font-size: 13px; color: #10b981; font-weight: 600; display: flex; align-items: center;"></span>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: flex-end;">
+      <button type="submit" class="btn btn-primary" style="background: #2563eb; color: #fff; font-weight: 700; font-size: 14px; padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer;">
+        Save Preferences
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  async function testHardware() {
+    const label = document.getElementById("hardwareTestStatus");
+    label.textContent = "Requesting permissions...";
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      label.textContent = "✓ Camera and Microphone working perfectly!";
+      stream.getTracks().forEach(t => t.stop());
+    } catch (e) {
+      label.textContent = "⚠️ Permission denied or hardware not found.";
+      label.style.color = "#ef4444";
+    }
+  }
+</script>
+{% endblock %}

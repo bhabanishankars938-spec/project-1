@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% block title %}HR & Recruiter Sign In · HireNexa Talent Platform{% endblock %}
+
+{% block content %}
+<div class="split-auth-container">
+  <!-- Left Column: Recruiter SaaS Value Proposition -->
+  <div class="auth-showcase-pane" style="background: linear-gradient(135deg, #1e1b4b 0%, #1e293b 100%);">
+    <div>
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 24px;">
+        <div class="brand-icon" style="width: 40px; height: 40px; font-size: 18px; background: #6366f1;">💼</div>
+        <span style="font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.03em;">HireNexa</span>
+        <span class="role-tag recruiter">HR & TALENT ACQUISITION</span>
+      </div>
+
+      <h2 style="font-size: 32px; font-weight: 800; color: #ffffff; line-height: 1.2; margin-bottom: 16px; letter-spacing: -0.03em;">
+        Enterprise Recruitment & Applicant Screening
+      </h2>
+
+      <p style="color: #cbd5e1; font-size: 15px; line-height: 1.6; margin-bottom: 32px;">
+        Access your company hiring dashboard, review explainable AI candidate scorecards, post new job openings, and coordinate interview rounds.
+      </p>
+
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 14px; margin-bottom: 40px;">
+        <li style="display: flex; align-items: center; gap: 12px; color: #e2e8f0; font-size: 14px;">
+          <span style="color: #6366f1; font-size: 18px;">✓</span>
+          <span><strong>Authorized Recruitment Data:</strong> Strictly isolated to your company's roles and applicants.</span>
+        </li>
+        <li style="display: flex; align-items: center; gap: 12px; color: #e2e8f0; font-size: 14px;">
+          <span style="color: #6366f1; font-size: 18px;">✓</span>
+          <span><strong>Explainable ATS Matching:</strong> Instant skill overlap analysis and gap detection.</span>
+        </li>
+        <li style="display: flex; align-items: center; gap: 12px; color: #e2e8f0; font-size: 14px;">
+          <span style="color: #6366f1; font-size: 18px;">✓</span>
+          <span><strong>Multi-Stage Pipeline:</strong> Shortlist, add internal ratings, and book interviews.</span>
+        </li>
+      </ul>
+    </div>
+
+    <div style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: var(--radius-lg); padding: 18px;">
+      <span style="color: #a5b4fc; font-size: 12px; font-weight: 700; text-transform: uppercase;">HR Productivity</span>
+      <p style="color: #f8fafc; font-size: 13px; margin-top: 4px; line-height: 1.5;">
+        Average time-to-hire decreased by 40% with automated resume parsing and instant skill match scorecards.
+      </p>
+    </div>
+  </div>
+
+  <!-- Right Column: Login Form -->
+  <div class="auth-form-pane">
+    <div style="margin-bottom: 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span class="role-tag recruiter">RECRUITER WORKSPACE</span>
+        <a href="{% url 'login' %}" style="font-size: 12px; color: var(--slate-500);">All Roles</a>
+      </div>
+      <h1 class="auth-title" style="text-align: left; font-size: 28px;">HR Recruiter Sign In</h1>
+      <p class="auth-subtitle" style="text-align: left;">Manage company job postings and interview pipeline</p>
+    </div>
+
+    <!-- 1-Click Demo for Recruiter -->
+    <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <strong style="display: block; font-size: 13px; color: var(--slate-800);">Fast Evaluation Access</strong>
+        <span style="font-size: 12px; color: var(--slate-500);">Test HR tools with verified recruiter credentials</span>
+      </div>
+      <a href="{% url 'demo_login' 'recruiter' %}" class="btn btn-outline btn-sm" style="font-size: 12px; border-color: var(--primary); color: var(--primary);">
+        ⚡ 1-Click HR Demo
+      </a>
+    </div>
+
+    {% if form.errors %}
+      <div class="alert-message alert-error" style="margin-bottom: 18px;">
+        <span>Invalid credentials. Please verify your recruiter username and password.</span>
+      </div>
+    {% endif %}
+
+    <!-- Auth Method Tabs -->
+    <div class="auth-tabs" style="display: flex; gap: 4px; background: var(--slate-100); padding: 4px; border-radius: var(--radius-lg); margin-bottom: 20px;">
+      <button type="button" class="auth-tab-btn active" data-tab="password" style="flex: 1; padding: 8px 10px; font-size: 12px; font-weight: 700; border: none; border-radius: var(--radius-md); background: #ffffff; color: var(--slate-900); cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.2s;">
+        🔑 Password
+      </button>
+      <button type="button" class="auth-tab-btn" data-tab="email_otp" style="flex: 1; padding: 8px 10px; font-size: 12px; font-weight: 700; border: none; border-radius: var(--radius-md); background: transparent; color: var(--slate-600); cursor: pointer; transition: all 0.2s;">
+        ✉️ Email OTP
+      </button>
+      <button type="button" class="auth-tab-btn" data-tab="mobile_otp" style="flex: 1; padding: 8px 10px; font-size: 12px; font-weight: 700; border: none; border-radius: var(--radius-md); background: transparent; color: var(--slate-600); cursor: pointer; transition: all 0.2s;">
+        📱 Mobile OTP
+      </button>
+    </div>
+
+    <!-- Tab 1: Password Login -->
+    <div id="tab-pane-password" class="auth-tab-pane">
+      <form method="post" action="{% url 'hr_login' %}">
+        {% csrf_token %}
+        {% if next %}
+          <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
+
+        <div class="form-group">
+          <label class="form-label" for="id_username">Recruiter Username / Work Email / Mobile Phone</label>
+          <input type="text" name="username" autofocus required id="id_username" class="form-input" placeholder="e.g. techcorp_hr, hr@techcorp.io, or +91 9876543210" value="{{ identifier|default:'' }}">
+        </div>
+
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <label class="form-label" for="id_password" style="margin: 0;">Password</label>
+            <a href="{% url 'forgot_password' %}" style="font-size: 12px; color: var(--primary);">Forgot password?</a>
+          </div>
+          <input type="password" name="password" required id="id_password" class="form-input" placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 8px;">
+          Access Recruiter Workspace →
+        </button>
+      </form>
+    </div>
+
+    <!-- Tab 2: Email OTP Login -->
+    <div id="tab-pane-email_otp" class="auth-tab-pane" style="display: none;">
+      <form method="post" action="{% url 'request_otp' %}">
+        {% csrf_token %}
+        <input type="hidden" name="channel" value="EMAIL">
+        <input type="hidden" name="portal" value="hr">
+        {% if next %}
+          <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
+
+        <div class="form-group">
+          <label class="form-label" for="id_hr_email_otp_identifier">Recruiter Work Email Address</label>
+          <input type="email" name="identifier" required id="id_hr_email_otp_identifier" class="form-input" placeholder="e.g. hr@company.com" value="{{ identifier|default:'' }}">
+          <span style="font-size: 12px; color: var(--slate-500); margin-top: 6px; display: block;">
+            We'll send a single-use 6-digit code valid for 5 minutes.
+          </span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 8px;">
+          Send Email Verification Code →
+        </button>
+      </form>
+    </div>
+
+    <!-- Tab 3: Mobile OTP Login -->
+    <div id="tab-pane-mobile_otp" class="auth-tab-pane" style="display: none;">
+      <form method="post" action="{% url 'request_otp' %}">
+        {% csrf_token %}
+        <input type="hidden" name="channel" value="SMS">
+        <input type="hidden" name="portal" value="hr">
+        {% if next %}
+          <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
+
+        <div class="form-group">
+          <label class="form-label" for="id_hr_phone_otp_identifier">Recruiter Registered Mobile Phone</label>
+          <input type="tel" name="identifier" required id="id_hr_phone_otp_identifier" class="form-input" placeholder="e.g. +91 9876543210" value="{{ identifier|default:'' }}">
+          <span style="font-size: 12px; color: var(--slate-500); margin-top: 6px; display: block;">
+            SMS verification code will be sent to your mobile phone.
+          </span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 8px;">
+          Send Mobile Verification Code →
+        </button>
+      </form>
+    </div>
+
+    <script>
+    (function() {
+      const tabs = document.querySelectorAll('.auth-tab-btn');
+      const panes = document.querySelectorAll('.auth-tab-pane');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          const target = this.getAttribute('data-tab');
+          
+          tabs.forEach(t => {
+            t.classList.remove('active');
+            t.style.background = 'transparent';
+            t.style.color = 'var(--slate-600)';
+            t.style.boxShadow = 'none';
+          });
+          
+          this.classList.add('active');
+          this.style.background = '#ffffff';
+          this.style.color = 'var(--slate-900)';
+          this.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)';
+
+          panes.forEach(p => { p.style.display = 'none'; });
+          const activePane = document.getElementById('tab-pane-' + target);
+          if (activePane) {
+            activePane.style.display = 'block';
+            const input = activePane.querySelector('input[type=text], input[type=email], input[type=tel]');
+            if (input) input.focus();
+          }
+        });
+      });
+    })();
+    </script>
+
+    <div class="auth-footer" style="text-align: left; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--slate-200);">
+      New hiring manager or company?
+      <a href="{% url 'hr_signup' %}" style="font-weight: 700;">
+        Register HR Company Account →
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,987 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}HireNexa Meet · {{ interview.round_name }} · {{ job.title }}{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* Full-bleed Studio Stage */
+  .meet-viewport {
+    max-width: 1400px;
+    margin: 16px auto 40px auto;
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 120px);
+    min-height: 640px;
+  }
+
+  /* Top Control Strip */
+  .meet-top-bar {
+    background: #0f172a;
+    color: #ffffff;
+    border-radius: 14px;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+    border: 1px solid #1e293b;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  }
+
+  .meet-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-live {
+    background: #ef4444;
+    color: #ffffff;
+    animation: livePulse 2s infinite;
+  }
+
+  .badge-encrypted {
+    background: #1e293b;
+    color: #10b981;
+    border: 1px solid #059669;
+  }
+
+  .meet-timer {
+    background: #1e293b;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 14px;
+    color: #38bdf8;
+    font-weight: 700;
+  }
+
+  /* Main Workspace */
+  .meet-main-stage {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Stage Container */
+  .meet-video-canvas {
+    background: #090d16;
+    border-radius: 16px;
+    border: 1px solid #1e293b;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* VIEW A: GALLERY VIEW (Multi-Tile Grid) */
+  .layout-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 14px;
+    width: 100%;
+    height: 100%;
+    padding: 14px;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 768px) {
+    .layout-gallery {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* VIEW B: SPEAKER VIEW (Stage + Thumbnails) */
+  .layout-speaker {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 14px;
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  .layout-speaker .speaker-stage {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .layout-speaker .thumbnail-strip {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 220px;
+    aspect-ratio: 16/9;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    z-index: 20;
+    border: 2px solid #4f46e5;
+  }
+
+  /* Common Tile Styling */
+  .video-tile {
+    position: relative;
+    background: #020617;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1.5px solid #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s ease;
+  }
+
+  .video-tile.speaking {
+    border-color: #6366f1;
+    box-shadow: 0 0 16px rgba(99, 102, 241, 0.4);
+  }
+
+  .video-tile video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .tile-avatar-fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+  }
+
+  .avatar-glyph {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4f46e5, #06b6d4);
+    color: #ffffff;
+    font-size: 26px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+
+  .tile-tag-bottom {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(8px);
+    color: #f8fafc;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+  }
+
+  .tile-tag-status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 6px;
+    pointer-events: none;
+  }
+
+  .status-badge {
+    background: rgba(15, 23, 42, 0.8);
+    padding: 4px 6px;
+    border-radius: 6px;
+    font-size: 11px;
+    color: #f8fafc;
+  }
+
+  /* Fixed Bottom Control Bar */
+  .meet-controls-bar {
+    background: #0f172a;
+    border-radius: 14px;
+    padding: 12px 24px;
+    margin-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid #1e293b;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .controls-center-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .meet-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    background: #1e293b;
+    color: #f8fafc;
+    font-size: 17px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .meet-btn:hover {
+    background: #334155;
+    color: #ffffff;
+    transform: translateY(-2px);
+  }
+
+  .meet-btn.active {
+    background: #4f46e5;
+    color: #ffffff;
+  }
+
+  .meet-btn.off {
+    background: #ef4444;
+    color: #ffffff;
+  }
+
+  .meet-btn-danger {
+    background: #ef4444;
+    color: #ffffff;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+  }
+
+  .meet-btn-danger:hover {
+    background: #dc2626;
+  }
+
+  /* Side Panels: Chat, Scorecard, Participants */
+  .meet-drawer {
+    width: 340px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .meet-drawer.active {
+    display: flex;
+  }
+
+  .drawer-header {
+    background: #f8fafc;
+    padding: 14px 18px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .drawer-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: #0f172a;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+  }
+
+  .drawer-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #64748b;
+  }
+
+  .drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px;
+  }
+
+  /* Chat Messages */
+  .chat-messages-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 200px;
+  }
+
+  .chat-bubble {
+    background: #f1f5f9;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    max-width: 85%;
+  }
+
+  .chat-bubble.mine {
+    background: #ede9fe;
+    align-self: flex-end;
+    color: #4f28a9;
+  }
+
+  .chat-sender {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 2px;
+  }
+
+  .chat-input-row {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    border-top: 1px solid #e2e8f0;
+    background: #f8fafc;
+  }
+
+  .chat-input-row input {
+    flex: 1;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    outline: none;
+  }
+
+  .chat-input-row button {
+    background: #4f46e5;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  @keyframes livePulse {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.6;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="meet-viewport">
+  <!-- Top Meeting Information Strip -->
+  <div class="meet-top-bar">
+    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+      <span class="meet-badge badge-live">● LIVE MEETING</span>
+      <span class="meet-badge badge-encrypted">🔒 E2EE SECURE</span>
+      <div>
+        <h2 style="font-size: 16px; font-weight: 800; margin: 0; color: #ffffff;">{{ interview.round_name }}</h2>
+        <span style="font-size: 12.5px; color: #94a3b8;">{{ job.title }} · {{ job.company_name }}</span>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div class="meet-timer" id="callTimer">00:00:00</div>
+      {% if is_interviewer %}
+      <button type="button" class="meet-btn" id="btnToggleScorecard" onclick="toggleDrawer('scorecardDrawer')"
+        title="Open Interview Scorecard">📝</button>
+      {% endif %}
+      <button type="button" class="meet-btn" id="btnToggleChat" onclick="toggleDrawer('chatDrawer')"
+        title="In-Meeting Chat">💬</button>
+      <button type="button" class="meet-btn" id="btnToggleParticipants" onclick="toggleDrawer('participantsDrawer')"
+        title="Participants List">👥</button>
+    </div>
+  </div>
+
+  <!-- Main Stage Workspace -->
+  <div class="meet-main-stage">
+    <!-- Center Video Grid -->
+    <div class="meet-video-canvas" id="videoCanvas">
+      <!-- Layout Container (Gallery View by default) -->
+      <div class="layout-gallery" id="activeLayoutContainer">
+        <!-- 1. Local Participant Video Tile -->
+        <div class="video-tile" id="localVideoTile">
+          <video id="localVideo" autoplay playsinline muted></video>
+          <div class="tile-avatar-fallback" id="localAvatarFallback" style="display: none;">
+            <div class="avatar-glyph">{{ request.user.username|slice:":1"|upper }}</div>
+            <span>Camera turned off</span>
+          </div>
+          <div class="tile-tag-bottom">
+            <span>{{ request.user.get_full_name|default:request.user.username }} (You)</span>
+          </div>
+          <div class="tile-tag-status">
+            <span class="status-badge" id="localMicBadge">🎙️</span>
+          </div>
+        </div>
+
+        <!-- 2. Remote Participant Video Tile -->
+        <div class="video-tile" id="remoteVideoTile">
+          <video id="remoteVideo" autoplay playsinline></video>
+          <div class="tile-avatar-fallback" id="remoteAvatarFallback">
+            <div class="avatar-glyph">
+              {% if is_candidate %}HR{% else %}{{ candidate.username|slice:":1"|upper }}{% endif %}
+            </div>
+            <span id="remoteStatusText">Waiting for peer connection...</span>
+          </div>
+          <div class="tile-tag-bottom">
+            <span id="remoteNameTag">{% if is_candidate %}Interviewer{% else %}{{
+              candidate.get_full_name|default:candidate.username }}{% endif %}</span>
+          </div>
+          <div class="tile-tag-status">
+            <span class="status-badge" id="remoteMicBadge">🎙️</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side Drawer 1: Live Chat -->
+    <div class="meet-drawer" id="chatDrawer">
+      <div class="drawer-header">
+        <h3 class="drawer-title">In-Meeting Chat</h3>
+        <button class="drawer-close-btn" onclick="toggleDrawer('chatDrawer')">✕</button>
+      </div>
+      <div class="drawer-body">
+        <div class="chat-messages-container" id="chatMessages">
+          <div style="text-align: center; font-size: 12px; color: #94a3b8; margin: 10px 0;">
+            Messages are private to participants in this interview.
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Send a message..."
+          onkeydown="if(event.key==='Enter') sendChatMessage()">
+        <button type="button" onclick="sendChatMessage()">Send</button>
+      </div>
+    </div>
+
+    <!-- Side Drawer 2: Participants -->
+    <div class="meet-drawer" id="participantsDrawer">
+      <div class="drawer-header">
+        <h3 class="drawer-title">Participants (<span id="participantCount">2</span>)</h3>
+        <button class="drawer-close-btn" onclick="toggleDrawer('participantsDrawer')">✕</button>
+      </div>
+      <div class="drawer-body" id="participantsList">
+        <div
+          style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9;">
+          <div>
+            <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+            <span style="font-size: 11px; color: #4f46e5; display: block;">You · {% if is_candidate %}Candidate{% else %}Interviewer (Host){% endif %}</span>
+          </div>
+          <span style="font-size: 12px; color: #10b981;">Online</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0;">
+          <div>
+            <strong>{% if is_candidate %}Interviewer{% else %}{{ candidate.get_full_name|default:candidate.username }}{% endif %}</strong>
+            <span style="font-size: 11px; color: #64748b; display: block;">{% if is_candidate %}Interviewer (Host){% else %}Candidate{% endif %}</span>
+          </div>
+          <span style="font-size: 12px; color: #38bdf8;" id="peerStatusLabel">Connecting</span>
+        </div>
+      </div>
+    </div>
+
+    {% if is_interviewer %}
+    <!-- Side Drawer 3: Interviewer Live Scorecard -->
+    <div class="meet-drawer" id="scorecardDrawer">
+      <div class="drawer-header">
+        <h3 class="drawer-title">Live Scorecard</h3>
+        <button class="drawer-close-btn" onclick="toggleDrawer('scorecardDrawer')">✕</button>
+      </div>
+      <div class="drawer-body">
+        <div style="margin-bottom: 14px;">
+          <label
+            style="font-size: 12px; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">Candidate</label>
+          <div style="font-size: 14px; font-weight: 700; color: #0f172a;">{{
+            candidate.get_full_name|default:candidate.username }}</div>
+          <span style="font-size: 12px; color: #64748b;">{{ job.title }}</span>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label
+            style="font-size: 12px; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">Interview
+            Outcome / Status</label>
+          <select id="interviewStatusSelect"
+            style="width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px;">
+            <option value="SCHEDULED" {% if interview.status == 'SCHEDULED' %}selected{% endif %}>In Progress / Scheduled</option>
+            <option value="COMPLETED" {% if interview.status == 'COMPLETED' %}selected{% endif %}>Completed (Pass to Next Round)</option>
+            <option value="CANCELLED" {% if interview.status == 'CANCELLED' %}selected{% endif %}>Cancelled</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label
+            style="font-size: 12px; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">Competency
+            Evaluation Notes</label>
+          <textarea id="scorecardNotes"
+            style="width: 100%; height: 140px; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; line-height: 1.5;"
+            placeholder="Record observations on technical problem solving, system design, architectural thinking, and communication...">{{ interview.interviewer_feedback }}</textarea>
+        </div>
+
+        <button type="button" class="btn btn-primary btn-sm" style="width: 100%; padding: 10px; font-weight: 700;"
+          onclick="submitScorecard()">
+          💾 Save Scorecard to Database
+        </button>
+        <div id="scorecardSavedNotice"
+          style="display: none; text-align: center; color: #059669; font-size: 12px; margin-top: 8px; font-weight: 600;">
+          ✓ Scorecard updated in database!
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Fixed Bottom Control Bar -->
+  <div class="meet-controls-bar">
+    <!-- Left: Layout View Toggles -->
+    <div style="display: flex; gap: 8px;">
+      <button type="button" class="meet-btn active" id="btnGalleryView" onclick="setViewMode('gallery')"
+        title="Gallery View (Grid)">⊞</button>
+      <button type="button" class="meet-btn" id="btnSpeakerView" onclick="setViewMode('speaker')"
+        title="Speaker View (Stage)">🔲</button>
+    </div>
+
+    <!-- Center: Primary Meeting Actions -->
+    <div class="controls-center-group">
+      <button type="button" class="meet-btn" id="btnMic" onclick="toggleAudio()" title="Mute/Unmute Audio">🎙️</button>
+      <button type="button" class="meet-btn" id="btnCam" onclick="toggleVideo()" title="Turn Camera On/Off">📹</button>
+      <button type="button" class="meet-btn" id="btnScreenShare" onclick="toggleScreenShare()"
+        title="Share Your Screen">🖥️</button>
+      <button type="button" class="meet-btn" id="btnFullScreen" onclick="toggleFullScreen()"
+        title="Full Screen">⛶</button>
+      <button type="button" class="meet-btn meet-btn-danger" onclick="leaveMeeting()" title="Leave Meeting">📞</button>
+    </div>
+
+    <!-- Right: Room Key & Settings -->
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <button type="button" class="meet-btn" onclick="copyMeetingLink()" title="Copy Invitation Link">🔗</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const INTERVIEW_ID = {% if interview %}{{ interview.pk }}{% else %}null{% endif %};
+  const CURRENT_USER = "{{ request.user.username }}";
+  const IS_HOST = {% if is_interviewer %}true{% else %}false{% endif %};
+
+  let localStream = null;
+  let peerConnection = null;
+  let screenStream = null;
+  let isAudioMuted = false;
+  let isVideoMuted = false;
+  let isScreenSharing = false;
+  let lastSignalId = 0;
+  let signalPollInterval = null;
+  let currentViewMode = "gallery";
+  let meetingEnded = false;
+
+  // Standard Public STUN Configuration
+  const rtcConfig = {
+    iceServers: [
+      { urls: "stun:stun.l.google.com:19302" },
+      { urls: "stun:stun1.l.google.com:19302" }
+    ]
+  };
+
+  document.addEventListener("DOMContentLoaded", async function () {
+    startTimer();
+    await initLocalMedia();
+    initWebRTC();
+    startSignaling();
+  });
+
+  // 1. Call Timer
+  function startTimer() {
+    let seconds = 0;
+    setInterval(() => {
+      seconds++;
+      const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
+      const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+      const s = String(seconds % 60).padStart(2, '0');
+      document.getElementById("callTimer").textContent = `${h}:${m}:${s}`;
+    }, 1000);
+  }
+
+  // 2. Initialize Local Media Streams
+  async function initLocalMedia() {
+    try {
+      localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      const localVideo = document.getElementById("localVideo");
+      localVideo.srcObject = localStream;
+      document.getElementById("localAvatarFallback").style.display = "none";
+    } catch (err) {
+      console.warn("Could not capture local hardware media:", err);
+      document.getElementById("localAvatarFallback").style.display = "flex";
+      document.getElementById("btnCam").classList.add("off");
+      document.getElementById("btnMic").classList.add("off");
+    }
+  }
+
+  // 3. WebRTC PeerConnection Setup
+  function initWebRTC() {
+    peerConnection = new RTCPeerConnection(rtcConfig);
+
+    // Add local tracks to WebRTC peer connection
+    if (localStream) {
+      localStream.getTracks().forEach(track => {
+        peerConnection.addTrack(track, localStream);
+      });
+    }
+
+    // Handle incoming remote media tracks
+    peerConnection.ontrack = function (event) {
+      const remoteVideo = document.getElementById("remoteVideo");
+      if (remoteVideo && event.streams[0]) {
+        remoteVideo.srcObject = event.streams[0];
+        document.getElementById("remoteAvatarFallback").style.display = "none";
+        document.getElementById("peerStatusLabel").textContent = "Connected (WebRTC)";
+        document.getElementById("peerStatusLabel").style.color = "#10b981";
+      }
+    };
+
+    // ICE Candidates
+    peerConnection.onicecandidate = function (event) {
+      if (event.candidate) {
+        sendSignal("candidate", event.candidate);
+      }
+    };
+
+    peerConnection.onconnectionstatechange = function () {
+      const statusElem = document.getElementById("peerStatusLabel");
+      if (statusElem) {
+        statusElem.textContent = peerConnection.connectionState;
+      }
+    };
+
+    // If host, initiate call with SDP offer
+    if (IS_HOST) {
+      createAndSendOffer();
+    }
+  }
+
+  async function createAndSendOffer() {
+    try {
+      const offer = await peerConnection.createOffer();
+      await peerConnection.setLocalDescription(offer);
+      sendSignal("offer", offer);
+    } catch (e) {
+      console.warn("Error creating WebRTC offer:", e);
+    }
+  }
+
+  // 4. Signaling Channel via REST API Polling
+  function startSignaling() {
+    pollSignals();
+    signalPollInterval = setInterval(pollSignals, 1500);
+  }
+
+  async function sendSignal(type, payload) {
+    try {
+      const csrfToken = getCsrfToken();
+      await fetch(`/api/interviews/${INTERVIEW_ID}/signal/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken
+        },
+        body: JSON.stringify({ type: type, payload: payload })
+      });
+    } catch (e) {
+      console.warn("Signal send error:", e);
+    }
+  }
+
+  async function pollSignals() {
+    if (meetingEnded) return;
+    try {
+      const res = await fetch(`/api/interviews/${INTERVIEW_ID}/signal/?since=${lastSignalId}`);
+      if (res.status === 410) {
+        cleanupMeeting();
+        alert("This interview has ended.");
+        window.location.href = "{% url 'dashboard' %}";
+        return;
+      }
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.success && data.signals) {
+        for (const sig of data.signals) {
+          lastSignalId = Math.max(lastSignalId, sig.id);
+          await handleIncomingSignal(sig);
+        }
+      }
+    } catch (e) {
+      console.warn("Signaling poll notice:", e);
+    }
+  }
+
+  async function handleIncomingSignal(sig) {
+    const { type, payload, sender_name } = sig;
+    if (!peerConnection) return;
+
+    if (type === "offer" && !IS_HOST) {
+      await peerConnection.setRemoteDescription(new RTCSessionDescription(payload));
+      const answer = await peerConnection.createAnswer();
+      await peerConnection.setLocalDescription(answer);
+      sendSignal("answer", answer);
+    } else if (type === "answer" && IS_HOST) {
+      if (peerConnection.signalingState !== "stable") {
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(payload));
+      }
+    } else if (type === "candidate") {
+      try {
+        await peerConnection.addIceCandidate(new RTCIceCandidate(payload));
+      } catch (e) {
+        console.warn("Error adding ICE candidate:", e);
+      }
+    } else if (type === "chat") {
+      appendChatMessage(sender_name, payload.message, sig.sender === CURRENT_USER);
+    }
+  }
+
+  function getCsrfToken() {
+    const m = document.cookie.match(/csrftoken=([^;]+)/);
+    return m ? m[1] : "";
+  }
+
+  // 5. Hardware Controls
+  function toggleAudio() {
+    if (!localStream) return;
+    const audioTracks = localStream.getAudioTracks();
+    if (audioTracks.length > 0) {
+      isAudioMuted = !isAudioMuted;
+      audioTracks[0].enabled = !isAudioMuted;
+      const btn = document.getElementById("btnMic");
+      const badge = document.getElementById("localMicBadge");
+      if (isAudioMuted) {
+        btn.classList.add("off");
+        btn.textContent = "🔇";
+        badge.textContent = "🔇";
+      } else {
+        btn.classList.remove("off");
+        btn.textContent = "🎙️";
+        badge.textContent = "🎙️";
+      }
+    }
+  }
+
+  function toggleVideo() {
+    if (!localStream) return;
+    const videoTracks = localStream.getVideoTracks();
+    if (videoTracks.length > 0) {
+      isVideoMuted = !isVideoMuted;
+      videoTracks[0].enabled = !isVideoMuted;
+      const btn = document.getElementById("btnCam");
+      const fallback = document.getElementById("localAvatarFallback");
+      if (isVideoMuted) {
+        btn.classList.add("off");
+        btn.textContent = "🚫";
+        fallback.style.display = "flex";
+      } else {
+        btn.classList.remove("off");
+        btn.textContent = "📹";
+        fallback.style.display = "none";
+      }
+    }
+  }
+
+  // 6. Real Screen Sharing
+  async function toggleScreenShare() {
+    const btn = document.getElementById("btnScreenShare");
+    if (!isScreenSharing) {
+      try {
+        screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+        const screenTrack = screenStream.getVideoTracks()[0];
+
+        // Replace video track in peer connection
+        const sender = peerConnection.getSenders().find(s => s.track.kind === "video");
+        if (sender) {
+          sender.replaceTrack(screenTrack);
+        }
+        document.getElementById("localVideo").srcObject = screenStream;
+        isScreenSharing = true;
+        btn.classList.add("active");
+
+        screenTrack.onended = () => {
+          stopScreenSharing();
+        };
+      } catch (err) {
+        console.warn("Screen share cancelled or not allowed:", err);
+      }
+    } else {
+      stopScreenSharing();
+    }
+  }
+
+  function stopScreenSharing() {
+    if (screenStream) {
+      screenStream.getTracks().forEach(t => t.stop());
+    }
+    const videoTrack = localStream.getVideoTracks()[0];
+    const sender = peerConnection.getSenders().find(s => s.track.kind === "video");
+    if (sender && videoTrack) {
+      sender.replaceTrack(videoTrack);
+    }
+    document.getElementById("localVideo").srcObject = localStream;
+    isScreenSharing = false;
+    document.getElementById("btnScreenShare").classList.remove("active");
+  }
+
+  // 7. View Mode Switching (Gallery View vs Speaker View)
+  function setViewMode(mode) {
+    currentViewMode = mode;
+    const container = document.getElementById("activeLayoutContainer");
+    const btnGallery = document.getElementById("btnGalleryView");
+    const btnSpeaker = document.getElementById("btnSpeakerView");
+
+    if (mode === "speaker") {
+      container.className = "layout-speaker";
+      document.getElementById("remoteVideoTile").className = "video-tile speaker-stage";
+      document.getElementById("localVideoTile").className = "video-tile thumbnail-strip";
+      btnSpeaker.classList.add("active");
+      btnGallery.classList.remove("active");
+    } else {
+      container.className = "layout-gallery";
+      document.getElementById("remoteVideoTile").className = "video-tile";
+      document.getElementById("localVideoTile").className = "video-tile";
+      btnGallery.classList.add("active");
+      btnSpeaker.classList.remove("active");
+    }
+  }
+
+  // 8. Drawer Toggles (Chat, Scorecard, Participants)
+  function toggleDrawer(drawerId) {
+    const drawer = document.getElementById(drawerId);
+    const isCurrentlyOpen = drawer.classList.contains("active");
+
+    // Close other open drawers
+    document.querySelectorAll(".meet-drawer").forEach(d => d.classList.remove("active"));
+    document.getElementById("btnToggleChat").classList.remove("active");
+    document.getElementById("btnToggleParticipants").classList.remove("active");
+    const btnScorecard = document.getElementById("btnToggleScorecard");
+    if (btnScorecard) btnScorecard.classList.remove("active");
+
+    if (!isCurrentlyOpen) {
+      drawer.classList.add("active");
+      if (drawerId === "chatDrawer") document.getElementById("btnToggleChat").classList.add("active");
+      if (drawerId === "participantsDrawer") document.getElementById("btnToggleParticipants").classList.add("active");
+      if (drawerId === "scorecardDrawer" && btnScorecard) btnScorecard.classList.add("active");
+    }
+  }
+
+  // 9. In-Meeting Chat
+  function sendChatMessage() {
+    const input = document.getElementById("chatInput");
+    const text = input.value.trim();
+    if (!text) return;
+    sendSignal("chat", { message: text });
+    appendChatMessage("You", text, true);
+    input.value = "";
+  }
+
+  function appendChatMessage(sender, text, isMine) {
+    const box = document.getElementById("chatMessages");
+    const bubble = document.createElement("div");
+    bubble.className = "chat-bubble" + (isMine ? " mine" : "");
+    bubble.innerHTML = `<div class="chat-sender">${sender}</div><div>${text}</div>`;
+    box.appendChild(bubble);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  // 10. Interviewer Scorecard Persistence
+  async function submitScorecard() {
+    const notes = document.getElementById("scorecardNotes").value;
+    const statusVal = document.getElementById("interviewStatusSelect").value;
+    const notice = document.getElementById("scorecardSavedNotice");
+
+    try {
+      const res = await fetch(`/api/interviews/${INTERVIEW_ID}/feedback/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCsrfToken()
+        },
+        body: JSON.stringify({ notes: notes, status: statusVal })
+      });
+      if (res.ok) {
+        notice.style.display = "block";
+        setTimeout(() => notice.style.display = "none", 4000);
+      }
+    } catch (e) {
+      alert("Could not persist scorecard to database.");
+    }
+  }
+
+  // 11. Utilities
+  function toggleFullScreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  }
+
+  function copyMeetingLink() {
+    const url = window.location.origin + "/interviews/{{ interview.pk }}/lobby/";
+    navigator.clipboard.writeText(url).then(() => {
+      alert("Copied interview invitation link:\n" + url);
+    });
+  }
+
+  function cleanupMeeting() {
+    meetingEnded = true;
+    if (signalPollInterval) {
+      clearInterval(signalPollInterval);
+      signalPollInterval = null;
+    }
+    if (localStream) {
+      try { localStream.getTracks().forEach(t => t.stop()); } catch (e) {}
+      localStream = null;
+    }
+    if (screenStream) {
+      try { screenStream.getTracks().forEach(t => t.stop()); } catch (e) {}
+      screenStream = null;
+    }
+    if (peerConnection) {
+      try { peerConnection.close(); } catch (e) {}
+      peerConnection = null;
+    }
+  }
+
+  window.addEventListener("beforeunload", cleanupMeeting);
+  window.addEventListener("pagehide", cleanupMeeting);
+
+  function leaveMeeting() {
+    cleanupMeeting();
+    window.location.href = "{% url 'dashboard' %}";
+  }
+</script>
+{% endblock %}

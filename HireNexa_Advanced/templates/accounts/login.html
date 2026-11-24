@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Sign In to Workspace · Multi-Role · HireNexa{% endblock %}
+
+{% block content %}
+<div class="split-auth-container" id="loginContainer">
+  <!-- Left Column: Showcase & Platform Highlights -->
+  <aside class="auth-showcase-pane" aria-label="HireNexa Authentication Highlights">
+    <div class="auth-showcase-top">
+      <div class="auth-brand-badge">
+        <div class="auth-brand-icon">HN</div>
+        <span class="auth-brand-name">HireNexa</span>
+        <span class="auth-brand-pill">Unified Workspace</span>
+      </div>
+
+      <h1 class="auth-showcase-headline">
+        Welcome Back to <br>
+        <span
+          style="background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Talent
+          Intelligence.</span>
+      </h1>
+
+      <p class="auth-showcase-subtext">
+        Access your personalized career dashboard, candidate pipelines, CBT mock exam performance, and recruitment
+        tools.
+      </p>
+
+      <div class="auth-benefits-list">
+        <div class="auth-benefit-item">
+          <div class="auth-benefit-icon">🏢</div>
+          <div>
+            <div class="auth-benefit-title">Role-Based Dashboard Routing</div>
+            <div class="auth-benefit-desc">Automated session routing to Student, HR Recruiter, Company Admin, or
+              Freelancer dashboards.</div>
+          </div>
+        </div>
+
+        <div class="auth-benefit-item">
+          <div class="auth-benefit-icon">🛡️</div>
+          <div>
+            <div class="auth-benefit-title">Bank-Grade Argon2 Security</div>
+            <div class="auth-benefit-desc">Multi-identifier authentication with brute-force rate limiting and encrypted
+              session tracking.</div>
+          </div>
+        </div>
+
+        <div class="auth-benefit-item">
+          <div class="auth-benefit-icon">⚡</div>
+          <div>
+            <div class="auth-benefit-title">Passwordless Mobile OTP Option</div>
+            <div class="auth-benefit-desc">Sign in instantly via your registered mobile number and cryptographic SMS
+              verification.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-showcase-footer">
+      <div class="auth-trust-tag">
+        <span class="auth-trust-dot"></span>
+        <span>Secure Active Session</span>
+      </div>
+      <div class="auth-trust-tag">
+        <span>🔒 Zero User Tracking</span>
+      </div>
+      <div class="auth-trust-tag">
+        <a href="{% url 'role_hub' %}"
+          style="color: #93c5fd; text-decoration: none; font-weight: 700; font-size: 11.5px;">All Role Portals →</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Right Column: Clean Sign In Form -->
+  <main class="auth-form-pane" aria-labelledby="loginTitle">
+    <div class="auth-form-header">
+      <h2 class="auth-title" id="loginTitle">Sign In to HireNexa</h2>
+      <p class="auth-subtitle">Enter your Username, registered Email ID, or Mobile Number to continue</p>
+    </div>
+
+    <!-- Sign-In Method Switcher: Password vs Phone OTP -->
+    <div
+      style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; background: var(--slate-100); padding: 4px; border-radius: 10px;">
+      <div
+        style="text-align: center; padding: 7px 10px; font-size: 12px; font-weight: 700; color: #0f172a; background: #ffffff; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.06);">
+        🔑 Password Sign In
+      </div>
+      <a href="{% url 'phone_otp_login' %}"
+        style="text-align: center; padding: 7px 10px; font-size: 12px; font-weight: 600; color: #4f46e5; text-decoration: none; border-radius: 8px; transition: background 0.15s ease;">
+        ⚡ Phone OTP Sign In
+      </a>
+    </div>
+
+    <!-- Alert Messages -->
+    {% if messages %}
+    {% for message in messages %}
+    <div
+      class="alert-message {% if 'error' in message.tags or 'warning' in message.tags %}alert-error{% else %}alert-info{% endif %}"
+      style="margin-bottom: 18px; padding: 12px 16px; border-radius: 10px; font-size: 13px;" role="alert">
+      {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <form method="post" action="{% url 'login' %}" id="hirenexaLoginForm" novalidate>
+      {% csrf_token %}
+      {% if next %}
+      <input type="hidden" name="next" value="{{ next }}">
+      {% endif %}
+
+      <!-- 1. Username or Email Input -->
+      <div class="form-group" style="margin-bottom: 16px;">
+        <label class="form-label" for="id_username" style="font-size: 13px; font-weight: 700; color: #334155;">
+          Username, Email ID, or Mobile Number <span style="color: #ef4444;">*</span>
+        </label>
+        <div class="auth-input-group">
+          <span class="auth-input-icon">👤</span>
+          <input type="text" name="username" id="id_username" class="auth-input"
+            placeholder="e.g. admin, admin@hirenexa.internal, or +91 9800000000" value="{{ identifier|default:'' }}"
+            required autofocus autocomplete="username" spellcheck="false">
+        </div>
+      </div>
+
+      <!-- 2. Password Input with Eye Toggle & Forgot Link -->
+      <div class="form-group" style="margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <label class="form-label" for="id_password"
+            style="font-size: 13px; font-weight: 700; color: #334155; margin: 0;">
+            Password <span style="color: #ef4444;">*</span>
+          </label>
+          <a href="{% url 'forgot_password' %}"
+            style="font-size: 12.5px; color: #4f46e5; font-weight: 600; text-decoration: none;">
+            Forgot Password?
+          </a>
+        </div>
+        <div class="auth-input-group">
+          <span class="auth-input-icon">🔒</span>
+          <input type="password" name="password" id="id_password" class="auth-input" placeholder="Enter your password"
+            required autocomplete="current-password">
+          <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('id_password', this)"
+            aria-label="Toggle password visibility">
+            👁️
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. Remember Me Checkbox -->
+      <label class="auth-checkbox-row">
+        <input type="checkbox" name="remember_me" id="id_remember_me" class="auth-checkbox" value="1" checked>
+        <span class="auth-checkbox-label">
+          Remember my session for 14 days
+        </span>
+      </label>
+
+      <!-- 4. Sign In Submit Button -->
+      <button type="submit" class="auth-submit-btn" id="loginSubmitBtn" style="margin-top: 6px;">
+        <span id="loginSubmitText">Sign In to Workspace →</span>
+      </button>
+    </form>
+
+    <!-- 1-Click Instant Demo Access Strip -->
+    <div
+      style="margin-top: 24px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 12px 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span
+          style="font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.04em;">
+          ⚡ 1-Click Instant Demo
+        </span>
+        <span
+          style="font-size: 10.5px; background: #ede9fe; color: #6d28d9; padding: 1px 7px; border-radius: 999px; font-weight: 700;">TEST
+          DRIVE</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+        <a href="{% url 'demo_login' 'candidate' %}" class="btn btn-white btn-sm"
+          style="font-size: 11.5px; padding: 6px 4px; text-align: center; justify-content: center;">
+          🎓 Student
+        </a>
+        <a href="{% url 'demo_login' 'recruiter' %}" class="btn btn-white btn-sm"
+          style="font-size: 11.5px; padding: 6px 4px; text-align: center; justify-content: center;">
+          💼 Recruiter
+        </a>
+        <a href="{% url 'demo_login' 'freelancer' %}" class="btn btn-white btn-sm"
+          style="font-size: 11.5px; padding: 6px 4px; text-align: center; justify-content: center;">
+          ⚡ Freelance
+        </a>
+      </div>
+    </div>
+
+    <div class="auth-pane-footer">
+      New to HireNexa?
+      <a href="{% url 'signup' %}">Create Account Free →</a>
+    </div>
+  </main>
+</div>
+
+<!-- Password Visibility & Double Submission Prevention Script -->
+<script>
+  function togglePasswordVisibility(fieldId, btn) {
+    const input = document.getElementById(fieldId);
+    if (!input) return;
+    if (input.type === 'password') {
+      input.type = 'text';
+      btn.innerHTML = '🙈';
+      btn.setAttribute('aria-label', 'Hide password');
+    } else {
+      input.type = 'password';
+      btn.innerHTML = '👁️';
+      btn.setAttribute('aria-label', 'Show password');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('hirenexaLoginForm');
+    const btn = document.getElementById('loginSubmitBtn');
+    const btnText = document.getElementById('loginSubmitText');
+    if (form && btn) {
+      form.addEventListener('submit', function () {
+        btn.disabled = true;
+        btn.classList.add('btn-loading');
+        if (btnText) btnText.innerHTML = '⚡ Signing in...';
+      });
+    }
+  });
+</script>
+{% endblock %}

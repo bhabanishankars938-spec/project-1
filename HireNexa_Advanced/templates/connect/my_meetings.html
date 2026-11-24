@@ -1,0 +1,184 @@
+{% extends "connect/base_connect.html" %}
+{% load static %}
+
+{% block title %}My Meetings · HireNexa Connect{% endblock %}
+
+{% block connect_content %}
+<div
+  style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 26px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+  <div
+    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 14px;">
+    <div>
+      <h2 style="font-size: 20px; font-weight: 800; color: #0f172a; margin: 0;">👥 My Meetings</h2>
+      <span style="font-size: 13px; color: #64748b;">Manage your scheduled video sessions, live calls, and
+        history</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+      <a href="{% url 'connect:join_meeting' %}" class="btn"
+        style="background: #0f172a; color: #fff; padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;">
+        🔑 Join with ID
+      </a>
+      <a href="{% url 'connect:schedule_meeting' %}" class="btn btn-primary"
+        style="background: #2563eb; color: #fff; padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;">
+        ➕ Schedule
+      </a>
+
+      <!-- Filter Tabs -->
+      <div style="display: flex; gap: 4px; background: #f1f5f9; padding: 4px; border-radius: 10px;">
+        <a href="?tab=upcoming"
+          style="padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; {% if active_tab == 'upcoming' %}background: #ffffff; color: #0f172a; box-shadow: 0 1px 3px rgba(0,0,0,0.1);{% else %}color: #64748b;{% endif %}">
+          Scheduled
+        </a>
+        <a href="?tab=live"
+          style="padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; {% if active_tab == 'live' %}background: #ffffff; color: #0f172a; box-shadow: 0 1px 3px rgba(0,0,0,0.1);{% else %}color: #64748b;{% endif %}">
+          Live Now
+        </a>
+        <a href="?tab=history"
+          style="padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; {% if active_tab == 'history' %}background: #ffffff; color: #0f172a; box-shadow: 0 1px 3px rgba(0,0,0,0.1);{% else %}color: #64748b;{% endif %}">
+          History
+        </a>
+      </div>
+    </div>
+  </div>
+
+  {% if meetings %}
+  <div style="overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 13.5px;">
+      <thead>
+        <tr
+          style="border-bottom: 2px solid #f1f5f9; text-align: left; color: #64748b; font-size: 12px; text-transform: uppercase;">
+          <th style="padding: 12px 14px;">Meeting Title & Room ID</th>
+          <th style="padding: 12px 14px;">Type & Round</th>
+          <th style="padding: 12px 14px;">Scheduled Date & Time</th>
+          <th style="padding: 12px 14px;">Host</th>
+          <th style="padding: 12px 14px;">Status</th>
+          <th style="padding: 12px 14px; text-align: right;">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in meetings %}
+        <tr style="border-bottom: 1px solid #f8fafc; transition: background 0.15s;"
+          onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+          <td style="padding: 14px;">
+            <div style="font-weight: 700; color: #0f172a;">{{ m.title }}</div>
+            <div style="font-family: monospace; font-size: 12px; color: #2563eb;">{{ m.meeting_id }}</div>
+          </td>
+          <td style="padding: 14px;">
+            <span
+              style="display: inline-block; font-size: 11px; font-weight: 700; background: #e0f2fe; color: #0284c7; padding: 2px 8px; border-radius: 6px;">
+              {{ m.get_meeting_type_display }}
+            </span>
+            {% if m.interview_round != 'GENERAL' %}
+            <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">{{ m.get_interview_round_display }}</div>
+            {% endif %}
+          </td>
+          <td style="padding: 14px; color: #334155;">
+            <div>{{ m.scheduled_start|date:"D, d M, Y" }}</div>
+            <div style="font-size: 12px; color: #64748b;">{{ m.scheduled_start|date:"h:i A" }} ({{
+              m.scheduled_duration_minutes }}m)</div>
+          </td>
+          <td style="padding: 14px; color: #334155;">
+            {{ m.host.get_full_name|default:m.host.username }}
+          </td>
+          <td style="padding: 14px;">
+            {% if m.status == 'LIVE' %}
+            <span
+              style="background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; font-weight: 800; font-size: 11px; padding: 3px 8px; border-radius: 9999px;">●
+              LIVE</span>
+            {% elif m.status == 'SCHEDULED' %}
+            <span
+              style="background: #f0fdf4; color: #16a34a; font-weight: 700; font-size: 11px; padding: 3px 8px; border-radius: 9999px;">SCHEDULED</span>
+            {% elif m.status == 'COMPLETED' %}
+            <span
+              style="background: #f1f5f9; color: #64748b; font-weight: 600; font-size: 11px; padding: 3px 8px; border-radius: 9999px;">COMPLETED</span>
+            {% else %}
+            <span
+              style="background: #fef2f2; color: #991b1b; font-size: 11px; padding: 3px 8px; border-radius: 9999px;">{{
+              m.status }}</span>
+            {% endif %}
+          </td>
+          <td style="padding: 14px; text-align: right;">
+            {% if m.status != 'COMPLETED' and m.status != 'CANCELLED' %}
+            <div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center; flex-wrap: wrap;">
+              {% if m.host == request.user and m.status == 'SCHEDULED' %}
+              <a href="{% url 'connect:start_meeting' m.meeting_id %}" class="btn"
+                style="background: #10b981; color: #fff; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 8px; text-decoration: none;"
+                title="Start meeting now">
+                ▶ Start
+              </a>
+              {% endif %}
+              <a href="{{ m.get_absolute_url }}" class="btn btn-primary"
+                style="background: #2563eb; color: #fff; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 8px; text-decoration: none;">
+                Join Room
+              </a>
+              <button type="button" onclick="copyMeetingInvite('{{ m.meeting_id }}', '{{ m.get_join_url|escapejs }}')"
+                class="btn"
+                style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 8px; cursor: pointer;"
+                title="Copy Invitation Link">
+                🔗 Share
+              </button>
+              {% if m.interview %}
+              <a href="{% url 'connect:interview_studio' m.meeting_id %}" class="btn"
+                style="background: #0f172a; color: #fff; font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 8px; text-decoration: none;"
+                title="Open Interview Studio">
+                Studio ↗
+              </a>
+              {% endif %}
+            </div>
+            {% else %}
+            <a href="{% url 'connect:meeting_history' %}"
+              style="font-size: 12px; color: #64748b; text-decoration: none;">View Summary</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div style="text-align: center; padding: 48px 16px; color: #94a3b8;">
+    <span style="font-size: 36px; display: block; margin-bottom: 8px;">🗓️</span>
+    <h3 style="font-size: 16px; font-weight: 700; color: #475569; margin: 0 0 6px;">No meetings found in this view</h3>
+    <p style="font-size: 13.5px; color: #94a3b8; margin: 0 0 16px;">Schedule a new interview or initiate an instant
+      meeting to get started.</p>
+    <a href="{% url 'connect:schedule_meeting' %}" class="btn btn-primary"
+      style="background: #2563eb; color: #fff; font-size: 13px; font-weight: 600; padding: 8px 18px; border-radius: 8px; text-decoration: none;">
+      Schedule a Meeting
+    </a>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Toast notification for copy feedback -->
+<div id="copyToast"
+  style="display: none; position: fixed; bottom: 24px; right: 24px; background: #0f172a; color: #10b981; border: 1px solid #334155; padding: 12px 20px; border-radius: 10px; font-weight: 700; font-size: 13px; box-shadow: 0 6px 20px rgba(0,0,0,0.3); z-index: 9999;">
+  ✓ Meeting link copied to clipboard!
+</div>
+
+<script>
+  function copyMeetingInvite(meetingId, relativeUrl) {
+    const fullUrl = window.location.origin + relativeUrl;
+    navigator.clipboard.writeText(fullUrl).then(() => {
+      showToast("✓ Meeting link copied to clipboard!");
+    }).catch(() => {
+      const el = document.createElement("input");
+      el.value = fullUrl;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand("copy");
+      document.body.removeChild(el);
+      showToast("✓ Meeting link copied to clipboard!");
+    });
+  }
+
+  function showToast(text) {
+    const toast = document.getElementById("copyToast");
+    if (toast) {
+      toast.textContent = text;
+      toast.style.display = "block";
+      setTimeout(() => { toast.style.display = "none"; }, 2500);
+    }
+  }
+</script>
+{% endblock %}

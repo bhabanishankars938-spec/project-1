@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+{% block title %}Verify Verification Code · HireNexa{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 48px auto; padding: 0 16px;">
+  <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 40px 36px; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);">
+    
+    <!-- Portal / Purpose Header -->
+    <div style="text-align: center; margin-bottom: 28px;">
+      <div class="brand-icon" style="margin: 0 auto 16px; width: 52px; height: 52px; font-size: 24px; 
+        {% if portal == 'candidate' %}background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        {% elif portal == 'hr' %}background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+        {% elif portal == 'freelancer' %}background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+        {% else %}background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);{% endif %}">
+        {% if channel == 'EMAIL' %}✉️{% else %}📱{% endif %}
+      </div>
+      
+      <div style="display: inline-block; margin-bottom: 8px;">
+        <span class="role-tag {% if portal == 'candidate' %}candidate{% elif portal == 'hr' %}recruiter{% else %}owner{% endif %}">
+          {{ portal|upper }} WORKSPACE
+        </span>
+      </div>
+
+      <h1 style="font-size: 24px; font-weight: 800; color: var(--slate-900); margin: 0 0 8px 0; letter-spacing: -0.02em;">
+        Enter 6-Digit Code
+      </h1>
+      
+      <p style="font-size: 14px; color: var(--slate-600); margin: 0; line-height: 1.5;">
+        We've sent a 6-digit verification code to your {{ channel_label|lower }}:<br>
+        <strong style="color: var(--slate-900); font-family: monospace; font-size: 15px;">{{ masked_identifier|default:identifier }}</strong>
+      </p>
+
+      {% if debug %}
+      <div style="margin-top: 12px; padding: 8px 14px; background: rgba(245, 158, 11, 0.12); border: 1px solid #f59e0b; border-radius: 8px; font-size: 12px; color: #b45309; line-height: 1.5; text-align: left;">
+        📩 <strong>Notice:</strong> Resend test domain se aane wale emails Gmail ke <strong>Spam / Junk</strong> ya <strong>Promotions</strong> folder mein milte hain.
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Error/Notice Alert Box -->
+    <div id="otp-alert" style="{% if not error_message %}display: none;{% endif %} margin-bottom: 20px;" class="alert-message alert-error">
+      <span id="otp-alert-text">{{ error_message|default:'' }}</span>
+    </div>
+
+    <div id="otp-success-alert" style="display: none; margin-bottom: 20px;" class="alert-message alert-success">
+      <span id="otp-success-text"></span>
+    </div>
+
+    <!-- Verification Form -->
+    <form method="post" action="{% url 'verify_otp' %}" id="otp-verification-form">
+      {% csrf_token %}
+      <input type="hidden" name="identifier" value="{{ identifier }}">
+      <input type="hidden" name="channel" value="{{ channel }}">
+      <input type="hidden" name="portal" value="{{ portal }}">
+      {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+      {% endif %}
+      <input type="hidden" name="otp_code" id="id_full_otp_code" value="">
+
+      <div class="form-group" style="margin-bottom: 24px;">
+        <label class="form-label" style="text-align: center; display: block; font-weight: 700; margin-bottom: 12px; color: var(--slate-700);">
+          Verification Code
+        </label>
+        
+        <!-- 6-Box OTP Inputs -->
+        <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 12px;" id="otp-boxes-container">
+          <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" class="form-input otp-digit-box" data-index="1" autofocus style="width: 52px; height: 58px; font-size: 26px; font-weight: 800; text-align: center; border-radius: var(--radius-md); font-family: monospace;">
+          <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" class="form-input otp-digit-box" data-index="2" style="width: 52px; height: 58px; font-size: 26px; font-weight: 800; text-align: center; border-radius: var(--radius-md); font-family: monospace;">
+          <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" class="form-input otp-digit-box" data-index="3" style="width: 52px; height: 58px; font-size: 26px; font-weight: 800; text-align: center; border-radius: var(--radius-md); font-family: monospace;">
+          <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" class="form-input otp-digit-box" data-index="4" style="width: 52px; height: 58px; font-size: 26px; font-weight: 800; text-align: center; border-radius: var(--radius-md); font-family: monospace;">
+          <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" class="form-input otp-digit-box" data-index="5" style="width: 52px; height: 58px; font-size: 26px; font-weight: 800; text-align: center; border-radius: var(--radius-md); font-family: monospace;">
+          <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" class="form-input otp-digit-box" data-index="6" style="width: 52px; height: 58px; font-size: 26px; font-weight: 800; text-align: center; border-radius: var(--radius-md); font-family: monospace;">
+        </div>
+
+        <span style="font-size: 12px; color: var(--slate-500); display: block; text-align: center;">
+          Valid for 5 minutes. You can paste a 6-digit code directly into the boxes.
+        </span>
+      </div>
+
+      <button type="submit" id="verify-submit-btn" class="btn btn-primary btn-lg" style="width: 100%; 
+        {% if portal == 'candidate' %}background: linear-gradient(135deg, #059669 0%, #047857 100%); border-color: #059669;
+        {% elif portal == 'hr' %}background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); border-color: #6366f1;
+        {% else %}background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); border-color: #3b82f6;{% endif %}">
+        <span id="btn-text">Verify & Sign In →</span>
+        <span id="btn-spinner" style="display: none;">Verifying...</span>
+      </button>
+    </form>
+
+    <!-- Resend Countdown Timer & Action -->
+    <div style="text-align: center; margin-top: 24px; font-size: 13px; color: var(--slate-600);">
+      <div id="countdown-wrap">
+        Didn't receive the code? Resend in <strong id="timer-seconds" style="color: var(--primary); font-family: monospace;">{{ cooldown_seconds|default:60 }}</strong>s
+      </div>
+      <div id="resend-action-wrap" style="display: none; margin-top: 4px;">
+        <span>Didn't receive the code?</span>
+        <button type="button" id="resend-otp-btn" style="background: none; border: none; color: var(--primary); font-weight: 700; cursor: pointer; text-decoration: underline; font-size: 13px; margin-left: 4px; padding: 0;">
+          Resend Code Now
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation / Fallbacks -->
+    <div style="text-align: center; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--slate-200); font-size: 13px; color: var(--slate-500);">
+      <a href="{% if portal == 'candidate' %}{% url 'candidate_login' %}{% elif portal == 'hr' %}{% url 'hr_login' %}{% elif portal == 'freelancer' %}{% url 'freelancer_login' %}{% elif portal == 'owner' %}{% url 'owner_login' %}{% else %}{% url 'login' %}{% endif %}" style="color: var(--slate-600); text-decoration: none; font-weight: 600;">
+        ← Change {{ channel_label }}
+      </a>
+      <span style="margin: 0 10px; color: var(--slate-300);">•</span>
+      <a href="{% if portal == 'candidate' %}{% url 'candidate_login' %}{% elif portal == 'hr' %}{% url 'hr_login' %}{% elif portal == 'freelancer' %}{% url 'freelancer_login' %}{% elif portal == 'owner' %}{% url 'owner_login' %}{% else %}{% url 'login' %}{% endif %}" style="color: var(--slate-600); text-decoration: none; font-weight: 600;">
+        Sign In with Password
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function() {
+  const boxes = document.querySelectorAll('.otp-digit-box');
+  const fullInput = document.getElementById('id_full_otp_code');
+  const form = document.getElementById('otp-verification-form');
+  const submitBtn = document.getElementById('verify-submit-btn');
+  const btnText = document.getElementById('btn-text');
+  const btnSpinner = document.getElementById('btn-spinner');
+  const alertBox = document.getElementById('otp-alert');
+  const alertText = document.getElementById('otp-alert-text');
+  const successBox = document.getElementById('otp-success-alert');
+  const successText = document.getElementById('otp-success-text');
+
+  // Sync digit boxes to hidden input
+  function updateFullCode() {
+    let code = '';
+    boxes.forEach(b => { code += b.value.trim(); });
+    fullInput.value = code;
+    return code;
+  }
+
+  // Handle Box Interactions
+  boxes.forEach((box, idx) => {
+    // Only allow single digit
+    box.addEventListener('input', function(e) {
+      this.value = this.value.replace(/[^0-9]/g, '');
+      if (this.value.length >= 1) {
+        this.value = this.value.slice(-1);
+        if (idx < boxes.length - 1) {
+          boxes[idx + 1].focus();
+        }
+      }
+      const code = updateFullCode();
+      if (code.length === 6) {
+        // Automatically submit when all 6 digits entered
+        form.requestSubmit();
+      }
+    });
+
+    // Handle Backspace navigation
+    box.addEventListener('keydown', function(e) {
+      if (e.key === 'Backspace') {
+        if (!this.value && idx > 0) {
+          boxes[idx - 1].focus();
+          boxes[idx - 1].value = '';
+          updateFullCode();
+        }
+      } else if (e.key === 'ArrowLeft' && idx > 0) {
+        boxes[idx - 1].focus();
+      } else if (e.key === 'ArrowRight' && idx < boxes.length - 1) {
+        boxes[idx + 1].focus();
+      }
+    });
+
+    // Handle Paste event on any box
+    box.addEventListener('paste', function(e) {
+      e.preventDefault();
+      const pasteData = (e.clipboardData || window.clipboardData).getData('text').trim();
+      const digits = pasteData.replace(/[^0-9]/g, '');
+      if (digits.length >= 6) {
+        for (let i = 0; i < 6; i++) {
+          if (boxes[i]) boxes[i].value = digits[i];
+        }
+        updateFullCode();
+        boxes[5].focus();
+        form.requestSubmit();
+      } else if (digits.length > 0) {
+        let cur = idx;
+        for (let i = 0; i < digits.length && cur < boxes.length; i++, cur++) {
+          boxes[cur].value = digits[i];
+        }
+        updateFullCode();
+        if (cur < boxes.length) {
+          boxes[cur].focus();
+        } else {
+          boxes[boxes.length - 1].focus();
+        }
+      }
+    });
+  });
+
+  // Form submit state
+  form.addEventListener('submit', function(e) {
+    const code = updateFullCode();
+    if (code.length !== 6) {
+      e.preventDefault();
+      alertBox.style.display = 'block';
+      alertText.textContent = 'Please enter all 6 digits of your verification code.';
+      return;
+    }
+    submitBtn.disabled = true;
+    btnText.style.display = 'none';
+    btnSpinner.style.display = 'inline-block';
+  });
+
+  // Countdown & Resend Logic
+  let secondsLeft = parseInt("{{ cooldown_seconds|default:60 }}", 10) || 60;
+  const timerEl = document.getElementById('timer-seconds');
+  const countdownWrap = document.getElementById('countdown-wrap');
+  const resendActionWrap = document.getElementById('resend-action-wrap');
+  const resendBtn = document.getElementById('resend-otp-btn');
+
+  let countdownInterval = null;
+
+  function startCountdown(sec) {
+    secondsLeft = sec;
+    countdownWrap.style.display = 'block';
+    resendActionWrap.style.display = 'none';
+    if (timerEl) timerEl.textContent = secondsLeft;
+
+    if (countdownInterval) clearInterval(countdownInterval);
+
+    countdownInterval = setInterval(function() {
+      secondsLeft--;
+      if (timerEl) timerEl.textContent = secondsLeft;
+      if (secondsLeft <= 0) {
+        clearInterval(countdownInterval);
+        countdownWrap.style.display = 'none';
+        resendActionWrap.style.display = 'block';
+      }
+    }, 1000);
+  }
+
+  startCountdown(secondsLeft);
+
+  // AJAX Resend Handler
+  if (resendBtn) {
+    resendBtn.addEventListener('click', function() {
+      resendBtn.disabled = true;
+      resendBtn.textContent = 'Sending...';
+
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      const payload = new URLSearchParams();
+      payload.append('identifier', "{{ identifier }}");
+      payload.append('channel', "{{ channel }}");
+      payload.append('portal', "{{ portal }}");
+
+      fetch("{% url 'resend_otp' %}", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': csrfToken,
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: payload.toString()
+      })
+      .then(res => res.json().then(data => ({ status: res.status, body: data })))
+      .then(res => {
+        resendBtn.disabled = false;
+        resendBtn.textContent = 'Resend Code Now';
+
+        if (res.body.success) {
+          alertBox.style.display = 'none';
+          successBox.style.display = 'block';
+          successText.textContent = res.body.message || 'A new verification code has been dispatched.';
+          
+          // Clear boxes
+          boxes.forEach(b => { b.value = ''; });
+          fullInput.value = '';
+          boxes[0].focus();
+
+          const cd = res.body.cooldown || 60;
+          startCountdown(cd);
+        } else {
+          alertBox.style.display = 'block';
+          alertText.textContent = res.body.message || 'Unable to resend OTP at this time.';
+          if (res.body.error_code === 'COOLDOWN_ACTIVE' && res.body.cooldown) {
+            startCountdown(res.body.cooldown);
+          }
+        }
+      })
+      .catch(err => {
+        resendBtn.disabled = false;
+        resendBtn.textContent = 'Resend Code Now';
+        alertBox.style.display = 'block';
+        alertText.textContent = 'Network error while attempting to resend code. Please try again.';
+      });
+    });
+  }
+})();
+</script>
+{% endblock %}

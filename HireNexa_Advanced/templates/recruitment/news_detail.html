@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block title %}{{ announcement.title }} · HireNexa Intelligence{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb Header -->
+<div style="margin-bottom: 20px; font-size: 13px; color: var(--slate-500); display: flex; align-items: center; gap: 8px;">
+  <a href="{% url 'home' %}" style="color: var(--slate-500);">Home</a>
+  <span>›</span>
+  <a href="{% url 'news_list' %}" style="color: var(--slate-500);">News & Circulars</a>
+  <span>›</span>
+  <span style="color: var(--slate-800); font-weight: 600;">{{ announcement.get_category_display }}</span>
+</div>
+
+<div style="display: grid; grid-template-columns: 2.2fr 1fr; gap: 32px; align-items: start; margin-bottom: 48px;">
+  <!-- Main Article Body -->
+  <article style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 36px; box-shadow: var(--shadow-sm);">
+    <!-- Meta badges -->
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+      <span class="meta-badge" style="background: #eef2ff; color: var(--primary); font-weight: 700;">
+        {{ announcement.get_category_display }}
+      </span>
+      {% if announcement.priority == 'URGENT' %}
+        <span class="meta-badge" style="background: #ffe4e6; color: #e11d48; font-weight: 700;">
+          🔴 URGENT / BREAKING
+        </span>
+      {% elif announcement.priority == 'HIGH' %}
+        <span class="meta-badge" style="background: #fef3c7; color: #b45309; font-weight: 700;">
+          ⚡ HIGH PRIORITY
+        </span>
+      {% endif %}
+      <span class="meta-badge" style="background: var(--slate-100); color: var(--slate-700);">
+        Audience: {{ announcement.get_target_audience_display }}
+      </span>
+    </div>
+
+    <!-- Article Title -->
+    <h1 style="font-size: 32px; font-weight: 800; color: var(--slate-900); line-height: 1.3; letter-spacing: -0.02em; margin-bottom: 16px;">
+      {{ announcement.title }}
+    </h1>
+
+    <!-- Author & Timestamp Bar -->
+    <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--slate-100); padding-bottom: 20px; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+          {{ announcement.author.username|slice:":1"|upper }}
+        </div>
+        <div>
+          <strong style="color: var(--slate-900); font-size: 14px; display: block;">
+            {% if announcement.organization %}
+              {{ announcement.organization.name }} (Authorized Circular)
+            {% else %}
+              Platform Central Governance
+            {% endif %}
+          </strong>
+          <span style="font-size: 12px; color: var(--slate-500);">
+            Published by {{ announcement.author.username }} · {{ announcement.published_at|date:"F d, Y · h:i A" }}
+          </span>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 13px; color: var(--slate-400);">
+          👁️ {{ announcement.views_count }} total views
+        </span>
+
+        {% if user.is_authenticated %}
+          {% if user.is_owner or announcement.author == user %}
+            <a href="{% url 'news_edit' announcement.pk %}" class="btn btn-outline btn-sm">
+              ✏️ Edit Notice
+            </a>
+            <form method="post" action="{% url 'news_delete' announcement.pk %}" style="display: inline;" onsubmit="return confirm('Permanently delete this announcement?');">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--rose-600);">
+                🗑️ Delete
+              </button>
+            </form>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Lead Summary -->
+    <div style="background: var(--slate-50); border-left: 4px solid var(--primary); border-radius: 4px; padding: 14px 18px; margin-bottom: 28px; font-size: 16px; font-weight: 500; color: var(--slate-700); line-height: 1.6;">
+      {{ announcement.summary }}
+    </div>
+
+    <!-- Main Content -->
+    <div style="font-size: 15px; color: var(--slate-800); line-height: 1.8; white-space: pre-line; margin-bottom: 32px;">
+      {{ announcement.content }}
+    </div>
+
+    <!-- Action Attachments & External Link -->
+    {% if announcement.external_link or announcement.attachment %}
+      <div style="background: #f8fafc; border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 18px 24px; margin-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <strong style="color: var(--slate-900); font-size: 14px; display: block;">Official Action & Resources</strong>
+          <span style="font-size: 13px; color: var(--slate-500);">Review linked schedules, registration links, or formal circular documents.</span>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          {% if announcement.attachment %}
+            <a href="{{ announcement.attachment.url }}" target="_blank" class="btn btn-outline btn-sm" download>
+              📄 Download Document
+            </a>
+          {% endif %}
+          {% if announcement.external_link %}
+            <a href="{{ announcement.external_link }}" target="_blank" class="btn btn-primary btn-sm">
+              Open Registration Portal →
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  </article>
+
+  <!-- Sidebar: Related Circulars & Authority Verification -->
+  <aside>
+    <!-- Authority Card -->
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 24px; box-shadow: var(--shadow-sm);">
+      <h3 style="font-size: 15px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px;">
+        🛡️ Verification Notice
+      </h3>
+      <p style="font-size: 13px; color: var(--slate-600); line-height: 1.5; margin-bottom: 12px;">
+        This announcement is cryptographically signed and published under HireNexa's role-based enterprise broadcast framework.
+      </p>
+      <div style="font-size: 12px; color: var(--slate-500); border-top: 1px solid var(--slate-100); padding-top: 10px;">
+        <div><strong>Status:</strong> Active & Verified</div>
+        <div><strong>Broadcast ID:</strong> #HN-NEWS-{{ announcement.id }}</div>
+      </div>
+    </div>
+
+    <!-- Related News -->
+    {% if related_news %}
+      <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-sm);">
+        <h3 style="font-size: 15px; font-weight: 700; color: var(--slate-900); margin-bottom: 14px;">
+          Related Announcements
+        </h3>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          {% for r in related_news %}
+            <div style="border-bottom: 1px solid var(--slate-100); padding-bottom: 12px;">
+              <span style="font-size: 11px; color: var(--slate-400); display: block;">{{ r.published_at|date:"M d, Y" }}</span>
+              <a href="{% url 'news_detail' r.slug %}" style="font-size: 13px; font-weight: 600; color: var(--slate-900); line-height: 1.4; display: block; margin-top: 2px;">
+                {{ r.title }}
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}

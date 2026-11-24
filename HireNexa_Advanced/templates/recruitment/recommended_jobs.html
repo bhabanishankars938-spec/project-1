@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Recommended Jobs · AI Matching · HireNexa{% endblock %}
+
+{% block content %}
+<div class="section-header" style="align-items: center; margin-bottom: 24px;">
+  <div>
+    <span class="hero-pill" style="margin-bottom: 8px;">✨ PERSONALIZED AI JOB RECOMMENDATIONS</span>
+    <h1 style="font-size: 32px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.03em;">
+      Recommended Opportunities for You
+    </h1>
+    <p style="color: var(--slate-600); font-size: 15px; margin-top: 4px;">
+      Roles scored and ranked by analyzing your verified skills and academic discipline against live employer requisitions.
+    </p>
+  </div>
+  <div>
+    <a href="{% url 'profile_edit' %}" class="btn btn-outline" style="border-color: var(--slate-300); color: var(--slate-700);">
+      Update Your Skills →
+    </a>
+  </div>
+</div>
+
+<!-- Recommendations List -->
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px;">
+  {% for rec in recommendations %}
+    {% with job=rec.job %}
+      <div class="job-card" style="display: flex; flex-direction: column; justify-content: space-between; border-top: 3px solid var(--primary);">
+        <div>
+          <!-- Header with Match Percentage Badge -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              {% if job.target_course == 'MCA' %}
+                <span class="meta-badge" style="background: #e0f2fe; color: #0369a1; font-weight: 700;">💻 MCA</span>
+              {% elif job.target_course == 'MBA' %}
+                <span class="meta-badge" style="background: #fef3c7; color: #b45309; font-weight: 700;">📊 MBA</span>
+              {% endif %}
+              <span class="meta-badge">{{ job.department }}</span>
+            </div>
+            <div class="meta-badge" style="background: #ecfdf5; color: #065f46; font-weight: 800; font-size: 13px;">
+              {{ rec.score }}% Match
+            </div>
+          </div>
+
+          <div class="job-header">
+            <div class="company-logo">{{ job.company_name|slice:":1" }}</div>
+            <div>
+              <h3 class="job-title"><a href="{% url 'job_detail' job.pk %}">{{ job.title }}</a></h3>
+              <div class="company-name">🏢 {{ job.company_name }}</div>
+            </div>
+          </div>
+
+          <div class="job-meta-row" style="margin: 8px 0;">
+            <span class="meta-badge">📍 {{ job.location|default:"Remote" }}</span>
+            <span class="meta-badge">🎯 {{ job.vacancies }} Opening{{ job.vacancies|pluralize }}</span>
+          </div>
+
+          <!-- Matching Competencies -->
+          <div style="margin: 12px 0 8px 0;">
+            <span style="font-size: 11px; font-weight: 700; color: #065f46; text-transform: uppercase; display: block; margin-bottom: 4px;">
+              ✓ You Match ({{ rec.overlap_skills|length }}):
+            </span>
+            <div class="skills-wrap">
+              {% for s in rec.overlap_skills %}
+                <span class="skill-tag" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0;">{{ s }}</span>
+              {% empty %}
+                <span style="font-size: 11px; color: var(--slate-400);">Baseline discipline match</span>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Missing Skills / Growth Suggestion -->
+          {% if rec.missing_skills %}
+            <div style="margin: 8px 0 12px 0;">
+              <span style="font-size: 11px; font-weight: 700; color: #991b1b; text-transform: uppercase; display: block; margin-bottom: 4px;">
+                ⚠ Recommended Learning:
+              </span>
+              <div class="skills-wrap">
+                {% for s in rec.missing_skills|slice:":3" %}
+                  <span class="skill-tag" style="background: #fef2f2; color: #991b1b; border: 1px solid #fecaca;">+ {{ s }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="job-footer" style="margin-top: 16px;">
+          <form method="post" action="{% url 'toggle_save_job' job.pk %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-ghost btn-sm" title="Save Job">☆ Save</button>
+          </form>
+          <a href="{% url 'job_detail' job.pk %}" class="btn btn-primary btn-sm">View & Apply →</a>
+        </div>
+      </div>
+    {% endwith %}
+  {% empty %}
+    <div style="grid-column: 1 / -1; text-align: center; padding: 48px; background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl);">
+      <div style="font-size: 36px; margin-bottom: 12px;">🎯</div>
+      <h3>No matching jobs found yet</h3>
+      <p style="color: var(--slate-500); margin: 6px 0 16px 0;">Update your candidate profile with your technical skills, education, and projects to unlock personalized AI matches.</p>
+      <a href="{% url 'profile_edit' %}" class="btn btn-primary">Update Profile Skills</a>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

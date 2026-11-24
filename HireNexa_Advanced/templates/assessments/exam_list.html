@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Live Examinations & Timed Mock Tests | HireNexa{% endblock %}
+
+{% block content %}
+<div class="exam-list-container">
+
+  <!-- Header -->
+  <section class="exam-list-hero">
+    <span class="badge-cat">⏱️ Synchronized Real-Time Testing Engine</span>
+    <h1 class="exam-list-title">Live Examinations & Timed Mock Tests</h1>
+    <p class="exam-list-desc">
+      Official mock examinations featuring strict server-side timers, question palettes,
+      mark for review, negative marking, and instant question-by-question analysis.
+    </p>
+
+    <!-- Categories Filter -->
+    <div class="exam-cat-tabs">
+      <a href="?category=" class="cat-pill {% if not selected_category %}active{% endif %}">All Examinations</a>
+      <a href="?category=PLACEMENT_MOCK"
+        class="cat-pill {% if selected_category == 'PLACEMENT_MOCK' %}active{% endif %}">Placement Mock Tests</a>
+      <a href="?category=MOCK_FINAL" class="cat-pill {% if selected_category == 'MOCK_FINAL' %}active{% endif %}">Final
+        Mock Tests</a>
+      <a href="?category=LIVE_TEST" class="cat-pill {% if selected_category == 'LIVE_TEST' %}active{% endif %}">Live
+        Scheduled Tests</a>
+      <a href="?category=DAILY" class="cat-pill {% if selected_category == 'DAILY' %}active{% endif %}">Daily Practice
+        Drills</a>
+      <a href="?category=WEEKLY" class="cat-pill {% if selected_category == 'WEEKLY' %}active{% endif %}">Weekly
+        Assessments</a>
+    </div>
+  </section>
+
+  <!-- Exams Grid -->
+  <div class="exams-grid">
+    {% for ex in exams %}
+    <div class="exam-item-card">
+      <div class="exam-item-head">
+        <span class="exam-cat-pill">{{ ex.get_category_display }}</span>
+        {% if ex.target_entrance_exam %}
+        <span class="badge-pyq">{{ ex.target_entrance_exam }}</span>
+        {% endif %}
+      </div>
+
+      <h3 class="exam-item-title">{{ ex.title }}</h3>
+      <p class="exam-item-desc">{{ ex.description }}</p>
+
+      <div class="exam-item-meta">
+        <span>⏱️ <strong>{{ ex.duration_minutes }}</strong> Mins</span>
+        <span>🎯 <strong>{{ ex.total_marks }}</strong> Marks</span>
+        <span>📝 <strong>{{ ex.questions_count }}</strong> Questions</span>
+        <span>📉 <strong>-{{ ex.negative_marking }}</strong> Neg.</span>
+        <span>🔄 <strong>{{ ex.user_attempts_left|default:4 }}</strong> of {{ ex.max_attempts|default:4 }} Left</span>
+      </div>
+
+      <div class="exam-item-foot">
+        {% if ex.user_attempts_left <= 0 %} <a href="{% url 'exam_start' ex.slug %}"
+          class="btn btn-secondary btn-block">
+          <span>View Attempts (4/4 Used)</span>
+          </a>
+          {% else %}
+          <a href="{% url 'exam_start' ex.slug %}" class="btn btn-primary btn-block">
+            <span>Take Examination ({{ ex.user_attempts_left|default:4 }} left) →</span>
+          </a>
+          {% endif %}
+      </div>
+    </div>
+    {% empty %}
+    <div class="empty-state-card" style="grid-column: 1 / -1;">
+      <span class="empty-icon">⏱️</span>
+      <h3>No examinations found in this category</h3>
+      <p>Try switching category filters to view all active tests.</p>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

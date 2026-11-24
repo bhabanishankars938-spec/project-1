@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}HackerRank-Style Coding Practice · HireNexa{% endblock %}
+
+{% block content %}
+<div class="coding-dir-container">
+
+  <!-- Hero Header -->
+  <section class="coding-hero-card">
+    <div class="hero-left">
+      <span class="badge-code-suite">💻 Real-Time Code Execution Engine</span>
+      <h1 class="coding-hero-title">HackerRank-Style Coding Practice</h1>
+      <p class="coding-hero-desc">
+        Practice algorithmic problems, write and execute code in Python, JavaScript, C, C++, and Java.
+        Test against hidden edge cases and build competitive programming readiness.
+      </p>
+    </div>
+    <div class="hero-right-pills">
+      <span class="tech-pill">Python 3.13</span>
+      <span class="tech-pill">Node.js v20</span>
+      <span class="tech-pill">GCC / G++ C++17</span>
+      <span class="tech-pill">Java OpenJDK</span>
+    </div>
+  </section>
+
+  <!-- Filters Row -->
+  <div class="coding-filter-bar">
+    <div class="filter-group-left">
+      <a href="?difficulty=" class="btn-filter {% if not selected_difficulty %}active{% endif %}">All Difficulties</a>
+      <a href="?difficulty=EASY" class="btn-filter {% if selected_difficulty == 'EASY' %}active{% endif %}">Easy</a>
+      <a href="?difficulty=MEDIUM" class="btn-filter {% if selected_difficulty == 'MEDIUM' %}active{% endif %}">Medium</a>
+      <a href="?difficulty=HARD" class="btn-filter {% if selected_difficulty == 'HARD' %}active{% endif %}">Hard</a>
+    </div>
+
+    <form method="get" class="search-form-inline">
+      <input type="text" name="q" value="{{ search_query }}" placeholder="Search coding problems..." class="form-input-sm">
+      <button type="submit" class="btn btn-outline btn-sm">Search</button>
+    </form>
+  </div>
+
+  <!-- Problems Grid -->
+  <div class="coding-grid">
+    {% for p in problems %}
+    <div class="coding-card {% if p.id in user_solved_ids %}card-solved{% endif %}">
+      <div class="card-top">
+        <span class="badge-diff badge-{{ p.difficulty|lower }}">{{ p.get_difficulty_display }}</span>
+        {% if p.id in user_solved_ids %}
+          <span class="badge-solved">✓ Solved</span>
+        {% endif %}
+      </div>
+
+      <h3 class="problem-title">
+        <a href="{% url 'coding_workspace' p.slug %}">{{ p.title }}</a>
+      </h3>
+
+      <p class="problem-desc-snippet">{{ p.description|truncatewords:20 }}</p>
+
+      <div class="problem-meta-row">
+        <span>⏱️ {{ p.time_limit_seconds }}s Limit</span>
+        <span>🧠 {{ p.memory_limit_mb }} MB</span>
+        <span>🧪 {{ p.test_cases_count }} Test Cases</span>
+      </div>
+
+      <div class="problem-lang-tags">
+        {% for lang in p.allowed_languages %}
+          <span class="lang-tag">{{ lang }}</span>
+        {% endfor %}
+      </div>
+
+      <div class="card-foot">
+        <a href="{% url 'coding_workspace' p.slug %}" class="btn btn-primary btn-sm btn-block">
+          <span>Solve Challenge →</span>
+        </a>
+      </div>
+    </div>
+    {% empty %}
+    <div class="empty-state-card" style="grid-column: 1 / -1;">
+      <span class="empty-icon">💻</span>
+      <h3>No coding problems match the query</h3>
+      <p>Try clearing filters or search terms.</p>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

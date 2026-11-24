@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About HireNexa · Enterprise AI Recruitment & Talent Intelligence{% endblock %}
+
+{% block content %}
+<div class="pro-container" style="max-width: 1100px; margin: 40px auto; padding: 0 20px;">
+  
+  <!-- Hero Section -->
+  <div style="text-align: center; margin-bottom: 56px;">
+    <span class="meta-badge" style="background: rgba(37, 99, 235, 0.1); color: var(--blue-600); border: 1px solid rgba(37, 99, 235, 0.25); font-weight: 700; padding: 6px 14px; border-radius: 9999px; font-size: 12px; letter-spacing: 0.05em;">
+      ABOUT HIRENEXA 2.0
+    </span>
+    <h1 style="font-size: 42px; font-weight: 800; color: var(--slate-900); margin: 18px 0 14px; letter-spacing: -0.02em; line-height: 1.2;">
+      Where Talent Meets <span style="background: linear-gradient(135deg, #1d4ed8 0%, #7c3aed 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Intelligent Opportunity</span>
+    </h1>
+    <p style="font-size: 18px; color: var(--slate-600); max-width: 760px; margin: 0 auto; line-height: 1.6;">
+      HireNexa connects ambitious candidates, modern enterprises, and technical recruiters through transparent skill matching, explainable ATS evaluation, and career intelligence.
+    </p>
+  </div>
+
+  <!-- Vision & Mission Grid -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px; margin-bottom: 60px;">
+    <div class="stat-box" style="text-align: left; padding: 32px; border-radius: var(--radius-xl); border: 1px solid var(--slate-200); background: #ffffff; box-shadow: var(--shadow-sm);">
+      <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(37, 99, 235, 0.1); display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 18px;">🎯</div>
+      <h3 style="font-size: 20px; font-weight: 700; color: var(--slate-900); margin-bottom: 10px;">Our Mission</h3>
+      <p style="font-size: 14px; color: var(--slate-600); line-height: 1.7;">
+        To eliminate black-box rejection in hiring by equipping jobseekers with actionable diagnostic feedback, transparent skill gap breakdowns, and verified curriculum assessments.
+      </p>
+    </div>
+
+    <div class="stat-box" style="text-align: left; padding: 32px; border-radius: var(--radius-xl); border: 1px solid var(--slate-200); background: #ffffff; box-shadow: var(--shadow-sm);">
+      <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(124, 58, 237, 0.1); display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 18px;">⚡</div>
+      <h3 style="font-size: 20px; font-weight: 700; color: var(--slate-900); margin-bottom: 10px;">Our Technology</h3>
+      <p style="font-size: 14px; color: var(--slate-600); line-height: 1.7;">
+        Built on enterprise Python 3.13, Django 6.x, PostgreSQL on Supabase, and explainable multi-agent matching models that score competencies without hidden bias.
+      </p>
+    </div>
+
+    <div class="stat-box" style="text-align: left; padding: 32px; border-radius: var(--radius-xl); border: 1px solid var(--slate-200); background: #ffffff; box-shadow: var(--shadow-sm);">
+      <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(16, 185, 129, 0.1); display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 18px;">🛡️</div>
+      <h3 style="font-size: 20px; font-weight: 700; color: var(--slate-900); margin-bottom: 10px;">Security & Trust</h3>
+      <p style="font-size: 14px; color: var(--slate-600); line-height: 1.7;">
+        Zero data selling. Strict role-based access control (RBAC), private encrypted resume vaults, SHA-256 integrity verification, and explicit candidate consent management.
+      </p>
+    </div>
+  </div>
+
+  <!-- The 4 Portals -->
+  <div style="background: var(--slate-900); border-radius: var(--radius-2xl); padding: 48px 40px; color: #ffffff; margin-bottom: 60px;">
+    <div style="text-align: center; max-width: 680px; margin: 0 auto 36px;">
+      <h2 style="font-size: 28px; font-weight: 800; color: #ffffff; margin-bottom: 12px;">A Unified Platform for Four Audiences</h2>
+      <p style="font-size: 15px; color: #94a3b8; line-height: 1.6;">
+        HireNexa provides dedicated, isolated workspaces configured for the exact workflow of each platform participant.
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+      <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-lg); padding: 22px;">
+        <div style="font-size: 24px; margin-bottom: 8px;">🎓</div>
+        <h4 style="font-size: 16px; font-weight: 700; color: #f8fafc; margin-bottom: 6px;">Candidates & Students</h4>
+        <p style="font-size: 13px; color: #94a3b8; line-height: 1.5;">Job discovery, ATS resume scoring, project portfolios, and MCA/MBA mock entrance exams.</p>
+      </div>
+
+      <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-lg); padding: 22px;">
+        <div style="font-size: 24px; margin-bottom: 8px;">🏢</div>
+        <h4 style="font-size: 16px; font-weight: 700; color: #f8fafc; margin-bottom: 6px;">Employers & HR</h4>
+        <p style="font-size: 13px; color: #94a3b8; line-height: 1.5;">Multi-step job wizard, candidate shortlisting, interview scheduling, and recruitment pipeline.</p>
+      </div>
+
+      <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-lg); padding: 22px;">
+        <div style="font-size: 24px; margin-bottom: 8px;">🚀</div>
+        <h4 style="font-size: 16px; font-weight: 700; color: #f8fafc; margin-bottom: 6px;">Freelancers</h4>
+        <p style="font-size: 13px; color: #94a3b8; line-height: 1.5;">Verified client contracts, project proposals, milestone management, and skill badges.</p>
+      </div>
+
+      <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-lg); padding: 22px;">
+        <div style="font-size: 24px; margin-bottom: 8px;">🛡️</div>
+        <h4 style="font-size: 16px; font-weight: 700; color: #f8fafc; margin-bottom: 6px;">Platform Owner</h4>
+        <p style="font-size: 13px; color: #94a3b8; line-height: 1.5;">Real-time ecosystem analytics, company verification, subscription plans, and audit logging.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Call to Action -->
+  <div style="text-align: center; padding: 40px 0;">
+    <h2 style="font-size: 26px; font-weight: 800; color: var(--slate-900); margin-bottom: 14px;">Ready to Explore HireNexa?</h2>
+    <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+      <a href="{% url 'job_list' %}" class="btn btn-primary btn-lg" style="padding: 12px 28px;">Explore All Vacancies</a>
+      <a href="{% url 'ai_assistant' %}" class="btn btn-outline btn-lg" style="padding: 12px 28px;">Try HireNexa AI Co-Pilot</a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

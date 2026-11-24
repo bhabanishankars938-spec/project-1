@@ -1,0 +1,81 @@
+{% extends "connect/base_connect.html" %}
+{% load static %}
+
+{% block title %}Public Career Webinars & Events · HireNexa Connect{% endblock %}
+
+{% block connect_content %}
+<div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+    <div>
+      <div style="display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; text-transform: uppercase; color: #2563eb; background: #eff6ff; padding: 3px 10px; border-radius: 9999px; margin-bottom: 6px;">
+        <span>🌐 MODERATED WEBINAR ECOSYSTEM</span>
+      </div>
+      <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; margin: 0 0 4px;">Public Career Events & Webinars</h2>
+      <p style="font-size: 13.5px; color: #64748b; margin: 0;">Learn from industry leaders, tech hiring managers, and career coaches in interactive moderated sessions.</p>
+    </div>
+
+    <!-- Search & Filter Form -->
+    <form method="get" style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <input type="text" name="q" value="{{ query }}" placeholder="Search by topic, speaker..." style="padding: 8px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none; min-width: 220px;">
+      <select name="category" onchange="this.form.submit()" style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none;">
+        <option value="">All Categories</option>
+        {% for val, label in categories %}
+        <option value="{{ val }}" {% if selected_category == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn btn-primary" style="background: #0f172a; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">Search</button>
+    </form>
+  </div>
+
+  {% if events %}
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px;">
+    {% for ev in events %}
+    <div style="border: 1px solid #e2e8f0; border-radius: 14px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; background: #ffffff; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-size: 11px; font-weight: 700; background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; padding: 3px 10px; border-radius: 9999px;">
+            {{ ev.cover_tag }}
+          </span>
+          <span style="font-size: 12px; color: #64748b;">
+            💺 {{ ev.seats_left }} / {{ ev.capacity }} seats
+          </span>
+        </div>
+
+        <h3 style="font-size: 17px; font-weight: 700; color: #0f172a; margin: 0 0 8px; line-height: 1.35;">{{ ev.title }}</h3>
+        <p style="font-size: 13px; color: #64748b; line-height: 1.5; margin: 0 0 16px;">{{ ev.subtitle|default:ev.description|truncatewords:20 }}</p>
+
+        <div style="background: #f8fafc; border-radius: 10px; padding: 12px; margin-bottom: 18px; font-size: 13px;">
+          <div>👤 <strong>{{ ev.presenter_name }}</strong> · {{ ev.presenter_title }}</div>
+          <div style="color: #2563eb; font-weight: 600; margin-top: 4px;">🕒 {{ ev.scheduled_at|date:"l, d M, Y · h:i A" }} ({{ ev.duration_minutes }}m)</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <a href="{{ ev.get_absolute_url }}" class="btn" style="flex: 1; text-align: center; background: #0f172a; color: #fff; font-size: 13px; font-weight: 600; padding: 10px; border-radius: 8px; text-decoration: none;">
+          View Agenda
+        </a>
+        {% if ev.id in registered_event_ids %}
+        <a href="{% url 'connect:public_event_room' ev.slug %}" class="btn" style="background: #10b981; color: #fff; font-size: 13px; font-weight: 700; padding: 10px 14px; border-radius: 8px; text-decoration: none;">
+          Enter Stage ↗
+        </a>
+        {% else %}
+        <form method="post" action="{% url 'connect:public_event_register' ev.slug %}" style="display: inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary" style="background: #2563eb; color: #fff; font-size: 13px; font-weight: 600; padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer;">
+            Register Free
+          </button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div style="text-align: center; padding: 48px 16px; color: #94a3b8;">
+    <span style="font-size: 36px; display: block; margin-bottom: 8px;">🌐</span>
+    <h3 style="font-size: 16px; font-weight: 700; color: #475569; margin: 0 0 6px;">No webinars found matching criteria</h3>
+    <p style="font-size: 13.5px; color: #94a3b8; margin: 0;">Try adjusting your category filter or search query.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

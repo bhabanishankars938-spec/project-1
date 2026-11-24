@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Performance Analytics & Target Gap Dashboard | HireNexa{% endblock %}
+
+{% block content %}
+<div class="analytics-container" style="max-width: 1250px; margin: 0 auto; padding: 24px 20px;">
+
+  <!-- Header -->
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; margin-bottom: 24px; border-bottom: 1px solid #e2e8f0; padding-bottom: 18px;">
+    <div>
+      <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 4px;">
+        <a href="{% url 'mcq_entrance_hub' %}" style="color: #2563eb; text-decoration: none;">← Back to Entrance Hub</a>
+      </div>
+      <h1 style="font-size: 2rem; font-weight: 800; color: #0f172a; margin: 0 0 6px 0;">
+        📊 Performance Analytics & Target Gap Engine
+      </h1>
+      <p style="font-size: 0.95rem; color: #64748b; margin: 0;">
+        Comprehensive performance metrics, subject mastery breakdowns, attempt progression trends, and personal target gap analysis.
+      </p>
+    </div>
+
+    <!-- Personal Target Setting Widget -->
+    <div style="background: #fff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+      <div style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 6px;">🎯 Set Target Goal</div>
+      <form method="POST" action="{% url 'personal_target_set' %}" style="display: flex; gap: 8px; align-items: center;">
+        {% csrf_token %}
+        <input type="number" name="target_percentage" min="50" max="100" step="0.5" value="{{ target_score }}" style="width: 80px; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-weight: 700; font-size: 0.95rem; text-align: center;">
+        <span style="font-weight: 700; color: #475569;">%</span>
+        <button type="submit" style="background: #2563eb; color: #fff; font-size: 0.82rem; font-weight: 600; padding: 7px 12px; border: none; border-radius: 6px; cursor: pointer;">
+          Update
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- OVERALL METRICS STRIP -->
+  <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 28px;">
+    
+    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+      <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Average Score %</div>
+      <div style="font-size: 2.2rem; font-weight: 800; color: #2563eb; line-height: 1.1; margin-top: 4px;">{{ avg_score_pct }}%</div>
+      <div style="font-size: 0.8rem; color: #64748b; margin-top: 6px;">Across {{ total_tests_taken }} tests completed</div>
+    </div>
+
+    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+      <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Average Accuracy %</div>
+      <div style="font-size: 2.2rem; font-weight: 800; color: #16a34a; line-height: 1.1; margin-top: 4px;">{{ avg_accuracy_pct }}%</div>
+      <div style="font-size: 0.8rem; color: #64748b; margin-top: 6px;">Correct vs Attempted ratio</div>
+    </div>
+
+    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+      <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Average Completion %</div>
+      <div style="font-size: 2.2rem; font-weight: 800; color: #f59e0b; line-height: 1.1; margin-top: 4px;">{{ avg_completion_pct }}%</div>
+      <div style="font-size: 0.8rem; color: #64748b; margin-top: 6px;">Question attempt rate</div>
+    </div>
+
+    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+      <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Target Gap</div>
+      <div style="font-size: 2.2rem; font-weight: 800; {% if target_gap >= 0 %}color: #16a34a;{% else %}color: #dc2626;{% endif %} line-height: 1.1; margin-top: 4px;">
+        {% if target_gap >= 0 %}+{{ target_gap }}%{% else %}{{ target_gap }}%{% endif %}
+      </div>
+      <div style="font-size: 0.8rem; color: #64748b; margin-top: 6px;">Target: {{ target_score }}%</div>
+    </div>
+
+  </section>
+
+  <!-- SUBJECT MASTERY BREAKDOWN -->
+  <section style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; margin-bottom: 28px; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+    <h3 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin: 0 0 16px 0;">📚 Subject Mastery Breakdown</h3>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px;">
+      {% for sa in subject_analytics %}
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div>
+            <h4 style="font-size: 0.95rem; font-weight: 700; color: #0f172a; margin: 0;">{{ sa.subject.name }}</h4>
+            <span style="font-size: 0.72rem; color: #64748b; font-weight: 600;">{{ sa.track }} · {{ sa.tests_taken }} Tests</span>
+          </div>
+          <span style="font-size: 1.1rem; font-weight: 800; color: #2563eb;">{{ sa.mastery_score_pct }}%</span>
+        </div>
+        <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 999px; overflow: hidden;">
+          <div style="width: {{ sa.mastery_score_pct }}%; height: 100%; background: #2563eb; border-radius: 999px;"></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- WEAK TOPICS IDENTIFICATION (< 60%) -->
+  {% if weak_topics %}
+  <section style="background: #fff; border: 1px solid #fee2e2; border-radius: 12px; padding: 24px; margin-bottom: 28px; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+      <span style="font-size: 1.2rem;">⚠️</span>
+      <h3 style="font-size: 1.2rem; font-weight: 800; color: #991b1b; margin: 0;">Priority Revision Topics (&lt; 60% Score)</h3>
+    </div>
+    <p style="font-size: 0.88rem; color: #64748b; margin: 0 0 16px 0;">
+      These topics require immediate review of conceptual notes and practice re-attempts.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px;">
+      {% for wt in weak_topics %}
+      <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <div style="font-size: 0.9rem; font-weight: 700; color: #7f1d1d;">{{ wt.topic.name }}</div>
+          <div style="font-size: 0.75rem; color: #991b1b;">{{ wt.subject.name }} · Best: {{ wt.best_score }}/16 ({{ wt.percentage }}%)</div>
+        </div>
+        <a href="{% url 'topic_learning_notes' wt.topic.id %}" style="background: #dc2626; color: #fff; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 4px; text-decoration: none;">
+          Revise
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- ATTEMPT PROGRESSION TREND -->
+  {% if progression_trend %}
+  <section style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+    <h3 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin: 0 0 16px 0;">📈 Multi-Attempt Progression Trend (Attempts 1 to 5)</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;">
+      {% for pt in progression_trend %}
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; text-align: center;">
+        <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Attempt #{{ pt.attempt }}</div>
+        <div style="font-size: 1.8rem; font-weight: 800; color: #2563eb; margin: 4px 0;">{{ pt.avg_score_pct }}%</div>
+        <div style="font-size: 0.75rem; color: #94a3b8;">{{ pt.tests_count }} tests taken</div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+</div>
+{% endblock %}

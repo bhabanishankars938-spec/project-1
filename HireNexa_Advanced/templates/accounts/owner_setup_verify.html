@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Verify Email OTP · Platform Owner Setup · HireNexa{% endblock %}
+
+{% block content %}
+<div style="max-width: 520px; margin: 50px auto; background: #ffffff; border-radius: var(--radius-xl); box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.2); border: 1px solid #e2e8f0; padding: 40px; text-align: center;">
+
+  <div style="width: 60px; height: 60px; margin: 0 auto 20px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; color: #fff;">
+    ✉️
+  </div>
+
+  <span style="font-size: 11px; font-weight: 800; color: #b45309; text-transform: uppercase; letter-spacing: 0.08em; background: #fef3c7; padding: 4px 12px; border-radius: 999px; display: inline-block; margin-bottom: 12px;">
+    EMAIL OWNERSHIP VERIFICATION
+  </span>
+
+  <h2 style="font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">
+    Enter 6-Digit Verification Code
+  </h2>
+
+  <p style="font-size: 14px; color: #64748b; margin-bottom: 24px; line-height: 1.5;">
+    We sent a 6-digit code to <strong style="color: #1e293b; font-weight: 700;">{{ masked_email }}</strong>
+  </p>
+
+  {% if dev_owner_otp %}
+    <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid #3b82f6; border-radius: 8px; padding: 12px; margin-bottom: 20px; font-size: 13px; text-align: left;">
+      <span style="color: #1e40af; font-weight: 700;">🛠️ Local Development OTP:</span>
+      <span style="font-family: monospace; font-weight: 800; font-size: 16px; color: #1d4ed8; margin-left: 6px;">{{ dev_owner_otp }}</span>
+    </div>
+  {% endif %}
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert-message alert-{{ message.tags }}" style="margin-bottom: 20px; padding: 12px; border-radius: 8px; font-size: 13px; text-align: left;">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="post" action="{% url 'first_time_owner_setup_verify' %}">
+    {% csrf_token %}
+
+    <div style="margin-bottom: 24px;">
+      <input type="text" name="otp_code" maxlength="6" pattern="[0-9]{6}" required autofocus
+             placeholder="• • • • • •" autocomplete="one-time-code"
+             style="width: 100%; text-align: center; font-size: 32px; letter-spacing: 12px; font-weight: 800; padding: 12px; border: 2px solid #cbd5e1; border-radius: 10px; font-family: monospace; box-sizing: border-box; color: #0f172a;">
+      <span style="font-size: 12px; color: #94a3b8; margin-top: 8px; display: block;">
+        Valid for 15 minutes. Maximum 5 attempts allowed.
+      </span>
+    </div>
+
+    <button type="submit" style="width: 100%; background: linear-gradient(135deg, #d97706 0%, #b45309 100%); color: #ffffff; padding: 14px; font-size: 15px; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.35);">
+      Confirm & Activate Platform Owner Account →
+    </button>
+  </form>
+
+  <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; font-size: 13px;">
+    <a href="{% url 'first_time_owner_setup' %}" style="color: #64748b; text-decoration: none;">← Start over</a>
+    <div id="resend-wrapper">
+      <a id="resend-btn" href="{% url 'first_time_owner_setup_resend' %}"
+         style="color: #b45309; font-weight: 700; text-decoration: none; {% if cooldown_remaining > 0 %}display: none;{% endif %}">
+        Resend Code
+      </a>
+      <span id="cooldown-timer" style="color: #94a3b8; {% if cooldown_remaining == 0 %}display: none;{% endif %}">
+        Resend code in <strong id="seconds-left" style="color: #1e293b;">{{ cooldown_remaining|default:0 }}</strong>s
+      </span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  (function() {
+    var seconds = parseInt("{{ cooldown_remaining|default:0 }}", 10);
+    var timerSpan = document.getElementById("cooldown-timer");
+    var resendBtn = document.getElementById("resend-btn");
+    var secondsLeft = document.getElementById("seconds-left");
+
+    if (seconds > 0) {
+      var interval = setInterval(function() {
+        seconds--;
+        if (secondsLeft) secondsLeft.textContent = seconds;
+        if (seconds <= 0) {
+          clearInterval(interval);
+          if (timerSpan) timerSpan.style.display = "none";
+          if (resendBtn) resendBtn.style.display = "inline";
+        }
+      }, 1000);
+    }
+  })();
+</script>
+{% endblock %}

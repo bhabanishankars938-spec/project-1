@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ problem.title }} · Coding Workspace | HireNexa{% endblock %}
+
+{% block content %}
+<div class="workspace-container">
+
+  <!-- TOP BAR: PROBLEM TITLE & CONTROLS -->
+  <header class="workspace-header">
+    <div class="header-left">
+      <a href="{% url 'coding_list' %}" class="back-link">← Problems</a>
+      <h1 class="ws-problem-title">{{ problem.title }}</h1>
+      <span class="badge-diff badge-{{ problem.difficulty|lower }}">{{ problem.get_difficulty_display }}</span>
+    </div>
+
+    <div class="header-right">
+      <!-- Language Selector -->
+      <div class="lang-selector-wrap">
+        <label for="langSelect">Language:</label>
+        <select id="langSelect" class="form-select-sm" onchange="onLanguageChanged()">
+          {% for lang in allowed_languages %}
+            <option value="{{ lang }}" {% if lang == 'python' %}selected{% endif %}>
+              {% if lang == 'python' %}Python 3.13
+              {% elif lang == 'javascript' %}JavaScript (Node.js)
+              {% elif lang == 'c' %}C (GCC)
+              {% elif lang == 'cpp' %}C++17 (G++)
+              {% elif lang == 'java' %}Java (OpenJDK)
+              {% else %}{{ lang }}{% endif %}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <button type="button" class="btn btn-outline btn-sm" id="btnRunCode" onclick="runCode()">
+        <span>▶ Run Code</span>
+      </button>
+      <button type="button" class="btn btn-primary btn-sm" id="btnSubmitCode" onclick="submitCode()">
+        <span>🚀 Submit Solution</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- SPLIT WORKSPACE BODY -->
+  <div class="workspace-body">
+
+    <!-- LEFT PANE: PROBLEM STATEMENT & SUBMISSIONS -->
+    <div class="ws-left-pane">
+      <div class="ws-tabs-bar">
+        <button type="button" class="ws-tab-btn active" id="tabBtnDesc" onclick="switchWsTab('desc')">Problem Description</button>
+        <button type="button" class="ws-tab-btn" id="tabBtnSubmissions" onclick="switchWsTab('submissions')">Submissions ({{ user_submissions|length }})</button>
+      </div>
+
+      <!-- Tab 1: Description -->
+      <div class="ws-tab-content active" id="tabContentDesc">
+        <div class="problem-statement-prose">
+          {{ problem.description|linebreaksbr }}
+        </div>
+
+        <div class="problem-io-section">
+          <h4>Input Format</h4>
+          <div class="io-box">{{ problem.input_format|linebreaksbr }}</div>
+
+          <h4>Output Format</h4>
+          <div class="io-box">{{ problem.output_format|linebreaksbr }}</div>
+
+          <h4>Constraints</h4>
+          <div class="constraints-box">{{ problem.constraints|linebreaksbr }}</div>
+        </div>
+
+        <!-- Sample Test Cases -->
+        <div class="sample-cases-section">
+          <h4>Sample Test Cases</h4>
+          {% for sc in sample_cases %}
+          <div class="sample-case-card">
+            <span class="sample-tag">Sample Case #{{ forloop.counter }}</span>
+            <div class="sample-io-grid">
+              <div>
+                <strong>Sample Input:</strong>
+                <pre><code>{{ sc.input_data }}</code></pre>
+              </div>
+              <div>
+                <strong>Expected Output:</strong>
+                <pre><code>{{ sc.expected_output }}</code></pre>
+              </div>
+            </div>
+            {% if sc.explanation %}
+              <div class="sample-exp"><small><strong>Explanation:</strong> {{ sc.explanation }}</small></div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Tab 2: Submissions -->
+      <div class="ws-tab-content" id="tabContentSubmissions" style="display: none;">
+        <div class="submissions-list">
+          {% for sub in user_submissions %}
+          <div class="submission-item">
+            <div class="sub-top">
+              <span class="sub-status status-{{ sub.status|lower }}">{{ sub.get_status_display }}</span>
+              <span class="sub-lang">{{ sub.language|upper }}</span>
+              <span class="sub-time">{{ sub.submitted_at|date:"M d, Y · h:i A" }}</span>
+            </div>
+            <div class="sub-metrics">
+              <span>Passed: {{ sub.passed_cases_count }} / {{ sub.total_cases_count }} cases</span>
+              <span>Runtime: {{ sub.execution_time_ms }} ms</span>
+            </div>
+          </div>
+          {% empty %}
+          <div class="empty-subs">
+            <p>No previous submissions for this problem yet. Run your code and click Submit Solution!</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANE: CODE EDITOR & EXECUTION CONSOLE -->
+    <div class="ws-right-pane">
+      
+      <!-- Editor Top Toolbar -->
+      <div class="editor-toolbar">
+        <span class="editor-file-label">solution.<span id="fileExtLabel">py</span></span>
+        <button type="button" class="btn-tool" onclick="resetStarterTemplate()" title="Reset to default starter template">↺ Reset Code</button>
+      </div>
+
+      <!-- Code Editor Textarea with Line Numbers -->
+      <div class="code-editor-wrapper">
+        <textarea id="codeEditor" 
+                  class="code-textarea" 
+                  spellcheck="false" 
+                  autocapitalize="off" 
+                  autocomplete="off" 
+                  rows="22" 
+                  placeholder="Write your solution here..."></textarea>
+      </div>
+
+      <!-- Custom Input Toggle -->
+      <div class="custom-input-bar">
+        <label class="custom-input-toggle">
+          <input type="checkbox" id="toggleCustomInput" onchange="onCustomInputToggled()">
+          <span>Test against custom input</span>
+        </label>
+        <div class="custom-input-wrap" id="customInputWrap" style="display: none;">
+          <textarea id="customInputText" placeholder="Enter custom test input..." rows="3" class="custom-input-box"></textarea>
+        </div>
+      </div>
+
+      <!-- Terminal Output / Execution Drawer -->
+      <div class="terminal-drawer" id="terminalDrawer">
+        <div class="terminal-header">
+          <span class="term-title">🖥️ Execution Console</span>
+          <span class="term-status-pill" id="termStatusPill">Idle</span>
+        </div>
+        <div class="terminal-body" id="terminalBody">
+          <p class="term-placeholder">Click 'Run Code' to test your solution against sample test cases.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+const starterTemplates = {{ starter_templates_json|safe }};
+const problemId = {{ problem.id }};
+const csrfToken = "{{ csrf_token }}";
+
+const extMap = {
+  python: 'py',
+  javascript: 'js',
+  c: 'c',
+  cpp: 'cpp',
+  java: 'java'
+};
+
+function onLanguageChanged() {
+  const lang = document.getElementById('langSelect').value;
+  document.getElementById('fileExtLabel').innerText = extMap[lang] || 'txt';
+  const editor = document.getElementById('codeEditor');
+  if (starterTemplates && starterTemplates[lang]) {
+    editor.value = starterTemplates[lang];
+  } else {
+    editor.value = "// Write your solution here\n";
+  }
+}
+
+function resetStarterTemplate() {
+  if (confirm("Reset editor to original starter code? Any unsaved edits will be lost.")) {
+    onLanguageChanged();
+  }
+}
+
+function onCustomInputToggled() {
+  const isChecked = document.getElementById('toggleCustomInput').checked;
+  document.getElementById('customInputWrap').style.display = isChecked ? 'block' : 'none';
+}
+
+function switchWsTab(tab) {
+  document.getElementById('tabBtnDesc').classList.remove('active');
+  document.getElementById('tabBtnSubmissions').classList.remove('active');
+  document.getElementById('tabContentDesc').style.display = 'none';
+  document.getElementById('tabContentSubmissions').style.display = 'none';
+
+  if (tab === 'desc') {
+    document.getElementById('tabBtnDesc').classList.add('active');
+    document.getElementById('tabContentDesc').style.display = 'block';
+  } else {
+    document.getElementById('tabBtnSubmissions').classList.add('active');
+    document.getElementById('tabContentSubmissions').style.display = 'block';
+  }
+}
+
+// Enable Tab indentation inside code editor
+document.getElementById('codeEditor').addEventListener('keydown', function(e) {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const start = this.selectionStart;
+    const end = this.selectionEnd;
+    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+    this.selectionStart = this.selectionEnd = start + 4;
+  }
+});
+
+function runCode() {
+  const lang = document.getElementById('langSelect').value;
+  const code = document.getElementById('codeEditor').value;
+  const useCustom = document.getElementById('toggleCustomInput').checked;
+  const customIn = document.getElementById('customInputText').value;
+
+  const pill = document.getElementById('termStatusPill');
+  const term = document.getElementById('terminalBody');
+  pill.className = 'term-status-pill pill-running';
+  pill.innerText = "Running in Sandbox...";
+  term.innerHTML = '<div class="term-spinner">Executing in isolated secure sandbox...</div>';
+
+  fetch("{% url 'api_code_run' %}", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": csrfToken
+    },
+    body: JSON.stringify({
+      problem_id: problemId,
+      language: lang,
+      code: code,
+      use_custom_input: useCustom,
+      custom_input: customIn
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    renderTerminalOutput(data, false);
+  })
+  .catch(err => {
+    pill.className = 'term-status-pill pill-error';
+    pill.innerText = "Execution Failed";
+    term.innerHTML = '<p class="term-err">Network error connecting to execution sandbox.</p>';
+  });
+}
+
+function submitCode() {
+  const lang = document.getElementById('langSelect').value;
+  const code = document.getElementById('codeEditor').value;
+
+  const pill = document.getElementById('termStatusPill');
+  const term = document.getElementById('terminalBody');
+  pill.className = 'term-status-pill pill-running';
+  pill.innerText = "Evaluating All Test Cases...";
+  term.innerHTML = '<div class="term-spinner">Testing against public and hidden test cases...</div>';
+
+  fetch("{% url 'api_code_submit' %}", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": csrfToken
+    },
+    body: JSON.stringify({
+      problem_id: problemId,
+      language: lang,
+      code: code
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    renderTerminalOutput(data, true);
+  })
+  .catch(err => {
+    pill.className = 'term-status-pill pill-error';
+    pill.innerText = "Submission Failed";
+    term.innerHTML = '<p class="term-err">Network error submitting code.</p>';
+  });
+}
+
+function renderTerminalOutput(data, isSubmit) {
+  const pill = document.getElementById('termStatusPill');
+  const term = document.getElementById('terminalBody');
+
+  if (data.status === 'ACCEPTED') {
+    pill.className = 'term-status-pill pill-accepted';
+    pill.innerText = isSubmit ? '✓ Accepted' : '✓ Sample Cases Passed';
+  } else if (data.status === 'WRONG_ANSWER') {
+    pill.className = 'term-status-pill pill-wrong';
+    pill.innerText = '✗ Wrong Answer';
+  } else if (data.status === 'COMPILATION_ERROR') {
+    pill.className = 'term-status-pill pill-error';
+    pill.innerText = '⚠️ Compilation Error';
+  } else {
+    pill.className = 'term-status-pill pill-error';
+    pill.innerText = data.status || 'Error';
+  }
+
+  let html = `<div class="term-meta-bar">
+    <span>Status: <strong>${data.status}</strong></span>
+    <span>Cases Passed: <strong>${data.passed_count || 0} / ${data.total_count || 0}</strong></span>
+    <span>Runtime: <strong>${data.runtime_ms || 0} ms</strong></span>
+  </div>`;
+
+  if (data.stderr) {
+    html += `<div class="term-err-box"><pre>${data.stderr}</pre></div>`;
+  }
+
+  if (data.test_results && data.test_results.length > 0) {
+    html += `<div class="term-tc-list">`;
+    data.test_results.forEach(tc => {
+      const isPass = tc.status === 'PASSED';
+      html += `<div class="tc-result-item ${isPass ? 'tc-pass' : 'tc-fail'}">
+        <div class="tc-top">
+          <span>Case #${tc.case_number} (${tc.is_hidden ? 'Hidden' : 'Sample'})</span>
+          <strong>${isPass ? '✓ PASSED' : '✗ ' + tc.status} (${tc.runtime_ms} ms)</strong>
+        </div>
+        ${!isPass ? `
+          <div class="tc-diff-box">
+            <div><strong>Input:</strong> <pre>${tc.input}</pre></div>
+            <div><strong>Expected:</strong> <pre>${tc.expected_output}</pre></div>
+            <div><strong>Your Output:</strong> <pre>${tc.actual_output}</pre></div>
+          </div>
+        ` : ''}
+      </div>`;
+    });
+    html += `</div>`;
+  } else if (data.stdout) {
+    html += `<div class="term-stdout-box"><pre>${data.stdout}</pre></div>`;
+  }
+
+  term.innerHTML = html;
+}
+
+// Initialize on page load
+onLanguageChanged();
+</script>
+{% endblock %}

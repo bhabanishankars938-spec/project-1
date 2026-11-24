@@ -1,0 +1,562 @@
+[
+  {
+    "order": 1,
+    "title": "Storage Classes and Scope Problem #1",
+    "difficulty": "EASY",
+    "topic": "Storage Classes and Scope",
+    "text": "What will be the output of the following C program (Snippet #1) when compiled with gcc -Wall?\n\nSubject: C Programming and Pointers | Concept: Storage Classes and Scope",
+    "code_snippet": "#include <stdio.h>\nint main() {\n    int arr[] = {10, 20, 30, 40, 50};\n    int *p = arr + 1;\n    printf(\"%d\", *(p + 1));\n    return 0;\n}",
+    "explanation": "Pointer arithmetic advances pointer by 1 element. The element at target index is 30.",
+    "options": [
+      {
+        "key": "A",
+        "text": "20",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "40",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Compilation Error",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "30",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 2,
+    "title": "Storage Classes and Scope Problem #2",
+    "difficulty": "EASY",
+    "topic": "Storage Classes and Scope",
+    "text": "Analyze the recursion tree and determine the exact output of this C function (Case #2) for Storage Classes and Scope:",
+    "code_snippet": "#include <stdio.h>\nint compute(int n) {\n    if (n <= 1) return 1;\n    return n + compute(n - 2);\n}\nint main() {\n    printf(\"%d\", compute(2));\n    return 0;\n}",
+    "explanation": "Evaluating the base case and recursive unwinding yields exactly 3.",
+    "options": [
+      {
+        "key": "A",
+        "text": "1",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "3",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "7",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Segmentation Fault",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 3,
+    "title": "Storage Classes and Scope Problem #3",
+    "difficulty": "EASY",
+    "topic": "Storage Classes and Scope",
+    "text": "What will be the output of the following C program (Snippet #3) when compiled with gcc -Wall?\n\nSubject: C Programming and Pointers | Concept: Storage Classes and Scope",
+    "code_snippet": "#include <stdio.h>\nint main() {\n    int arr[] = {10, 20, 30, 40, 50};\n    int *p = arr + 3;\n    printf(\"%d\", *(p + 1));\n    return 0;\n}",
+    "explanation": "Pointer arithmetic advances pointer by 1 element. The element at target index is 50.",
+    "options": [
+      {
+        "key": "A",
+        "text": "40",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "50",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "60",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Compilation Error",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 4,
+    "title": "Storage Classes and Scope Problem #4",
+    "difficulty": "MEDIUM",
+    "topic": "Storage Classes and Scope",
+    "text": "Analyze the recursion tree and determine the exact output of this C function (Case #4) for Storage Classes and Scope:",
+    "code_snippet": "#include <stdio.h>\nint compute(int n) {\n    if (n <= 1) return 1;\n    return n + compute(n - 2);\n}\nint main() {\n    printf(\"%d\", compute(4));\n    return 0;\n}",
+    "explanation": "Evaluating the base case and recursive unwinding yields exactly 7.",
+    "options": [
+      {
+        "key": "A",
+        "text": "5",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "11",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "7",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "Segmentation Fault",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 5,
+    "title": "Storage Classes and Scope Problem #5",
+    "difficulty": "MEDIUM",
+    "topic": "Storage Classes and Scope",
+    "text": "What will be the output of the following C program (Snippet #5) when compiled with gcc -Wall?\n\nSubject: C Programming and Pointers | Concept: Storage Classes and Scope",
+    "code_snippet": "#include <stdio.h>\nint main() {\n    int arr[] = {10, 20, 30, 40, 50};\n    int *p = arr + 1;\n    printf(\"%d\", *(p + 1));\n    return 0;\n}",
+    "explanation": "Pointer arithmetic advances pointer by 1 element. The element at target index is 30.",
+    "options": [
+      {
+        "key": "A",
+        "text": "20",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "40",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "30",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "Compilation Error",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 6,
+    "title": "Storage Classes and Scope Problem #6",
+    "difficulty": "MEDIUM",
+    "topic": "Storage Classes and Scope",
+    "text": "Analyze the recursion tree and determine the exact output of this C function (Case #6) for Storage Classes and Scope:",
+    "code_snippet": "#include <stdio.h>\nint compute(int n) {\n    if (n <= 1) return 1;\n    return n + compute(n - 2);\n}\nint main() {\n    printf(\"%d\", compute(6));\n    return 0;\n}",
+    "explanation": "Evaluating the base case and recursive unwinding yields exactly 13.",
+    "options": [
+      {
+        "key": "A",
+        "text": "11",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "17",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "13",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "Segmentation Fault",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 7,
+    "title": "Storage Classes and Scope Problem #7",
+    "difficulty": "MEDIUM",
+    "topic": "Storage Classes and Scope",
+    "text": "What will be the output of the following C program (Snippet #7) when compiled with gcc -Wall?\n\nSubject: C Programming and Pointers | Concept: Storage Classes and Scope",
+    "code_snippet": "#include <stdio.h>\nint main() {\n    int arr[] = {10, 20, 30, 40, 50};\n    int *p = arr + 3;\n    printf(\"%d\", *(p + 1));\n    return 0;\n}",
+    "explanation": "Pointer arithmetic advances pointer by 1 element. The element at target index is 50.",
+    "options": [
+      {
+        "key": "A",
+        "text": "50",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "40",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "60",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Compilation Error",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 8,
+    "title": "Storage Classes and Scope Problem #8",
+    "difficulty": "MEDIUM",
+    "topic": "Storage Classes and Scope",
+    "text": "Analyze the recursion tree and determine the exact output of this C function (Case #8) for Storage Classes and Scope:",
+    "code_snippet": "#include <stdio.h>\nint compute(int n) {\n    if (n <= 1) return 1;\n    return n + compute(n - 2);\n}\nint main() {\n    printf(\"%d\", compute(8));\n    return 0;\n}",
+    "explanation": "Evaluating the base case and recursive unwinding yields exactly 21.",
+    "options": [
+      {
+        "key": "A",
+        "text": "21",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "19",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "25",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Segmentation Fault",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 9,
+    "title": "Storage Classes and Scope Problem #9",
+    "difficulty": "MEDIUM",
+    "topic": "Storage Classes and Scope",
+    "text": "What will be the output of the following C program (Snippet #9) when compiled with gcc -Wall?\n\nSubject: C Programming and Pointers | Concept: Storage Classes and Scope",
+    "code_snippet": "#include <stdio.h>\nint main() {\n    int arr[] = {10, 20, 30, 40, 50};\n    int *p = arr + 1;\n    printf(\"%d\", *(p + 1));\n    return 0;\n}",
+    "explanation": "Pointer arithmetic advances pointer by 1 element. The element at target index is 30.",
+    "options": [
+      {
+        "key": "A",
+        "text": "20",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "30",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "40",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Compilation Error",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 10,
+    "title": "Storage Classes and Scope Problem #10",
+    "difficulty": "MEDIUM",
+    "topic": "Storage Classes and Scope",
+    "text": "Analyze the recursion tree and determine the exact output of this C function (Case #10) for Storage Classes and Scope:",
+    "code_snippet": "#include <stdio.h>\nint compute(int n) {\n    if (n <= 1) return 1;\n    return n + compute(n - 2);\n}\nint main() {\n    printf(\"%d\", compute(10));\n    return 0;\n}",
+    "explanation": "Evaluating the base case and recursive unwinding yields exactly 31.",
+    "options": [
+      {
+        "key": "A",
+        "text": "29",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "35",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "31",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "Segmentation Fault",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 11,
+    "title": "Storage Classes and Scope Problem #11",
+    "difficulty": "MEDIUM",
+    "topic": "Storage Classes and Scope",
+    "text": "What will be the output of the following C program (Snippet #11) when compiled with gcc -Wall?\n\nSubject: C Programming and Pointers | Concept: Storage Classes and Scope",
+    "code_snippet": "#include <stdio.h>\nint main() {\n    int arr[] = {10, 20, 30, 40, 50};\n    int *p = arr + 3;\n    printf(\"%d\", *(p + 1));\n    return 0;\n}",
+    "explanation": "Pointer arithmetic advances pointer by 1 element. The element at target index is 50.",
+    "options": [
+      {
+        "key": "A",
+        "text": "40",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "50",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "60",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Compilation Error",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 12,
+    "title": "Storage Classes and Scope Problem #12",
+    "difficulty": "HARD",
+    "topic": "Storage Classes and Scope",
+    "text": "Analyze the recursion tree and determine the exact output of this C function (Case #12) for Storage Classes and Scope:",
+    "code_snippet": "#include <stdio.h>\nint compute(int n) {\n    if (n <= 1) return 1;\n    return n + compute(n - 2);\n}\nint main() {\n    printf(\"%d\", compute(12));\n    return 0;\n}",
+    "explanation": "Evaluating the base case and recursive unwinding yields exactly 43.",
+    "options": [
+      {
+        "key": "A",
+        "text": "41",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "47",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Segmentation Fault",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "43",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 13,
+    "title": "Storage Classes and Scope Problem #13",
+    "difficulty": "HARD",
+    "topic": "Storage Classes and Scope",
+    "text": "What will be the output of the following C program (Snippet #13) when compiled with gcc -Wall?\n\nSubject: C Programming and Pointers | Concept: Storage Classes and Scope",
+    "code_snippet": "#include <stdio.h>\nint main() {\n    int arr[] = {10, 20, 30, 40, 50};\n    int *p = arr + 1;\n    printf(\"%d\", *(p + 1));\n    return 0;\n}",
+    "explanation": "Pointer arithmetic advances pointer by 1 element. The element at target index is 30.",
+    "options": [
+      {
+        "key": "A",
+        "text": "30",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "20",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "40",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Compilation Error",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 14,
+    "title": "Storage Classes and Scope Problem #14",
+    "difficulty": "HARD",
+    "topic": "Storage Classes and Scope",
+    "text": "Analyze the recursion tree and determine the exact output of this C function (Case #14) for Storage Classes and Scope:",
+    "code_snippet": "#include <stdio.h>\nint compute(int n) {\n    if (n <= 1) return 1;\n    return n + compute(n - 2);\n}\nint main() {\n    printf(\"%d\", compute(14));\n    return 0;\n}",
+    "explanation": "Evaluating the base case and recursive unwinding yields exactly 57.",
+    "options": [
+      {
+        "key": "A",
+        "text": "55",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "61",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Segmentation Fault",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "57",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 15,
+    "title": "Storage Classes and Scope Problem #15",
+    "difficulty": "HARD",
+    "topic": "Storage Classes and Scope",
+    "text": "What will be the output of the following C program (Snippet #15) when compiled with gcc -Wall?\n\nSubject: C Programming and Pointers | Concept: Storage Classes and Scope",
+    "code_snippet": "#include <stdio.h>\nint main() {\n    int arr[] = {10, 20, 30, 40, 50};\n    int *p = arr + 3;\n    printf(\"%d\", *(p + 1));\n    return 0;\n}",
+    "explanation": "Pointer arithmetic advances pointer by 1 element. The element at target index is 50.",
+    "options": [
+      {
+        "key": "A",
+        "text": "50",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "40",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "60",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Compilation Error",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 16,
+    "title": "Storage Classes and Scope Problem #16",
+    "difficulty": "HARD",
+    "topic": "Storage Classes and Scope",
+    "text": "Analyze the recursion tree and determine the exact output of this C function (Case #16) for Storage Classes and Scope:",
+    "code_snippet": "#include <stdio.h>\nint compute(int n) {\n    if (n <= 1) return 1;\n    return n + compute(n - 2);\n}\nint main() {\n    printf(\"%d\", compute(16));\n    return 0;\n}",
+    "explanation": "Evaluating the base case and recursive unwinding yields exactly 73.",
+    "options": [
+      {
+        "key": "A",
+        "text": "71",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "77",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Segmentation Fault",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "73",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  }
+]

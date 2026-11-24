@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Create Student Account · HireNexa{% endblock %}
+
+{% block content %}
+<div class="split-auth-container">
+  <div class="auth-showcase-pane" style="background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%);">
+    <div>
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 24px;">
+        <div class="brand-icon" style="width: 40px; height: 40px; font-size: 18px; background: #059669;">🎓</div>
+        <span style="font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.03em;">HireNexa</span>
+        <span class="role-tag candidate">STUDENT REGISTRATION</span>
+      </div>
+
+      <h2 style="font-size: 30px; font-weight: 800; color: #ffffff; line-height: 1.25; margin-bottom: 16px;">
+        Supercharge your career with verified skill scoring.
+      </h2>
+
+      <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6; margin-bottom: 30px;">
+        Join over 25,000+ engineering students and campus graduates landing interviews based on actual code and coursework capabilities.
+      </p>
+
+      <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); padding: 18px; margin-bottom: 24px;">
+        <strong style="color: #ffffff; font-size: 15px; display: block; margin-bottom: 6px;">100% Free for Candidates:</strong>
+        <p style="color: #94a3b8; font-size: 13px; margin: 0; line-height: 1.5;">
+          Upload your resume in PDF/DOCX format, get transparent skill overlap feedback, and apply to top tech job openings with one click.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-form-pane">
+    <div style="margin-bottom: 24px;">
+      <span class="role-tag candidate" style="margin-bottom: 6px; display: inline-block;">STUDENT ONBOARDING</span>
+      <h1 class="auth-title" style="text-align: left; font-size: 26px;">Create Candidate Account</h1>
+      <p class="auth-subtitle" style="text-align: left;">Register in 30 seconds to upload your resume and apply</p>
+    </div>
+
+    {% if form.non_field_errors %}
+      <div class="alert-message alert-error">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'candidate_signup' %}">
+      {% csrf_token %}
+      {{ form.role }}
+
+      <div class="form-group">
+        <label class="form-label" for="id_full_name">Full Name</label>
+        {{ form.full_name }}
+        {% if form.full_name.errors %}<div class="errorlist">{{ form.full_name.errors }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="id_username">Student Username</label>
+        {{ form.username }}
+        {% if form.username.errors %}<div class="errorlist">{{ form.username.errors }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="id_email">Email Address (College or Personal)</label>
+        {{ form.email }}
+        {% if form.email.errors %}<div class="errorlist">{{ form.email.errors }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="id_phone_number">Mobile Number (SMS OTP Verification)</label>
+        <div style="display: grid; grid-template-columns: 140px 1fr; gap: 8px;">
+          {{ form.country_code }}
+          {{ form.phone_number }}
+        </div>
+        {% if form.phone_number.errors %}<div class="errorlist">{{ form.phone_number.errors }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="id_password1">Password</label>
+        {{ form.password1 }}
+        {% if form.password1.errors %}<div class="errorlist">{{ form.password1.errors }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="id_password2">Confirm Password</label>
+        {{ form.password2 }}
+        {% if form.password2.errors %}<div class="errorlist">{{ form.password2.errors }}</div>{% endif %}
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 10px; background: linear-gradient(135deg, #059669 0%, #047857 100%); border-color: #059669;">
+        Register Student Account →
+      </button>
+    </form>
+
+    <div class="auth-footer" style="text-align: left; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--slate-200);">
+      Already registered as a candidate?
+      <a href="{% url 'candidate_login' %}" style="font-weight: 700; color: #059669;">
+        Sign In to Student Portal →
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

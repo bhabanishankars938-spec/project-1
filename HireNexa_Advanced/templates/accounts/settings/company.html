@@ -1,0 +1,82 @@
+{% extends "accounts/settings/settings_base.html" %}
+
+{% block title %}Company Branding & Workspace · HireNexa Settings{% endblock %}
+
+{% block settings_content %}
+<div class="settings-card">
+  <div class="card-header-bar">
+    <div class="card-title-group">
+      <h2 class="card-title">Company Profile & Employer Branding</h2>
+      <p class="card-subtitle">Manage company logos, overview, industry sector, headquarters, and verification credentials.</p>
+    </div>
+    {% if org %}
+      <span class="role-pill-clean company_admin">{{ org.name }}</span>
+    {% endif %}
+  </div>
+
+  {% if org %}
+    <form method="post" enctype="multipart/form-data" class="settings-form">
+      {% csrf_token %}
+
+      <div class="form-row-2col">
+        <div class="form-group">
+          <label for="orgNameInput" class="form-label">Company Official Name</label>
+          <input type="text" name="name" id="orgNameInput" value="{{ org.name }}" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label for="orgWebsiteInput" class="form-label">Official Website URL</label>
+          <input type="url" name="website" id="orgWebsiteInput" value="{{ org.website }}" class="form-input" placeholder="https://company.com">
+        </div>
+      </div>
+
+      <div class="form-row-2col">
+        <div class="form-group">
+          <label for="orgIndustryInput" class="form-label">Industry Sector</label>
+          <input type="text" name="industry" id="orgIndustryInput" value="{{ org.industry }}" class="form-input" placeholder="e.g. AI & Cloud Software, Fintech, EdTech">
+        </div>
+
+        <div class="form-group">
+          <label for="orgSizeInput" class="form-label">Company Scale / Employee Headcount</label>
+          <input type="text" name="company_size" id="orgSizeInput" value="{{ org.company_size }}" class="form-input" placeholder="e.g. 50-200 employees">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="orgLocInput" class="form-label">Headquarters Location</label>
+        <input type="text" name="location" id="orgLocInput" value="{{ org.location }}" class="form-input" placeholder="e.g. Bengaluru, Karnataka, India">
+      </div>
+
+      <div class="form-group">
+        <label for="orgDescInput" class="form-label">Company Overview & Culture</label>
+        <textarea name="description" id="orgDescInput" rows="4" class="form-textarea" placeholder="Highlight your engineering culture, benefits, and tech stack...">{{ org.description }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="orgLogoInput" class="form-label">Company Logo (PNG / SVG)</label>
+        <input type="file" name="logo" id="orgLogoInput" accept="image/*" class="form-input">
+        {% if org.logo %}
+          <div style="margin-top: 8px;">
+            <img src="{{ org.logo.url }}" alt="{{ org.name }}" style="height: 48px; border-radius: var(--radius-sm); border: 1px solid var(--slate-200);">
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="form-submit-row">
+        <button type="submit" class="btn btn-primary btn-md">
+          Save Organization Profile
+        </button>
+      </div>
+    </form>
+  {% else %}
+    <div style="padding: 40px; text-align: center;">
+      <span style="font-size: 36px; display: block; margin-bottom: 12px;">🏢</span>
+      <h3 style="font-size: 18px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px;">No Company Organization Associated</h3>
+      <p style="font-size: 14px; color: var(--slate-600); margin-bottom: 20px;">
+        You are currently operating in an individual recruiter capacity. Register or join a corporate organization to activate enterprise branding.
+      </p>
+      <a href="{% url 'hr_signup' %}" class="btn btn-primary btn-sm">Register Enterprise Organization</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

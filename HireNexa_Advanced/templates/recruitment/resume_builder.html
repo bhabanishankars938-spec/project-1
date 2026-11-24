@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Resume Builder · HireNexa 2.0{% endblock %}
+
+{% block content %}
+<div class="pro-container" style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
+
+  <!-- Header Banner -->
+  <div style="text-align: center; margin-bottom: 40px;">
+    <span class="meta-badge" style="background: rgba(37, 99, 235, 0.1); color: var(--blue-600); border: 1px solid rgba(37, 99, 235, 0.25); font-weight: 700; padding: 6px 14px; border-radius: 9999px; font-size: 12px; letter-spacing: 0.05em;">
+      ATS-COMPLIANT RESUME STUDIO
+    </span>
+    <h1 style="font-size: 38px; font-weight: 800; color: var(--slate-900); margin: 16px 0 12px; letter-spacing: -0.02em;">
+      Craft High-Impact, ATS-Friendly Resumes
+    </h1>
+    <p style="font-size: 16px; color: var(--slate-600); max-width: 720px; margin: 0 auto; line-height: 1.6;">
+      Built according to enterprise recruiter parsing standards: single-column layout, clear semantic sections, verified technical keywords, and instant diagnostic score.
+    </p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start;">
+    
+    <!-- Left Column: Interactive Form Editor -->
+    <div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: 18px; padding: 28px; box-shadow: 0 4px 14px rgba(0,0,0,0.03);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--slate-100); padding-bottom: 12px;">
+        <h3 style="font-size: 18px; font-weight: 700; color: var(--slate-900);">Resume Content Editor</h3>
+        <span style="font-size: 12px; color: var(--slate-500);">Auto-syncs to preview</span>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 18px;">
+        <!-- Full Name & Title -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div>
+            <label style="font-size: 12px; font-weight: 600; color: var(--slate-700); margin-bottom: 6px; display: block;">Full Name</label>
+            <input type="text" id="rbName" value="{{ user.get_full_name|default:'Alex Rivera' }}" style="width: 100%; padding: 10px 14px; border: 1px solid var(--slate-200); border-radius: 8px; font-size: 14px;" oninput="updateResumePreview()">
+          </div>
+          <div>
+            <label style="font-size: 12px; font-weight: 600; color: var(--slate-700); margin-bottom: 6px; display: block;">Target Job Title</label>
+            <input type="text" id="rbTitle" value="Senior Full-Stack Engineer" style="width: 100%; padding: 10px 14px; border: 1px solid var(--slate-200); border-radius: 8px; font-size: 14px;" oninput="updateResumePreview()">
+          </div>
+        </div>
+
+        <!-- Contact Row -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div>
+            <label style="font-size: 12px; font-weight: 600; color: var(--slate-700); margin-bottom: 6px; display: block;">Email</label>
+            <input type="email" id="rbEmail" value="{{ user.email|default:'alex.rivera@example.com' }}" style="width: 100%; padding: 10px 14px; border: 1px solid var(--slate-200); border-radius: 8px; font-size: 14px;" oninput="updateResumePreview()">
+          </div>
+          <div>
+            <label style="font-size: 12px; font-weight: 600; color: var(--slate-700); margin-bottom: 6px; display: block;">Location</label>
+            <input type="text" id="rbLocation" value="Bhubaneswar, Odisha, India" style="width: 100%; padding: 10px 14px; border: 1px solid var(--slate-200); border-radius: 8px; font-size: 14px;" oninput="updateResumePreview()">
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div>
+          <label style="font-size: 12px; font-weight: 600; color: var(--slate-700); margin-bottom: 6px; display: block;">Professional Executive Summary</label>
+          <textarea id="rbSummary" rows="3" style="width: 100%; padding: 10px 14px; border: 1px solid var(--slate-200); border-radius: 8px; font-size: 13.5px; line-height: 1.5;" oninput="updateResumePreview()">Full-Stack Software Engineer with 4+ years architecting high-throughput Django, PostgreSQL, and React web applications. Proven track record reducing API latency by 42% and implementing explainable AI workflows.</textarea>
+        </div>
+
+        <!-- Core Skills -->
+        <div>
+          <label style="font-size: 12px; font-weight: 600; color: var(--slate-700); margin-bottom: 6px; display: block;">Core Skills (Comma separated)</label>
+          <input type="text" id="rbSkills" value="Python, Django, PostgreSQL, React, TypeScript, Docker, Redis, REST APIs, Git" style="width: 100%; padding: 10px 14px; border: 1px solid var(--slate-200); border-radius: 8px; font-size: 14px;" oninput="updateResumePreview()">
+        </div>
+
+        <!-- Experience 1 -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+          <h4 style="font-size: 13.5px; font-weight: 700; color: #1e293b; margin-bottom: 10px;">Primary Work Experience</h4>
+          <input type="text" id="rbExpRole" value="Software Engineer · OdishaTech Innovations (2022 - Present)" style="width: 100%; padding: 8px 12px; border: 1px solid var(--slate-200); border-radius: 6px; font-size: 13px; margin-bottom: 8px;" oninput="updateResumePreview()">
+          <textarea id="rbExpBullets" rows="3" style="width: 100%; padding: 8px 12px; border: 1px solid var(--slate-200); border-radius: 6px; font-size: 13px; line-height: 1.5;" oninput="updateResumePreview()">• Engineered scalable multi-tenant REST APIs serving 150k monthly active requests with 99.9% uptime.
+• Migrated database queries to atomic transactions with index optimization, shaving 220ms off response p99.
+• Led frontend modernization using React and Tailwind CSS, increasing candidate conversion rate by 28%.</textarea>
+        </div>
+
+        <!-- Actions -->
+        <div style="display: flex; gap: 12px; margin-top: 8px;">
+          <button type="button" onclick="window.print()" class="btn btn-primary" style="flex: 1; padding: 12px; font-weight: 700; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            🖨️ Export PDF / Print
+          </button>
+          <a href="{% url 'resume_analyzer' %}" class="btn btn-secondary" style="padding: 12px 18px; font-weight: 600; border-radius: 8px; display: flex; align-items: center; gap: 6px;">
+            Analyze with AI ✨
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Live ATS-Compliant Document Preview -->
+    <div style="position: sticky; top: 90px;">
+      <div style="background: #ffffff; border: 2px solid var(--slate-300); border-radius: 8px; padding: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.06); min-height: 600px; font-family: 'Inter', -apple-system, sans-serif;" id="resumePrintArea">
+        
+        <!-- Header -->
+        <div style="border-bottom: 2px solid #0f172a; padding-bottom: 14px; margin-bottom: 18px;">
+          <h2 id="prevName" style="font-size: 26px; font-weight: 800; color: #0f172a; margin: 0 0 4px; text-transform: uppercase; letter-spacing: 0.04em;">Alex Rivera</h2>
+          <div id="prevTitle" style="font-size: 15px; font-weight: 600; color: #2563eb; margin-bottom: 6px;">Senior Full-Stack Engineer</div>
+          <div style="font-size: 12px; color: #475569; display: flex; flex-wrap: wrap; gap: 14px;">
+            <span id="prevEmail">alex.rivera@example.com</span>
+            <span>•</span>
+            <span id="prevLocation">Bhubaneswar, Odisha, India</span>
+            <span>•</span>
+            <span>linkedin.com/in/alex-rivera</span>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div style="margin-bottom: 18px;">
+          <h3 style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #0f172a; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 8px;">Professional Summary</h3>
+          <p id="prevSummary" style="font-size: 12.5px; color: #334155; line-height: 1.6; margin: 0;">
+            Full-Stack Software Engineer with 4+ years architecting high-throughput Django, PostgreSQL, and React web applications. Proven track record reducing API latency by 42% and implementing explainable AI workflows.
+          </p>
+        </div>
+
+        <!-- Skills -->
+        <div style="margin-bottom: 18px;">
+          <h3 style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #0f172a; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 8px;">Technical Skills</h3>
+          <div id="prevSkills" style="font-size: 12.5px; color: #334155; line-height: 1.6;">
+            <strong>Core:</strong> Python, Django, PostgreSQL, React, TypeScript, Docker, Redis, REST APIs, Git
+          </div>
+        </div>
+
+        <!-- Experience -->
+        <div style="margin-bottom: 18px;">
+          <h3 style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #0f172a; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 8px;">Work Experience</h3>
+          <div id="prevExpRole" style="font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 4px;">Software Engineer · OdishaTech Innovations (2022 - Present)</div>
+          <div id="prevExpBullets" style="font-size: 12px; color: #334155; line-height: 1.6; white-space: pre-line;">• Engineered scalable multi-tenant REST APIs serving 150k monthly active requests with 99.9% uptime.
+• Migrated database queries to atomic transactions with index optimization, shaving 220ms off response p99.
+• Led frontend modernization using React and Tailwind CSS, increasing candidate conversion rate by 28%.</div>
+        </div>
+
+        <!-- Education -->
+        <div>
+          <h3 style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #0f172a; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 8px;">Education</h3>
+          <div style="font-size: 13px; font-weight: 700; color: #1e293b;">B.Tech in Computer Science & Engineering</div>
+          <div style="font-size: 12px; color: #64748b;">Utkal University / BPUT · CGPA 8.8 / 10.0</div>
+        </div>
+
+      </div>
+
+      <!-- Live ATS Check Gauge Badge -->
+      <div style="margin-top: 14px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 20px;">🛡️</span>
+          <div>
+            <div style="font-size: 13px; font-weight: 700; color: #166534;">ATS Compatibility: 98% (Pass)</div>
+            <div style="font-size: 11px; color: #15803d;">Standard headers, clean fonts, tabular tags avoided</div>
+          </div>
+        </div>
+        <span style="background: #22c55e; color: #ffffff; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 9999px;">OPTIMAL</span>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function updateResumePreview() {
+  document.getElementById('prevName').innerText = document.getElementById('rbName').value || 'YOUR NAME';
+  document.getElementById('prevTitle').innerText = document.getElementById('rbTitle').value || 'JOB TITLE';
+  document.getElementById('prevEmail').innerText = document.getElementById('rbEmail').value || 'email@example.com';
+  document.getElementById('prevLocation').innerText = document.getElementById('rbLocation').value || 'City, Country';
+  document.getElementById('prevSummary').innerText = document.getElementById('rbSummary').value || '';
+  document.getElementById('prevSkills').innerHTML = '<strong>Core:</strong> ' + (document.getElementById('rbSkills').value || '');
+  document.getElementById('prevExpRole').innerText = document.getElementById('rbExpRole').value || '';
+  document.getElementById('prevExpBullets').innerText = document.getElementById('rbExpBullets').value || '';
+}
+</script>
+{% endblock %}

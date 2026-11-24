@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Admin Question Bank & Audit Controls | HireNexa{% endblock %}
+
+{% block content %}
+<div class="admin-q-hub" style="max-width: 1300px; margin: 0 auto; padding: 24px 20px;">
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+    <div>
+      <h1 style="font-size: 1.8rem; font-weight: 800; color: #0f172a; margin: 0 0 4px 0;">
+        🛡️ Question Bank Management & Audit Controls
+      </h1>
+      <p style="font-size: 0.9rem; color: #64748b; margin: 0;">
+        Filter, review, verify, and audit question integrity across MCA and MBA entrance preparation tracks.
+      </p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <a href="{% url 'admin_bulk_import_questions' %}" class="btn btn-outline" style="border: 1px solid #cbd5e1; padding: 8px 16px; border-radius: 8px; font-weight: 600; text-decoration: none; color: #334155;">
+        📥 Bulk Import Questions
+      </a>
+      <a href="{% url 'admin_assessment_hub' %}" class="btn btn-primary" style="background: #2563eb; color: #fff; padding: 8px 16px; border-radius: 8px; font-weight: 600; text-decoration: none;">
+        ← Admin Overview Hub
+      </a>
+    </div>
+  </div>
+
+  <!-- STATS BAR -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 24px;">
+    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; text-align: center;">
+      <div style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Total Questions</div>
+      <div style="font-size: 1.8rem; font-weight: 800; color: #0f172a;">{{ total_count }}</div>
+    </div>
+    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; text-align: center;">
+      <div style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Verified Questions</div>
+      <div style="font-size: 1.8rem; font-weight: 800; color: #16a34a;">{{ verified_count }}</div>
+    </div>
+    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; text-align: center;">
+      <div style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Verification Rate</div>
+      <div style="font-size: 1.8rem; font-weight: 800; color: #2563eb;">
+        {% if total_count > 0 %}{% widthratio verified_count total_count 100 %}%{% else %}0%{% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTER CONTROLS -->
+  <section style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+    <form method="GET" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: flex-end;">
+      <div>
+        <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Track</label>
+        <select name="track" style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.88rem;">
+          <option value="">All Tracks</option>
+          {% for trk in tracks %}
+          <option value="{{ trk.code }}" {% if active_track == trk.code %}selected{% endif %}>{{ trk.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Subject</label>
+        <select name="subject" style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.88rem;">
+          <option value="">All Subjects</option>
+          {% for s in subjects %}
+          <option value="{{ s.id }}" {% if active_subject == s.id|stringformat:"s" %}selected{% endif %}>{{ s.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Verification</label>
+        <select name="verified" style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.88rem;">
+          <option value="">All</option>
+          <option value="1" {% if active_verified == '1' %}selected{% endif %}>Verified Only</option>
+          <option value="0" {% if active_verified == '0' %}selected{% endif %}>Unverified Only</option>
+        </select>
+      </div>
+
+      <div style="display: flex; gap: 8px;">
+        <button type="submit" style="background: #2563eb; color: #fff; border: none; padding: 8px 18px; border-radius: 6px; font-weight: 600; cursor: pointer; flex: 1;">
+          Filter
+        </button>
+        <a href="{% url 'admin_question_management' %}" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 8px 14px; border-radius: 6px; font-weight: 600; text-decoration: none; text-align: center;">
+          Reset
+        </a>
+      </div>
+    </form>
+  </section>
+
+  <!-- QUESTIONS TABLE -->
+  <section style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+        <thead>
+          <tr style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-size: 0.78rem; text-transform: uppercase;">
+            <th style="padding: 10px 12px;">ID</th>
+            <th style="padding: 10px 12px;">Question Title & Text</th>
+            <th style="padding: 10px 12px;">Subject / Topic</th>
+            <th style="padding: 10px 12px;">Difficulty</th>
+            <th style="padding: 10px 12px;">Verification</th>
+            <th style="padding: 10px 12px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for q in questions %}
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 12px; color: #64748b; font-weight: 600;">#{{ q.id }}</td>
+            <td style="padding: 12px; max-width: 450px;">
+              <div style="font-weight: 700; color: #0f172a; margin-bottom: 2px;">{{ q.title }}</div>
+              <div style="font-size: 0.8rem; color: #64748b;">{{ q.question_text|truncatewords:18 }}</div>
+              {% if q.fingerprint %}
+              <div style="font-size: 0.7rem; color: #94a3b8; font-family: monospace; margin-top: 2px;">
+                FP: {{ q.fingerprint|slice:":16" }}...
+              </div>
+              {% endif %}
+            </td>
+            <td style="padding: 12px;">
+              <div style="font-weight: 600; color: #1e293b;">{{ q.subject.name }}</div>
+              <div style="font-size: 0.75rem; color: #64748b;">{{ q.topic.name|default:"General" }}</div>
+            </td>
+            <td style="padding: 12px;">
+              <span style="font-size: 0.75rem; font-weight: 700; background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">
+                {{ q.get_difficulty_display }}
+              </span>
+            </td>
+            <td style="padding: 12px;">
+              {% if q.is_verified %}
+              <span style="color: #16a34a; font-weight: 700; font-size: 0.8rem;">✓ Verified</span>
+              {% else %}
+              <span style="color: #ea580c; font-weight: 700; font-size: 0.8rem;">Pending Review</span>
+              {% endif %}
+            </td>
+            <td style="padding: 12px;">
+              <div style="display: flex; gap: 6px;">
+                <a href="{% url 'question_detail' q.id %}" target="_blank" style="color: #2563eb; font-weight: 600; font-size: 0.8rem; text-decoration: none;">
+                  Preview ↗
+                </a>
+                {% if not q.is_verified %}
+                <a href="{% url 'admin_question_action' q.id 'approve' %}" style="color: #16a34a; font-weight: 600; font-size: 0.8rem; text-decoration: none;">
+                  Verify
+                </a>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="6" style="padding: 24px; text-align: center; color: #64748b;">
+              No questions match the selected filter criteria.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if questions.has_other_pages %}
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; font-size: 0.88rem;">
+      <div>Page {{ questions.number }} of {{ questions.paginator.num_pages }}</div>
+      <div style="display: flex; gap: 8px;">
+        {% if questions.has_previous %}
+        <a href="?page={{ questions.previous_page_number }}&track={{ active_track }}&subject={{ active_subject }}&verified={{ active_verified }}" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; text-decoration: none; color: #475569;">← Previous</a>
+        {% endif %}
+        {% if questions.has_next %}
+        <a href="?page={{ questions.next_page_number }}&track={{ active_track }}&subject={{ active_subject }}&verified={{ active_verified }}" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; text-decoration: none; color: #475569;">Next →</a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </section>
+
+</div>
+{% endblock %}

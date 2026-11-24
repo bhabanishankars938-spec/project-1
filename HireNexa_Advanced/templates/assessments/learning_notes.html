@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Learning Notes: {{ topic.name }} · {{ subject.name }} | HireNexa{% endblock %}
+
+{% block content %}
+<div class="learning-notes-container" style="max-width: 1100px; margin: 0 auto; padding: 24px 20px;">
+
+  <!-- Breadcrumbs & Header -->
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; margin-bottom: 24px; border-bottom: 1px solid #e2e8f0; padding-bottom: 18px;">
+    <div>
+      <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 6px;">
+        <a href="{% url 'mcq_entrance_hub' %}" style="color: #2563eb; text-decoration: none;">Entrance Hub</a>
+        <span style="margin: 0 6px;">›</span>
+        <span>{{ subject.name }}</span>
+        <span style="margin: 0 6px;">›</span>
+        <span style="color: #0f172a; font-weight: 600;">{{ topic.name }}</span>
+      </div>
+      <h1 style="font-size: 2rem; font-weight: 800; color: #0f172a; margin: 0 0 6px 0;">
+        📖 {{ topic.name }} — Comprehensive Learning Notes
+      </h1>
+      <p style="font-size: 0.95rem; color: #475569; margin: 0;">
+        {{ subject.name }} · Standardized Entrance Syllabus · Concepts, Invariants, Visual Tables & Step-by-Step Examples
+      </p>
+    </div>
+
+    <!-- Sticky Exam CTA -->
+    <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px 18px; text-align: right;">
+      <div style="font-size: 0.82rem; color: #64748b; margin-bottom: 4px;">
+        Topic Examination: <strong>16 Questions · 21 Mins</strong>
+      </div>
+      <div style="font-size: 0.78rem; color: #475569; margin-bottom: 8px;">
+        Attempts Remaining: <strong>{{ attempts_left }} of 5</strong>
+        {% if best_score is not None %}· Best: <strong style="color: #16a34a;">{{ best_score }}/16</strong>{% endif %}
+      </div>
+      {% if exam %}
+        {% if attempts_left > 0 %}
+        <a href="{% url 'exam_start' exam.slug %}" class="btn btn-primary" style="background: #2563eb; color: #fff; font-weight: 700; padding: 8px 18px; border-radius: 6px; text-decoration: none; font-size: 0.9rem; display: inline-block;">
+          🚀 Take Topic Examination
+        </a>
+        {% else %}
+        <a href="{% url 'exam_start' exam.slug %}" style="background: #94a3b8; color: #fff; font-weight: 600; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; display: inline-block;">
+          View Past Attempts (5/5 Used)
+        </a>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- SECTION A: CONCEPT UNDERSTANDING -->
+  <section style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 26px; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+      <span style="background: #eff6ff; color: #1d4ed8; font-weight: 800; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem;">A</span>
+      <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0;">Concept Understanding & Theoretical Invariants</h2>
+    </div>
+
+    <!-- Introduction & Definition -->
+    <div style="background: #f8fafc; border-left: 4px solid #2563eb; padding: 16px 20px; border-radius: 6px; margin-bottom: 20px;">
+      <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e3a8a; margin: 0 0 6px 0;">Introduction & Formal Definition</h3>
+      <div style="font-size: 0.95rem; color: #334155; line-height: 1.6;">
+        {{ note.concept_summary|linebreaksbr }}
+      </div>
+    </div>
+
+    <!-- Detailed Explanation -->
+    <div style="margin-bottom: 22px;">
+      <h3 style="font-size: 1.1rem; font-weight: 700; color: #0f172a; margin: 0 0 10px 0;">Detailed Principles & Working Architecture</h3>
+      <div style="font-size: 0.95rem; color: #334155; line-height: 1.7;">
+        {{ note.detailed_explanation|linebreaksbr }}
+      </div>
+    </div>
+
+    <!-- Applications and Advantages / Disadvantages Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; margin-bottom: 20px;">
+      {% if note.real_world_applications %}
+      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px;">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #166534; margin: 0 0 8px 0;">🌐 Real-World Applications</h4>
+        <div style="font-size: 0.88rem; color: #15803d; line-height: 1.5;">
+          {{ note.real_world_applications|linebreaksbr }}
+        </div>
+      </div>
+      {% endif %}
+
+      {% if note.advantages_disadvantages %}
+      <div style="background: #fefce8; border: 1px solid #fef08a; border-radius: 8px; padding: 16px;">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #854d0e; margin: 0 0 8px 0;">⚖️ Advantages, Trade-offs & Limitations</h4>
+        <div style="font-size: 0.88rem; color: #713f12; line-height: 1.5;">
+          {{ note.advantages_disadvantages|linebreaksbr }}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Common Pitfalls & Traps -->
+    {% if note.common_pitfalls %}
+    <div style="background: #fff1f2; border-left: 4px solid #f43f5e; padding: 14px 18px; border-radius: 6px;">
+      <h4 style="font-size: 0.92rem; font-weight: 700; color: #9f1239; margin: 0 0 6px 0;">⚠️ Common Candidate Pitfalls & Exam Traps</h4>
+      <div style="font-size: 0.88rem; color: #881337; line-height: 1.5;">
+        {{ note.common_pitfalls|linebreaksbr }}
+      </div>
+    </div>
+    {% endif %}
+  </section>
+
+  <!-- SECTION B: VISUAL LEARNING (COMPARISON TABLE) -->
+  {% if note.comparison_table_markdown %}
+  <section style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 26px; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+      <span style="background: #eff6ff; color: #1d4ed8; font-weight: 800; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem;">B</span>
+      <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0;">Visual Learning & Paradigm Comparison</h2>
+    </div>
+    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px; overflow-x: auto; font-family: monospace; font-size: 0.9rem; line-height: 1.6; color: #1e293b;">
+      <pre style="margin: 0; white-space: pre-wrap;"><code>{{ note.comparison_table_markdown }}</code></pre>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- SECTION C: STEP-BY-STEP EXAMPLES -->
+  {% if note.examples_json %}
+  <section style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 26px; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+      <span style="background: #eff6ff; color: #1d4ed8; font-weight: 800; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem;">C</span>
+      <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0;">Step-by-Step Pedagogical Examples</h2>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      {% for ex in note.examples_json %}
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px;">
+        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+          <span style="background: #2563eb; color: #fff; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 4px;">{{ ex.level }} Level Example</span>
+          <h4 style="font-size: 0.95rem; font-weight: 700; color: #0f172a; margin: 0;">{{ ex.problem }}</h4>
+        </div>
+        <div style="background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px; font-size: 0.88rem; color: #334155; line-height: 1.6;">
+          <strong style="color: #1e40af; display: block; margin-bottom: 4px;">Step-by-Step Derivation & Solution:</strong>
+          {{ ex.solution|linebreaksbr }}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- SECTION D: QUICK REVISION FORMULAS & HIGH-YIELD EXAM POINTS -->
+  {% if note.quick_revision_formulas %}
+  <section style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 26px; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+      <span style="background: #eff6ff; color: #1d4ed8; font-weight: 800; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem;">D</span>
+      <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0;">Quick Revision Formulas & High-Yield Exam Invariants</h2>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px;">
+      {% for f in note.quick_revision_formulas %}
+      <div style="background: #f1f5f9; border-left: 4px solid #3b82f6; padding: 12px 16px; border-radius: 6px; font-size: 0.9rem; color: #1e293b; font-weight: 500;">
+        📌 {{ f }}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- BOTTOM ACTION BAR -->
+  <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #fff; border-radius: 12px; padding: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+    <div>
+      <h3 style="font-size: 1.15rem; font-weight: 800; margin: 0 0 4px 0;">Ready to Test Your Mastery on {{ topic.name }}?</h3>
+      <p style="font-size: 0.88rem; color: #94a3b8; margin: 0;">Standardized 16-Question CBT Exam · 21 Minutes · Max 5 Attempts · Immediate Percentage Analytics</p>
+    </div>
+    {% if exam %}
+      {% if attempts_left > 0 %}
+      <a href="{% url 'exam_start' exam.slug %}" class="btn btn-primary" style="background: #2563eb; color: #fff; font-weight: 700; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 1rem;">
+        🚀 Launch 16-Question Examination ({{ attempts_left }} Attempts Left)
+      </a>
+      {% else %}
+      <a href="{% url 'exam_start' exam.slug %}" style="background: #64748b; color: #fff; font-weight: 600; padding: 10px 20px; border-radius: 8px; text-decoration: none;">
+        View Past Attempts (5/5 Used)
+      </a>
+      {% endif %}
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

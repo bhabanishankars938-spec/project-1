@@ -1,0 +1,803 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}HireNexa 2.0 · Where Talent Meets Intelligent Opportunity{% endblock %}
+
+{% block content %}
+<!-- Breaking Circular / Drive Ticker -->
+{% if latest_news %}
+<div
+  style="background: #0f172a; border-radius: 12px; padding: 10px 18px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+  <div style="display: flex; align-items: center; gap: 10px; overflow: hidden; flex: 1; min-width: 260px;">
+    <span class="meta-badge"
+      style="background: #ef4444; color: #ffffff; font-weight: 800; font-size: 10px; letter-spacing: 0.05em; padding: 3px 8px; border-radius: 6px;">
+      LIVE CIRCULAR
+    </span>
+    <div style="font-size: 13px; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+      {% with top_news=latest_news.0 %}
+      <strong>{{ top_news.title }}:</strong> {{ top_news.summary }}
+      {% endwith %}
+    </div>
+  </div>
+  <a href="{% url 'news_list' %}"
+    style="font-size: 12px; color: #38bdf8; font-weight: 600; white-space: nowrap; text-decoration: none;">
+    View All Bulletins ({{ latest_news.count }}) →
+  </a>
+</div>
+{% endif %}
+
+<!-- ==========================================================================
+     HIRENEXA 2.0 HERO STAGE (Inspired by NovaFlow & 3D Talent Network Visuals)
+     ========================================================================== -->
+<section class="hero-stage-container"
+  style="position: relative; overflow: hidden; border-radius: 24px; background: radial-gradient(120% 100% at 50% 0%, #1e40af 0%, #0d1527 60%, #070a13 100%); color: #ffffff; padding: 64px 28px 56px; margin-bottom: 48px; box-shadow: 0 20px 45px rgba(15, 23, 42, 0.25);">
+
+  <!-- 3D Interactive Talent Constellation Canvas -->
+  <canvas id="talentNetworkCanvas"
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: auto; opacity: 0.65; z-index: 1;"></canvas>
+
+  <div style="position: relative; z-index: 2; max-width: 960px; margin: 0 auto; text-align: center;">
+
+    <!-- Micro-Pill Tagline -->
+    <div
+      style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 9999px; padding: 6px 16px; font-size: 12.5px; font-weight: 600; color: #bae6fd; backdrop-filter: blur(8px); margin-bottom: 22px;">
+      <span
+        style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 10px #38bdf8;"></span>
+      <span>Enterprise Talent Intelligence · Explainable AI Matching</span>
+    </div>
+
+    <!-- Section 04 Master Headline -->
+    <h1
+      style="font-size: clamp(34px, 5.2vw, 58px); font-weight: 900; line-height: 1.15; letter-spacing: -0.03em; margin: 0 0 16px; color: #ffffff;">
+      Where Talent Meets <br>
+      <span
+        style="background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Intelligent
+        Opportunity.</span>
+    </h1>
+
+    <!-- Alternative Supporting Statement -->
+    <div
+      style="font-size: clamp(16px, 2.2vw, 20px); font-weight: 600; color: #93c5fd; margin-bottom: 12px; letter-spacing: -0.01em;">
+      Discover opportunities. Demonstrate your potential. Build your future.
+    </div>
+
+    <!-- Description -->
+    <p style="font-size: 16px; line-height: 1.65; color: #cbd5e1; max-width: 740px; margin: 0 auto 32px;">
+      HireNexa connects talented professionals and ambitious organisations through intelligent recruitment, explainable
+      skill matching and modern career intelligence.
+    </p>
+
+    <!-- CTAs Cluster -->
+    <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px;">
+      <a href="{% url 'job_list' %}" class="btn"
+        style="background: #ffffff; color: #1e3a8a; font-weight: 800; font-size: 15px; padding: 14px 28px; border-radius: 12px; text-decoration: none; box-shadow: 0 4px 16px rgba(0,0,0,0.15); transition: transform 0.2s;"
+        onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+        Explore Opportunities →
+      </a>
+      <a href="{% url 'signup' %}?role=RECRUITER" class="btn"
+        style="background: rgba(255, 255, 255, 0.12); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); font-weight: 700; font-size: 15px; padding: 14px 26px; border-radius: 12px; text-decoration: none; backdrop-filter: blur(8px); transition: background 0.2s;"
+        onmouseover="this.style.background='rgba(255,255,255,0.2)'"
+        onmouseout="this.style.background='rgba(255,255,255,0.12)'">
+        Hire Top Talent
+      </a>
+      <a href="{% url 'ai_assistant' %}" class="btn"
+        style="background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%); color: #ffffff; font-weight: 700; font-size: 15px; padding: 14px 26px; border-radius: 12px; text-decoration: none; box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4); display: inline-flex; align-items: center; gap: 8px;">
+        <span>⚡ Explore HireNexa AI</span>
+      </a>
+    </div>
+
+    <!-- Search Bar with India Location Autocomplete (Professional Enterprise Design) -->
+    <form method="get" action="{% url 'job_list' %}"
+      style="background: #ffffff; padding: 6px 8px 6px 20px; border-radius: 999px; display: flex; flex-wrap: wrap; gap: 10px; box-shadow: 0 16px 36px -4px rgba(15, 23, 42, 0.28); max-width: 860px; margin: 0 auto 20px; align-items: center; border: 1.5px solid #cbd5e1; position: relative; z-index: 100;">
+
+      <!-- 1. Role / Skill Search Input -->
+      <div style="flex: 1.2; min-width: 220px; display: flex; align-items: center; gap: 10px; padding: 6px 0;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.3"
+          stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" name="q" placeholder="Job title, skills (e.g. Python, React, HR)..."
+          style="width: 100%; border: none; outline: none; font-size: 14.5px; color: #0f172a; background: transparent; font-family: inherit;">
+      </div>
+
+      <div style="width: 1px; height: 32px; background: #e2e8f0;" class="desktop-only"></div>
+
+      <!-- 2. Hierarchical India Location Autocomplete Input -->
+      <div
+        style="flex: 1; min-width: 220px; display: flex; align-items: center; gap: 10px; padding: 6px 0; position: relative;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.3"
+          stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        <input type="text" name="location" id="hero-location-input" class="location-autocomplete-input"
+          autocomplete="off" placeholder="State, District, City, PIN or Remote..."
+          style="width: 100%; border: none; outline: none; font-size: 14.5px; color: #0f172a; background: transparent; font-family: inherit;">
+      </div>
+
+      <!-- 3. Professional Blue Find Jobs Button -->
+      <button type="submit" class="btn"
+        style="background: #2563eb; color: #ffffff; font-weight: 700; padding: 12px 28px; border-radius: 999px; border: none; cursor: pointer; font-size: 14.5px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); transition: transform 0.15s ease, background 0.15s ease;">
+        <span>Find Jobs</span>
+      </button>
+    </form>
+
+    <!-- Popular Location Chips -->
+    <div
+      style="display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; font-size: 12.5px; color: #94a3b8;">
+      <span style="color: #cbd5e1; font-weight: 600;">🇮🇳 Popular:</span>
+      <a href="{% url 'job_list' %}?location=Bhubaneswar"
+        style="color: #ffffff; background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 9999px; text-decoration: none; font-weight: 500;">Bhubaneswar</a>
+      <a href="{% url 'job_list' %}?location=Deogarh"
+        style="color: #ffffff; background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 9999px; text-decoration: none; font-weight: 500;">Deogarh</a>
+      <a href="{% url 'job_list' %}?location=Bengaluru"
+        style="color: #ffffff; background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 9999px; text-decoration: none; font-weight: 500;">Bengaluru</a>
+      <a href="{% url 'job_list' %}?location=Hyderabad"
+        style="color: #ffffff; background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 9999px; text-decoration: none; font-weight: 500;">Hyderabad</a>
+      <a href="{% url 'job_list' %}?location=Pune"
+        style="color: #ffffff; background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 9999px; text-decoration: none; font-weight: 500;">Pune</a>
+      <a href="{% url 'job_list' %}?location=Remote"
+        style="color: #6ee7b7; background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); padding: 4px 12px; border-radius: 9999px; text-decoration: none; font-weight: 700;">💻
+        Pan-India Remote</a>
+    </div>
+
+  </div>
+
+  <!-- ==========================================================================
+       FLOATING INTERACTIVE OPPORTUNITY CARDS (Reference Image 1: NovaFlow Layout)
+       ========================================================================== -->
+  <div
+    style="position: relative; z-index: 1; max-width: 1100px; margin: 44px auto 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; align-items: stretch;">
+
+    <!-- Card 1: AI Match Accuracy Breakdown Gauge -->
+    <div
+      style="background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 20px; backdrop-filter: blur(12px); box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <span style="font-size: 13px; font-weight: 700; color: #bae6fd; display: flex; align-items: center; gap: 6px;">
+          <span>🎯</span> AI Match Accuracy Breakdown
+        </span>
+        <span style="font-size: 14px; color: #94a3b8;">•••</span>
+      </div>
+
+      <!-- Semicircular completed accuracy arc visual -->
+      <div style="position: relative; width: 140px; height: 75px; margin: 10px auto 14px; overflow: hidden;">
+        <div
+          style="position: absolute; top: 0; left: 0; width: 140px; height: 140px; border-radius: 50%; border: 10px solid rgba(255,255,255,0.1); border-top-color: #22c55e; border-right-color: #3b82f6; border-left-color: #a855f7; transform: rotate(45deg);">
+        </div>
+        <div style="position: absolute; bottom: 0; left: 0; width: 100%; text-align: center;">
+          <div style="font-size: 10px; color: #94a3b8; text-transform: uppercase;">Completed Accuracy</div>
+          <div style="font-size: 20px; font-weight: 900; color: #ffffff;">92.67%</div>
+        </div>
+      </div>
+
+      <!-- Breakdown Legend Tags -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px;">
+        <div style="display: flex; align-items: center; gap: 6px; color: #e2e8f0;">
+          <span style="width: 8px; height: 8px; border-radius: 2px; background: #3b82f6;"></span>
+          <span>46% Excellent Fit</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px; color: #e2e8f0;">
+          <span style="width: 8px; height: 8px; border-radius: 2px; background: #22c55e;"></span>
+          <span>36% Moderate Fit</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px; color: #e2e8f0;">
+          <span style="width: 8px; height: 8px; border-radius: 2px; background: #38bdf8;"></span>
+          <span>16% Good Fit</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px; color: #e2e8f0;">
+          <span style="width: 8px; height: 8px; border-radius: 2px; background: #f97316;"></span>
+          <span>5% Poor Fit</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Candidate Profile Card (Maya Chen) -->
+    <div
+      style="background: rgba(255, 255, 255, 0.95); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 16px; padding: 20px; color: #1e293b; box-shadow: 0 10px 25px rgba(0,0,0,0.25); text-align: left;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+        <div
+          style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%); display: flex; align-items: center; justify-content: center; font-weight: 800; color: #ffffff; font-size: 16px;">
+          MC
+        </div>
+        <div>
+          <div style="font-size: 15px; font-weight: 800; color: #0f172a;">Maya Chen</div>
+          <div style="font-size: 12px; color: #64748b;">Product Designer · Bhubaneswar Hub</div>
+        </div>
+      </div>
+
+      <div
+        style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 12px; text-align: center;">
+        <div style="background: #f1f5f9; padding: 6px 4px; border-radius: 6px;">
+          <div style="font-size: 10px; color: #64748b;">Match</div>
+          <div style="font-size: 13px; font-weight: 800; color: #2563eb;">78%</div>
+        </div>
+        <div style="background: #f1f5f9; padding: 6px 4px; border-radius: 6px;">
+          <div style="font-size: 10px; color: #64748b;">Experience</div>
+          <div style="font-size: 13px; font-weight: 800; color: #059669;">92%</div>
+        </div>
+        <div style="background: #f1f5f9; padding: 6px 4px; border-radius: 6px;">
+          <div style="font-size: 10px; color: #64748b;">Source</div>
+          <div style="font-size: 11px; font-weight: 700; color: #0284c7;">LinkedIn</div>
+        </div>
+      </div>
+
+      <div
+        style="background: #f8fafc; border-left: 3px solid #7c3aed; padding: 8px 10px; border-radius: 4px; font-size: 11px; color: #475569; line-height: 1.4;">
+        <strong style="color: #7c3aed;">⚡ AI Insights:</strong> Candidate matches 100% of required UI/UX and React state
+        workflows.
+      </div>
+    </div>
+
+    <!-- Card 3: Live Interview Schedule Card -->
+    <div
+      style="background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 20px; backdrop-filter: blur(12px); box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: left; display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span
+              style="background: #2563eb; color: #ffffff; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 6px;">31</span>
+            <span style="font-size: 14px; font-weight: 700; color: #ffffff;">Alex x Aiko</span>
+          </div>
+          <span
+            style="background: #10b981; color: #ffffff; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 9999px;">NOW</span>
+        </div>
+        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 12px;">
+          ⏰ 09:30 am - 10:00 am · 2nd Round Technical Architecture
+        </div>
+        <div style="font-size: 12px; color: #cbd5e1; line-height: 1.5;">
+          Topic: Multi-tenant Django schema, Supabase storage security, and indexing.
+        </div>
+      </div>
+      <div style="margin-top: 14px; display: flex; gap: 8px;">
+        <a href="{% url 'special_interview_hub' %}" class="btn"
+          style="flex: 1; background: rgba(255,255,255,0.15); color: #ffffff; font-size: 12px; font-weight: 600; padding: 8px; border-radius: 8px; text-align: center; text-decoration: none;">Join
+          Session</a>
+        <a href="{% url 'recruiter_dashboard' %}" class="btn"
+          style="background: #2563eb; color: #ffffff; font-size: 12px; font-weight: 600; padding: 8px 12px; border-radius: 8px; text-align: center; text-decoration: none;">ATS</a>
+      </div>
+    </div>
+
+    <!-- Card 4: Candidate Conversion Efficiency -->
+    <div
+      style="background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 20px; backdrop-filter: blur(12px); box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: left; display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div
+          style="font-size: 13px; font-weight: 700; color: #bae6fd; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+          <span>📈</span> Candidate Conversion Funnel
+        </div>
+        <div style="margin-bottom: 12px;">
+          <div
+            style="display: flex; justify-content: space-between; font-size: 12px; color: #cbd5e1; margin-bottom: 6px;">
+            <span>AI Automated Screening</span>
+            <strong style="color: #4ade80;">78% Fast-Track</strong>
+          </div>
+          <div
+            style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 9999px; overflow: hidden;">
+            <div style="width: 78%; height: 100%; background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%);"></div>
+          </div>
+        </div>
+        <p style="font-size: 12px; color: #94a3b8; line-height: 1.5; margin: 0;">
+          37% of applicants shortlisted automatically with 91% precision. Zero unreviewed candidates.
+        </p>
+      </div>
+      <a href="{% url 'resume_analyzer' %}"
+        style="font-size: 12px; color: #38bdf8; text-decoration: none; font-weight: 600; margin-top: 12px; display: inline-block;">
+        Run Diagnostic on Your Resume →
+      </a>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ==========================================================================
+     NEW PRODUCT SHOWCASE: HIRENEXA CONNECT
+     "Connect. Communicate. Interview. Grow."
+     ========================================================================== -->
+<section style="margin-bottom: 56px;">
+  <div style="background: radial-gradient(120% 120% at 50% 0%, #1e3a8a 0%, #0f172a 60%, #090d16 100%); border: 1px solid #1e293b; border-radius: 24px; padding: 48px 36px; color: #ffffff; box-shadow: 0 16px 40px rgba(0,0,0,0.3); position: relative; overflow: hidden;">
+    <div style="max-width: 900px; margin: 0 auto; text-align: center; position: relative; z-index: 2;">
+      <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(37, 99, 235, 0.25); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 9999px; padding: 5px 16px; font-size: 12px; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 18px;">
+        <span>🎥 INTRODUCING HIRENEXA CONNECT</span>
+      </div>
+
+      <h2 style="font-size: clamp(28px, 4vw, 42px); font-weight: 900; letter-spacing: -0.02em; margin: 0 0 10px; color: #ffffff;">
+        Connect. Communicate. Interview. Grow.
+      </h2>
+
+      <p style="font-size: 16px; line-height: 1.6; color: #cbd5e1; max-width: 680px; margin: 0 auto 32px;">
+        Seamless WebRTC video conferencing, recruitment interview studios, panel evaluations, and moderated career webinars — fully integrated into HireNexa.
+      </p>
+
+      <!-- 4 Core Pillars Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 36px; text-align: left;">
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 18px; backdrop-filter: blur(8px);">
+          <div style="font-size: 24px; margin-bottom: 8px;">📹</div>
+          <div style="font-size: 14.5px; font-weight: 700; color: #ffffff; margin-bottom: 4px;">1-on-1 Interviews</div>
+          <div style="font-size: 12.5px; color: #94a3b8; line-height: 1.5;">Direct candidate interviews with screen sharing, PiP & live chat.</div>
+        </div>
+
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 18px; backdrop-filter: blur(8px);">
+          <div style="font-size: 24px; margin-bottom: 8px;">👥</div>
+          <div style="font-size: 14.5px; font-weight: 700; color: #ffffff; margin-bottom: 4px;">Panel & Group Calls</div>
+          <div style="font-size: 12.5px; color: #94a3b8; line-height: 1.5;">Multi-interviewer hiring panels with active speaker highlighting.</div>
+        </div>
+
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 18px; backdrop-filter: blur(8px);">
+          <div style="font-size: 24px; margin-bottom: 8px;">🌐</div>
+          <div style="font-size: 14.5px; font-weight: 700; color: #ffffff; margin-bottom: 4px;">Public Webinars</div>
+          <div style="font-size: 12.5px; color: #94a3b8; line-height: 1.5;">Controlled broadcasts, moderated Q&A, and campus workshops.</div>
+        </div>
+
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 18px; backdrop-filter: blur(8px);">
+          <div style="font-size: 24px; margin-bottom: 8px;">✨</div>
+          <div style="font-size: 14.5px; font-weight: 700; color: #ffffff; margin-bottom: 4px;">AI Interview Co-Pilot</div>
+          <div style="font-size: 12.5px; color: #94a3b8; line-height: 1.5;">Explainable question ideas from JD & live scorecard notes.</div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+        <a href="{% url 'connect:dashboard' %}" class="btn" style="background: #2563eb; color: #ffffff; font-weight: 700; font-size: 14.5px; padding: 12px 28px; border-radius: 10px; text-decoration: none; box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);">
+          Explore HireNexa Connect →
+        </a>
+        <a href="{% url 'connect:instant_meeting' %}" class="btn" style="background: #10b981; color: #ffffff; font-weight: 700; font-size: 14.5px; padding: 12px 24px; border-radius: 10px; text-decoration: none;">
+          ⚡ Start Instant Meeting
+        </a>
+        <a href="{% url 'connect:join_meeting' %}" class="btn" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #ffffff; font-weight: 700; font-size: 14.5px; padding: 12px 24px; border-radius: 10px; text-decoration: none;">
+          🔑 Join Meeting
+        </a>
+        <a href="{% url 'connect:public_events' %}" class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #ffffff; font-weight: 600; font-size: 14.5px; padding: 12px 22px; border-radius: 10px; text-decoration: none;">
+          Browse Webinars
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ==========================================================================
+     LIVE PLATFORM METRICS STRIP
+     ========================================================================== -->
+<section class="stats-strip" style="margin-bottom: 50px;">
+  <div class="stat-box">
+    <span class="stat-value">{{ total_jobs|default:"12+" }}</span>
+    <span class="stat-label">Active Opportunities</span>
+    <p class="stat-desc">Vetted engineering, cloud, management, and AI roles open for direct application.</p>
+  </div>
+  <div class="stat-box">
+    <span class="stat-value">{{ companies_count|default:"6+" }}</span>
+    <span class="stat-label">Verified Enterprises</span>
+    <p class="stat-desc">Innovative startups and technology enterprises hiring across Indian tech hubs.</p>
+  </div>
+  <div class="stat-box">
+    <span class="stat-value">2,140+</span>
+    <span class="stat-label">Verified Exam Questions</span>
+    <p class="stat-desc">NIMCET, OJEE, CUET-PG entrance question bank with chapter analytics.</p>
+  </div>
+  <div class="stat-box">
+    <span class="stat-value">100%</span>
+    <span class="stat-label">Explainable Scoring</span>
+    <p class="stat-desc">Exact skill overlap and semantic insights, never a black-box automated reject.</p>
+  </div>
+</section>
+
+
+
+
+
+<!-- ==========================================================================
+     ACADEMIC & SPECIALIZATION HUBS (MCA, MBA, ENGINEERING)
+     ========================================================================== -->
+<section style="margin-bottom: 56px;">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Academic & Specialization Placement Hubs</h2>
+      <p class="section-subtitle">Dedicated career discovery channels curated for major disciplines and lateral
+        specializations.</p>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+    <!-- MCA Stream Hub -->
+    <div
+      style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 28px; box-shadow: var(--shadow-sm); border-top: 4px solid #0284c7;">
+      <div style="font-size: 32px; margin-bottom: 12px;">💻</div>
+      <h3 style="font-size: 20px; font-weight: 800; color: var(--slate-900); margin: 0 0 8px 0;">MCA & Computer
+        Applications</h3>
+      <p style="font-size: 13.5px; color: var(--slate-600); line-height: 1.6; margin-bottom: 16px;">
+        Full Stack Development, Python/Django, Java Spring Boot, React, Cloud & DevOps, Database Architecture, and
+        Quality Assurance roles.
+      </p>
+      <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px;">
+        <span class="meta-badge" style="background: #e0f2fe; color: #0369a1;">Python</span>
+        <span class="meta-badge" style="background: #e0f2fe; color: #0369a1;">Django</span>
+        <span class="meta-badge" style="background: #e0f2fe; color: #0369a1;">React</span>
+        <span class="meta-badge" style="background: #e0f2fe; color: #0369a1;">PostgreSQL</span>
+      </div>
+      <a href="{% url 'job_list' %}?course=MCA" class="btn btn-outline btn-sm"
+        style="width: 100%; text-align: center; border-color: #0284c7; color: #0284c7;">
+        Explore MCA Positions →
+      </a>
+    </div>
+
+    <!-- MBA Stream Hub -->
+    <div
+      style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 28px; box-shadow: var(--shadow-sm); border-top: 4px solid #d97706;">
+      <div style="font-size: 32px; margin-bottom: 12px;">📊</div>
+      <h3 style="font-size: 20px; font-weight: 800; color: var(--slate-900); margin: 0 0 8px 0;">MBA & Business
+        Management</h3>
+      <p style="font-size: 13.5px; color: var(--slate-600); line-height: 1.6; margin-bottom: 16px;">
+        Talent Acquisition, Human Resource Management, Business Analytics, Digital Marketing, Corporate Finance, and
+        Operations Leadership.
+      </p>
+      <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px;">
+        <span class="meta-badge" style="background: #fef3c7; color: #b45309;">HR Management</span>
+        <span class="meta-badge" style="background: #fef3c7; color: #b45309;">Business Analytics</span>
+        <span class="meta-badge" style="background: #fef3c7; color: #b45309;">Marketing</span>
+      </div>
+      <a href="{% url 'job_list' %}?course=MBA" class="btn btn-outline btn-sm"
+        style="width: 100%; text-align: center; border-color: #d97706; color: #d97706;">
+        Explore MBA Positions →
+      </a>
+    </div>
+
+    <!-- Engineering Stream Hub -->
+    <div
+      style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); padding: 28px; box-shadow: var(--shadow-sm); border-top: 4px solid #059669;">
+      <div style="font-size: 32px; margin-bottom: 12px;">⚙️</div>
+      <h3 style="font-size: 20px; font-weight: 800; color: var(--slate-900); margin: 0 0 8px 0;">Engineering (B.Tech /
+        B.E.)</h3>
+      <p style="font-size: 13.5px; color: var(--slate-600); line-height: 1.6; margin-bottom: 16px;">
+        Core Software Engineering, Systems Architecture, Embedded & Electronics, Civil & Infrastructure, and Mechanical
+        Design opportunities.
+      </p>
+      <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px;">
+        <span class="meta-badge" style="background: #ecfdf5; color: #047857;">Software Eng</span>
+        <span class="meta-badge" style="background: #ecfdf5; color: #047857;">Data Structures</span>
+        <span class="meta-badge" style="background: #ecfdf5; color: #047857;">Systems</span>
+      </div>
+      <a href="{% url 'job_list' %}?course=BTECH" class="btn btn-outline btn-sm"
+        style="width: 100%; text-align: center; border-color: #059669; color: #059669;">
+        Explore Engineering Positions →
+      </a>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- ==========================================================================
+     AI RESUME ANALYZER SPOTLIGHT SECTION
+     ========================================================================== -->
+<section
+  style="margin-bottom: 56px; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border-radius: var(--radius-xl); padding: 48px; color: #ffffff; box-shadow: var(--shadow-lg);">
+  <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center;">
+    <div>
+      <span class="hero-pill" style="background: rgba(255, 255, 255, 0.15); color: #c7d2fe; margin-bottom: 16px;">
+        ✨ INSTANT MATCH DIAGNOSTICS
+      </span>
+      <h2
+        style="font-size: 32px; font-weight: 800; color: #ffffff; letter-spacing: -0.02em; line-height: 1.25; margin-bottom: 16px;">
+        Benchmark Your Resume Against Real Industry Stacks
+      </h2>
+      <p style="color: #c7d2fe; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
+        Our AI Resume Analyzer parses your PDF or Word document in seconds, maps your competencies to our 130+ technical
+        taxonomy, and provides explainable scores with actionable learning tips.
+      </p>
+      <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+        <a href="{% url 'resume_analyzer' %}" class="btn btn-primary btn-lg"
+          style="background: #6366f1; border-color: #6366f1;">
+          Analyze Your Resume Now →
+        </a>
+        <a href="{% url 'career_resources' %}" class="btn btn-outline btn-lg"
+          style="color: #ffffff; border-color: rgba(255, 255, 255, 0.4);">
+          Read Interview Playbooks
+        </a>
+      </div>
+    </div>
+
+    <div
+      style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: var(--radius-lg); padding: 24px; backdrop-filter: blur(8px);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <span style="font-size: 13px; font-weight: 700; color: #a5b4fc;">Sample Diagnostic</span>
+        <strong style="color: #4ade80; font-size: 20px;">88% Match</strong>
+      </div>
+      <div style="font-size: 13px; color: #e0e7ff; margin-bottom: 12px;">
+        ✓ Matched Skills: Python, Django, SQL, REST APIs, Git
+      </div>
+      <div style="font-size: 13px; color: #fca5a5; margin-bottom: 16px;">
+        ⚠ Skill Gap: Docker, Redis (Recommended to acquire)
+      </div>
+      <p style="font-size: 12px; color: #94a3b8; margin: 0; line-height: 1.5;">
+        "Candidate demonstrates full coverage of core backend competencies with high semantic alignment to engineering
+        requirements."
+      </p>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- ==========================================================================
+     FEATURED TECH & RECRUITMENT OPENINGS
+     ========================================================================== -->
+<section style="margin-bottom: 56px;">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Featured Career Openings</h2>
+      <p class="section-subtitle">Explore high-impact positions open to candidates across all Indian tech hubs.</p>
+    </div>
+    <a href="{% url 'job_list' %}" class="btn btn-white btn-sm">View All {{ total_jobs }} Jobs →</a>
+  </div>
+
+  <div class="jobs-grid">
+    {% for job in jobs %}
+    <article class="job-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 10px;">
+          {% if job.target_course == 'MCA' or 'mca' in job.department|lower %}
+          <span class="meta-badge" style="background: #e0f2fe; color: #0369a1; font-weight: 700;">💻 MCA Stream</span>
+          {% elif job.target_course == 'MBA' or 'mba' in job.department|lower %}
+          <span class="meta-badge" style="background: #fef3c7; color: #b45309; font-weight: 700;">📊 MBA Stream</span>
+          {% else %}
+          <span class="meta-badge" style="background: #f1f5f9; color: var(--slate-700);">🎓 {{
+            job.get_target_course_display }}</span>
+          {% endif %}
+          {% if job.department %}
+          <span class="meta-badge" style="background: var(--slate-100); color: var(--slate-600);">{{ job.department
+            }}</span>
+          {% endif %}
+        </div>
+
+        <div class="job-header">
+          <div class="company-logo">{{ job.company_name|slice:":1" }}</div>
+          <div>
+            <h3 class="job-title"><a href="{% url 'job_detail' job.pk %}">{{ job.title }}</a></h3>
+            <div class="company-name">🏢 {{ job.company_name }}</div>
+          </div>
+        </div>
+
+        <div class="job-meta-row" style="margin: 8px 0;">
+          <span class="meta-badge">📍 {{ job.location|default:"Remote / Flexible" }}</span>
+          <span class="meta-badge" style="background: #f0fdf4; color: #15803d; font-weight: 700;">🎯 Hiring {{
+            job.vacancies }} Candidates</span>
+        </div>
+
+        <div class="skills-wrap">
+          {% for skill in job.skill_list %}
+          <span class="skill-tag">{{ skill }}</span>
+          {% empty %}
+          <span class="skill-tag">General</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="job-footer" style="margin-top: 14px;">
+        <span class="posted-date">Posted {{ job.created_at|date:"M d, Y" }}</span>
+        <a href="{% url 'job_detail' job.pk %}" class="btn btn-secondary btn-sm">View Details & Apply →</a>
+      </div>
+    </article>
+    {% empty %}
+    <div class="stat-box" style="grid-column: 1 / -1; text-align: center; padding: 48px;">
+      <h3>No active positions at this moment</h3>
+      <p class="stat-desc">Check back soon or post an opening as a recruiter.</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+
+
+
+
+<!-- ==========================================================================
+     DUAL SHOWCASE: FOR CANDIDATES & FOR RECRUITERS
+     ========================================================================== -->
+<section id="how-it-works" class="showcase-section" style="margin-bottom: 56px;">
+  <div style="text-align: center; max-width: 650px; margin: 0 auto 36px;">
+    <h2 class="section-title">Built for Candidates and Modern Hiring Teams</h2>
+    <p class="section-subtitle">See how HireNexa eliminates recruitment friction for both sides of the hiring equation.
+    </p>
+  </div>
+
+  <div class="showcase-grid">
+    <div id="for-candidates" class="showcase-card">
+      <span class="showcase-tag">For Candidates</span>
+      <h3 class="showcase-title">Never get lost in an ATS black hole</h3>
+      <p class="showcase-desc">Upload your resume once and get transparent, instant feedback on how your technical
+        skills match real engineering requirements.</p>
+
+      <ul class="feature-steps">
+        <li class="feature-step">
+          <span class="step-num">1</span>
+          <div><strong>1-Click Resume Upload:</strong> Upload PDF or DOCX. Text and skills are extracted cleanly in
+            seconds.</div>
+        </li>
+        <li class="feature-step">
+          <span class="step-num">2</span>
+          <div><strong>Explainable Skill Diagnostics:</strong> See exactly which required skills matched and which are
+            missing before interviewing.</div>
+        </li>
+        <li class="feature-step">
+          <span class="step-num">3</span>
+          <div><strong>Live Status Tracking:</strong> Track applications from review to interview scheduling without
+            ghosting.</div>
+        </li>
+      </ul>
+
+      <a href="{% url 'signup' %}" class="btn btn-primary">Join as a Candidate →</a>
+    </div>
+
+    <div id="for-recruiters" class="showcase-card">
+      <span class="showcase-tag">For Recruiters</span>
+      <h3 class="showcase-title">Screen 500+ resumes in minutes, with zero bias</h3>
+      <p class="showcase-desc">Spend time talking to qualified candidates instead of manually skimming resumes.
+        Explainable matching ranks by real qualifications.</p>
+
+      <ul class="feature-steps">
+        <li class="feature-step">
+          <span class="step-num">1</span>
+          <div><strong>Define Role & Required Stacks:</strong> Specify required tech skills, frameworks, and role
+            responsibilities.</div>
+        </li>
+        <li class="feature-step">
+          <span class="step-num">2</span>
+          <div><strong>Automated Candidate Ranking:</strong> Get instant skill overlap scores and deep semantic
+            alignment breakdown.</div>
+        </li>
+        <li class="feature-step">
+          <span class="step-num">3</span>
+          <div><strong>Integrated Interview Scheduler:</strong> Shortlist applicants, schedule rounds, and record
+            recruiter feedback in one place.</div>
+        </li>
+      </ul>
+
+      <a href="{% url 'signup' %}?role=RECRUITER" class="btn btn-white">Hire with HireNexa →</a>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- Bottom CTA Banner -->
+<section class="cta-banner" style="margin-bottom: 40px;">
+  <h2>Ready to experience the future of recruitment?</h2>
+  <p>Join thousands of software engineers finding their next roles and engineering leaders building elite teams.</p>
+  <div class="cta-actions">
+    <a href="{% url 'job_list' %}" class="btn btn-white btn-lg">Explore Open Roles</a>
+    <a href="{% url 'signup' %}?role=RECRUITER" class="btn btn-primary btn-lg">Post a Job for Free</a>
+  </div>
+</section>
+
+
+
+
+
+<!-- ==========================================================================
+     3D TALENT NETWORK CONSTELLATION VISUAL (Reference Image 3 Animation)
+     ========================================================================== -->
+<script>
+  (function () {
+    const canvas = document.getElementById('talentNetworkCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+    const particleCount = 42;
+    const maxDistance = 140;
+    let mouse = { x: null, y: null, radius: 120 };
+
+    function resize() {
+      width = canvas.width = canvas.offsetWidth;
+      height = canvas.height = canvas.offsetHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    window.addEventListener('mousemove', function (e) {
+      const rect = canvas.getBoundingClientRect();
+      if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+      } else {
+        mouse.x = null;
+        mouse.y = null;
+      }
+    });
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.7;
+        this.vy = (Math.random() - 0.5) * 0.7;
+        this.radius = Math.random() * 2.5 + 1.5;
+        this.color = Math.random() > 0.4 ? '#38bdf8' : '#a855f7'; // Cyan or Electric Violet
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0 || this.x > width) this.vx = -this.vx;
+        if (this.y < 0 || this.y > height) this.vy = -this.vy;
+
+        // Mouse repulsion/interaction
+        if (mouse.x !== null && mouse.y !== null) {
+          const dx = mouse.x - this.x;
+          const dy = mouse.y - this.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < mouse.radius) {
+            const force = (mouse.radius - dist) / mouse.radius;
+            this.x -= (dx / dist) * force * 2;
+            this.y -= (dy / dist) * force * 2;
+          }
+        }
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = this.color;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw connecting lines
+      for (let a = 0; a < particles.length; a++) {
+        for (let b = a + 1; b < particles.length; b++) {
+          const dx = particles[a].x - particles[b].x;
+          const dy = particles[a].y - particles[b].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < maxDistance) {
+            const alpha = 1 - dist / maxDistance;
+            ctx.beginPath();
+            ctx.moveTo(particles[a].x, particles[a].y);
+            ctx.lineTo(particles[b].x, particles[b].y);
+            // Linear gradient between cyan and violet
+            const grad = ctx.createLinearGradient(particles[a].x, particles[a].y, particles[b].x, particles[b].y);
+            grad.addColorStop(0, 'rgba(56, 189, 248, ' + (alpha * 0.4) + ')');
+            grad.addColorStop(1, 'rgba(168, 85, 247, ' + (alpha * 0.4) + ')');
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = 1.1;
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Update and draw particles
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    // Check prefers-reduced-motion
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      animate();
+    }
+  })();
+</script>
+{% endblock %}

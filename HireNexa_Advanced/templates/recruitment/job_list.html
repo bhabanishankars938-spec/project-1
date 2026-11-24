@@ -1,0 +1,1561 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Find MCA, MBA & Engineering Opportunities · HireNexa{% endblock %}
+
+{% block content %}
+<div class="jobs-page-wrapper" style="max-width: 1360px; margin: 0 auto; padding: 20px 16px 80px 16px;">
+
+  <!-- Hero Header Section -->
+  <div style="text-align: center; margin-bottom: 28px;">
+    <h1 style="font-size: 34px; font-weight: 800; color: #0f172a; letter-spacing: -0.03em; margin: 0 0 10px 0;">
+      Find MCA, MBA & Engineering Opportunities
+    </h1>
+    <p style="color: #64748b; font-size: 15px; max-width: 820px; margin: 0 auto; line-height: 1.6;">
+      Explore verified company hiring posts categorized by course departments. Discover roles like <strong>Full Stack
+        Developer for MCA</strong>, <strong>HR Manager, Marketing & Finance for MBA</strong>, complete with company
+      vacancy quotas and round-by-round hiring tracks.
+    </p>
+  </div>
+
+  <!-- Course Stream Tabs (Matching Image 1) -->
+  <div style="display: flex; justify-content: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
+    <a href="{% url 'job_list' %}{% if location %}?location={{ location|urlencode }}{% endif %}"
+      class="stream-tab-btn {% if not course %}active{% endif %}"
+      style="display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 700; border-radius: 999px; padding: 9px 20px; text-decoration: none; transition: all 0.15s ease; {% if not course %}background: #4f46e5; color: #ffffff; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);{% else %}background: #ffffff; color: #334155; border: 1px solid #e2e8f0;{% endif %}">
+      <span>🎓</span> All Open Roles ({{ all_count }})
+    </a>
+    <a href="{% url 'job_list' %}?course=MCA{% if location %}&location={{ location|urlencode }}{% endif %}"
+      class="stream-tab-btn {% if course == 'MCA' %}active{% endif %}"
+      style="display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 700; border-radius: 999px; padding: 9px 20px; text-decoration: none; transition: all 0.15s ease; {% if course == 'MCA' %}background: #4f46e5; color: #ffffff; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);{% else %}background: #ffffff; color: #334155; border: 1px solid #e2e8f0;{% endif %}">
+      <span>💻</span> MCA / Computer Applications ({{ mca_count }})
+    </a>
+    <a href="{% url 'job_list' %}?course=MBA{% if location %}&location={{ location|urlencode }}{% endif %}"
+      class="stream-tab-btn {% if course == 'MBA' %}active{% endif %}"
+      style="display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 700; border-radius: 999px; padding: 9px 20px; text-decoration: none; transition: all 0.15s ease; {% if course == 'MBA' %}background: #4f46e5; color: #ffffff; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);{% else %}background: #ffffff; color: #334155; border: 1px solid #e2e8f0;{% endif %}">
+      <span>📊</span> MBA / Management & Business ({{ mba_count }})
+    </a>
+  </div>
+
+  <!-- Main Search Bar & Hierarchical Location Selector Form (Matching Image 1) -->
+  <div style="position: relative; max-width: 1040px; margin: 0 auto 16px auto;">
+    <form method="get" action="{% url 'job_list' %}" id="mainJobSearchForm"
+      style="display: flex; align-items: center; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 999px; padding: 6px 8px 6px 20px; box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.08); gap: 12px; flex-wrap: wrap;">
+      {% if course %}
+      <input type="hidden" name="course" value="{{ course }}">
+      {% endif %}
+      {% if work_mode %}
+      <input type="hidden" name="work_mode" value="{{ work_mode }}">
+      {% endif %}
+      {% if job_type %}
+      <input type="hidden" name="type" value="{{ job_type }}">
+      {% endif %}
+      {% if sort %}
+      <input type="hidden" name="sort" id="hiddenSortInput" value="{{ sort }}">
+      {% endif %}
+
+      <!-- 1. Role / Skill Search Field -->
+      <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 260px;">
+        <span style="color: #6366f1; font-size: 17px;">🔍</span>
+        <input type="text" name="q" value="{{ q }}"
+          placeholder="Search by role (e.g. Full Stack Developer, HR Manager), skills..."
+          style="width: 100%; border: none; outline: none; font-size: 14px; color: #0f172a; background: transparent; font-family: inherit;">
+      </div>
+
+      <div style="width: 1px; height: 32px; background: #e2e8f0;"></div>
+
+      <!-- 2. Hierarchical Location Trigger Box (Image 1 Specification) -->
+      <div class="location-selector-trigger-box" id="locSelectorTriggerBtn" onclick="toggleLocationPopover(event)"
+        style="display: flex; align-items: center; gap: 8px; cursor: pointer; flex: 1.2; min-width: 280px; padding: 6px 12px; border-radius: 999px; background: #f8fafc; border: 1px solid #e2e8f0;">
+        <span class="loc-trigger-pin">📍</span>
+        <span class="loc-trigger-text" id="locDisplayLabel">
+          {{ location|default:"India > Odisha > Khordha > Bhubaneswar" }}
+        </span>
+        <span class="loc-trigger-chevron">▼</span>
+      </div>
+      <input type="hidden" name="location" id="hiddenLocationInput"
+        value="{{ location|default:'India > Odisha > Khordha > Bhubaneswar' }}">
+      <input type="hidden" name="state" id="hiddenStateInput" value="{{ state }}">
+      <input type="hidden" name="district" id="hiddenDistrictInput" value="{{ district }}">
+      <input type="hidden" name="city" id="hiddenCityInput" value="{{ city }}">
+      <input type="hidden" name="area" id="hiddenAreaInput" value="{{ area }}">
+
+      <!-- 3. Filter Jobs Button -->
+      <button type="submit" class="btn btn-primary"
+        style="background: #4f28a9; border-color: #4f28a9; border-radius: 999px; padding: 10px 24px; font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(79, 40, 169, 0.35);">
+        <span>⚡</span> Filter Jobs
+      </button>
+
+      <!-- 4. Reset All Button -->
+      {% if q or location or skill or course or work_mode or department or job_type or sort != 'newest' %}
+      <a href="{% url 'job_list' %}" class="btn btn-white"
+        style="border-radius: 999px; padding: 9px 18px; font-size: 13px; font-weight: 600; color: #64748b; text-decoration: none; border: 1px solid #e2e8f0;">
+        Reset All
+      </a>
+      {% endif %}
+    </form>
+
+    <!-- [IMAGE 1 EXACT DESIGN] 4-Column Hierarchical Location Popover -->
+    <div class="location-hierarchical-popover" id="locationHierarchyPopover">
+      <!-- Top Breadcrumb Header -->
+      <div class="loc-popover-header">
+        <div class="loc-breadcrumb-display">
+          <span style="color: #6366f1; font-size: 16px;">📍</span>
+          <span id="locHeaderBreadcrumb">{{ location|default:"India > Odisha > Khordha > Bhubaneswar" }}</span>
+        </div>
+        <button type="button" class="loc-clear-link" onclick="clearLocationSelection()">Clear</button>
+      </div>
+
+      <!-- 4 Interactive Searchable Columns -->
+      <div class="loc-columns-grid">
+        <!-- Col 1: Country -->
+        <div class="loc-col-panel">
+          <div class="loc-col-title">🌐 Country</div>
+          <div class="loc-col-list">
+            <button type="button" class="loc-item-btn selected" id="countryIndiaBtn" onclick="selectCountry('India')">
+              <span>🇮🇳 India</span>
+              <span class="loc-item-check">✓</span>
+            </button>
+            <button type="button" class="loc-item-btn" id="countryAllIndiaBtn" onclick="selectAllIndia()">
+              <span>🌐 All India</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Col 2: State -->
+        <div class="loc-col-panel">
+          <div class="loc-col-title">State</div>
+          <input type="text" placeholder="Search State..." class="loc-col-search-input" id="stateSearchInput"
+            oninput="filterStateList(this.value)">
+          <div class="loc-col-list" id="stateListContainer">
+            <!-- Dynamically populated or pre-rendered states -->
+          </div>
+        </div>
+
+        <!-- Col 3: District -->
+        <div class="loc-col-panel">
+          <div class="loc-col-title">District</div>
+          <input type="text" placeholder="Search District..." class="loc-col-search-input" id="districtSearchInput"
+            oninput="filterDistrictList(this.value)">
+          <div class="loc-col-list" id="districtListContainer">
+            <!-- Dynamically populated based on state -->
+          </div>
+        </div>
+
+        <!-- Col 4: City / Area -->
+        <div class="loc-col-panel">
+          <div class="loc-col-title">City / Area</div>
+          <input type="text" placeholder="Search City/Area..." class="loc-col-search-input" id="cityAreaSearchInput"
+            oninput="filterCityAreaList(this.value)">
+          <div class="loc-col-list" id="cityAreaListContainer">
+            <!-- Dynamically populated based on district -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Footer Actions -->
+      <div class="loc-popover-footer">
+        <div class="loc-footer-selected">
+          <span style="color: #6366f1;">📍 Selected:</span>
+          <strong id="locFooterBreadcrumb">{{ location|default:"India > Odisha > Khordha > Bhubaneswar" }}</strong>
+        </div>
+        <div class="loc-footer-actions">
+          <button type="button" class="btn btn-white btn-sm" onclick="clearLocationSelection()"
+            style="font-size: 12.5px; border-radius: 6px;">Clear</button>
+          <button type="button" class="loc-btn-apply" onclick="applyLocationSelection()">Apply Location</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [IMAGE 2 EXACT SPECIFICATION] Suggestions Pills Row -->
+  <div class="jobie-suggestions-row">
+    <span class="jobie-suggestions-label">Suggestions:</span>
+    <a href="{% url 'job_list' %}{% if location %}?location={{ location|urlencode }}{% endif %}"
+      class="jobie-suggestion-pill {% if not q and not skill %}active{% endif %}">
+      Your Skill
+    </a>
+    <a href="{% url 'job_list' %}?q=Programmer{% if location %}&location={{ location|urlencode }}{% endif %}{% if course %}&course={{ course }}{% endif %}"
+      class="jobie-suggestion-pill {% if q == 'Programmer' %}active{% endif %}">
+      Programmer
+    </a>
+    <a href="{% url 'job_list' %}?q=Software+Engineer{% if location %}&location={{ location|urlencode }}{% endif %}{% if course %}&course={{ course }}{% endif %}"
+      class="jobie-suggestion-pill {% if q == 'Software Engineer' %}active{% endif %}">
+      Software Engineer
+    </a>
+    <a href="{% url 'job_list' %}?q=Full+Stack{% if location %}&location={{ location|urlencode }}{% endif %}{% if course %}&course={{ course }}{% endif %}"
+      class="jobie-suggestion-pill {% if q == 'Full Stack' %}active{% endif %}">
+      Full Stack
+    </a>
+    <a href="{% url 'job_list' %}?q=Python{% if location %}&location={{ location|urlencode }}{% endif %}{% if course %}&course={{ course }}{% endif %}"
+      class="jobie-suggestion-pill {% if q == 'Python' %}active{% endif %}">
+      Python & Django
+    </a>
+    <a href="{% url 'job_list' %}?q=React{% if location %}&location={{ location|urlencode }}{% endif %}{% if course %}&course={{ course }}{% endif %}"
+      class="jobie-suggestion-pill {% if q == 'React' %}active{% endif %}">
+      React Developer
+    </a>
+    <a href="{% url 'job_list' %}?q=HR+Manager{% if location %}&location={{ location|urlencode }}{% endif %}{% if course %}&course={{ course }}{% endif %}"
+      class="jobie-suggestion-pill {% if q == 'HR Manager' %}active{% endif %}">
+      HR Manager
+    </a>
+    <a href="{% url 'job_list' %}?q=Digital+Marketing{% if location %}&location={{ location|urlencode }}{% endif %}{% if course %}&course={{ course }}{% endif %}"
+      class="jobie-suggestion-pill {% if q == 'Digital Marketing' %}active{% endif %}">
+      Digital Marketing
+    </a>
+  </div>
+
+  <!-- Quick Filters Row (Matching Image 1) -->
+  <div class="quick-filters-row"
+    style="max-width: 1040px; margin: 0 auto 24px auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+      <span style="font-size: 13px; font-weight: 700; color: #475569; display: flex; align-items: center; gap: 4px;">
+        <span>⚙️</span> Quick Filters:
+      </span>
+      <a href="{% url 'job_list' %}?work_mode=REMOTE{% if course %}&course={{ course }}{% endif %}{% if location %}&location={{ location|urlencode }}{% endif %}"
+        class="quick-filter-pill {% if work_mode == 'REMOTE' %}active{% endif %}">
+        <span>💻</span> Remote
+      </a>
+      <a href="{% url 'job_list' %}?work_mode=HYBRID{% if course %}&course={{ course }}{% endif %}{% if location %}&location={{ location|urlencode }}{% endif %}"
+        class="quick-filter-pill {% if work_mode == 'HYBRID' %}active{% endif %}">
+        <span>👥</span> Hybrid
+      </a>
+      <a href="{% url 'job_list' %}?work_mode=ONSITE{% if course %}&course={{ course }}{% endif %}{% if location %}&location={{ location|urlencode }}{% endif %}"
+        class="quick-filter-pill {% if work_mode == 'ONSITE' %}active{% endif %}">
+        <span>📍</span> On-site
+      </a>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b;">
+      <span>Showing opportunities for:</span>
+      <select onchange="window.location.href=this.value"
+        style="padding: 5px 12px; border-radius: 999px; border: 1px solid #cbd5e1; font-weight: 700; color: #4f46e5; background: #ffffff; outline: none; cursor: pointer;">
+        <option value="{% url 'job_list' %}?course=MCA" {% if course == 'MCA' or not course %}selected{% endif %}>MCA ▼
+        </option>
+        <option value="{% url 'job_list' %}?course=MBA" {% if course == 'MBA' %}selected{% endif %}>MBA ▼</option>
+        <option value="{% url 'job_list' %}" {% if not course %}selected{% endif %}>All Streams ▼</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Academic Specialization Hub Banner (Image 1 Specification) -->
+  {% if course == 'MBA' %}
+  <div class="mca-hub-card" style="max-width: 1040px; margin: 0 auto 32px auto; border-left: 4px solid #d97706;">
+    <div
+      style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
+      <div>
+        <span class="meta-badge"
+          style="background: #d97706; color: #ffffff; font-weight: 800; font-size: 11px; padding: 3px 10px; border-radius: 999px; letter-spacing: 0.05em;">
+          📊 MBA DEPARTMENT HUB
+        </span>
+        <h2 style="font-size: 20px; font-weight: 800; color: #0f172a; margin: 8px 0 4px 0;">
+          MBA Roles: HR Management, Marketing, Business Analytics & Finance Careers
+        </h2>
+        <p style="font-size: 13.5px; color: #475569; margin: 0;">
+          Specialized business and management career tracks curated for MBA candidates & corporate leaders.
+        </p>
+      </div>
+      <a href="{% url 'job_list' %}" class="btn btn-white btn-sm"
+        style="font-size: 12.5px; border-radius: 999px; padding: 6px 14px; font-weight: 700; color: #475569; border-color: #cbd5e1;">View
+        All Roles →</a>
+    </div>
+
+    <!-- Career Track Chips for MBA -->
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0;">
+      <a href="{% url 'job_list' %}?course=MBA&q=HR+Manager" class="quick-filter-pill"
+        style="background: #ffffff; border-color: #cbd5e1; font-weight: 600;">
+        <span>👥</span> HR Manager & Talent Acquisition
+      </a>
+      <a href="{% url 'job_list' %}?course=MBA&q=Business+Analyst" class="quick-filter-pill"
+        style="background: #ffffff; border-color: #cbd5e1; font-weight: 600;">
+        <span>📈</span> Business Analytics & Strategy
+      </a>
+      <a href="{% url 'job_list' %}?course=MBA&q=Marketing" class="quick-filter-pill"
+        style="background: #ffffff; border-color: #cbd5e1; font-weight: 600;">
+        <span>📢</span> Digital Marketing & Brand Growth
+      </a>
+      <a href="{% url 'job_list' %}?course=MBA&q=Finance" class="quick-filter-pill"
+        style="background: #ffffff; border-color: #cbd5e1; font-weight: 600;">
+        <span>💰</span> Financial Analysis & Advisory
+      </a>
+      <a href="{% url 'job_list' %}?course=MBA&q=Operations" class="quick-filter-pill"
+        style="background: #ffffff; border-color: #cbd5e1; font-weight: 600;">
+        <span>⚙️</span> Operations Management
+      </a>
+    </div>
+
+    <!-- Key MBA Skills Line -->
+    <div
+      style="font-size: 12.5px; color: #64748b; border-top: 1px dashed #cbd5e1; padding-top: 12px; margin-top: 10px;">
+      <strong style="color: #334155;">Key MBA Skills:</strong>
+      <span style="color: #475569;">
+        Human Resources | Talent Acquisition | Financial Analysis | Digital Marketing | Strategic Planning | Operations
+        Leadership
+      </span>
+    </div>
+  </div>
+  {% else %}
+  <div class="mca-hub-card" style="max-width: 1040px; margin: 0 auto 32px auto;">
+    <div
+      style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
+      <div>
+        <span class="meta-badge"
+          style="background: #4f46e5; color: #ffffff; font-weight: 800; font-size: 11px; padding: 3px 10px; border-radius: 999px; letter-spacing: 0.05em;">
+          🎓 MCA DEPARTMENT HUB
+        </span>
+        <h2 style="font-size: 20px; font-weight: 800; color: #0f172a; margin: 8px 0 4px 0;">
+          MCA Roles: Full Stack Developer, Backend, Cloud & AI Careers
+        </h2>
+        <p style="font-size: 13.5px; color: #475569; margin: 0;">
+          Specialized computer applications career tracks curated for MCA candidates & IT graduates.
+        </p>
+      </div>
+      {% if course != 'MCA' %}
+      <a href="{% url 'job_list' %}?course=MCA" class="btn btn-white btn-sm"
+        style="font-size: 12.5px; border-radius: 999px; padding: 6px 14px; font-weight: 700; color: #4f46e5; border-color: #c7d2fe;">Filter
+        Only MCA Jobs →</a>
+      {% endif %}
+    </div>
+
+    <!-- Career Track Chips (Exact Image 1 List) -->
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0;">
+      <a href="{% url 'job_list' %}?course=MCA&q=Full+Stack+Developer" class="quick-filter-pill"
+        style="background: #ffffff; border-color: #cbd5e1; font-weight: 600;">
+        <span>&lt;/&gt;</span> Full Stack Developer
+      </a>
+      <a href="{% url 'job_list' %}?course=MCA&q=Python" class="quick-filter-pill"
+        style="background: #ffffff; border-color: #cbd5e1; font-weight: 600;">
+        <span>🐍</span> Python & Django Developer
+      </a>
+      <a href="{% url 'job_list' %}?course=MCA&q=Java" class="quick-filter-pill"
+        style="background: #ffffff; border-color: #cbd5e1; font-weight: 600;">
+        <span>☕</span> Java & Spring Boot Engineer
+      </a>
+      <a href="{% url 'job_list' %}?course=MCA&q=React" class="quick-filter-pill"
+        style="background: #ffffff; border-color: #cbd5e1; font-weight: 600;">
+        <span>⚛️</span> React & Frontend Developer
+      </a>
+      <a href="{% url 'job_list' %}?course=MCA&q=Data+Scientist" class="quick-filter-pill"
+        style="background: #ffffff; border-color: #cbd5e1; font-weight: 600;">
+        <span>📊</span> Data Scientist & ML Specialist
+      </a>
+      <a href="{% url 'job_list' %}?course=MCA&q=QA" class="quick-filter-pill"
+        style="background: #ffffff; border-color: #cbd5e1; font-weight: 600;">
+        <span>✅</span> QA & Automation Tester
+      </a>
+      <a href="{% url 'job_list' %}?course=MCA&q=Cloud" class="quick-filter-pill"
+        style="background: #ffffff; border-color: #cbd5e1; font-weight: 600;">
+        <span>☁️</span> Cloud & DevOps Engineer
+      </a>
+      <a href="{% url 'job_list' %}?course=MCA&q=Mobile" class="quick-filter-pill"
+        style="background: #ffffff; border-color: #cbd5e1; font-weight: 600;">
+        <span>📱</span> Mobile App Developer (Android/iOS)
+      </a>
+      <a href="{% url 'job_list' %}?course=MCA&q=SQL" class="quick-filter-pill"
+        style="background: #ffffff; border-color: #cbd5e1; font-weight: 600;">
+        <span>🗄️</span> Database & SQL Specialist
+      </a>
+      <a href="{% url 'job_list' %}?course=MCA" class="quick-filter-pill"
+        style="background: #ede9fe; color: #6d28d9; border-color: #c4b5fd; font-weight: 700;">
+        Read More →
+      </a>
+    </div>
+
+    <!-- Key MCA Skills Line -->
+    <div
+      style="font-size: 12.5px; color: #64748b; border-top: 1px dashed #cbd5e1; padding-top: 12px; margin-top: 10px;">
+      <strong style="color: #334155;">Key MCA Skills:</strong>
+      <span style="color: #475569;">
+        Full Stack Development | Python | Django | React | Node.js | Java | Spring Boot | SQL | PostgreSQL | MongoDB |
+        AWS | Docker | REST APIs | Git
+      </span>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- [IMAGE 2 EXACT SPECIFICATION] Results Count & Interactive Controls Toolbar -->
+  <div class="jobie-results-toolbar">
+    <div>
+      <h2 class="jobie-results-heading">
+        {% if location and location != 'All India' %}
+        Open Roles in {{ location }} ({{ total_count }})
+        {% elif course %}
+        {{ course }} Hiring Positions ({{ total_count }})
+        {% elif q %}
+        Search Results for "{{ q }}" ({{ total_count }})
+        {% else %}
+        Showing {{ total_count }} Jobs Results
+        {% endif %}
+      </h2>
+      <p class="jobie-results-subheading">
+        Based on your preferences and verified company vacancies
+      </p>
+    </div>
+
+    <div class="jobie-controls-group">
+      <!-- Fulltime Toggle -->
+      <a href="{% url 'job_list' %}?type={% if job_type == 'fulltime' or job_type == 'Full-time' %}{% else %}fulltime{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}{% if location %}&location={{ location|urlencode }}{% endif %}{% if course %}&course={{ course }}{% endif %}{% if work_mode %}&work_mode={{ work_mode }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
+        class="jobie-toggle-pill {% if job_type == 'fulltime' or job_type == 'Full-time' %}active{% endif %}"
+        title="Toggle Full-time Roles">
+        <span class="toggle-circle"></span> Fulltime
+      </a>
+
+      <!-- Freelance Toggle -->
+      <a href="{% url 'job_list' %}?type={% if job_type == 'freelance' or job_type == 'Contract' %}{% else %}freelance{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}{% if location %}&location={{ location|urlencode }}{% endif %}{% if course %}&course={{ course }}{% endif %}{% if work_mode %}&work_mode={{ work_mode }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
+        class="jobie-toggle-pill {% if job_type == 'freelance' or job_type == 'Contract' %}active{% endif %}"
+        title="Toggle Freelance Roles">
+        <span class="toggle-circle"></span> Freelance
+      </a>
+
+      <!-- Remote Toggle -->
+      <a href="{% url 'job_list' %}?work_mode={% if work_mode == 'REMOTE' %}{% else %}REMOTE{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}{% if location %}&location={{ location|urlencode }}{% endif %}{% if course %}&course={{ course }}{% endif %}{% if job_type %}&type={{ job_type }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
+        class="jobie-toggle-pill {% if work_mode == 'REMOTE' %}active{% endif %}" title="Toggle Remote Roles">
+        <span class="toggle-circle"></span> Remote
+      </a>
+
+      <!-- Sort Dropdown -->
+      <select class="jobie-sort-select" onchange="handleSortChange(this.value)" title="Sort Jobs">
+        <option value="newest" {% if sort == 'newest' or not sort %}selected{% endif %}>Newest ▼</option>
+        <option value="salary" {% if sort == 'salary' %}selected{% endif %}>Highest Salary ▼</option>
+        <option value="vacancies" {% if sort == 'vacancies' %}selected{% endif %}>Most Vacancies ▼</option>
+      </select>
+
+      <!-- Grid vs List View Switcher -->
+      <div class="view-switch-btns">
+        <button type="button" class="view-btn active" id="gridViewBtn" onclick="setJobView('grid')"
+          title="3x3 Grid View">⊞</button>
+        <button type="button" class="view-btn" id="listViewBtn" onclick="setJobView('list')"
+          title="Horizontal List View">☰</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- [IMAGE 2 EXACT SPECIFICATION] 3x3 Job Cards Grid -->
+  <div class="jobie-cards-grid" id="jobCardsContainer">
+    {% for job in jobs %}
+    {% cycle 'company-badge-blue' 'company-badge-orange' 'company-badge-pink' 'company-badge-green' 'company-badge-cyan'
+    'company-badge-yellow' 'company-badge-purple' 'company-badge-indigo' as badge_color silent %}
+    <article class="jobie-card">
+      <div>
+        <!-- Top Row: Company & Title on Left, Company Logo Avatar on Right -->
+        <div class="jobie-card-header">
+          <div class="jobie-card-header-info">
+            <span class="jobie-company-name">{{ job.company_name|default:"TechCorp" }}</span>
+            <h3 class="jobie-job-title">
+              <a href="{% url 'job_detail' job.pk %}">{{ job.title }}</a>
+            </h3>
+          </div>
+          <div class="jobie-company-avatar {{ badge_color }}">
+            <span>{{ job.company_name|slice:":1"|upper|default:"H" }}</span>
+          </div>
+        </div>
+
+        <!-- Salary Row (Bold Dark Numbers) -->
+        <div class="jobie-salary-row">
+          {% if job.salary_min and job.salary_max %}
+          ₹{{ job.salary_min|floatformat:0 }} - ₹{{ job.salary_max|floatformat:0 }} <span class="jobie-salary-period">/
+            yr</span>
+          {% elif job.salary_min %}
+          ₹{{ job.salary_min|floatformat:0 }}+ <span class="jobie-salary-period">/ yr</span>
+          {% else %}
+          Competitive Industry CTC
+          {% endif %}
+        </div>
+
+        <!-- Snippet (2 Lines Muted Excerpt) -->
+        <p class="jobie-snippet">
+          {{ job.description|striptags|truncatewords:18 }}
+        </p>
+
+        <!-- Hiring Quota Progress Bar -->
+        <div class="jobie-vacancy-bar">
+          <div class="jobie-vacancy-text">
+            <span>Vacancies: <strong>{{ job.vacancies }} Openings</strong></span>
+            <span class="jobie-remaining">{{ job.remaining_vacancies }} Remaining</span>
+          </div>
+          <div class="jobie-progress-track">
+            <div class="jobie-progress-fill" style="width: {{ job.hiring_progress_percentage }}%;"></div>
+          </div>
+        </div>
+
+        <!-- Required Skills Tags -->
+        <div class="jobie-skills-wrap">
+          {% for s in job.skill_list|slice:":3" %}
+          <span class="jobie-skill-pill">{{ s }}</span>
+          {% empty %}
+          <span class="jobie-skill-pill">{{ job.get_target_course_display }}</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Card Footer (Pill Badge on Left, Location on Right) -->
+      <div>
+        <div class="jobie-card-footer">
+          <div
+            class="jobie-workmode-pill {% if job.workplace_type == 'Remote' %}mode-remote{% elif job.workplace_type == 'Hybrid' %}mode-hybrid{% else %}mode-onsite{% endif %}">
+            {{ job.workplace_type|upper|default:"ON-SITE" }}
+          </div>
+          <div class="jobie-location-tag">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>{{ job.city|default:job.location|default:"India"|truncatechars:22 }}</span>
+          </div>
+        </div>
+
+        <!-- Card Action Footer -->
+        <div class="jobie-card-hover-actions">
+          {% if user.is_authenticated and user.is_candidate %}
+          <form method="post" action="{% url 'toggle_save_job' job.pk %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="jobie-btn-save" title="Save Job">☆ Save</button>
+          </form>
+          {% endif %}
+          <a href="{% url 'job_detail' job.pk %}" class="jobie-btn-apply">
+            Apply Now →
+          </a>
+        </div>
+      </div>
+    </article>
+    {% empty %}
+    <div
+      style="grid-column: 1 / -1; text-align: center; padding: 56px 20px; background: #ffffff; border-radius: 16px; border: 1px dashed #cbd5e1;">
+      <span style="font-size: 40px; display: block; margin-bottom: 12px;">🔍</span>
+      <h3 style="font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">No jobs match your selected
+        location & filters</h3>
+      <p style="color: #64748b; font-size: 14px; max-width: 480px; margin: 0 auto 20px auto;">
+        Try selecting <strong>All India</strong> or clearing specific district filters to see company postings across
+        other regions.
+      </p>
+      <div style="display: flex; justify-content: center; gap: 10px;">
+        <button type="button" class="btn btn-primary" onclick="selectAllIndia(); applyLocationSelection();">
+          Show All India Jobs
+        </button>
+        <a href="{% url 'job_list' %}" class="btn btn-white">Reset All Filters</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- [IMAGE 2 EXACT SPECIFICATION] Pagination Controls -->
+  <div class="jobie-pagination-wrap">
+    <div class="jobie-pagination-info">
+      Showing <strong>{{ page_obj.start_index|default:1 }}</strong> to <strong>{{ page_obj.end_index|default:total_count
+        }}</strong> from <strong>{{ total_count }}</strong> data
+    </div>
+    {% if page_obj.paginator.num_pages > 1 %}
+    <div class="jobie-pagination-nav">
+      {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q|urlencode }}{% endif %}{% if location %}&location={{ location|urlencode }}{% endif %}{% if course %}&course={{ course }}{% endif %}{% if work_mode %}&work_mode={{ work_mode }}{% endif %}{% if job_type %}&type={{ job_type }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
+        class="jobie-page-btn jobie-page-prev">« Previous</a>
+      {% else %}
+      <span class="jobie-page-btn jobie-page-disabled">« Previous</span>
+      {% endif %}
+
+      {% for p in page_obj.paginator.page_range %}
+      {% if p == page_obj.number %}
+      <span class="jobie-page-btn jobie-page-num active">{{ p }}</span>
+      {% elif p >= page_obj.number|add:"-2" and p <= page_obj.number|add:"2" %} <a
+        href="?page={{ p }}{% if q %}&q={{ q|urlencode }}{% endif %}{% if location %}&location={{ location|urlencode }}{% endif %}{% if course %}&course={{ course }}{% endif %}{% if work_mode %}&work_mode={{ work_mode }}{% endif %}{% if job_type %}&type={{ job_type }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
+        class="jobie-page-btn jobie-page-num">{{ p }}</a>
+        {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q|urlencode }}{% endif %}{% if location %}&location={{ location|urlencode }}{% endif %}{% if course %}&course={{ course }}{% endif %}{% if work_mode %}&work_mode={{ work_mode }}{% endif %}{% if job_type %}&type={{ job_type }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
+          class="jobie-page-btn jobie-page-next">Next »</a>
+        {% else %}
+        <span class="jobie-page-btn jobie-page-disabled">Next »</span>
+        {% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Floating Ask HireNexa AI Button (Image 1 Specification) -->
+  <a href="{% url 'ai_assistant' %}" class="floating-ai-btn" title="Ask HireNexa AI">
+    <span>✨</span>
+    <span>Ask HireNexa AI</span>
+  </a>
+
+</div>
+
+<!-- ==========================================================================
+     HIERARCHICAL INDIA LOCATION JAVASCRIPT ENGINE (IMAGE 1 CASCADING LOGIC)
+     ========================================================================== -->
+<script>
+  // State Management for Location Cascade
+  let selectedCountry = "India";
+  let selectedState = "{{ state|default:'' }}";
+  let selectedDistrict = "{{ district|default:'' }}";
+  let selectedCity = "{{ city|default:'' }}";
+  let selectedArea = "{{ area|default:'' }}";
+  let fullBreadcrumb = "{{ location|default:'India > Odisha > Khordha > Bhubaneswar' }}";
+
+  // Standard India dataset pre-cached for instant offline rendering
+  const INITIAL_STATES = [
+    "Odisha", "Maharashtra", "Karnataka", "Delhi", "West Bengal",
+    "Tamil Nadu", "Telangana", "Uttar Pradesh", "Gujarat", "Andhra Pradesh",
+    "Bihar", "Haryana", "Kerala", "Madhya Pradesh", "Punjab", "Rajasthan"
+  ];
+
+  const STATE_DISTRICTS = {
+    "Odisha": ["Khordha", "Deogarh", "Cuttack", "Puri", "Sambalpur", "Sundargarh"],
+    "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Thane", "Nashik"],
+    "Karnataka": ["Bengaluru Urban", "Mysuru", "Mangaluru", "Hubballi"],
+    "Delhi": ["New Delhi", "North Delhi", "South Delhi", "West Delhi"],
+    "West Bengal": ["Kolkata", "Howrah", "North 24 Parganas"],
+    "Telangana": ["Hyderabad", "Rangareddy", "Medchal"],
+    "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai"]
+  };
+
+  const DISTRICT_CITIES = {
+    "Khordha": [
+      { name: "Bhubaneswar", type: "city" },
+      { name: "Patia", type: "area" },
+      { name: "Chandrasekharpur", type: "area" },
+      { name: "Khandagiri", type: "area" },
+      { name: "Infocity", type: "area" },
+      { name: "Nayapalli", type: "area" }
+    ],
+    "Deogarh": [
+      { name: "Deogarh", type: "city" },
+      { name: "Reamal", type: "area" },
+      { name: "Barkote", type: "area" },
+      { name: "Main Town", type: "area" }
+    ],
+    "Cuttack": [
+      { name: "Cuttack", type: "city" },
+      { name: "Badambadi", type: "area" },
+      { name: "CDA Sector", type: "area" },
+      { name: "Link Road", type: "area" }
+    ],
+    "Puri": [
+      { name: "Puri", type: "city" },
+      { name: "Grand Road", type: "area" },
+      { name: "Sea Beach Road", type: "area" }
+    ],
+    "Sambalpur": [
+      { name: "Sambalpur", type: "city" },
+      { name: "Burla", type: "area" },
+      { name: "Ainthapali", type: "area" }
+    ],
+    "Sundargarh": [
+      { name: "Rourkela", type: "city" },
+      { name: "Civil Township", type: "area" },
+      { name: "Panposh", type: "area" }
+    ],
+    "Mumbai": [
+      { name: "Mumbai", type: "city" },
+      { name: "Bandra Kurla Complex (BKC)", type: "area" },
+      { name: "Andheri East", type: "area" },
+      { name: "Powai", type: "area" }
+    ],
+    "Pune": [
+      { name: "Pune", type: "city" },
+      { name: "Hinjawadi IT Park", type: "area" },
+      { name: "Baner", type: "area" },
+      { name: "Wakad", type: "area" }
+    ],
+    "Bengaluru Urban": [
+      { name: "Bengaluru", type: "city" },
+      { name: "Electronic City", type: "area" },
+      { name: "Whitefield", type: "area" },
+      { name: "Koramangala", type: "area" },
+      { name: "HSR Layout", type: "area" }
+    ],
+    "New Delhi": [
+      { name: "Delhi", type: "city" },
+      { name: "Connaught Place", type: "area" },
+      { name: "Saket", type: "area" },
+      { name: "Nehru Place", type: "area" }
+    ],
+    "Kolkata": [
+      { name: "Kolkata", type: "city" },
+      { name: "Salt Lake Sector V", type: "area" },
+      { name: "New Town", type: "area" }
+    ],
+    "Hyderabad": [
+      { name: "Hyderabad", type: "city" },
+      { name: "HITEC City", type: "area" },
+      { name: "Gachibowli", type: "area" }
+    ],
+    "Chennai": [
+      { name: "Chennai", type: "city" },
+      { name: "Old Mahabalipuram Road (OMR)", type: "area" },
+      { name: "Guindy", type: "area" }
+    ]
+  };
+
+  // Initialize Popover Data on Page Load
+  document.addEventListener("DOMContentLoaded", function () {
+    parseInitialBreadcrumb();
+    renderStatesList();
+    if (selectedState) {
+      renderDistrictsList(selectedState);
+    }
+    if (selectedDistrict) {
+      renderCityAreaList(selectedDistrict);
+    }
+    updateBreadcrumbDisplays();
+  });
+
+  function parseInitialBreadcrumb() {
+    const current = document.getElementById("hiddenLocationInput").value;
+    if (!current) return;
+    if (current === "All India") {
+      selectedCountry = "All India";
+      selectedState = "";
+      selectedDistrict = "";
+      selectedCity = "";
+      selectedArea = "";
+      return;
+    }
+    const parts = current.split(">").map(s => s.trim());
+    if (parts.length >= 2) selectedState = parts[1];
+    if (parts.length >= 3) selectedDistrict = parts[2];
+    if (parts.length >= 4) selectedCity = parts[3];
+    if (parts.length >= 5) selectedArea = parts[4];
+  }
+
+  function toggleLocationPopover(e) {
+    e.stopPropagation();
+    const popover = document.getElementById("locationHierarchyPopover");
+    popover.classList.toggle("active");
+  }
+
+  document.addEventListener("click", function (e) {
+    const popover = document.getElementById("locationHierarchyPopover");
+    const trigger = document.getElementById("locSelectorTriggerBtn");
+    if (popover && !popover.contains(e.target) && !trigger.contains(e.target)) {
+      popover.classList.remove("active");
+    }
+  });
+
+  function selectCountry(cName) {
+    selectedCountry = cName;
+    document.getElementById("countryIndiaBtn").classList.add("selected");
+    document.getElementById("countryAllIndiaBtn").classList.remove("selected");
+    updateBreadcrumbDisplays();
+  }
+
+  function selectAllIndia() {
+    selectedCountry = "All India";
+    selectedState = "";
+    selectedDistrict = "";
+    selectedCity = "";
+    selectedArea = "";
+    document.getElementById("countryAllIndiaBtn").classList.add("selected");
+    document.getElementById("countryIndiaBtn").classList.remove("selected");
+
+    // Clear other columns
+    document.querySelectorAll("#stateListContainer .loc-item-btn").forEach(b => b.classList.remove("selected"));
+    document.getElementById("districtListContainer").innerHTML = '<div style="padding: 10px; font-size: 12px; color: #94a3b8;">All India selected (no district restriction)</div>';
+    document.getElementById("cityAreaListContainer").innerHTML = '<div style="padding: 10px; font-size: 12px; color: #94a3b8;">All India selected</div>';
+
+    updateBreadcrumbDisplays();
+  }
+
+  function renderStatesList() {
+    const container = document.getElementById("stateListContainer");
+    container.innerHTML = "";
+
+    // Fetch from API or fallback
+    fetch("/api/locations/hierarchy/?level=states")
+      .then(res => res.json())
+      .then(data => {
+        const states = (data.success && data.states) ? data.states.map(s => s.name) : INITIAL_STATES;
+        states.forEach(sName => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "loc-item-btn" + (sName === selectedState ? " selected" : "");
+          btn.innerHTML = `<span>${sName}</span>${sName === selectedState ? '<span class="loc-item-check">✓</span>' : ''}`;
+          btn.onclick = () => selectState(sName);
+          container.appendChild(btn);
+        });
+      })
+      .catch(() => {
+        INITIAL_STATES.forEach(sName => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "loc-item-btn" + (sName === selectedState ? " selected" : "");
+          btn.innerHTML = `<span>${sName}</span>${sName === selectedState ? '<span class="loc-item-check">✓</span>' : ''}`;
+          btn.onclick = () => selectState(sName);
+          container.appendChild(btn);
+        });
+      });
+  }
+
+  function selectState(sName) {
+    selectedCountry = "India";
+    selectedState = sName;
+    selectedDistrict = "";
+    selectedCity = "";
+    selectedArea = "";
+
+    document.getElementById("countryIndiaBtn").classList.add("selected");
+    document.getElementById("countryAllIndiaBtn").classList.remove("selected");
+
+    // Highlight state
+    document.querySelectorAll("#stateListContainer .loc-item-btn").forEach(b => {
+      b.classList.toggle("selected", b.innerText.includes(sName));
+      b.innerHTML = `<span>${b.innerText.replace('✓', '').trim()}</span>${b.innerText.includes(sName) ? '<span class="loc-item-check">✓</span>' : ''}`;
+    });
+
+    renderDistrictsList(sName);
+    document.getElementById("cityAreaListContainer").innerHTML = '<div style="padding: 10px; font-size: 12px; color: #94a3b8;">Select a district first</div>';
+    updateBreadcrumbDisplays();
+  }
+
+  function renderDistrictsList(sName) {
+    const container = document.getElementById("districtListContainer");
+    container.innerHTML = '<div style="padding: 10px; font-size: 12px; color: #94a3b8;">Loading districts...</div>';
+
+    fetch(`/api/locations/hierarchy/?level=districts&state_name=${encodeURIComponent(sName)}`)
+      .then(res => res.json())
+      .then(data => {
+        const districts = (data.success && data.districts && data.districts.length) ? data.districts.map(d => d.name) : (STATE_DISTRICTS[sName] || []);
+        displayDistricts(districts);
+      })
+      .catch(() => {
+        displayDistricts(STATE_DISTRICTS[sName] || []);
+      });
+  }
+
+  function displayDistricts(distList) {
+    const container = document.getElementById("districtListContainer");
+    container.innerHTML = "";
+    if (!distList.length) {
+      container.innerHTML = '<div style="padding: 10px; font-size: 12px; color: #94a3b8;">No districts found</div>';
+      return;
+    }
+    distList.forEach(dName => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "loc-item-btn" + (dName === selectedDistrict ? " selected" : "");
+      btn.innerHTML = `<span>${dName}</span>${dName === selectedDistrict ? '<span class="loc-item-check">✓</span>' : ''}`;
+      btn.onclick = () => selectDistrict(dName);
+      container.appendChild(btn);
+    });
+  }
+
+  function selectDistrict(dName) {
+    selectedDistrict = dName;
+    selectedCity = "";
+    selectedArea = "";
+
+    document.querySelectorAll("#districtListContainer .loc-item-btn").forEach(b => {
+      b.classList.toggle("selected", b.innerText.includes(dName));
+      b.innerHTML = `<span>${b.innerText.replace('✓', '').trim()}</span>${b.innerText.includes(dName) ? '<span class="loc-item-check">✓</span>' : ''}`;
+    });
+
+    renderCityAreaList(dName);
+    updateBreadcrumbDisplays();
+  }
+
+  function renderCityAreaList(dName) {
+    const container = document.getElementById("cityAreaListContainer");
+    container.innerHTML = '<div style="padding: 10px; font-size: 12px; color: #94a3b8;">Loading cities & areas...</div>';
+
+    fetch(`/api/locations/hierarchy/?level=cities&district_name=${encodeURIComponent(dName)}`)
+      .then(res => res.json())
+      .then(data => {
+        let items = [];
+        if (data.success && data.cities && data.cities.length) {
+          items = data.cities.map(c => ({ name: c.name, type: "city" }));
+        }
+        if (DISTRICT_CITIES[dName]) {
+          items = DISTRICT_CITIES[dName];
+        }
+        displayCityAreas(items);
+      })
+      .catch(() => {
+        displayCityAreas(DISTRICT_CITIES[dName] || []);
+      });
+  }
+
+  function displayCityAreas(items) {
+    const container = document.getElementById("cityAreaListContainer");
+    container.innerHTML = "";
+    if (!items.length) {
+      container.innerHTML = '<div style="padding: 10px; font-size: 12px; color: #94a3b8;">No cities or areas listed</div>';
+      return;
+    }
+    items.forEach(item => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      const isSelected = (item.name === selectedCity || item.name === selectedArea);
+      btn.className = "loc-item-btn" + (isSelected ? " selected" : "");
+      btn.innerHTML = `<span>${item.type === 'area' ? '△ ' : ''}${item.name}</span>${isSelected ? '<span class="loc-item-check">✓</span>' : ''}`;
+      btn.onclick = () => selectCityArea(item.name, item.type);
+      container.appendChild(btn);
+    });
+  }
+
+  function selectCityArea(name, type) {
+    if (type === "area") {
+      selectedArea = name;
+    } else {
+      selectedCity = name;
+      selectedArea = "";
+    }
+
+    document.querySelectorAll("#cityAreaListContainer .loc-item-btn").forEach(b => {
+      b.classList.toggle("selected", b.innerText.includes(name));
+      b.innerHTML = `<span>${b.innerText.replace('✓', '').trim()}</span>${b.innerText.includes(name) ? '<span class="loc-item-check">✓</span>' : ''}`;
+    });
+
+    updateBreadcrumbDisplays();
+  }
+
+  function updateBreadcrumbDisplays() {
+    if (selectedCountry === "All India") {
+      fullBreadcrumb = "All India";
+    } else {
+      const parts = [selectedCountry];
+      if (selectedState) parts.push(selectedState);
+      if (selectedDistrict) parts.push(selectedDistrict);
+      if (selectedCity) parts.push(selectedCity);
+      if (selectedArea && selectedArea !== selectedCity) parts.push(selectedArea);
+      fullBreadcrumb = parts.join(" > ");
+    }
+
+    document.getElementById("locHeaderBreadcrumb").innerText = fullBreadcrumb;
+    document.getElementById("locFooterBreadcrumb").innerText = fullBreadcrumb;
+    document.getElementById("locDisplayLabel").innerText = fullBreadcrumb;
+    document.getElementById("hiddenLocationInput").value = fullBreadcrumb;
+
+    document.getElementById("hiddenStateInput").value = selectedState;
+    document.getElementById("hiddenDistrictInput").value = selectedDistrict;
+    document.getElementById("hiddenCityInput").value = selectedCity;
+    document.getElementById("hiddenAreaInput").value = selectedArea;
+  }
+
+  function clearLocationSelection() {
+    selectAllIndia();
+  }
+
+  function applyLocationSelection() {
+    document.getElementById("locationHierarchyPopover").classList.remove("active");
+    document.getElementById("mainJobSearchForm").submit();
+  }
+
+  // Client-side instant column filter inputs
+  function filterStateList(val) {
+    const v = val.toLowerCase();
+    document.querySelectorAll("#stateListContainer .loc-item-btn").forEach(b => {
+      b.style.display = b.innerText.toLowerCase().includes(v) ? "flex" : "none";
+    });
+  }
+
+  function filterDistrictList(val) {
+    const v = val.toLowerCase();
+    document.querySelectorAll("#districtListContainer .loc-item-btn").forEach(b => {
+      b.style.display = b.innerText.toLowerCase().includes(v) ? "flex" : "none";
+    });
+  }
+
+  function filterCityAreaList(val) {
+    const v = val.toLowerCase();
+    document.querySelectorAll("#cityAreaListContainer .loc-item-btn").forEach(b => {
+      b.style.display = b.innerText.toLowerCase().includes(v) ? "flex" : "none";
+    });
+  }
+
+  // ==========================================================================
+  // JOBIE CONTROLS: SORTING & GRID/LIST VIEW SWITCHER
+  // ==========================================================================
+  function handleSortChange(sortVal) {
+    const form = document.getElementById("mainJobSearchForm");
+    let sortInput = document.getElementById("hiddenSortInput");
+    if (!sortInput) {
+      sortInput = document.createElement("input");
+      sortInput.type = "hidden";
+      sortInput.name = "sort";
+      sortInput.id = "hiddenSortInput";
+      form.appendChild(sortInput);
+    }
+    sortInput.value = sortVal;
+    form.submit();
+  }
+
+  function setJobView(mode) {
+    const container = document.getElementById("jobCardsContainer");
+    const gridBtn = document.getElementById("gridViewBtn");
+    const listBtn = document.getElementById("listViewBtn");
+    if (!container) return;
+
+    if (mode === "list") {
+      container.classList.add("list-view");
+      if (gridBtn) gridBtn.classList.remove("active");
+      if (listBtn) listBtn.classList.add("active");
+      try { localStorage.setItem("hirenexa_job_view", "list"); } catch (e) { }
+    } else {
+      container.classList.remove("list-view");
+      if (gridBtn) gridBtn.classList.add("active");
+      if (listBtn) listBtn.classList.remove("active");
+      try { localStorage.setItem("hirenexa_job_view", "grid"); } catch (e) { }
+    }
+  }
+
+  // Restore user view preference
+  document.addEventListener("DOMContentLoaded", function () {
+    try {
+      const saved = localStorage.getItem("hirenexa_job_view");
+      if (saved === "list") {
+        setJobView("list");
+      }
+    } catch (e) { }
+  });
+</script>
+
+<!-- ==========================================================================
+     JOBIE-GRADE STYLING (MATCHING IMAGE 2 EXACT AESTHETIC)
+     ========================================================================== -->
+<style>
+  /* Suggestions Row */
+  .jobie-suggestions-row {
+    max-width: 1040px;
+    margin: 0 auto 20px auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .jobie-suggestions-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+    margin-right: 4px;
+  }
+
+  .jobie-suggestion-pill {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    color: #475569;
+    text-decoration: none;
+    border: 1px solid #e2e8f0;
+    transition: all 0.15s ease;
+  }
+
+  .jobie-suggestion-pill:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+  }
+
+  .jobie-suggestion-pill.active {
+    background: #4f28a9;
+    color: #ffffff;
+    border-color: #4f28a9;
+    box-shadow: 0 4px 12px rgba(79, 40, 169, 0.3);
+  }
+
+  /* Results Toolbar (Image 2) */
+  .jobie-results-toolbar {
+    max-width: 1040px;
+    margin: 0 auto 24px auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .jobie-results-heading {
+    font-size: 21px;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 3px 0;
+    letter-spacing: -0.02em;
+  }
+
+  .jobie-results-subheading {
+    font-size: 13px;
+    color: #64748b;
+    margin: 0;
+  }
+
+  .jobie-controls-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .jobie-toggle-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    transition: all 0.15s ease;
+  }
+
+  .jobie-toggle-pill:hover {
+    border-color: #cbd5e1;
+    background: #f8fafc;
+  }
+
+  .jobie-toggle-pill.active {
+    background: #4f28a9;
+    color: #ffffff;
+    border-color: #4f28a9;
+  }
+
+  .toggle-circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #cbd5e1;
+    display: inline-block;
+  }
+
+  .jobie-toggle-pill.active .toggle-circle {
+    background: #ffffff;
+    border-color: #ffffff;
+  }
+
+  .jobie-sort-select {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .view-switch-btns {
+    display: flex;
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 2px;
+    gap: 2px;
+  }
+
+  .view-btn {
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    width: 32px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .view-btn.active {
+    background: #ffffff;
+    color: #4f28a9;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-weight: 700;
+  }
+
+  /* 3x3 Card Grid (Image 2) */
+  .jobie-cards-grid {
+    max-width: 1040px;
+    margin: 0 auto 36px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .jobie-card {
+    background: #ffffff;
+    border: 1px solid #edf0f7;
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.03);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+  }
+
+  .jobie-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(79, 40, 169, 0.08);
+    border-color: #c7d2fe;
+  }
+
+  .jobie-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .jobie-company-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  .jobie-job-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+    line-height: 1.35;
+  }
+
+  .jobie-job-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .jobie-job-title a:hover {
+    color: #4f28a9;
+  }
+
+  /* Company Avatars (Image 2 Colors) */
+  .jobie-company-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    font-weight: 800;
+    color: #ffffff;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  }
+
+  .company-badge-blue {
+    background: #2563eb;
+  }
+
+  .company-badge-orange {
+    background: #ea580c;
+  }
+
+  .company-badge-pink {
+    background: #db2777;
+  }
+
+  .company-badge-green {
+    background: #059669;
+  }
+
+  .company-badge-cyan {
+    background: #0891b2;
+  }
+
+  .company-badge-yellow {
+    background: #d97706;
+  }
+
+  .company-badge-purple {
+    background: #7c3aed;
+  }
+
+  .company-badge-indigo {
+    background: #4f46e5;
+  }
+
+  /* Salary */
+  .jobie-salary-row {
+    font-size: 15px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 8px;
+  }
+
+  .jobie-salary-period {
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748b;
+  }
+
+  /* Snippet */
+  .jobie-snippet {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.5;
+    margin: 0 0 14px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 38px;
+  }
+
+  /* Vacancy Progress */
+  .jobie-vacancy-bar {
+    background: #f8fafc;
+    border: 1px dashed #e2e8f0;
+    border-radius: 8px;
+    padding: 7px 10px;
+    margin-bottom: 12px;
+    font-size: 11.5px;
+  }
+
+  .jobie-vacancy-text {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    color: #334155;
+  }
+
+  .jobie-remaining {
+    color: #059669;
+    font-weight: 700;
+  }
+
+  .jobie-progress-track {
+    width: 100%;
+    height: 4px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .jobie-progress-fill {
+    height: 100%;
+    background: #10b981;
+  }
+
+  /* Skills */
+  .jobie-skills-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 14px;
+  }
+
+  .jobie-skill-pill {
+    font-size: 11px;
+    font-weight: 600;
+    background: #f1f5f9;
+    color: #475569;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  /* Card Footer */
+  .jobie-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #f8fafc;
+    padding-top: 12px;
+    margin-top: auto;
+  }
+
+  .jobie-workmode-pill {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .mode-remote {
+    background: #f3e8ff;
+    color: #7c3aed;
+  }
+
+  .mode-hybrid {
+    background: #fef3c7;
+    color: #b45309;
+  }
+
+  .mode-onsite {
+    background: #e0f2fe;
+    color: #0369a1;
+  }
+
+  .jobie-location-tag {
+    font-size: 12.5px;
+    color: #64748b;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Hover Action Bar */
+  .jobie-card-hover-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #f1f5f9;
+  }
+
+  .jobie-btn-save {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .jobie-btn-save:hover {
+    background: #fef3c7;
+    color: #d97706;
+    border-color: #fde68a;
+  }
+
+  .jobie-btn-apply {
+    background: #4f28a9;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 7px 16px;
+    font-size: 12.5px;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.15s ease;
+    box-shadow: 0 4px 12px rgba(79, 40, 169, 0.25);
+  }
+
+  .jobie-btn-apply:hover {
+    background: #432194;
+    box-shadow: 0 6px 16px rgba(79, 40, 169, 0.35);
+  }
+
+  /* List View Mode */
+  .jobie-cards-grid.list-view {
+    grid-template-columns: 1fr;
+  }
+
+  .jobie-cards-grid.list-view .jobie-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 24px;
+  }
+
+  .jobie-cards-grid.list-view .jobie-card-header {
+    flex-direction: row-reverse;
+    margin-bottom: 0;
+    min-width: 260px;
+    justify-content: flex-end;
+  }
+
+  .jobie-cards-grid.list-view .jobie-snippet {
+    min-height: auto;
+    margin-bottom: 0;
+  }
+
+  .jobie-cards-grid.list-view .jobie-card-footer {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  .jobie-cards-grid.list-view .jobie-card-hover-actions {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+  }
+
+  /* Pagination (Image 2) */
+  .jobie-pagination-wrap {
+    max-width: 1040px;
+    margin: 24px auto 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 4px;
+    border-top: 1px solid #f1f5f9;
+  }
+
+  .jobie-pagination-info {
+    font-size: 13px;
+    color: #64748b;
+  }
+
+  .jobie-pagination-info strong {
+    color: #1e293b;
+  }
+
+  .jobie-pagination-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .jobie-page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #475569;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    transition: all 0.15s ease;
+  }
+
+  .jobie-page-btn:hover:not(.jobie-page-disabled):not(.active) {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #1e293b;
+  }
+
+  .jobie-page-num {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 8px;
+  }
+
+  .jobie-page-btn.active {
+    background: #4f28a9;
+    color: #ffffff;
+    border-color: #4f28a9;
+    box-shadow: 0 4px 12px rgba(79, 40, 169, 0.3);
+  }
+
+  .jobie-page-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f8fafc;
+  }
+</style>
+{% endblock %}

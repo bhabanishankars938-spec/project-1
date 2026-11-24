@@ -1,0 +1,62 @@
+{% extends "accounts/settings/settings_base.html" %}
+
+{% block title %}Career & Job Preferences · HireNexa Settings{% endblock %}
+
+{% block settings_content %}
+<div class="settings-card">
+  <div class="card-header-bar">
+    <div class="card-title-group">
+      <h2 class="card-title">Career Targets & Job Matching Preferences</h2>
+      <p class="card-subtitle">Set your desired position, expected compensation, work location, and notice period availability.</p>
+    </div>
+  </div>
+
+  <form method="post" class="settings-form">
+    {% csrf_token %}
+
+    <div class="form-row-2col">
+      <div class="form-group">
+        <label for="desiredRoleInput" class="form-label">Desired Job Title / Target Role</label>
+        <input type="text" name="desired_role" id="desiredRoleInput" value="{{ job_prefs.desired_role|default:'' }}" class="form-input" placeholder="e.g. Senior Backend Engineer / AI Architect">
+      </div>
+
+      <div class="form-group">
+        <label for="salaryInput" class="form-label">Expected Annual CTC / Hourly Rate</label>
+        <input type="text" name="target_salary" id="salaryInput" value="{{ job_prefs.target_salary|default:'' }}" class="form-input" placeholder="e.g. ₹20,00,000 / year or $50 / hr">
+      </div>
+    </div>
+
+    <div class="form-row-2col">
+      <div class="form-group">
+        <label for="preferredLocInput" class="form-label">Preferred Cities / Locations</label>
+        <input type="text" name="preferred_location" id="preferredLocInput" value="{{ job_prefs.preferred_location|default:'' }}" class="form-input" placeholder="e.g. Bengaluru, Hyderabad, Bhubaneswar, Remote">
+      </div>
+
+      <div class="form-group">
+        <label for="remoteSelect" class="form-label">Workplace Policy Preference</label>
+        <select name="remote_preference" id="remoteSelect" class="form-input">
+          <option value="REMOTE" {% if job_prefs.remote_preference == 'REMOTE' %}selected{% endif %}>100% Fully Remote</option>
+          <option value="HYBRID" {% if job_prefs.remote_preference == 'HYBRID' %}selected{% endif %}>Hybrid (Office + Remote flexibility)</option>
+          <option value="ONSITE" {% if job_prefs.remote_preference == 'ONSITE' %}selected{% endif %}>Onsite / In-Office</option>
+          <option value="ANY" {% if job_prefs.remote_preference == 'ANY' or not job_prefs.remote_preference %}selected{% endif %}>Open to All Arrangements</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="availSelect" class="form-label">Current Availability Status</label>
+      <select name="availability_status" id="availSelect" class="form-input" style="max-width: 400px;">
+        <option value="AVAILABLE" {% if user_settings.availability_status == 'AVAILABLE' %}selected{% endif %}>🚀 Available Immediately (Zero Notice Period)</option>
+        <option value="NOTICE" {% if user_settings.availability_status == 'NOTICE' %}selected{% endif %}>⏳ Serving Notice / 15-30 Days Notice Period</option>
+        <option value="NOT_LOOKING" {% if user_settings.availability_status == 'NOT_LOOKING' %}selected{% endif %}>⏸️ Not Looking Currently (Passive Profile)</option>
+      </select>
+    </div>
+
+    <div class="form-submit-row">
+      <button type="submit" class="btn btn-primary btn-md">
+        Save Job Preferences
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

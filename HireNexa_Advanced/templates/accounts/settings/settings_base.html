@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Settings · HireNexa Intelligence{% endblock %}
+
+{% block content %}
+<div class="settings-page-wrapper">
+  
+  <!-- Breadcrumb & Settings Header -->
+  <div class="settings-header-banner">
+    <div class="settings-header-left">
+      <div class="settings-breadcrumbs">
+        <a href="{% url 'home' %}">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="{% url 'dashboard' %}">Workspace</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">Settings</span>
+      </div>
+      <h1 class="settings-main-title">Account & Platform Settings</h1>
+      <p class="settings-sub-text">
+        Manage your profile identity, role configurations, security verification, and preferences.
+      </p>
+    </div>
+    <div class="settings-header-right">
+      <a href="{% url 'dashboard' %}" class="btn btn-outline btn-sm">
+        ← Return to {{ current_role_display }} Workspace
+      </a>
+    </div>
+  </div>
+
+  <!-- Settings Grid Layout: Left Sidebar + Right Content Pane -->
+  <div class="settings-layout-grid">
+    
+    <!-- LEFT SIDEBAR TABS -->
+    <aside class="settings-sidebar" aria-label="Settings navigation">
+      
+      <!-- Category 1: Personal Settings -->
+      <div class="sidebar-category">
+        <div class="sidebar-category-title">Personal Settings</div>
+        <nav class="sidebar-tab-list">
+          <a href="{% url 'settings_profile' %}" class="sidebar-tab {% if active_tab == 'profile' %}active{% endif %}">
+            <span class="tab-icon">👤</span>
+            <span class="tab-label">My Profile</span>
+          </a>
+          <a href="{% url 'settings_account' %}" class="sidebar-tab {% if active_tab == 'account' %}active{% endif %}">
+            <span class="tab-icon">⚙️</span>
+            <span class="tab-label">Account & Email</span>
+          </a>
+          <a href="{% url 'settings_security' %}" class="sidebar-tab {% if active_tab == 'security' %}active{% endif %}">
+            <span class="tab-icon">🔒</span>
+            <span class="tab-label">Security & 2FA</span>
+          </a>
+          <a href="{% url 'settings_notifications' %}" class="sidebar-tab {% if active_tab == 'notifications' %}active{% endif %}">
+            <span class="tab-icon">🔔</span>
+            <span class="tab-label">Notifications</span>
+          </a>
+          <a href="{% url 'settings_appearance' %}" class="sidebar-tab {% if active_tab == 'appearance' %}active{% endif %}">
+            <span class="tab-icon">🎨</span>
+            <span class="tab-label">Theme & Display</span>
+          </a>
+          <a href="{% url 'settings_privacy' %}" class="sidebar-tab {% if active_tab == 'privacy' %}active{% endif %}">
+            <span class="tab-icon">🛡️</span>
+            <span class="tab-label">Privacy & GDPR</span>
+          </a>
+          <a href="{% url 'settings_connected_accounts' %}" class="sidebar-tab {% if active_tab == 'connected_accounts' %}active{% endif %}">
+            <span class="tab-icon">🔗</span>
+            <span class="tab-label">Connected Accounts</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Category 2: Role Specific Extensions -->
+      <div class="sidebar-category">
+        <div class="sidebar-category-title">{{ current_role_display }} Features</div>
+        <nav class="sidebar-tab-list">
+          {% if current_role == 'CANDIDATE' or user.is_candidate %}
+            <a href="{% url 'settings_preferences' %}" class="sidebar-tab {% if active_tab == 'preferences' %}active{% endif %}">
+              <span class="tab-icon">🎯</span>
+              <span class="tab-label">Job Preferences</span>
+            </a>
+            <a href="{% url 'resume_upload' %}" class="sidebar-tab">
+              <span class="tab-icon">📄</span>
+              <span class="tab-label">Upload Resumes</span>
+            </a>
+          {% endif %}
+
+          {% if current_role == 'FREELANCER' or user.is_freelancer %}
+            <a href="{% url 'settings_preferences' %}" class="sidebar-tab {% if active_tab == 'preferences' %}active{% endif %}">
+              <span class="tab-icon">🎯</span>
+              <span class="tab-label">Gig Availability</span>
+            </a>
+            <a href="{% url 'settings_payout' %}" class="sidebar-tab {% if active_tab == 'payout' %}active{% endif %}">
+              <span class="tab-icon">💳</span>
+              <span class="tab-label">Payout & Banking</span>
+            </a>
+          {% endif %}
+
+          {% if current_role == 'COMPANY_ADMIN' or current_role == 'RECRUITER' or user.is_company_admin or user.is_recruiter %}
+            <a href="{% url 'settings_company' %}" class="sidebar-tab {% if active_tab == 'company' %}active{% endif %}">
+              <span class="tab-icon">🏢</span>
+              <span class="tab-label">Company Branding</span>
+            </a>
+            <a href="{% url 'settings_team' %}" class="sidebar-tab {% if active_tab == 'team' %}active{% endif %}">
+              <span class="tab-icon">👥</span>
+              <span class="tab-label">Team Members & Seats</span>
+            </a>
+          {% endif %}
+        </nav>
+      </div>
+
+      <!-- Category 3: Platform Governance (Owner / Admin Only) -->
+      {% if is_platform_owner_role or user.is_owner or user.is_superuser %}
+        <div class="sidebar-category">
+          <div class="sidebar-category-title" style="color: #fbbf24;">🛡️ Platform Governance</div>
+          <nav class="sidebar-tab-list">
+            <a href="{% url 'settings_platform' %}" class="sidebar-tab {% if active_tab == 'platform' %}active{% endif %}" style="border-left-color: #fbbf24;">
+              <span class="tab-icon">⚙️</span>
+              <span class="tab-label" style="font-weight: 700;">Platform Settings</span>
+            </a>
+            <a href="{% url 'owner_dashboard' %}" class="sidebar-tab">
+              <span class="tab-icon">📊</span>
+              <span class="tab-label">Owner Analytics</span>
+            </a>
+          </nav>
+        </div>
+      {% endif %}
+
+    </aside>
+
+    <!-- RIGHT CONTENT PANE -->
+    <main class="settings-content-pane" id="settingsFormContainer">
+      {% block settings_content %}{% endblock %}
+    </main>
+
+  </div>
+</div>
+
+<!-- Unsaved Changes Protection Script -->
+<script>
+  (function() {
+    let formIsDirty = false;
+    const forms = document.querySelectorAll('#settingsFormContainer form');
+    forms.forEach(form => {
+      form.addEventListener('input', () => { formIsDirty = true; });
+      form.addEventListener('submit', () => { formIsDirty = false; });
+    });
+
+    window.addEventListener('beforeunload', (e) => {
+      if (formIsDirty) {
+        e.preventDefault();
+        e.returnValue = 'You have unsaved changes in your settings. Are you sure you want to discard them?';
+      }
+    });
+  })();
+</script>
+{% endblock %}

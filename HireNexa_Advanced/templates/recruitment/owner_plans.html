@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}SaaS Subscription Plans Governance · HireNexa Platform Owner{% endblock %}
+
+{% block content %}
+<div style="max-width: 1040px; margin: 0 auto; padding-bottom: 60px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+        <a href="{% url 'owner_dashboard' %}" style="color: var(--slate-500); font-size: 13px; text-decoration: none;">← Owner Control Center</a>
+        <span style="color: var(--slate-400); font-size: 13px;">/</span>
+        <span style="color: var(--primary); font-size: 13px; font-weight: 600;">Pricing & Subscriptions</span>
+      </div>
+      <h1 style="font-size: 28px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.03em;">
+        SaaS Subscription Tiers
+      </h1>
+      <p style="color: var(--slate-600); font-size: 14px; margin-top: 4px;">
+        Define and manage commercial subscription tiers, quota boundaries, and AI capability entitlements.
+      </p>
+    </div>
+    <a href="{% url 'owner_create_plan' %}" class="btn btn-primary btn-lg">
+      + Create Subscription Tier
+    </a>
+  </div>
+
+  <div class="detail-main" style="padding: 0; overflow: hidden;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: left;">
+      <thead>
+        <tr style="background: var(--slate-50); border-bottom: 1px solid var(--slate-200); color: var(--slate-600);">
+          <th style="padding: 12px 18px;">Plan Tier & Name</th>
+          <th style="padding: 12px 18px;">Monthly Fee</th>
+          <th style="padding: 12px 18px;">Annual Fee</th>
+          <th style="padding: 12px 18px; text-align: center;">Job Quota</th>
+          <th style="padding: 12px 18px; text-align: center;">Resumes / Mo</th>
+          <th style="padding: 12px 18px; text-align: center;">HR Seats</th>
+          <th style="padding: 12px 18px; text-align: center;">AI Match</th>
+          <th style="padding: 12px 18px;">Status</th>
+          <th style="padding: 12px 18px; text-align: right;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for plan in plans %}
+          <tr style="border-bottom: 1px solid var(--slate-100);">
+            <td style="padding: 14px 18px;">
+              <strong style="color: var(--slate-900); font-size: 14px;">{{ plan.name }}</strong>
+              <span class="meta-badge" style="background: var(--slate-100); color: var(--slate-600); margin-left: 6px;">{{ plan.tier }}</span>
+              <p style="font-size: 11px; color: var(--slate-500); margin: 3px 0 0 0;">{{ plan.description|truncatechars:50 }}</p>
+            </td>
+            <td style="padding: 14px 18px; font-weight: 700; color: #059669;">
+              {{ plan.currency }} {{ plan.monthly_price }}
+            </td>
+            <td style="padding: 14px 18px; color: var(--slate-700);">
+              {{ plan.currency }} {{ plan.annual_price }}
+            </td>
+            <td style="padding: 14px 18px; text-align: center; font-weight: 600;">
+              {{ plan.max_jobs }}
+            </td>
+            <td style="padding: 14px 18px; text-align: center; font-weight: 600;">
+              {{ plan.max_resumes_per_month }}
+            </td>
+            <td style="padding: 14px 18px; text-align: center; font-weight: 600;">
+              {{ plan.max_recruiters }}
+            </td>
+            <td style="padding: 14px 18px; text-align: center;">
+              {% if plan.ai_matching_enabled %}
+                <span style="color: #059669; font-weight: 700;">✓ Yes</span>
+              {% else %}
+                <span style="color: var(--slate-400);">No</span>
+              {% endif %}
+            </td>
+            <td style="padding: 14px 18px;">
+              {% if plan.is_active %}
+                <span class="meta-badge" style="background: #ecfdf5; color: #059669; font-weight: 600;">Active</span>
+              {% else %}
+                <span class="meta-badge" style="background: #f1f5f9; color: #64748b;">Inactive</span>
+              {% endif %}
+            </td>
+            <td style="padding: 14px 18px; text-align: right;">
+              <div style="display: flex; gap: 6px; justify-content: flex-end;">
+                <a href="{% url 'owner_edit_plan' plan.pk %}" class="btn btn-ghost btn-sm">Edit</a>
+                <form method="post" action="{% url 'owner_delete_plan' plan.pk %}" style="display: inline;" onsubmit="return confirm('Delete tier {{ plan.name }}?');">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--rose-600);">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="9" style="padding: 30px; text-align: center; color: var(--slate-400);">
+              No dynamic subscription tiers defined yet. <a href="{% url 'owner_create_plan' %}" style="color: var(--primary);">Create your first plan →</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

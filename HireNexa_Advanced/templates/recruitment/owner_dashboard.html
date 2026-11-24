@@ -1,0 +1,648 @@
+{% extends "base.html" %}
+{% block title %}Platform Owner Master Dashboard · HireNexa Intelligence{% endblock %}
+
+{% block content %}
+<!-- Top Header & Administrative Status -->
+<div class="section-header" style="align-items: center; margin-bottom: 24px; border-bottom: 1px solid var(--slate-200); padding-bottom: 20px;">
+  <div>
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+      <span class="meta-badge" style="background: #0f172a; color: #fbbf24; font-weight: 700; font-size: 11px;">
+        PLATFORM OWNER & SUPER ADMIN
+      </span>
+      <span class="meta-badge" style="background: var(--emerald-50); color: var(--emerald-600); font-weight: 700; font-size: 11px;">
+        {{ system_status }}
+      </span>
+    </div>
+    <h1 style="font-size: 32px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.03em;">
+      Master Administration Dashboard
+    </h1>
+    <p style="color: var(--slate-600); font-size: 15px; margin-top: 4px;">
+      Centralized governance across all registered companies, HR workspaces, platform vacancies, broadcast notices, and candidate evaluation workflows.
+    </p>
+  </div>
+  <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+    <a href="{% url 'owner_plans_list' %}" class="btn btn-outline btn-lg">
+      SaaS Plans & Pricing
+    </a>
+    <a href="{% url 'news_create' %}" class="btn btn-outline btn-lg">
+      + Post Notice
+    </a>
+    <a href="{% url 'job_create' %}" class="btn btn-primary btn-lg">
+      + Post Vacancy
+    </a>
+    <a href="{% url 'owner_export_report' %}" class="btn btn-outline btn-lg" style="color: var(--slate-800); border-color: var(--slate-300);">
+      Export Audit CSV
+    </a>
+  </div>
+</div>
+
+<!-- 12-Metric Enterprise KPI Grid (100% Real Database Calculations) -->
+<section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-bottom: 28px;">
+  <div class="stat-box" style="padding: 16px;">
+    <span class="stat-value" style="color: #059669;">{{ kpis.total_companies }}</span>
+    <span class="stat-label">Total Companies</span>
+    <p class="stat-desc">
+      <span style="color: #059669; font-weight: 700;">{{ kpis.active_companies }} active</span> · 
+      <span style="color: #d97706; font-weight: 700;">{{ kpis.pending_companies }} pending</span> · 
+      <span style="color: #e11d48; font-weight: 700;">{{ kpis.suspended_companies }} suspended</span>
+    </p>
+  </div>
+  <div class="stat-box" style="padding: 16px;">
+    <span class="stat-value" style="color: var(--primary);">{{ kpis.total_candidates }}</span>
+    <span class="stat-label">Total Candidates</span>
+    <p class="stat-desc">Registered talent & job seekers.</p>
+  </div>
+  <div class="stat-box" style="padding: 16px;">
+    <span class="stat-value" style="color: #0d9488;">{{ kpis.total_freelancers }}</span>
+    <span class="stat-label">Freelancers</span>
+    <p class="stat-desc">Independent contractors & gigs.</p>
+  </div>
+  <div class="stat-box" style="padding: 16px;">
+    <span class="stat-value" style="color: #d97706;">{{ kpis.total_hr_users }}</span>
+    <span class="stat-label">HR / Recruiters</span>
+    <p class="stat-desc">Enterprise hiring managers & seats.</p>
+  </div>
+  <div class="stat-box" style="padding: 16px;">
+    <span class="stat-value" style="color: #7c3aed;">{{ kpis.total_resumes }}</span>
+    <span class="stat-label">Uploaded Resumes</span>
+    <p class="stat-desc">Verified PDF/DOCX documents.</p>
+  </div>
+  <div class="stat-box" style="padding: 16px;">
+    <span class="stat-value" style="color: #0284c7;">{{ kpis.total_active_jobs }} / {{ kpis.total_jobs }}</span>
+    <span class="stat-label">Active / Total Jobs</span>
+    <p class="stat-desc">Live open requisitions.</p>
+  </div>
+  <div class="stat-box" style="padding: 16px;">
+    <span class="stat-value" style="color: var(--slate-900);">{{ kpis.total_applications }}</span>
+    <span class="stat-label">Applications</span>
+    <p class="stat-desc">Submitted across positions.</p>
+  </div>
+  <div class="stat-box" style="padding: 16px;">
+    <span class="stat-value" style="color: #10b981;">{{ kpis.total_interviews }}</span>
+    <span class="stat-label">Interviews</span>
+    <p class="stat-desc">Scheduled round assessments.</p>
+  </div>
+  <div class="stat-box" style="padding: 16px;">
+    <span class="stat-value" style="color: #e11d48;">{{ kpis.total_vacancies }}</span>
+    <span class="stat-label">Total Hiring Target</span>
+    <p class="stat-desc">Target headcount across firms.</p>
+  </div>
+  <div class="stat-box" style="padding: 16px;">
+    <span class="stat-value" style="color: #6366f1;">{{ kpis.total_hired }}</span>
+    <span class="stat-label">Total Hired (Unique)</span>
+    <p class="stat-desc">Final confirmed recruits.</p>
+  </div>
+  <div class="stat-box" style="padding: 16px;">
+    <span class="stat-value" style="color: #0891b2;">{{ kpis.total_active_subscriptions }}</span>
+    <span class="stat-label">Active Subscriptions</span>
+    <p class="stat-desc">Client enterprise accounts.</p>
+  </div>
+  <div class="stat-box" style="padding: 16px;">
+    <span class="stat-value" style="color: #059669;">₹{{ kpis.mrr|floatformat:2 }}</span>
+    <span class="stat-label">Verified MRR (30d)</span>
+    <p class="stat-desc">Based on verified gateway payments.</p>
+  </div>
+</section>
+
+<!-- System & Database Health Banner -->
+<div style="background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 16px 22px; margin-bottom: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+  <div style="display: flex; align-items: center; gap: 14px;">
+    <div style="width: 36px; height: 36px; border-radius: 50%; background: #ecfdf5; color: #059669; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;">
+      ✓
+    </div>
+    <div>
+      <strong style="color: var(--slate-900); font-size: 14px; display: block;">Central Database Health: {{ db_status }}</strong>
+      <span style="color: var(--slate-500); font-size: 12px;">Engine: <code>{{ db_engine }}</code> · Argon2 Password Hashing: Active · 5-Tier RBAC Enforced</span>
+    </div>
+  </div>
+  <div style="display: flex; gap: 8px;">
+    <a href="{% url 'owner_plans_list' %}" class="btn btn-outline btn-sm">Manage Pricing Plans →</a>
+    <a href="{% url 'admin:index' %}" target="_blank" class="btn btn-outline btn-sm">Django Console →</a>
+  </div>
+</div>
+
+<!-- =========================================================================
+     OWNER GOVERNANCE QUEUE: PENDING COMPANY REGISTRATIONS
+     ========================================================================= -->
+{% if pending_orgs %}
+<div class="section-header" style="margin-top: 10px;">
+  <div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <h2 class="section-title">Pending Company Registrations</h2>
+      <span class="meta-badge" style="background: #fef3c7; color: #b45309; font-weight: 700;">{{ pending_orgs.count }} Awaiting Verification</span>
+    </div>
+    <p class="section-subtitle">Review corporate credentials, legal name, and business identity before granting multi-tenant access.</p>
+  </div>
+</div>
+
+<div class="detail-main" style="padding: 0; overflow: hidden; margin-bottom: 32px; border: 1px solid #fed7aa;">
+  <table style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: left;">
+    <thead>
+      <tr style="background: #fffbeb; border-bottom: 1px solid #fde68a; color: #92400e; font-weight: 700;">
+        <th style="padding: 12px 16px;">Company Legal Name</th>
+        <th style="padding: 12px 16px;">Industry / Scale</th>
+        <th style="padding: 12px 16px;">Location</th>
+        <th style="padding: 12px 16px;">Registered Date</th>
+        <th style="padding: 12px 16px; text-align: right;">Review & Decision</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for org in pending_orgs %}
+        <tr style="border-bottom: 1px solid var(--slate-100);">
+          <td style="padding: 12px 16px;">
+            <strong style="color: var(--slate-900); font-size: 14px;">
+              <a href="{% url 'owner_company_detail' org.pk %}">{{ org.name }}</a>
+            </strong>
+            {% if org.website %}<a href="{{ org.website }}" target="_blank" style="font-size: 11px; color: var(--primary); display: block;">{{ org.website }} ↗</a>{% endif %}
+          </td>
+          <td style="padding: 12px 16px; color: var(--slate-600);">
+            {{ org.industry|default:"Technology" }} · {{ org.company_size|default:"50-200" }}
+          </td>
+          <td style="padding: 12px 16px; color: var(--slate-600);">
+            {{ org.location|default:"Not specified" }}
+          </td>
+          <td style="padding: 12px 16px; color: var(--slate-500);">
+            {{ org.created_at|date:"M d, Y" }}
+          </td>
+          <td style="padding: 12px 16px; text-align: right;">
+            <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
+              <a href="{% url 'owner_company_detail' org.pk %}" class="btn btn-ghost btn-sm">Inspect</a>
+              <form method="post" action="{% url 'owner_approve_org' org.pk %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-sm" style="background: #059669; border-color: #059669;">
+                  ✓ Approve
+                </button>
+              </form>
+              <form method="post" action="{% url 'owner_reject_org' org.pk %}" style="display: inline;" onsubmit="return confirm('Reject registration for {{ org.name }}?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--rose-600);">
+                  ✕ Reject
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+  <div>
+    <a href="{% url 'admin:index' %}" target="_blank" class="btn btn-outline btn-sm">
+      Open Django Database Console →
+    </a>
+  </div>
+</div>
+
+<!-- =========================================================================
+     AUTHOR SECTION 1: GLOBAL VACANCY GOVERNANCE & MODERATION (ADD / DELETE)
+     ========================================================================= -->
+<div class="section-header" style="margin-top: 24px;">
+  <div>
+    <h2 class="section-title">Platform Vacancies & Headcount Governance</h2>
+    <p class="section-subtitle">Author controls to review, feature on homepage, adjust quota, or permanently delete job vacancies across all client companies.</p>
+  </div>
+  <a href="{% url 'job_create' %}" class="btn btn-primary btn-sm">+ Post Platform Vacancy</a>
+</div>
+
+<div class="detail-main" style="padding: 0; overflow: hidden; margin-bottom: 36px;">
+  <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+    <thead>
+      <tr style="background: var(--slate-50); border-bottom: 1px solid var(--slate-200); color: var(--slate-600); text-align: left;">
+        <th style="padding: 12px 16px;">Vacancy Role & Stream</th>
+        <th style="padding: 12px 16px;">Company / Org</th>
+        <th style="padding: 12px 16px; text-align: center;">Target Quota</th>
+        <th style="padding: 12px 16px; text-align: center;">Hired</th>
+        <th style="padding: 12px 16px; text-align: center;">Featured</th>
+        <th style="padding: 12px 16px;">Status</th>
+        <th style="padding: 12px 16px; text-align: right;">Author Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for job in company_hiring_posts %}
+        <tr style="border-bottom: 1px solid var(--slate-100);">
+          <td style="padding: 12px 16px;">
+            <strong style="color: var(--slate-900); display: block;">
+              <a href="{% url 'job_detail' job.pk %}">{{ job.title }}</a>
+            </strong>
+            <span style="font-size: 11px; color: var(--slate-500);">
+              {{ job.get_target_course_display }} · {{ job.department|default:"Engineering" }}
+            </span>
+          </td>
+          <td style="padding: 12px 16px; color: var(--slate-700);">
+            <strong>{{ job.company_name }}</strong>
+            <span style="font-size: 11px; color: var(--slate-400); display: block;">By {{ job.recruiter.username }}</span>
+          </td>
+          <td style="padding: 12px 16px; text-align: center;">
+            <div style="display: inline-flex; align-items: center; gap: 4px;">
+              <strong style="font-size: 14px; color: var(--primary);">{{ job.vacancies }}</strong>
+              <form method="post" action="{% url 'job_headcount_adjust' job.pk %}" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="delta" value="-1">
+                <button type="submit" class="btn btn-ghost btn-sm" style="padding: 0 4px; font-size: 11px; border: 1px solid var(--slate-200);" title="Decrement">-</button>
+              </form>
+              <form method="post" action="{% url 'job_headcount_adjust' job.pk %}" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="delta" value="1">
+                <button type="submit" class="btn btn-ghost btn-sm" style="padding: 0 4px; font-size: 11px; border: 1px solid var(--slate-200);" title="Increment">+</button>
+              </form>
+            </div>
+          </td>
+          <td style="padding: 12px 16px; text-align: center; color: #059669; font-weight: 700;">
+            {{ job.hired_count }}
+          </td>
+          <td style="padding: 12px 16px; text-align: center;">
+            <form method="post" action="{% url 'owner_toggle_job_featured' job.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-ghost btn-sm" style="font-size: 12px; font-weight: 700; color: {% if job.is_featured %}#d97706{% else %}var(--slate-400){% endif %};" title="Toggle Homepage Featured">
+                {% if job.is_featured %}★ Featured{% else %}☆ Normal{% endif %}
+              </button>
+            </form>
+          </td>
+          <td style="padding: 12px 16px;">
+            {% if job.status == 'ACTIVE' %}
+              <span class="meta-badge" style="background: #ecfdf5; color: #059669; font-weight: 700;">● Active</span>
+            {% elif job.status == 'PAUSED' %}
+              <span class="meta-badge" style="background: #fffbeb; color: #d97706; font-weight: 700;">⏸ Paused</span>
+            {% else %}
+              <span class="meta-badge" style="background: #f1f5f9; color: #64748b;">{{ job.get_status_display }}</span>
+            {% endif %}
+          </td>
+          <td style="padding: 12px 16px; text-align: right;">
+            <div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center;">
+              <a href="{% url 'applicants' job.pk %}" class="btn btn-ghost btn-sm" title="View Pipeline">
+                Pipeline ({{ job.applications.count }})
+              </a>
+              <a href="{% url 'job_edit' job.pk %}" class="btn btn-ghost btn-sm" title="Edit Vacancy">
+                Edit
+              </a>
+              <form method="post" action="{% url 'job_delete' job.pk %}" style="display: inline;" onsubmit="return confirm('Author Delete: Permanently remove vacancy {{ job.title }}?');">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="force_delete">
+                <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--rose-600);" title="Hard Delete Vacancy">
+                  Delete
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="7" style="padding: 24px; text-align: center; color: var(--slate-400);">No vacancies found in database.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- =========================================================================
+     AUTHOR SECTION 2: PLATFORM BROADCASTS & NOTICES (ADD / DELETE)
+     ========================================================================= -->
+<div class="section-header" style="margin-top: 24px;">
+  <div>
+    <h2 class="section-title">Platform Broadcasts, Circulars & Announcements</h2>
+    <p class="section-subtitle">Author controls to broadcast official circulars, placement season dates, or system maintenance notices.</p>
+  </div>
+  <a href="{% url 'news_create' %}" class="btn btn-primary btn-sm">+ Publish New Notice</a>
+</div>
+
+<div class="detail-main" style="padding: 0; overflow: hidden; margin-bottom: 36px;">
+  <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+    <thead>
+      <tr style="background: var(--slate-50); border-bottom: 1px solid var(--slate-200); color: var(--slate-600); text-align: left;">
+        <th style="padding: 12px 16px;">Notice Title</th>
+        <th style="padding: 12px 16px;">Scope / Org</th>
+        <th style="padding: 12px 16px;">Category</th>
+        <th style="padding: 12px 16px;">Audience</th>
+        <th style="padding: 12px 16px;">Priority</th>
+        <th style="padding: 12px 16px;">Published</th>
+        <th style="padding: 12px 16px; text-align: right;">Author Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for notice in announcements %}
+        <tr style="border-bottom: 1px solid var(--slate-100);">
+          <td style="padding: 12px 16px;">
+            <strong style="color: var(--slate-900);">
+              <a href="{% url 'news_detail' notice.slug %}">{{ notice.title }}</a>
+            </strong>
+            <span style="font-size: 11px; color: var(--slate-500); display: block;">{{ notice.summary|truncatechars:70 }}</span>
+          </td>
+          <td style="padding: 12px 16px;">
+            {% if notice.organization %}
+              <span class="meta-badge" style="background: #f0fdf4; color: #166534;">{{ notice.organization.name }}</span>
+            {% else %}
+              <span class="meta-badge" style="background: #f8fafc; color: var(--slate-700); border: 1px solid var(--slate-200);">Platform Authority</span>
+            {% endif %}
+          </td>
+          <td style="padding: 12px 16px; color: var(--slate-700);">
+            {{ notice.get_category_display }}
+          </td>
+          <td style="padding: 12px 16px; color: var(--slate-600);">
+            {{ notice.get_target_audience_display }}
+          </td>
+          <td style="padding: 12px 16px;">
+            {% if notice.priority == 'URGENT' %}
+              <span class="meta-badge" style="background: #ffe4e6; color: #e11d48; font-weight: 700;">URGENT</span>
+            {% elif notice.priority == 'HIGH' %}
+              <span class="meta-badge" style="background: #fef3c7; color: #b45309; font-weight: 700;">HIGH</span>
+            {% else %}
+              <span class="meta-badge" style="background: var(--slate-100); color: var(--slate-700);">Standard</span>
+            {% endif %}
+          </td>
+          <td style="padding: 12px 16px; color: var(--slate-500);">
+            {{ notice.published_at|date:"M d, Y" }}
+          </td>
+          <td style="padding: 12px 16px; text-align: right;">
+            <div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center;">
+              <a href="{% url 'news_edit' notice.pk %}" class="btn btn-ghost btn-sm">Edit</a>
+              <form method="post" action="{% url 'news_delete' notice.pk %}" style="display: inline;" onsubmit="return confirm('Author Action: Delete notice {{ notice.title }}?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--rose-600);">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="7" style="padding: 24px; text-align: center; color: var(--slate-400);">No announcements published yet.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- =========================================================================
+     AUTHOR SECTION 3: REGISTERED COMPANIES & ORGANIZATIONS
+     ========================================================================= -->
+<div class="section-header" style="margin-top: 24px;">
+  <div>
+    <h2 class="section-title">Registered Companies & Employer Directory</h2>
+    <p class="section-subtitle">Manage company access, audit HR seats, and activate or suspend organizational tenants.</p>
+  </div>
+</div>
+
+<div class="detail-main" style="padding: 0; overflow: hidden; margin-bottom: 36px;">
+  <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
+    <thead>
+      <tr style="background: var(--slate-50); border-bottom: 1px solid var(--slate-200); color: var(--slate-600); font-weight: 700;">
+        <th style="padding: 12px 16px;">Company Name</th>
+        <th style="padding: 12px 16px;">Industry / Size</th>
+        <th style="padding: 12px 16px;">Active Openings</th>
+        <th style="padding: 12px 16px;">HR Seats</th>
+        <th style="padding: 12px 16px;">Status</th>
+        <th style="padding: 12px 16px; text-align: right;">Administrative Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for company in recent_companies %}
+      <tr style="border-bottom: 1px solid var(--slate-100);">
+        <td style="padding: 12px 16px;">
+          <strong style="color: var(--slate-900); font-size: 14px;">
+            <a href="{% url 'owner_company_detail' company.pk %}">{{ company.name }}</a>
+          </strong>
+          {% if company.website %}<a href="{{ company.website }}" target="_blank" style="font-size: 12px; color: var(--primary); display: block;">{{ company.website }}</a>{% endif %}
+        </td>
+        <td style="padding: 12px 16px; color: var(--slate-600);">
+          {{ company.industry|default:"Technology" }} · {{ company.company_size|default:"50-200" }}
+        </td>
+        <td style="padding: 12px 16px; font-weight: 700; color: var(--slate-800);">
+          {{ company.job_count }} Jobs
+        </td>
+        <td style="padding: 12px 16px; color: var(--slate-600);">
+          {{ company.member_count }} Seats
+        </td>
+        <td style="padding: 12px 16px;">
+          {% if company.verification_status == 'APPROVED' %}
+            <span class="meta-badge" style="background: var(--emerald-50); color: var(--emerald-600); font-weight: 700;">✓ Verified</span>
+          {% elif company.verification_status == 'PENDING' %}
+            <span class="meta-badge" style="background: #fef3c7; color: #b45309; font-weight: 700;">⏳ Pending</span>
+          {% else %}
+            <span class="meta-badge" style="background: #fff1f2; color: #e11d48; font-weight: 700;">✕ Rejected</span>
+          {% endif %}
+          {% if not company.is_active %}
+            <span class="meta-badge" style="background: var(--rose-50); color: var(--rose-600); font-weight: 700; margin-left: 4px;">Suspended</span>
+          {% endif %}
+        </td>
+        <td style="padding: 12px 16px; text-align: right;">
+          <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
+            <a href="{% url 'owner_company_detail' company.pk %}" class="btn btn-ghost btn-sm">Inspect</a>
+            <form method="post" action="{% url 'owner_toggle_org' company.pk %}" style="display: inline;">
+              {% csrf_token %}
+              {% if company.is_active %}
+                <button type="submit" class="btn btn-outline btn-sm" style="color: var(--rose-600); border-color: var(--rose-100);">
+                  Suspend
+                </button>
+              {% else %}
+                <button type="submit" class="btn btn-primary btn-sm">
+                  Activate
+                </button>
+              {% endif %}
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6" style="padding: 24px; text-align: center; color: var(--slate-400);">No companies registered yet.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- =========================================================================
+     AUTHOR SECTION 4: SAAS SUBSCRIPTION PLANS & VERIFIED PAYMENTS (MRR)
+     ========================================================================= -->
+<div class="section-header" style="margin-top: 24px;">
+  <div>
+    <h2 class="section-title">SaaS Subscription Plans & Pricing Governance</h2>
+    <p class="section-subtitle">Configure commercial tiers, quotas, and review verified recurring transactions.</p>
+  </div>
+  <a href="{% url 'owner_plans_list' %}" class="btn btn-outline btn-sm">Manage All Plans →</a>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 40px;">
+  <!-- Plans Table -->
+  <div class="detail-main" style="padding: 0; overflow: hidden;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: left;">
+      <thead>
+        <tr style="background: var(--slate-50); border-bottom: 1px solid var(--slate-200); color: var(--slate-600);">
+          <th style="padding: 12px 16px;">Tier Name</th>
+          <th style="padding: 12px 16px;">Monthly Fee</th>
+          <th style="padding: 12px 16px; text-align: center;">Jobs Quota</th>
+          <th style="padding: 12px 16px; text-align: center;">Resumes / Mo</th>
+          <th style="padding: 12px 16px;">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for plan in pricing_plans %}
+          <tr style="border-bottom: 1px solid var(--slate-100);">
+            <td style="padding: 12px 16px;">
+              <strong style="color: var(--slate-900);">{{ plan.name }}</strong>
+              <span class="meta-badge" style="background: var(--slate-100); color: var(--slate-600); margin-left: 4px;">{{ plan.tier }}</span>
+            </td>
+            <td style="padding: 12px 16px; font-weight: 700; color: #059669;">
+              {{ plan.currency }} {{ plan.monthly_price }}
+            </td>
+            <td style="padding: 12px 16px; text-align: center;">{{ plan.max_jobs }}</td>
+            <td style="padding: 12px 16px; text-align: center;">{{ plan.max_resumes_per_month }}</td>
+            <td style="padding: 12px 16px;">
+              {% if plan.is_active %}<span style="color: #059669; font-weight: 600;">Active</span>{% else %}<span style="color: var(--slate-400);">Inactive</span>{% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5" style="padding: 20px; text-align: center; color: var(--slate-400);">
+              No dynamic tiers created yet. <a href="{% url 'owner_create_plan' %}" style="color: var(--primary);">Add tier</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Verified Revenue Summary -->
+  <div class="detail-main" style="padding: 22px;">
+    <h3 style="font-size: 15px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px;">
+      Verified Revenue Stream
+    </h3>
+    <p style="color: var(--slate-500); font-size: 12px; margin-bottom: 16px;">
+      Platform MRR computed exclusively from verified payment gateway receipts.
+    </p>
+
+    <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 16px;">
+      <span style="font-size: 11px; font-weight: 700; color: #047857; text-transform: uppercase;">Current 30-Day MRR</span>
+      <strong style="font-size: 24px; color: #065f46; display: block; margin-top: 2px;">₹{{ kpis.mrr|floatformat:2 }}</strong>
+      <span style="font-size: 11px; color: #059669;">{{ kpis.total_active_subscriptions }} active client subscriptions</span>
+    </div>
+
+    {% if recent_payments %}
+      <span style="font-size: 12px; font-weight: 600; color: var(--slate-600); display: block; margin-bottom: 8px;">Recent Successful Receipts</span>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        {% for p in recent_payments %}
+          <div style="display: flex; justify-content: space-between; font-size: 12px; padding: 6px 0; border-bottom: 1px solid var(--slate-100);">
+            <div>
+              <strong style="color: var(--slate-800);">{{ p.organization.name }}</strong>
+              <span style="color: var(--slate-400); display: block;">{{ p.created_at|date:"M d, Y" }}</span>
+            </div>
+            <strong style="color: #059669;">{{ p.currency }} {{ p.amount }}</strong>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p style="font-size: 12px; color: var(--slate-400); text-align: center; margin-top: 20px;">No verified payments recorded yet.</p>
+    {% endif %}
+  </div>
+</div>
+
+<!-- SECTION 6: PLATFORM MODERATION & USER REPORTS -->
+<div class="section-header" style="margin-top: 36px;">
+  <div>
+    <h2 class="section-title">Marketplace Moderation & Flagged Reports</h2>
+    <p class="section-subtitle">User-submitted safety reports for jobs, projects, and platform conduct.</p>
+  </div>
+</div>
+
+<div class="detail-main" style="padding: 0; overflow: hidden; margin-bottom: 36px;">
+  <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+    <thead>
+      <tr style="background: var(--slate-50); border-bottom: 1px solid var(--slate-200); color: var(--slate-600); text-align: left;">
+        <th style="padding: 12px 16px;">Type & Target</th>
+        <th style="padding: 12px 16px;">Reported By</th>
+        <th style="padding: 12px 16px;">Reason</th>
+        <th style="padding: 12px 16px;">Date</th>
+        <th style="padding: 12px 16px; text-align: right;">Moderator Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for rep in pending_reports %}
+        <tr style="border-bottom: 1px solid var(--slate-100);">
+          <td style="padding: 12px 16px;">
+            <strong style="color: var(--slate-900);">{{ rep.target_title|default:rep.target_id }}</strong>
+            <span class="meta-badge" style="background: #fef2f2; color: #991b1b; font-size: 10px; margin-left: 6px;">{{ rep.get_report_type_display }}</span>
+          </td>
+          <td style="padding: 12px 16px; color: var(--slate-700);">
+            {{ rep.reporter.username|default:"Anonymous" }}
+          </td>
+          <td style="padding: 12px 16px; color: var(--slate-600); max-width: 300px;">
+            {{ rep.reason|truncatechars:120 }}
+          </td>
+          <td style="padding: 12px 16px; color: var(--slate-400);">
+            {{ rep.created_at|date:"M d, Y" }}
+          </td>
+          <td style="padding: 12px 16px; text-align: right;">
+            <form method="post" action="{% url 'owner_resolve_report' rep.pk %}" style="display: inline-flex; gap: 6px;">
+              {% csrf_token %}
+              <button type="submit" name="action" value="RESOLVE" class="btn btn-primary btn-sm" style="font-size: 11px; padding: 4px 8px;">Resolve ✓</button>
+              <button type="submit" name="action" value="DISMISS" class="btn btn-ghost btn-sm" style="font-size: 11px; padding: 4px 8px; color: var(--slate-400);">Dismiss ✕</button>
+            </form>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="5" style="padding: 24px; text-align: center; color: var(--slate-400);">
+            No pending moderation reports. The marketplace is clean.
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 7: COMPANY VERIFICATION CREDENTIALS QUEUE -->
+<div class="section-header" style="margin-top: 36px;">
+  <div>
+    <h2 class="section-title">Company Verification Documents Audit Queue</h2>
+    <p class="section-subtitle">Review business incorporation credentials, GST certificates, and company licenses.</p>
+  </div>
+</div>
+
+<div class="detail-main" style="padding: 0; overflow: hidden; margin-bottom: 36px;">
+  <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+    <thead>
+      <tr style="background: var(--slate-50); border-bottom: 1px solid var(--slate-200); color: var(--slate-600); text-align: left;">
+        <th style="padding: 12px 16px;">Organization</th>
+        <th style="padding: 12px 16px;">Document Type</th>
+        <th style="padding: 12px 16px;">Submitted By</th>
+        <th style="padding: 12px 16px;">Date</th>
+        <th style="padding: 12px 16px; text-align: right;">Audit Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for doc in pending_verification_docs %}
+        <tr style="border-bottom: 1px solid var(--slate-100);">
+          <td style="padding: 12px 16px;">
+            <strong style="color: var(--slate-900);">{{ doc.organization.name }}</strong>
+          </td>
+          <td style="padding: 12px 16px; color: var(--slate-700);">
+            {{ doc.document_type }}
+            {% if doc.file %}
+              <a href="{{ doc.file.url }}" target="_blank" style="margin-left: 6px; font-size: 11px; color: var(--primary);">View File ↗</a>
+            {% endif %}
+          </td>
+          <td style="padding: 12px 16px; color: var(--slate-600);">
+            {{ doc.submitted_by.username|default:"Admin" }}
+          </td>
+          <td style="padding: 12px 16px; color: var(--slate-400);">
+            {{ doc.submitted_at|date:"M d, Y" }}
+          </td>
+          <td style="padding: 12px 16px; text-align: right;">
+            <form method="post" action="{% url 'owner_review_doc' doc.pk %}" style="display: inline-flex; gap: 6px;">
+              {% csrf_token %}
+              <button type="submit" name="action" value="APPROVE" class="btn btn-primary btn-sm" style="font-size: 11px; padding: 4px 8px; background: #059669; border-color: #059669;">Approve ✓</button>
+              <button type="submit" name="action" value="REJECT" class="btn btn-ghost btn-sm" style="font-size: 11px; padding: 4px 8px; color: #ef4444;">Reject ✕</button>
+            </form>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="5" style="padding: 24px; text-align: center; color: var(--slate-400);">
+            No pending company verification documents awaiting review.
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

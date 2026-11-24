@@ -1,0 +1,119 @@
+{% extends "connect/base_connect.html" %}
+{% load static %}
+
+{% block title %}Upcoming Interviews · HireNexa Connect{% endblock %}
+
+{% block connect_content %}
+<div
+  style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 26px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+  <div style="margin-bottom: 22px;">
+    <h2 style="font-size: 20px; font-weight: 800; color: #0f172a; margin: 0 0 4px;">🎯 Upcoming Recruitment Interviews
+    </h2>
+    <p style="font-size: 13.5px; color: #64748b; margin: 0;">
+      {% if is_candidate %}
+      Interviews scheduled with hiring companies for your job applications.
+      {% else %}
+      Interviews scheduled with candidates across your active organization job postings.
+      {% endif %}
+    </p>
+  </div>
+
+  {% if interviews %}
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px;">
+    {% for iv in interviews %}
+    <div
+      style="border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; background: #ffffff; display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <!-- Top Status & Round -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span
+            style="font-size: 11.5px; font-weight: 700; background: #eff6ff; color: #1d4ed8; padding: 3px 10px; border-radius: 9999px;">
+            {{ iv.round_name }}
+          </span>
+          <span
+            style="font-size: 11px; font-weight: 700; color: #16a34a; background: #f0fdf4; padding: 2px 8px; border-radius: 6px;">
+            {{ iv.get_status_display }}
+          </span>
+        </div>
+
+        <!-- Job & Company -->
+        <h3 style="font-size: 17px; font-weight: 700; color: #0f172a; margin: 0 0 4px;">
+          {{ iv.application.job.title }}
+        </h3>
+        <div style="font-size: 13px; color: #475569; margin-bottom: 14px;">
+          🏢 {{ iv.application.job.organization.name|default:iv.application.job.company_name }}
+        </div>
+
+        <!-- Candidate / Recruiter Info -->
+        <div style="background: #f8fafc; border-radius: 10px; padding: 12px; margin-bottom: 16px; font-size: 13px;">
+          {% if is_candidate %}
+          <div><strong>Interviewer:</strong> {{
+            iv.created_by.get_full_name|default:iv.created_by.username|default:"Hiring Team" }}</div>
+          {% else %}
+          <div><strong>Candidate:</strong> {{
+            iv.application.candidate.get_full_name|default:iv.application.candidate.username }}</div>
+          <div style="color: #64748b; font-size: 12px; margin-top: 2px;">Email: {{ iv.application.candidate.email }}
+          </div>
+          {% endif %}
+          <div style="margin-top: 6px; color: #2563eb; font-weight: 600;">
+            🕒 {{ iv.scheduled_at|date:"l, d M, Y · h:i A" }}
+          </div>
+          {% if iv.notes %}
+          <div style="margin-top: 6px; color: #64748b; font-size: 12px;">
+            <strong>Instructions:</strong> {{ iv.notes }}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        {% if iv.provider == 'ZOOM' %}
+        {% if iv.meeting_link %}
+        <a href="{{ iv.meeting_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary"
+          style="flex: 1; text-align: center; background: #2d8cff; color: #fff; font-weight: 700; font-size: 13px; padding: 10px 14px; border-radius: 8px; text-decoration: none;">
+          🔵 Join Zoom Meeting ↗
+        </a>
+        <button type="button"
+          onclick="navigator.clipboard.writeText('{{ iv.meeting_link|escapejs }}'); alert('Zoom link copied to clipboard!');"
+          class="btn"
+          style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 600; padding: 10px 12px; border-radius: 8px; cursor: pointer;"
+          title="Copy Zoom Link">
+          📋 Copy
+        </button>
+        {% else %}
+        <div
+          style="flex: 1; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #92400e;">
+          ⚠️ <strong>Zoom Setup Required:</strong> Zoom API credentials not configured in environment. Provide a direct
+          link in interview settings.
+        </div>
+        {% endif %}
+        {% else %}
+        <a href="{% url 'interview_room' iv.pk %}" class="btn btn-primary"
+          style="flex: 1; text-align: center; background: #2563eb; color: #fff; font-weight: 700; font-size: 13px; padding: 10px 14px; border-radius: 8px; text-decoration: none;">
+          Launch Interview Room
+        </a>
+        {% endif %}
+
+        {% if not is_candidate %}
+        <a href="{% url 'applicants' iv.application.job.id %}" class="btn"
+          style="background: #f1f5f9; color: #334155; font-size: 13px; font-weight: 600; padding: 10px 12px; border-radius: 8px; text-decoration: none;"
+          title="View Candidate Profile & Resume">
+          Profile ↗
+        </a>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div style="text-align: center; padding: 48px 16px; color: #94a3b8;">
+    <span style="font-size: 36px; display: block; margin-bottom: 8px;">🎯</span>
+    <h3 style="font-size: 16px; font-weight: 700; color: #475569; margin: 0 0 6px;">No upcoming interviews scheduled
+    </h3>
+    <p style="font-size: 13.5px; color: #94a3b8; margin: 0;">When interviews are scheduled from job applications, they
+      will appear here with full video conferencing controls.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

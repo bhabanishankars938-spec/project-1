@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block title %}{{ job.title }} at {{ job.company_name }} · HireNexa{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 24px;">
+  <a href="{% url 'job_list' %}" style="font-size: 14px; font-weight: 500; color: var(--slate-500); display: inline-flex; align-items: center; gap: 6px;">
+    ← Back to all open roles
+  </a>
+</div>
+
+<div class="job-detail-layout">
+  <!-- Left Column: Comprehensive Job Details -->
+  <article class="detail-main">
+    <div class="detail-header">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+        <span class="hero-pill" style="margin-bottom: 0; padding: 3px 12px; font-size: 11px;">ACTIVE HIRING</span>
+        {% if job.target_course == 'MCA' or 'mca' in job.department|lower %}
+          <span class="meta-badge" style="background: #e0f2fe; color: #0369a1; font-weight: 700; border: 1px solid #bae6fd;">💻 MCA Stream</span>
+        {% elif job.target_course == 'MBA' or 'mba' in job.department|lower %}
+          <span class="meta-badge" style="background: #fef3c7; color: #b45309; font-weight: 700; border: 1px solid #fde68a;">📊 MBA Stream</span>
+        {% else %}
+          <span class="meta-badge" style="background: #f1f5f9; color: var(--slate-700);">🎓 {{ job.get_target_course_display }}</span>
+        {% endif %}
+        {% if job.department %}
+          <span class="meta-badge" style="background: var(--slate-100); color: var(--slate-700);">📂 {{ job.department }}</span>
+        {% endif %}
+        <span class="meta-badge">⚡ {{ job.job_type }}</span>
+      </div>
+
+      <h1 class="detail-title">{{ job.title }}</h1>
+      <div class="detail-company">🏢 {{ job.company_name }} · 📍 {{ job.location|default:"Remote / Flexible" }}</div>
+
+      <div class="detail-meta-pills" style="margin-top: 10px;">
+        <span class="meta-badge">📅 Posted on {{ job.created_at|date:"F d, Y" }}</span>
+        <span class="meta-badge" style="background: #ecfdf5; color: #047857; font-weight: 700;">🎯 Company Hiring: {{ job.vacancies }} Candidates</span>
+        <span class="meta-badge">👥 {{ job.applications.count }} Applicant{{ job.applications.count|pluralize }}</span>
+      </div>
+    </div>
+
+    <!-- Vacancy & Hiring Quota Section -->
+    <div style="margin: 20px 0; padding: 18px; background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-lg);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <h4 style="font-size: 15px; font-weight: 700; color: var(--slate-900); margin: 0;">
+          🎯 Hiring Quota & Openings Breakdown
+        </h4>
+        <span class="meta-badge" style="background: #ecfdf5; color: #059669; font-weight: 700;">
+          {{ job.hired_count }} Hired / {{ job.remaining_vacancies }} Open Positions
+        </span>
+      </div>
+      <p style="font-size: 13px; color: var(--slate-600); margin-bottom: 10px;">
+        Company plans to hire <strong>{{ job.vacancies }} candidates</strong> for this position.
+      </p>
+      <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 9999px; overflow: hidden; margin-bottom: 12px;">
+        <div style="height: 100%; width: {{ job.hiring_progress_percentage }}%; background: #10b981; border-radius: 9999px;"></div>
+      </div>
+
+      <!-- Round-by-Round Hiring Stages Display -->
+      <h5 style="font-size: 13px; font-weight: 700; color: var(--slate-800); margin: 12px 0 8px 0; text-transform: uppercase; letter-spacing: 0.03em;">
+        🔄 Hiring Process: From 1st Round to Final Selection
+      </h5>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        {% for r in job.hiring_rounds_list %}
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--slate-700);">
+            <span style="display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--primary-light); color: var(--primary); font-size: 11px; font-weight: 700;">
+              {{ forloop.counter }}
+            </span>
+            <span>{{ r }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Required Skills Breakdown -->
+    <h3 class="detail-section-title">Required Technical Skills</h3>
+    <p style="font-size: 14px; color: var(--slate-500); margin-bottom: 12px;">Our explainable matching engine verifies candidate resumes against these canonical skills:</p>
+    <div class="skills-wrap" style="margin-bottom: 28px;">
+      {% for skill in job.skill_list %}
+        <span class="skill-tag" style="font-size: 13px; padding: 5px 12px;">{{ skill }}</span>
+      {% endfor %}
+    </div>
+
+    <!-- Job Description / Responsibilities -->
+    <h3 class="detail-section-title">About the Role & Responsibilities</h3>
+    <div class="detail-body">
+      {{ job.description }}
+    </div>
+
+    <!-- Transparent Hiring Note -->
+    <div style="margin-top: 36px; padding: 20px; background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-lg);">
+      <h4 style="font-size: 14px; font-weight: 700; color: var(--slate-800); margin-bottom: 4px;">🤝 Transparent Hiring Guarantee</h4>
+      <p style="font-size: 13px; color: var(--slate-600); margin: 0;">
+        HireNexa never uses AI black-boxes to discard candidate resumes. Every applicant receives an explainable match breakdown showing verified skills, missing skills, and semantic alignment to help hiring managers make fair decisions.
+      </p>
+    </div>
+  </article>
+
+  <!-- Right Column: Sticky Action & Application Widget -->
+  <aside>
+    <div class="sticky-apply-card">
+      {% if not user.is_authenticated %}
+        <!-- Public Guest Visitor State -->
+        <h3 class="apply-card-title">Apply for this Position</h3>
+        <p class="apply-card-desc">No account yet? You can create a free candidate profile in 30 seconds to upload your resume and apply instantly.</p>
+
+        <div class="apply-card-box">
+          <strong>Instant Resume Matching</strong>
+          Upload your PDF/DOCX to get an instant explainable skill score and fast-track your application to {{ job.company_name }}'s hiring team.
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <a href="{% url 'signup' %}?next={{ request.path }}" class="btn btn-primary btn-lg" style="width: 100%;">
+            Create Account & Apply
+          </a>
+          <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-white btn-lg" style="width: 100%;">
+            Sign In to Apply
+          </a>
+        </div>
+
+        <p style="text-align: center; font-size: 12px; color: var(--slate-400); margin-top: 16px;">
+          🔒 Free for candidates · No spam guarantee
+        </p>
+
+      {% elif user.role == 'CANDIDATE' %}
+        <!-- Authenticated Candidate State -->
+        {% if already_applied %}
+          <div style="text-align: center; padding: 12px 0;">
+            <div style="font-size: 36px; margin-bottom: 8px;">✅</div>
+            <h3 class="apply-card-title">Application Submitted</h3>
+            <p class="apply-card-desc">You have applied for this position. The recruiter has received your resume and skill breakdown.</p>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-lg" style="width: 100%;">
+              View in Dashboard →
+            </a>
+          </div>
+        {% else %}
+          <h3 class="apply-card-title">Ready to Apply?</h3>
+          <p class="apply-card-desc">We will match your latest uploaded resume against {{ job.title }}'s requirements.</p>
+
+          <form method="post" action="{% url 'apply_job' job.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+              Submit 1-Click Application
+            </button>
+          </form>
+
+          <div style="margin-top: 16px; text-align: center;">
+            <a href="{% url 'resume_upload' %}" style="font-size: 13px; color: var(--slate-500);">
+              Update or upload a new resume first →
+            </a>
+          </div>
+        {% endif %}
+
+      {% elif user.role == 'RECRUITER' %}
+        <!-- Authenticated Recruiter State -->
+        <h3 class="apply-card-title">Recruiter Workspace</h3>
+        <p class="apply-card-desc">You are viewing this listing with recruiter privileges.</p>
+
+        {% if job.recruiter == user %}
+          <div class="apply-card-box">
+            <strong>Your Job Posting</strong>
+            Total applicants: {{ job.applications.count }}
+          </div>
+          <a href="{% url 'applicants' job.pk %}" class="btn btn-primary btn-lg" style="width: 100%;">
+            Review Applicants ({{ job.applications.count }}) →
+          </a>
+        {% else %}
+          <p class="apply-card-desc" style="color: var(--slate-500);">Posted by a partner company: {{ job.company_name }}.</p>
+          <a href="{% url 'dashboard' %}" class="btn btn-white btn-lg" style="width: 100%;">
+            Go to Your Dashboard
+          </a>
+        {% endif %}
+      {% endif %}
+    </div>
+  </aside>
+</div>
+{% endblock %}

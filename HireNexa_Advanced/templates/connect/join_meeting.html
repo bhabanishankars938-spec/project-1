@@ -1,0 +1,128 @@
+{% extends "connect/base_connect.html" %}
+{% load static %}
+
+{% block title %}Join Meeting · HireNexa Connect{% endblock %}
+
+{% block connect_content %}
+<div style="max-width: 680px; margin: 0 auto;">
+
+  <!-- Join Card -->
+  <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 36px 32px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 24px;">
+    <div style="text-align: center; margin-bottom: 28px;">
+      <div style="display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 16px; background: #e0f2fe; color: #0284c7; font-size: 26px; margin-bottom: 14px;">
+        🔑
+      </div>
+      <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; margin: 0 0 6px;">Join a Live Meeting</h2>
+      <p style="font-size: 14px; color: #64748b; margin: 0;">Enter a 9-digit Room Code or paste your meeting invitation link below.</p>
+    </div>
+
+    {% if messages %}
+    <div style="margin-bottom: 20px;">
+      {% for message in messages %}
+      <div style="padding: 12px 16px; border-radius: 10px; font-size: 13.5px; margin-bottom: 8px; {% if message.tags == 'error' %}background: #fef2f2; border: 1px solid #fecaca; color: #991b1b;{% else %}background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534;{% endif %}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'connect:join_meeting' %}">
+      {% csrf_token %}
+
+      <div style="margin-bottom: 20px;">
+        <label for="meeting_id" style="display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 8px;">
+          Meeting ID or Invitation URL <span style="color: #ef4444;">*</span>
+        </label>
+        <div style="position: relative;">
+          <input
+            type="text"
+            id="meeting_id"
+            name="meeting_id"
+            value="{{ entered_code|default:'' }}"
+            placeholder="e.g. hnx-abc-xyz or https://hirenexa.internal/connect/room/..."
+            required
+            autofocus
+            style="width: 100%; box-sizing: border-box; padding: 13px 16px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 15px; font-family: monospace; color: #0f172a; outline: none; transition: border-color 0.2s;"
+            onfocus="this.style.borderColor='#2563eb'"
+            onblur="this.style.borderColor='#cbd5e1'"
+          >
+        </div>
+        <div style="font-size: 12px; color: #64748b; margin-top: 6px;">
+          Tip: You can paste the complete invitation link or just the <code>hnx-xxx-xxx</code> room code.
+        </div>
+      </div>
+
+      {% if requires_passcode or meeting.passcode %}
+      <div style="margin-bottom: 20px;">
+        <label for="passcode" style="display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 8px;">
+          Room Passcode <span style="color: #ef4444;">*</span>
+        </label>
+        <input
+          type="text"
+          id="passcode"
+          name="passcode"
+          placeholder="Enter room passcode"
+          required
+          style="width: 100%; box-sizing: border-box; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 14px; font-family: monospace; letter-spacing: 0.1em; color: #0f172a; outline: none;"
+        >
+      </div>
+      {% endif %}
+
+      {% if not user.is_authenticated %}
+      <div style="margin-bottom: 22px;">
+        <label for="display_name" style="display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 8px;">
+          Your Display Name <span style="color: #ef4444;">*</span>
+        </label>
+        <input
+          type="text"
+          id="display_name"
+          name="display_name"
+          placeholder="e.g. John Doe"
+          required
+          style="width: 100%; box-sizing: border-box; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 14px; color: #0f172a; outline: none;"
+        >
+      </div>
+      {% endif %}
+
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          style="flex: 1; background: #2563eb; color: #ffffff; border: none; font-weight: 700; font-size: 15px; padding: 13px 24px; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px;"
+        >
+          <span>🚀 Join Meeting Room</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Re-join Recent Sessions Card (if authenticated) -->
+  {% if recent_meetings %}
+  <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 22px 26px; box-shadow: 0 2px 10px rgba(0,0,0,0.04);">
+    <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0 0 14px;">Recent Scheduled Meetings</h3>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      {% for m in recent_meetings %}
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #f8fafc; border-radius: 10px; border: 1px solid #f1f5f9;">
+        <div>
+          <div style="font-size: 14px; font-weight: 700; color: #0f172a;">{{ m.title }}</div>
+          <div style="font-size: 12px; color: #64748b;">
+            <code style="color: #2563eb;">{{ m.meeting_id }}</code> · {{ m.scheduled_start|date:"D, d M, Y · h:i A" }}
+          </div>
+        </div>
+        <a href="{{ m.get_absolute_url }}" class="btn" style="background: #0f172a; color: #fff; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 8px; text-decoration: none;">
+          Join →
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Help & Device Guidance -->
+  <div style="margin-top: 24px; text-align: center; color: #64748b; font-size: 13px; line-height: 1.6;">
+    🔒 HireNexa meetings use end-to-end WebRTC encryption directly in your browser.<br>
+    No extensions, downloads, or external accounts required.
+  </div>
+
+</div>
+{% endblock %}

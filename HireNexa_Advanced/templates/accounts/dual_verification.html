@@ -1,0 +1,560 @@
+{% extends "base.html" %}
+{% block title %}Verify Email & Mobile · HireNexa Enterprise Security{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper" style="min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 40px 16px;">
+  <div class="auth-card" style="max-width: 680px; width: 100%; background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-xl); box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.1); padding: 36px 32px;">
+
+    <!-- Header & Security Badge -->
+    <div style="text-align: center; margin-bottom: 28px;">
+      <div style="display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 50%; background: rgba(79, 70, 229, 0.1); color: var(--primary); margin-bottom: 14px;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="m9 12 2 2 4-4"/>
+        </svg>
+      </div>
+      <h1 style="font-size: 26px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.02em; margin-bottom: 6px;">
+        Account Verification Required
+      </h1>
+      <p style="color: var(--slate-500); font-size: 14px; max-width: 520px; margin: 0 auto; line-height: 1.5;">
+        Welcome to HireNexa, <strong>{{ target_user.full_name }}</strong>. To activate your account, please verify <strong>either your Email Address OR your Mobile Phone Number</strong>. The other method is optional and can be verified anytime from your profile settings.
+      </p>
+    </div>
+
+    <!-- Overall Progress Indicator -->
+    <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 16px 20px; margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 13px; font-weight: 700; color: var(--slate-700);">Activation Rule:</span>
+        {% if email_verified or phone_verified %}
+          <span class="role-tag" style="background: rgba(16, 185, 129, 0.15); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 700;">
+            ✓ VERIFIED · ACCOUNT ACTIVATED
+          </span>
+        {% else %}
+          <span class="role-tag" style="background: rgba(79, 70, 229, 0.12); color: var(--primary); border: 1px solid rgba(79, 70, 229, 0.25); font-weight: 700;">
+            VERIFY EITHER EMAIL OR MOBILE TO ACTIVATE
+          </span>
+        {% endif %}
+      </div>
+      <div style="font-size: 12px; color: var(--slate-500);">
+        Role: <strong style="color: var(--slate-800);">{{ target_user.get_role_display }}</strong>
+      </div>
+    </div>
+
+    <!-- Alert Messages -->
+    <div id="liveAlertBox" style="display: none; margin-bottom: 20px;"></div>
+
+    {% if dev_email_otp or dev_phone_otp %}
+    <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid #3b82f6; border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 20px;">
+      <div style="font-weight: 700; color: #1e40af; font-size: 13px; margin-bottom: 6px;">
+        🛠️ Local Dev Mode Active (Test Verification Codes):
+      </div>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        {% if dev_email_otp %}
+        <span style="font-size: 13px; background: #ffffff; border: 1px solid #93c5fd; padding: 4px 10px; border-radius: 6px; color: #1d4ed8;">
+          Email OTP: <strong style="letter-spacing: 0.1em; font-family: monospace;">{{ dev_email_otp }}</strong>
+        </span>
+        {% endif %}
+        {% if dev_phone_otp %}
+        <span style="font-size: 13px; background: #ffffff; border: 1px solid #93c5fd; padding: 4px 10px; border-radius: 6px; color: #1d4ed8;">
+          Mobile OTP: <strong style="letter-spacing: 0.1em; font-family: monospace;">{{ dev_phone_otp }}</strong>
+        </span>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+
+      <!-- =================================================================== -->
+      <!-- 1. EMAIL VERIFICATION CARD                                         -->
+      <!-- =================================================================== -->
+      <div class="verification-card" style="border: 1px solid {% if email_verified %}#10b981{% else %}var(--slate-200){% endif %}; border-radius: var(--radius-lg); padding: 22px; background: {% if email_verified %}rgba(16, 185, 129, 0.03){% else %}#ffffff{% endif %}; transition: var(--transition);">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 40px; height: 40px; border-radius: 10px; background: {% if email_verified %}rgba(16, 185, 129, 0.15){% else %}rgba(79, 70, 229, 0.1){% endif %}; display: flex; align-items: center; justify-content: center; color: {% if email_verified %}#059669{% else %}var(--primary){% endif %}; font-size: 18px;">
+              ✉
+            </div>
+            <div>
+              <h3 style="font-size: 16px; font-weight: 700; color: var(--slate-900); margin: 0 0 2px 0;">
+                Email Address
+              </h3>
+              <span style="font-size: 14px; color: var(--slate-600); font-family: monospace;">
+                {{ target_user.email }}
+              </span>
+            </div>
+          </div>
+          <div>
+            {% if email_verified %}
+              <span class="role-tag" style="background: #10b981; color: #ffffff; font-weight: 700; padding: 4px 10px;">
+                ✓ VERIFIED
+              </span>
+            {% else %}
+              <span class="role-tag" style="background: rgba(245, 158, 11, 0.15); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.3); font-weight: 700; padding: 4px 10px;">
+                PENDING
+              </span>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if not email_verified %}
+          <div style="border-top: 1px solid var(--slate-100); padding-top: 16px; margin-top: 8px;">
+            {% if email_delivery_failed %}
+              <div style="background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid #ef4444; border-radius: 6px; padding: 12px 14px; margin-bottom: 14px; font-size: 13px; color: #991b1b;">
+                <strong>⚠️ Email Delivery Notice:</strong> We encountered an issue delivering your verification email.
+                {% if email_delivery_error %}<div style="margin-top: 4px; font-size: 12px; font-family: monospace; color: #b91c1c;">{{ email_delivery_error }}</div>{% endif %}
+                <div style="margin-top: 6px; font-size: 12px; color: #7f1d1d;">You can click <em>Resend Email OTP</em>, change your address, or verify your mobile number instead to activate your account.</div>
+              </div>
+            {% endif %}
+            <form method="post" action="{% url 'dual_verification' %}" class="otp-form" data-channel="email">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="verify_email">
+              
+              <label style="display: block; font-size: 13px; font-weight: 600; color: var(--slate-700); margin-bottom: 8px;">
+                Enter 6-digit Email Verification Code:
+              </label>
+
+              <!-- Interactive 6-digit OTP Input Group -->
+              <div class="otp-digit-container" data-target="email_otp" style="display: flex; gap: 8px; justify-content: center; margin-bottom: 14px;">
+                <input type="text" maxlength="1" class="otp-box" inputmode="numeric" pattern="[0-9]" autofocus>
+                <input type="text" maxlength="1" class="otp-box" inputmode="numeric" pattern="[0-9]">
+                <input type="text" maxlength="1" class="otp-box" inputmode="numeric" pattern="[0-9]">
+                <input type="text" maxlength="1" class="otp-box" inputmode="numeric" pattern="[0-9]">
+                <input type="text" maxlength="1" class="otp-box" inputmode="numeric" pattern="[0-9]">
+                <input type="text" maxlength="1" class="otp-box" inputmode="numeric" pattern="[0-9]">
+              </div>
+              <input type="hidden" name="email_otp" id="email_otp">
+
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                <button type="submit" class="btn btn-primary" style="padding: 9px 22px; font-weight: 700;">
+                  Verify Email Code →
+                </button>
+
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <button type="button" class="btn btn-secondary btn-resend" data-channel="email" data-cooldown="{{ email_cooldown }}" style="padding: 8px 14px; font-size: 12px;">
+                    Resend Email OTP
+                  </button>
+                  <button type="button" class="btn-toggle-modal" data-target="changeEmailModal" style="background: none; border: none; color: var(--slate-500); font-size: 12px; cursor: pointer; text-decoration: underline;">
+                    Change Email
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        {% else %}
+          <div style="display: flex; align-items: center; gap: 8px; color: #059669; font-size: 13px; margin-top: 8px;">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Email ownership verified successfully.
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- 2. MOBILE NUMBER VERIFICATION CARD                                  -->
+      <!-- =================================================================== -->
+      <div class="verification-card" style="border: 1px solid {% if phone_verified %}#10b981{% else %}var(--slate-200){% endif %}; border-radius: var(--radius-lg); padding: 22px; background: {% if phone_verified %}rgba(16, 185, 129, 0.03){% else %}#ffffff{% endif %}; transition: var(--transition);">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 40px; height: 40px; border-radius: 10px; background: {% if phone_verified %}rgba(16, 185, 129, 0.15){% else %}rgba(79, 70, 229, 0.1){% endif %}; display: flex; align-items: center; justify-content: center; color: {% if phone_verified %}#059669{% else %}var(--primary){% endif %}; font-size: 18px;">
+              📱
+            </div>
+            <div>
+              <h3 style="font-size: 16px; font-weight: 700; color: var(--slate-900); margin: 0 0 2px 0;">
+                Mobile Phone Number
+              </h3>
+              <span style="font-size: 14px; color: var(--slate-600); font-family: monospace;">
+                {{ target_user.phone_number }}
+              </span>
+            </div>
+          </div>
+          <div>
+            {% if phone_verified %}
+              <span class="role-tag" style="background: #10b981; color: #ffffff; font-weight: 700; padding: 4px 10px;">
+                ✓ VERIFIED
+              </span>
+            {% else %}
+              <span class="role-tag" style="background: rgba(245, 158, 11, 0.15); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.3); font-weight: 700; padding: 4px 10px;">
+                PENDING
+              </span>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if not phone_verified %}
+          <div style="border-top: 1px solid var(--slate-100); padding-top: 16px; margin-top: 8px;">
+            {% if phone_delivery_failed %}
+              <div style="background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid #ef4444; border-radius: 6px; padding: 12px 14px; margin-bottom: 14px; font-size: 13px; color: #991b1b;">
+                <strong>⚠️ SMS Delivery Notice:</strong> We encountered an issue dispatching SMS to your phone number.
+                {% if phone_delivery_error %}<div style="margin-top: 4px; font-size: 12px; font-family: monospace; color: #b91c1c;">{{ phone_delivery_error }}</div>{% endif %}
+                <div style="margin-top: 6px; font-size: 12px; color: #7f1d1d;">You can click <em>Resend Mobile OTP</em>, change your number, or verify your email instead to activate your account.</div>
+              </div>
+            {% endif %}
+            <form method="post" action="{% url 'dual_verification' %}" class="otp-form" data-channel="phone">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="verify_phone">
+              
+              <label style="display: block; font-size: 13px; font-weight: 600; color: var(--slate-700); margin-bottom: 8px;">
+                Enter 6-digit Mobile SMS Verification Code:
+              </label>
+
+              <!-- Interactive 6-digit OTP Input Group -->
+              <div class="otp-digit-container" data-target="phone_otp" style="display: flex; gap: 8px; justify-content: center; margin-bottom: 14px;">
+                <input type="text" maxlength="1" class="otp-box" inputmode="numeric" pattern="[0-9]">
+                <input type="text" maxlength="1" class="otp-box" inputmode="numeric" pattern="[0-9]">
+                <input type="text" maxlength="1" class="otp-box" inputmode="numeric" pattern="[0-9]">
+                <input type="text" maxlength="1" class="otp-box" inputmode="numeric" pattern="[0-9]">
+                <input type="text" maxlength="1" class="otp-box" inputmode="numeric" pattern="[0-9]">
+                <input type="text" maxlength="1" class="otp-box" inputmode="numeric" pattern="[0-9]">
+              </div>
+              <input type="hidden" name="phone_otp" id="phone_otp">
+
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                <button type="submit" class="btn btn-primary" style="padding: 9px 22px; font-weight: 700;">
+                  Verify Mobile Code →
+                </button>
+
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <button type="button" class="btn btn-secondary btn-resend" data-channel="phone" data-cooldown="{{ phone_cooldown }}" style="padding: 8px 14px; font-size: 12px;">
+                    Resend Mobile OTP
+                  </button>
+                  <button type="button" class="btn-toggle-modal" data-target="changePhoneModal" style="background: none; border: none; color: var(--slate-500); font-size: 12px; cursor: pointer; text-decoration: underline;">
+                    Change Mobile
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        {% else %}
+          <div style="display: flex; align-items: center; gap: 8px; color: #059669; font-size: 13px; margin-top: 8px;">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Mobile phone number ownership verified successfully.
+          </div>
+        {% endif %}
+      </div>
+
+    </div>
+
+    <!-- Security Information Footer -->
+    <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--slate-100); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 12px; color: var(--slate-500);">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span>🔒 256-bit Encrypted OTP Verification</span>
+        <span>·</span>
+        <span>Expires in 10 minutes</span>
+      </div>
+      <div>
+        <a href="{% url 'logout' %}" style="color: var(--slate-500); text-decoration: underline;">Cancel and Return to Sign In</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ======================================================================= -->
+<!-- CHANGE EMAIL MODAL                                                      -->
+<!-- ======================================================================= -->
+<div id="changeEmailModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
+  <div style="background: #ffffff; border-radius: var(--radius-xl); max-width: 440px; width: 100%; padding: 28px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--slate-900);">Update Email Address</h3>
+      <button type="button" class="btn-close-modal" data-target="changeEmailModal" style="background: none; border: none; font-size: 20px; cursor: pointer; color: var(--slate-400);">&times;</button>
+    </div>
+    <form method="post" action="{% url 'dual_verification' %}">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="change_email">
+      <div class="form-group" style="margin-bottom: 18px;">
+        <label class="form-label">New Email Address:</label>
+        <input type="email" name="new_email" class="form-input" placeholder="e.g. correct.email@example.com" required>
+        <span style="font-size: 12px; color: var(--slate-500); display: block; margin-top: 4px;">A fresh OTP code will be dispatched immediately to this new inbox.</span>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" class="btn btn-secondary btn-close-modal" data-target="changeEmailModal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Update & Send Code →</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ======================================================================= -->
+<!-- CHANGE PHONE MODAL                                                      -->
+<!-- ======================================================================= -->
+<div id="changePhoneModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
+  <div style="background: #ffffff; border-radius: var(--radius-xl); max-width: 460px; width: 100%; padding: 28px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--slate-900);">Update Mobile Number</h3>
+      <button type="button" class="btn-close-modal" data-target="changePhoneModal" style="background: none; border: none; font-size: 20px; cursor: pointer; color: var(--slate-400);">&times;</button>
+    </div>
+    <form method="post" action="{% url 'dual_verification' %}">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="change_phone">
+      <div class="form-group" style="margin-bottom: 14px;">
+        <label class="form-label">Country Code:</label>
+        <select name="country_code" class="form-input">
+          {% for code, label, region in country_codes %}
+            <option value="{{ code }}" {% if code == "+91" %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom: 18px;">
+        <label class="form-label">New Mobile Number:</label>
+        <input type="tel" name="new_phone_number" class="form-input" placeholder="98765 43210" required>
+        <span style="font-size: 12px; color: var(--slate-500); display: block; margin-top: 4px;">A fresh SMS verification code will be sent to this number.</span>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" class="btn btn-secondary btn-close-modal" data-target="changePhoneModal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Update & Send Code →</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+.otp-box {
+  width: 46px;
+  height: 52px;
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+  border: 2px solid var(--slate-200);
+  border-radius: 8px;
+  background: var(--slate-50);
+  color: var(--slate-900);
+  transition: all 0.2s ease;
+  font-family: monospace;
+}
+.otp-box:focus {
+  border-color: var(--primary);
+  background: #ffffff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+.otp-box.filled {
+  border-color: var(--slate-400);
+  background: #ffffff;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  // 1. Auto-Focus, Auto-Advance, Backspace & Paste Handler for 6-Digit OTP Boxes
+  document.querySelectorAll(".otp-digit-container").forEach(function(container) {
+    const boxes = Array.from(container.querySelectorAll(".otp-box"));
+    const targetInputId = container.getAttribute("data-target");
+    const hiddenInput = document.getElementById(targetInputId);
+
+    function updateHiddenValue() {
+      const code = boxes.map(b => b.value).join("");
+      if (hiddenInput) hiddenInput.value = code;
+      return code;
+    }
+
+    boxes.forEach(function(box, index) {
+      box.addEventListener("input", function(e) {
+        const val = this.value.replace(/[^0-9]/g, "");
+        this.value = val ? val[0] : "";
+        if (this.value) {
+          this.classList.add("filled");
+          if (index < boxes.length - 1) {
+            boxes[index + 1].focus();
+          }
+        } else {
+          this.classList.remove("filled");
+        }
+        updateHiddenValue();
+      });
+
+      box.addEventListener("keydown", function(e) {
+        if (e.key === "Backspace" && !this.value && index > 0) {
+          boxes[index - 1].focus();
+          boxes[index - 1].value = "";
+          boxes[index - 1].classList.remove("filled");
+          updateHiddenValue();
+        }
+      });
+
+      box.addEventListener("paste", function(e) {
+        e.preventDefault();
+        const pasted = (e.clipboardData || window.clipboardData).getData("text").replace(/[^0-9]/g, "");
+        if (pasted.length > 0) {
+          for (let i = 0; i < boxes.length; i++) {
+            if (i < pasted.length) {
+              boxes[i].value = pasted[i];
+              boxes[i].classList.add("filled");
+            }
+          }
+          const focusIndex = Math.min(pasted.length, boxes.length - 1);
+          boxes[focusIndex].focus();
+          updateHiddenValue();
+        }
+      });
+    });
+  });
+
+  // 2. Cooldown Timer Management for Resend Buttons
+  document.querySelectorAll(".btn-resend").forEach(function(btn) {
+    let cooldown = parseInt(btn.getAttribute("data-cooldown") || "0", 10);
+    const channel = btn.getAttribute("data-channel");
+    const originalText = channel === "email" ? "Resend Email OTP" : "Resend Mobile OTP";
+
+    function startTimer(seconds) {
+      cooldown = seconds;
+      btn.disabled = true;
+      btn.style.opacity = "0.6";
+      btn.style.cursor = "not-allowed";
+
+      const interval = setInterval(function() {
+        if (cooldown <= 0) {
+          clearInterval(interval);
+          btn.disabled = false;
+          btn.style.opacity = "1";
+          btn.style.cursor = "pointer";
+          btn.textContent = originalText;
+        } else {
+          btn.textContent = `Resend in ${cooldown}s`;
+          cooldown--;
+        }
+      }, 1000);
+    }
+
+    if (cooldown > 0) {
+      startTimer(cooldown);
+    }
+
+    btn.addEventListener("click", function() {
+      if (cooldown > 0) return;
+
+      btn.disabled = true;
+      btn.textContent = "Sending...";
+
+      fetch(`/accounts/verify/resend/${channel}/`, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": getCsrfToken(),
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json"
+        }
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          showAlert("success", data.message || "Verification code resent successfully.");
+          startTimer(data.cooldown || 60);
+        } else {
+          showAlert("error", data.message || "Unable to send verification code. Please check configuration.");
+          if (data.cooldown_remaining && data.cooldown_remaining > 0) {
+            startTimer(data.cooldown_remaining);
+          } else {
+            btn.disabled = false;
+            btn.style.opacity = "1";
+            btn.style.cursor = "pointer";
+            btn.textContent = originalText;
+          }
+        }
+      })
+      .catch(err => {
+        showAlert("error", "Network error. Please try again.");
+        btn.disabled = false;
+        btn.style.opacity = "1";
+        btn.style.cursor = "pointer";
+        btn.textContent = originalText;
+      });
+    });
+  });
+
+  // 3. Form Submit with dynamic alert toast feedback
+  document.querySelectorAll(".otp-form").forEach(function(form) {
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const submitBtn = form.querySelector("button[type=submit]");
+      const originalBtnText = submitBtn ? submitBtn.textContent : "Verify";
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Verifying...";
+      }
+
+      const formData = new FormData(form);
+
+      fetch(form.action, {
+        method: "POST",
+        body: formData,
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json"
+        }
+      })
+      .then(r => r.json().then(data => ({ status: r.status, ok: r.ok, data: data })))
+      .then(res => {
+        const data = res.data;
+        if (data.success) {
+          showAlert("success", data.message || "Verification successful! Activating your account...");
+          if (data.redirect_url) {
+            setTimeout(() => {
+              window.location.href = data.redirect_url;
+            }, 600);
+          } else {
+            window.location.reload();
+          }
+        } else {
+          showAlert("error", data.message || "Verification failed. Please check the code and try again.");
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnText;
+          }
+        }
+      })
+      .catch(err => {
+        // Fallback to standard form submission if AJAX fails
+        form.submit();
+      });
+    });
+  });
+
+  // 4. Modal Toggles
+  document.querySelectorAll(".btn-toggle-modal").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      const modalId = this.getAttribute("data-target");
+      const modal = document.getElementById(modalId);
+      if (modal) modal.style.display = "flex";
+    });
+  });
+
+  document.querySelectorAll(".btn-close-modal").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      const modalId = this.getAttribute("data-target");
+      const modal = document.getElementById(modalId);
+      if (modal) modal.style.display = "none";
+    });
+  });
+
+  // Helper to show dynamic alerts with toast styling
+  function showAlert(type, message) {
+    const box = document.getElementById("liveAlertBox");
+    if (!box) return;
+    box.style.display = "block";
+    if (type === "success") {
+      box.style.background = "#ecfdf5";
+      box.style.border = "1px solid #10b981";
+      box.style.color = "#065f46";
+      box.style.padding = "14px 18px";
+      box.style.borderRadius = "8px";
+      box.style.fontWeight = "600";
+      box.innerHTML = `<span>✓</span> <span>${message}</span>`;
+    } else {
+      box.style.background = "#fef2f2";
+      box.style.border = "1px solid #ef4444";
+      box.style.color = "#991b1b";
+      box.style.padding = "14px 18px";
+      box.style.borderRadius = "8px";
+      box.style.fontWeight = "600";
+      box.innerHTML = `<span>⚠️</span> <span>${message}</span>`;
+    }
+    box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  function getCsrfToken() {
+    const input = document.querySelector("[name=csrfmiddlewaretoken]");
+    return input ? input.value : "";
+  }
+
+});
+</script>
+{% endblock %}

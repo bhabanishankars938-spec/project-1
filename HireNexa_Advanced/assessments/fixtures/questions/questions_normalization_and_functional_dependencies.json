@@ -1,0 +1,562 @@
+[
+  {
+    "order": 1,
+    "title": "Normalization and Functional Dependencies Problem #1",
+    "difficulty": "EASY",
+    "topic": "Normalization and Functional Dependencies",
+    "text": "In SQL standard relational databases (Query #1), under what condition does the HAVING clause filter rows for this query in Normalization and Functional Dependencies with threshold 51000?",
+    "code_snippet": "SELECT dept_id, COUNT(*) \nFROM Employees \nGROUP BY dept_id \nHAVING AVG(salary) > 51000;",
+    "explanation": "WHERE filters individual tuples before grouping, whereas HAVING filters aggregated groups after GROUP BY.",
+    "options": [
+      {
+        "key": "A",
+        "text": "Before individual table rows are grouped",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "During the initial table scan prior to WHERE evaluation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Only if a nested subquery is explicitly defined",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "After the GROUP BY aggregation is applied to groups",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 2,
+    "title": "Normalization and Functional Dependencies Problem #2",
+    "difficulty": "EASY",
+    "topic": "Normalization and Functional Dependencies",
+    "text": "Consider a relational schema R(A, B, C, D) with functional dependencies (Case #2) for Normalization and Functional Dependencies. If attribute C determines all attributes, which normal form is guaranteed?",
+    "code_snippet": "",
+    "explanation": "In BCNF, for every non-trivial functional dependency X -> Y, X must strictly be a superkey.",
+    "options": [
+      {
+        "key": "A",
+        "text": "First Normal Form only (1NF)",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Boyce-Codd Normal Form (BCNF) if every determinant is a superkey",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "Second Normal Form without satisfying 3NF",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Non-relational flat representation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 3,
+    "title": "Normalization and Functional Dependencies Problem #3",
+    "difficulty": "EASY",
+    "topic": "Normalization and Functional Dependencies",
+    "text": "In SQL standard relational databases (Query #3), under what condition does the HAVING clause filter rows for this query in Normalization and Functional Dependencies with threshold 53000?",
+    "code_snippet": "SELECT dept_id, COUNT(*) \nFROM Employees \nGROUP BY dept_id \nHAVING AVG(salary) > 53000;",
+    "explanation": "WHERE filters individual tuples before grouping, whereas HAVING filters aggregated groups after GROUP BY.",
+    "options": [
+      {
+        "key": "A",
+        "text": "Before individual table rows are grouped",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "After the GROUP BY aggregation is applied to groups",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "During the initial table scan prior to WHERE evaluation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Only if a nested subquery is explicitly defined",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 4,
+    "title": "Normalization and Functional Dependencies Problem #4",
+    "difficulty": "MEDIUM",
+    "topic": "Normalization and Functional Dependencies",
+    "text": "Consider a relational schema R(A, B, C, D) with functional dependencies (Case #4) for Normalization and Functional Dependencies. If attribute A determines all attributes, which normal form is guaranteed?",
+    "code_snippet": "",
+    "explanation": "In BCNF, for every non-trivial functional dependency X -> Y, X must strictly be a superkey.",
+    "options": [
+      {
+        "key": "A",
+        "text": "First Normal Form only (1NF)",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Second Normal Form without satisfying 3NF",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Boyce-Codd Normal Form (BCNF) if every determinant is a superkey",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "Non-relational flat representation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 5,
+    "title": "Normalization and Functional Dependencies Problem #5",
+    "difficulty": "MEDIUM",
+    "topic": "Normalization and Functional Dependencies",
+    "text": "In SQL standard relational databases (Query #5), under what condition does the HAVING clause filter rows for this query in Normalization and Functional Dependencies with threshold 55000?",
+    "code_snippet": "SELECT dept_id, COUNT(*) \nFROM Employees \nGROUP BY dept_id \nHAVING AVG(salary) > 55000;",
+    "explanation": "WHERE filters individual tuples before grouping, whereas HAVING filters aggregated groups after GROUP BY.",
+    "options": [
+      {
+        "key": "A",
+        "text": "Before individual table rows are grouped",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "During the initial table scan prior to WHERE evaluation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "After the GROUP BY aggregation is applied to groups",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "Only if a nested subquery is explicitly defined",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 6,
+    "title": "Normalization and Functional Dependencies Problem #6",
+    "difficulty": "MEDIUM",
+    "topic": "Normalization and Functional Dependencies",
+    "text": "Consider a relational schema R(A, B, C, D) with functional dependencies (Case #6) for Normalization and Functional Dependencies. If attribute C determines all attributes, which normal form is guaranteed?",
+    "code_snippet": "",
+    "explanation": "In BCNF, for every non-trivial functional dependency X -> Y, X must strictly be a superkey.",
+    "options": [
+      {
+        "key": "A",
+        "text": "First Normal Form only (1NF)",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Second Normal Form without satisfying 3NF",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Boyce-Codd Normal Form (BCNF) if every determinant is a superkey",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "Non-relational flat representation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 7,
+    "title": "Normalization and Functional Dependencies Problem #7",
+    "difficulty": "MEDIUM",
+    "topic": "Normalization and Functional Dependencies",
+    "text": "In SQL standard relational databases (Query #7), under what condition does the HAVING clause filter rows for this query in Normalization and Functional Dependencies with threshold 57000?",
+    "code_snippet": "SELECT dept_id, COUNT(*) \nFROM Employees \nGROUP BY dept_id \nHAVING AVG(salary) > 57000;",
+    "explanation": "WHERE filters individual tuples before grouping, whereas HAVING filters aggregated groups after GROUP BY.",
+    "options": [
+      {
+        "key": "A",
+        "text": "After the GROUP BY aggregation is applied to groups",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Before individual table rows are grouped",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "During the initial table scan prior to WHERE evaluation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Only if a nested subquery is explicitly defined",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 8,
+    "title": "Normalization and Functional Dependencies Problem #8",
+    "difficulty": "MEDIUM",
+    "topic": "Normalization and Functional Dependencies",
+    "text": "Consider a relational schema R(A, B, C, D) with functional dependencies (Case #8) for Normalization and Functional Dependencies. If attribute A determines all attributes, which normal form is guaranteed?",
+    "code_snippet": "",
+    "explanation": "In BCNF, for every non-trivial functional dependency X -> Y, X must strictly be a superkey.",
+    "options": [
+      {
+        "key": "A",
+        "text": "Boyce-Codd Normal Form (BCNF) if every determinant is a superkey",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "First Normal Form only (1NF)",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Second Normal Form without satisfying 3NF",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Non-relational flat representation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 9,
+    "title": "Normalization and Functional Dependencies Problem #9",
+    "difficulty": "MEDIUM",
+    "topic": "Normalization and Functional Dependencies",
+    "text": "In SQL standard relational databases (Query #9), under what condition does the HAVING clause filter rows for this query in Normalization and Functional Dependencies with threshold 59000?",
+    "code_snippet": "SELECT dept_id, COUNT(*) \nFROM Employees \nGROUP BY dept_id \nHAVING AVG(salary) > 59000;",
+    "explanation": "WHERE filters individual tuples before grouping, whereas HAVING filters aggregated groups after GROUP BY.",
+    "options": [
+      {
+        "key": "A",
+        "text": "Before individual table rows are grouped",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "After the GROUP BY aggregation is applied to groups",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "During the initial table scan prior to WHERE evaluation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Only if a nested subquery is explicitly defined",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 10,
+    "title": "Normalization and Functional Dependencies Problem #10",
+    "difficulty": "MEDIUM",
+    "topic": "Normalization and Functional Dependencies",
+    "text": "Consider a relational schema R(A, B, C, D) with functional dependencies (Case #10) for Normalization and Functional Dependencies. If attribute C determines all attributes, which normal form is guaranteed?",
+    "code_snippet": "",
+    "explanation": "In BCNF, for every non-trivial functional dependency X -> Y, X must strictly be a superkey.",
+    "options": [
+      {
+        "key": "A",
+        "text": "First Normal Form only (1NF)",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Second Normal Form without satisfying 3NF",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Boyce-Codd Normal Form (BCNF) if every determinant is a superkey",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "D",
+        "text": "Non-relational flat representation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 11,
+    "title": "Normalization and Functional Dependencies Problem #11",
+    "difficulty": "MEDIUM",
+    "topic": "Normalization and Functional Dependencies",
+    "text": "In SQL standard relational databases (Query #11), under what condition does the HAVING clause filter rows for this query in Normalization and Functional Dependencies with threshold 61000?",
+    "code_snippet": "SELECT dept_id, COUNT(*) \nFROM Employees \nGROUP BY dept_id \nHAVING AVG(salary) > 61000;",
+    "explanation": "WHERE filters individual tuples before grouping, whereas HAVING filters aggregated groups after GROUP BY.",
+    "options": [
+      {
+        "key": "A",
+        "text": "Before individual table rows are grouped",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "After the GROUP BY aggregation is applied to groups",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "C",
+        "text": "During the initial table scan prior to WHERE evaluation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Only if a nested subquery is explicitly defined",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 12,
+    "title": "Normalization and Functional Dependencies Problem #12",
+    "difficulty": "HARD",
+    "topic": "Normalization and Functional Dependencies",
+    "text": "Consider a relational schema R(A, B, C, D) with functional dependencies (Case #12) for Normalization and Functional Dependencies. If attribute A determines all attributes, which normal form is guaranteed?",
+    "code_snippet": "",
+    "explanation": "In BCNF, for every non-trivial functional dependency X -> Y, X must strictly be a superkey.",
+    "options": [
+      {
+        "key": "A",
+        "text": "First Normal Form only (1NF)",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Second Normal Form without satisfying 3NF",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Non-relational flat representation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Boyce-Codd Normal Form (BCNF) if every determinant is a superkey",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 13,
+    "title": "Normalization and Functional Dependencies Problem #13",
+    "difficulty": "HARD",
+    "topic": "Normalization and Functional Dependencies",
+    "text": "In SQL standard relational databases (Query #13), under what condition does the HAVING clause filter rows for this query in Normalization and Functional Dependencies with threshold 63000?",
+    "code_snippet": "SELECT dept_id, COUNT(*) \nFROM Employees \nGROUP BY dept_id \nHAVING AVG(salary) > 63000;",
+    "explanation": "WHERE filters individual tuples before grouping, whereas HAVING filters aggregated groups after GROUP BY.",
+    "options": [
+      {
+        "key": "A",
+        "text": "After the GROUP BY aggregation is applied to groups",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Before individual table rows are grouped",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "During the initial table scan prior to WHERE evaluation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Only if a nested subquery is explicitly defined",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 14,
+    "title": "Normalization and Functional Dependencies Problem #14",
+    "difficulty": "HARD",
+    "topic": "Normalization and Functional Dependencies",
+    "text": "Consider a relational schema R(A, B, C, D) with functional dependencies (Case #14) for Normalization and Functional Dependencies. If attribute C determines all attributes, which normal form is guaranteed?",
+    "code_snippet": "",
+    "explanation": "In BCNF, for every non-trivial functional dependency X -> Y, X must strictly be a superkey.",
+    "options": [
+      {
+        "key": "A",
+        "text": "First Normal Form only (1NF)",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Second Normal Form without satisfying 3NF",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Non-relational flat representation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Boyce-Codd Normal Form (BCNF) if every determinant is a superkey",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  },
+  {
+    "order": 15,
+    "title": "Normalization and Functional Dependencies Problem #15",
+    "difficulty": "HARD",
+    "topic": "Normalization and Functional Dependencies",
+    "text": "In SQL standard relational databases (Query #15), under what condition does the HAVING clause filter rows for this query in Normalization and Functional Dependencies with threshold 65000?",
+    "code_snippet": "SELECT dept_id, COUNT(*) \nFROM Employees \nGROUP BY dept_id \nHAVING AVG(salary) > 65000;",
+    "explanation": "WHERE filters individual tuples before grouping, whereas HAVING filters aggregated groups after GROUP BY.",
+    "options": [
+      {
+        "key": "A",
+        "text": "After the GROUP BY aggregation is applied to groups",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      },
+      {
+        "key": "B",
+        "text": "Before individual table rows are grouped",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "During the initial table scan prior to WHERE evaluation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Only if a nested subquery is explicitly defined",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      }
+    ]
+  },
+  {
+    "order": 16,
+    "title": "Normalization and Functional Dependencies Problem #16",
+    "difficulty": "HARD",
+    "topic": "Normalization and Functional Dependencies",
+    "text": "Consider a relational schema R(A, B, C, D) with functional dependencies (Case #16) for Normalization and Functional Dependencies. If attribute A determines all attributes, which normal form is guaranteed?",
+    "code_snippet": "",
+    "explanation": "In BCNF, for every non-trivial functional dependency X -> Y, X must strictly be a superkey.",
+    "options": [
+      {
+        "key": "A",
+        "text": "First Normal Form only (1NF)",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "B",
+        "text": "Second Normal Form without satisfying 3NF",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "C",
+        "text": "Non-relational flat representation",
+        "is_correct": false,
+        "explanation": "Incorrect choice."
+      },
+      {
+        "key": "D",
+        "text": "Boyce-Codd Normal Form (BCNF) if every determinant is a superkey",
+        "is_correct": true,
+        "explanation": "Correct choice."
+      }
+    ]
+  }
+]
