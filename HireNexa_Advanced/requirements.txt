@@ -1,6 +1,9 @@
 # Core Django Framework
 Django>=6.1,<6.2
 
+# Required by Django's Argon2PasswordHasher
+argon2-cffi>=23.1.0
+
 # ASGI and Channels support
 channels>=4.3,<5
 daphne>=4.2,<5
